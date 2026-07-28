@@ -200,24 +200,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .ta{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;font-size:13.5px;
   line-height:1.75;font-family:var(--sans);color:var(--ink);background:#FCFDFD;resize:vertical}
 .ta.mono2{font-family:var(--mono);font-size:12px;line-height:1.6}
-/* 곡 생애주기 */
-.sq{border:1px solid var(--line);border-radius:14px;padding:11px 12px;margin-bottom:8px;background:#fff}
-.sq.due{border-color:var(--vio);box-shadow:0 0 0 2px var(--vio-soft)}
-.sq.grad{opacity:.6}
-.sq-h{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:5px}
-.sq-t{font-weight:800;font-size:14px;flex:1;min-width:110px;letter-spacing:-.01em}
-.sq-m{font-size:11.5px;color:var(--ink3);line-height:1.55;margin-bottom:7px}
-.sq-b{display:flex;gap:6px;flex-wrap:wrap}
-.sq-b .btn{width:auto;display:inline-block;padding:6px 12px;font-size:12.5px;border-radius:10px}
-.stg{font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;background:var(--vio-soft);color:var(--vio-d);white-space:nowrap}
-.stg.s3{background:var(--amb-soft);color:var(--amb)}
-.stg.g{background:var(--ok-soft);color:var(--ok)}
-.dots{display:inline-flex;gap:3px;align-items:center;vertical-align:-1px}
-.dots i{width:7px;height:7px;border-radius:50%;background:var(--line);display:block}
-.dots i.on{background:var(--vio)}
-.gbar{height:6px;border-radius:999px;background:var(--line2);overflow:hidden;margin:7px 0 3px}
-.gbar span{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .35s}
-.chkbox{background:var(--amb-soft);border-radius:11px;padding:9px 11px;margin-top:8px;font-size:12px;color:var(--amb);line-height:1.55}
 .lyrchk{font-size:12px;font-weight:700;color:var(--ok);background:var(--ok-soft);
   border-radius:9px;padding:7px 10px;margin-bottom:9px}
 .lyrchk.bad{color:var(--no);background:var(--no-soft)}
@@ -509,9 +491,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
     <div class="top"><div class="brand">🎵 세뇌형 가사</div><button class="exit" id="songBack">✕</button></div>
     <div id="songEmpty" class="panel pad hidden"><div class="more">틀린 카드가 없어 가사를 만들 수 없습니다.</div></div>
     <div id="songBody">
-      <div class="panel pad" style="margin-bottom:12px">
-        <div id="songPlan"></div>
-      </div>
       <div class="stabs" id="songTabs"></div>
       <div class="panel pad">
         <div class="sec-t">가사 <small>(Suno Custom Mode → Lyrics 칸에 붙여넣기)</small></div>
@@ -520,7 +499,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
         <div class="btn-row2">
           <button class="btn btn-primary sm" id="lyrCopy">📋 가사 복사</button>
           <button class="btn btn-ghost sm" id="lyrDl">⬇ 전곡 .txt</button>
-          <button class="btn btn-ghost sm" id="lyrCw">🧩 Cowork 프롬프트</button>
         </div>
       </div>
       <div class="panel pad">
@@ -893,187 +871,11 @@ function build(cards,title){
   return out.join('\n').replace(/\n{3,}/g,'\n\n').trim();
 }
 
-/* ===== v2 청킹 — 학습과학 기준 =====
-   한 줄 13음절(음운루프 ~2초 = 110BPM 한 마디)
-   한 절 4줄(작업기억 ~4청크, Cowan 2001) / 곡당 3절
-   곡당 사실 6~8개 / 후렴은 글자 그대로 반복(멜로디·가사 반복이 회상 이득의 조건)
-   최고난도 카드를 훅·후렴·아웃트로(초두·최신 위치)에 배치            */
-var SYL_MAX=13, LPV=4, VMAX=3, FMAX=8, FMIN=4, SYLBUD=230,
-    CREP=3, CREPH=4, SEC_LINE=2.18, HARD_LAP=8;
-
-function syl(t){ var n=0; for(var i=0;i<t.length;i++){ var c=t.charCodeAt(i);
-  if(c>=0xAC00&&c<=0xD7A3) n++; } return n; }
-
-function splitSyl(t,mx){
-  mx=mx||SYL_MAX; t=String(t||'').replace(/\s+/g,' ').trim();
-  if(!t) return [];
-  if(syl(t)<=mx) return [t];
-  if(t.indexOf(',')>=0){
-    var seg=t.split(','), o=[];
-    seg.forEach(function(x){ x=x.trim(); if(x) o=o.concat(splitSyl(x,mx)); });
-    if(o.length>1) return o;
-  }
-  var w=t.split(' ');
-  if(w.length===1) return [t];
-  var tot=syl(t), run=0, best=1, bd=1e9;
-  for(var i=0;i<w.length-1;i++){
-    run+=syl(w[i]); var d=Math.abs(run-tot/2);
-    if(d<bd){ bd=d; best=i+1; }
-  }
-  return splitSyl(w.slice(0,best).join(' '),mx).concat(splitSyl(w.slice(best).join(' '),mx));
-}
-
-/* 카드 → {줄들, 정답이 시작되는 줄 번호} */
-function tidy(t){
-  return String(t||'')
-    .replace(/\s+(에서|으로|보다|과|와|은|는|을|를|의|에|만|로|가)(\s|,|$)/g,'$1$2')
-    .replace(/\s+/g,' ').replace(/\s+,/g,',').trim();
-}
-function factOf(c){
-  var t=tidy(cut(H(topicOf(c.q)),24));
-  var full=(c.n||'').indexOf('전체:')===0 ? c.n.slice(3).trim() : '';
-  var body=tidy(H(full||c.a));
-  if(!t&&!body) return null;
-  var lines, aStart=0;
-  if(!body) lines=splitSyl(t);
-  else if(!t) lines=splitSyl(body);
-  else{
-    var one=t+', '+body;
-    if(syl(one)<=SYL_MAX) lines=[one];
-    else { var A=splitSyl(t), B=splitSyl(body); aStart=A.length; lines=A.concat(B); }
-  }
-  lines=lines.filter(function(x){ return syl(x)>0; });
-  if(!lines.length) return null;
-  return {c:c, lines:lines, aStart:Math.min(aStart,lines.length-1)};
-}
-
-/* 훅·후렴용 = [변별어, 정답] — 표면이 곧 정답 + 개념쌍 스왑 방지 */
-function pairOf(f){
-  var L=f.lines;
-  if(L.length<=3) return L.slice();
-  var ai=f.aStart||0;
-  if(ai===0) return L.slice(0,3);
-  return [L[0]].concat(L.slice(ai, ai+3)).slice(0,4);   /* 변별어 + 정답 전체(열거형 포함) */
-}
-function scoreOf(c){
-  var s=3*(c._lap||0)+6*(c._rich||0);
-  if((c._lap||0)>=HARD_LAP) s+=8;
-  return s;
-}
-/* 카드 구성이 같으면 같은 id — 날짜가 바뀌어도 진도가 이어진다 */
-function sidOf(ids){
-  var k=ids.slice().sort().join('|'), h=5381;
-  for(var i=0;i<k.length;i++) h=((h*33)^k.charCodeAt(i))>>>0;
-  return 's'+h.toString(36);
-}
-
-function mkSong(facts,ch,no){
-  var hook=pairOf(facts[0]), chorus=hook.slice(), seen={};
-  chorus.forEach(function(l){ seen[l]=1; });
-  for(var i=1;i<facts.length&&chorus.length<4;i++){
-    var pr=pairOf(facts[i]);
-    if(seen[pr[pr.length-1]]) continue;
-    pr=pr.filter(function(l){ return !seen[l]; });
-    if(!pr.length || chorus.length+pr.length>5) continue;
-    pr.forEach(function(l){ seen[l]=1; chorus.push(l); });
-  }
-  var head=[],tail=[];
-  facts.forEach(function(f,i){ (i%2===0?head:tail).push(f); });
-  var ord=head.concat(tail.reverse()), all=[];
-  ord.forEach(function(f){ all=all.concat(f.lines); });
-  var verses=[];
-  for(var k=0;k<all.length;k+=LPV) verses.push(all.slice(k,k+LPV));
-  var hard=facts.filter(function(f){ return (f.c._lap||0)>=HARD_LAP; }).length;
-  var rep=hard>=2?CREPH:CREP;
-  var sung=hook.length*2+all.length+chorus.length*rep+hook.length;
-  return { no:no, ch:ch,
-    sid:sidOf(facts.map(function(f){ return f.c.id; })),
-    ids:facts.map(function(f){ return f.c.id; }),
-    facts:facts, hook:hook, verses:verses, chorus:chorus, rep:rep,
-    hard:hard, n:facts.length,
-    syl:all.reduce(function(a,l){ return a+syl(l); },0),
-    sec:Math.round(sung*SEC_LINE+25) };
-}
-
-function plan(cards){
-  /* 중복 제거 ① 같은 부모의 '전체:' 카드는 한 장만 ② 가사가 글자 단위로 같으면 한 번만 */
-  var seenP={}, uniq=[];
-  cards.forEach(function(c){
-    var k=c.p||c.id;
-    if((c.n||'').indexOf('전체:')===0){ if(seenP[k]) return; seenP[k]=1; }
-    uniq.push(c);
-  });
-  cards=uniq;
-  var seenL={};
-
-  var byCh={}, order=[];
-  cards.forEach(function(c){
-    var k=c.ch||'기타';
-    if(!byCh[k]){ byCh[k]=[]; order.push(k); }
-    byCh[k].push(c);
-  });
-  order.sort();
-  var maxL=VMAX*LPV;
-  function nLines(fs){ return fs.reduce(function(a,f){ return a+f.lines.length; },0); }
-
-  /* 1단계 — 단원별로 먼저 자른다. 한 곡에 서로 다른 단원을 섞지 않는다.
-     (개념쌍 변별은 같은 곡 안에 있어야 효과가 난다) */
-  var packs=[];
-  order.forEach(function(k){
-    var facts=byCh[k].map(factOf).filter(Boolean).filter(function(f){
-      var key=f.lines.join('|');
-      if(seenL[key]) return false;
-      seenL[key]=1; return true;
-    }).sort(function(a,b){ return scoreOf(b.c)-scoreOf(a.c); });
-    if(!facts.length) return;
-    var totSyl=facts.reduce(function(a,f){
-      return a+f.lines.reduce(function(x,l){ return x+syl(l); },0); },0);
-    var n=Math.max(Math.ceil(facts.length/FMAX), Math.ceil(totSyl/SYLBUD), 1);
-    var tgt=Math.ceil(facts.length/n), cur=[], ln=0, sy=0;
-    facts.forEach(function(f){
-      var fl=f.lines.length, fs=f.lines.reduce(function(a,x){ return a+syl(x); },0);
-      /* 음절이 1차 예산, 줄 수는 사실 4개를 채운 뒤에만 작동하는 보조 제동 */
-      if(cur.length&&(cur.length>=tgt || sy+fs>SYLBUD*1.25 || (ln+fl>maxL && cur.length>=FMIN))){
-        packs.push({k:[k],f:cur}); cur=[]; ln=0; sy=0;
-      }
-      cur.push(f); ln+=fl; sy+=fs;
-    });
-    if(cur.length) packs.push({k:[k],f:cur});
-  });
-
-  /* 2단계 — 4개 미만인 자투리 단원끼리만, 예산 안에서 이웃과 합친다 */
-  var out=[];
-  packs.forEach(function(pk){
-    var pv=out[out.length-1];
-    function nSyl(fs){ return fs.reduce(function(a,f){
-      return a+f.lines.reduce(function(x,l){ return x+syl(l); },0); },0); }
-    if(pv && pv.f.length<FMIN && pk.f.length<FMIN &&
-       pv.f.length+pk.f.length<=FMAX &&
-       nSyl(pv.f)+nSyl(pk.f)<=SYLBUD){
-      pv.f=pv.f.concat(pk.f); pv.k=pv.k.concat(pk.k);
-    } else out.push(pk);
-  });
-
-  return out.map(function(pk,i){
-    pk.f.sort(function(a,b){ return scoreOf(b.c)-scoreOf(a.c); });
-    return mkSong(pk.f, pk.k.join('·'), i+1);
-  });
-}
-
-function lyricsOf(s){
-  var o=['[Intro]'].concat(s.hook, s.hook, '');
-  s.verses.forEach(function(v){ o=o.concat('[Verse]', v, ''); });
-  o.push('[Instrumental]','');
-  for(var r=0;r<s.rep;r++) o=o.concat('[Chorus]', s.chorus, '');
-  o=o.concat('[Outro]', s.hook, '', '[End]');
-  return o.join('\n').replace(/\n{3,}/g,'\n\n').trim();
-}
-
 var STYLE='korean chant, childrens choir + clear female lead, one note per syllable, staccato march, '+
  'dry vocal, minimal reverb, crisp diction, simple repetitive melody, light drum and handclap, '+
  '110 BPM, major key, no ad-libs, no rap';
 var NEG='rap, mumble, heavy autotune, whisper, screaming, dense reverb, melisma, instrumental';
-return {H:H,topicOf:topicOf,lineOf:lineOf,build:build,plan:plan,lyricsOf:lyricsOf,syl:syl,STYLE:STYLE,NEG:NEG};
+return {H:H,topicOf:topicOf,lineOf:lineOf,build:build,STYLE:STYLE,NEG:NEG};
 })();
 
 </script>
@@ -1169,7 +971,6 @@ function load(){
   if(!DB.log) DB.log={};
   if(DB.v!==2 && DB.v!==3) migrate();
   if(DB.v!==3) migrate3();
-  if(!DB.songs){ DB.songs={}; save(); }   /* 곡 생애주기 — 기존 카드 진도는 건드리지 않는다 */
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(DB)); }catch(e){} }
 
@@ -2181,209 +1982,48 @@ function copyTxt(t, btn){
   }
 }
 
-/* ---------- 세뇌형 가사 : 곡 생애주기 ---------- */
-var STG=[null,
- {n:'1 따라부르기', d:'가사 보면서 소리 내어 — 여기까지는 부호화',        per:3, need:6, gap:1},
- {n:'2 가사 없이',  d:'화면 끄고 따라부르기 — 여기부터 인출',             per:2, need:4, gap:2},
- {n:'3 한 박 앞서', d:'노래보다 먼저 뱉기. 틀리면 노래가 즉시 정정해준다', per:1, need:3, gap:4}];
-
-function songDB(){ if(!DB.songs) DB.songs={}; return DB.songs; }
-
-/* 카드 구성이 60% 이상 겹치면 옛 곡의 진도를 물려받는다 — 매일 다시 잘라도 단계가 안 초기화된다 */
-function sq(s){
-  var M=songDB(), q=M[s.sid];
-  if(!q){
-    var best=null,bj=0;
-    for(var k in M){
-      var o=M[k]; if(!o||!o.ids||!o.ids.length) continue;
-      var set={}; o.ids.forEach(function(i){ set[i]=1; });
-      var hit=0; s.ids.forEach(function(i){ if(set[i]) hit++; });
-      var j=hit/Math.max(o.ids.length, s.ids.length);
-      if(j>bj){ bj=j; best=o; }
-    }
-    q = (best && bj>=0.6)
-      ? {t:s.ch, ids:s.ids, stage:best.stage||1, plays:best.plays||0, day:best.day||today(),
-         dayN:best.dayN||0, due:best.due||today(), grad:0,
-         chk:best.chk||null, chkN:best.chkN||0, chkOk:best.chkOk||0, heir:1}
-      : {t:s.ch, ids:s.ids, stage:1, plays:0, day:today(), dayN:0,
-         due:today(), grad:0, chk:null, chkN:0, chkOk:0};
-    M[s.sid]=q;
-  }
-  if(q.day!==today()){ q.day=today(); q.dayN=0; }
-  q.ids=s.ids; q.t=s.ch;
-  gradeSong(q);
-  return q;
-}
-/* 진도 연속 반영 — 곡의 졸업은 SRS 상자 상태를 매번 다시 읽어 판정한다 */
-function boxedN(q){
-  var n=0; (q.ids||[]).forEach(function(id){ var t=DB.states[id]; if(t&&t.seen&&(t.box||1)>=3) n++; });
-  return n;
-}
-function gradeSong(q){
-  if(!q.ids||!q.ids.length){ q.grad=0; return; }
-  var done = boxedN(q)===q.ids.length;
-  q.grad = (done && q.stage>=3) ? 1 : 0;
-  if(q.grad){ if(!q.gradAt) q.gradAt=today(); } else q.gradAt=null;
-}
-function songDue(q){ return !q.grad && q.due<=today(); }
-function chkDue(q){ return !q.grad && q.stage>=2 && (!q.chk || dayDiff(q.chk,today())>=7); }
-
-function playOnce(sid){
-  var q=songDB()[sid]; if(!q) return;
-  if(q.day!==today()){ q.day=today(); q.dayN=0; }
-  q.dayN++; q.plays=(q.plays||0)+1;
-  var S=STG[q.stage]||STG[3];
-  if(q.dayN>=S.per) q.due=addDays(today(), S.gap);
-  if(q.plays>=S.need && q.stage<3){ q.stage++; q.plays=0; q.dayN=0; q.due=today(); }
-  gradeSong(q); save();
-}
-function blankCheck(sid, ok){
-  var q=songDB()[sid]; if(!q) return;
-  q.chk=today(); q.chkN=(q.chkN||0)+1;
-  if(ok) q.chkOk=(q.chkOk||0)+1;
-  else { q.stage=Math.max(1,q.stage-1); q.plays=0; q.dayN=0; q.due=today(); }
-  gradeSong(q); save();
-}
-
+/* ---------- 세뇌형 가사 ---------- */
 var songs=[], songI=0;
 function showSong(){
   var w=curWrongs();
   var cards=w.map(function(x){ var c=Object.assign({},x.c); c._lap=x.lap; c._rich=x.rich; return c; });
-  songs=LYR.plan(cards).map(function(sp){
-    return { s:sp, title:'곡 '+sp.no+' · '+sp.ch+' ('+sp.n+'장)', lyr:LYR.lyricsOf(sp) };
-  });
-  songI=0; renderSong(); show('song');
-}
-
-function dots(on,tot){
-  var h='<span class="dots">';
-  for(var i=0;i<tot;i++) h+='<i class="'+(i<on?'on':'')+'"></i>';
-  return h+'</span>';
-}
-function songCard(x){
-  var o=x.o, q=x.q, sp=o.s, S=STG[q.stage]||STG[3];
-  var bn=boxedN(q), tot=q.ids.length, pct=Math.round(bn/Math.max(1,tot)*100);
-  var cls='sq'+(q.grad?' grad':(songDue(q)?' due':''));
-  var badge = q.grad ? '<span class="stg g">졸업</span>'
-    : '<span class="stg'+(q.stage>=3?' s3':'')+'">'+S.n+'</span>';
-  var h='<div class="'+cls+'" data-sid="'+sp.sid+'">'
-    + '<div class="sq-h"><div class="sq-t">'+esc(sp.ch)+' <small style="font-weight:600;color:var(--ink3)">'+sp.n+'장 · '+Math.floor(sp.sec/60)+'분'+(sp.sec%60)+'초</small></div>'+badge+'</div>';
-  if(!q.grad){
-    h+='<div class="sq-m">'+esc(S.d)+'<br>오늘 '+dots(q.dayN,S.per)+' '+q.dayN+'/'+S.per+'회'
-      + ' · 단계 누적 '+(q.plays||0)+'/'+S.need
-      + ' · 다음 '+(songDue(q)?'<b style="color:var(--vio)">오늘</b>':esc(q.due))+'</div>';
-  } else {
-    h+='<div class="sq-m">카드가 전부 상자3 이상입니다. 노래 없이 나오므로 재생목록에서 뺐습니다.</div>';
+  songs=[];
+  var CH=12;
+  for(var i=0;i<cards.length;i+=CH){
+    var part=cards.slice(i,i+CH);
+    var chs={}; part.forEach(function(c){ chs[c.ch]=1; });
+    var t=Object.keys(chs); var title=(t.length===1?t[0]:'오늘 오답');
+    var lyr=LYR.build(part, title);
+    if(lyr) songs.push({title:'곡 '+(songs.length+1)+' · '+title+' ('+part.length+'장)', lyr:lyr});
   }
-  h+='<div class="gbar"><span style="width:'+pct+'%"></span></div>'
-   + '<div class="sq-m" style="margin:0 0 7px">카드 졸업 '+bn+'/'+tot+' (상자3 이상)</div>';
-  if(!q.grad){
-    h+='<div class="sq-b">'
-     + '<button class="btn btn-primary" data-play="'+sp.sid+'">▶ 한 번 들음</button>'
-     + '<button class="btn btn-ghost" data-go="'+x.i+'">가사</button></div>';
-    if(chkDue(q)){
-      h+='<div class="chkbox">주간 백지 검증 — 노래 끄고 이 곡의 사실을 종이에 써보세요. '
-       + '노래 틀면 나오는데 종이엔 안 나오면 아직 한 장도 안 외운 겁니다.'
-       + '<div class="sq-b" style="margin-top:7px">'
-       + '<button class="btn btn-ghost" data-ok="'+sp.sid+'">다 썼음</button>'
-       + '<button class="btn btn-ghost" data-ng="'+sp.sid+'">못 썼음</button></div></div>';
-    }
-  }
-  return h+'</div>';
-}
-function renderPlan(){
-  var due=[], later=[], grad=[];
-  songs.forEach(function(o,i){
-    var q=sq(o.s);
-    var row={o:o,q:q,i:i};
-    (q.grad?grad:(songDue(q)?due:later)).push(row);
-  });
-  save();
-  var h='<div class="sec-t">오늘의 재생 <small style="text-transform:none;font-weight:600">— 한 번에 2~3곡까지, 사이를 20분 이상 띄우세요</small></div>';
-  h += due.length ? due.map(songCard).join('')
-                  : '<div class="more">오늘 들을 곡이 없습니다. 아래 예정 곡의 날짜까지 쉬세요.</div>';
-  if(later.length) h+='<div class="sec-t mt12">예정 '+later.length+'곡</div>'+later.map(songCard).join('');
-  if(grad.length)  h+='<div class="sec-t mt12">졸업 '+grad.length+'곡</div>'+grad.map(songCard).join('');
-  $('songPlan').innerHTML=h;
-
-  $('songPlan').querySelectorAll('[data-play]').forEach(function(b){
-    b.onclick=function(){ playOnce(b.getAttribute('data-play')); renderSong(); };
-  });
-  $('songPlan').querySelectorAll('[data-ok]').forEach(function(b){
-    b.onclick=function(){ blankCheck(b.getAttribute('data-ok'), true); renderSong(); };
-  });
-  $('songPlan').querySelectorAll('[data-ng]').forEach(function(b){
-    b.onclick=function(){ blankCheck(b.getAttribute('data-ng'), false); renderSong(); };
-  });
-  $('songPlan').querySelectorAll('[data-go]').forEach(function(b){
-    b.onclick=function(){ songI=+b.getAttribute('data-go'); renderSong();
-      $('songTabs').scrollIntoView&&$('songTabs').scrollIntoView({behavior:'smooth',block:'start'}); };
-  });
+  songI=0;
+  renderSong();
+  show('song');
 }
 function renderSong(){
   if(!songs.length){
-    $('songTabs').innerHTML=''; $('songPlan').innerHTML=''; $('lyrText').value='';
-    $('songEmpty').classList.remove('hidden'); $('songBody').classList.add('hidden');
+    $('songTabs').innerHTML='';
+    $('lyrText').value='';
+    $('songEmpty').classList.remove('hidden');
+    $('songBody').classList.add('hidden');
     return;
   }
   $('songEmpty').classList.add('hidden');
   $('songBody').classList.remove('hidden');
-  renderPlan();
-  if(songI>=songs.length) songI=0;
-  $('songTabs').innerHTML=songs.map(function(o,i){
-    return '<button class="stab'+(i===songI?' on':'')+'" data-i="'+i+'">'+esc(o.title)+'</button>';
+  $('songTabs').innerHTML=songs.map(function(s,i){
+    return '<button class="stab'+(i===songI?' on':'')+'" data-i="'+i+'">'+esc(s.title)+'</button>';
   }).join('');
   document.querySelectorAll('.stab').forEach(function(b){
     b.onclick=function(){ songI=+b.getAttribute('data-i'); renderSong(); };
   });
-  var cur=songs[songI];
-  $('lyrText').value=cur.lyr;
+  $('lyrText').value=songs[songI].lyr;
   $('styleText').value=LYR.STYLE;
   $('negText').value=LYR.NEG;
-  var bad=cur.lyr.split('\n').filter(function(l){ return l[0]!=='[' && /[A-Za-z0-9]/.test(l); });
-  var lng=cur.lyr.split('\n').filter(function(l){ return l[0]!=='[' && LYR.syl(l)>16; });
-  $('lyrCheck').innerHTML = (bad.length||lng.length)
-    ? '⚠️ '+(bad.length?'한글화 실패 '+bad.length+'줄 ':'')+(lng.length?'과길이 '+lng.length+'줄':'')+' — 수동 확인 필요'
-    : '✅ 사실 '+cur.s.n+'개 · 한 줄 13음절 · 절 4줄 · 후렴 '+cur.s.rep+'회 · 약 '+Math.floor(cur.s.sec/60)+'분'+(cur.s.sec%60)+'초 (학습과학 기준 통과)';
-  $('lyrCheck').className='lyrchk'+((bad.length||lng.length)?' bad':'');
-}
-
-function coworkPrompt(){
-  var L=['[생물 오답 → 세뇌형 챈트 '+songs.length+'곡 — Suno 규격 완성본]','',
-  '아래는 오늘 틀린 카드를 학습과학 기준으로 이미 곡 단위로 잘라 놓은 것이다.',
-  '곡 배정은 그대로 두고, 가사 문장만 다듬어 Suno에 바로 넣을 수 있는 완성본으로 만들어라.','',
-  '■ 절대 규칙',
-  '1. 카드에 없는 사실을 새로 만들지 마라. 각 곡 끝에 근거표를 붙여 가사 줄마다 출처 카드 번호를 표시하라.',
-  '2. 세뇌형: 가사 표면이 곧 정답이다. 은유·연상·해독 단계가 필요한 표현 금지.',
-  '3. 개념쌍(경쟁적/비경쟁적 등)은 변별어와 정답을 반드시 한 묶음으로 붙여 불러라.','',
-  '■ 표기',
-  '- 본문 100% 한글. 라틴문자·아라비아 숫자·기호 금지.',
-  '- 태그는 [Intro] [Verse] [Chorus] [Instrumental] [Outro] [End]만, 영문으로만.',
-  '- 3글자 이상 알파벳 약어는 띄어 읽기(티 에스 에이치). 디엔에이·에이티피·브이맥스·케이엠은 붙여 쓴다.',
-  '- 산수는 가사에 그대로 박는다. 예: 이점오 곱하기 열은 이십오','',
-  '■ 구조·분량 (어기지 말 것)',
-  '- 한 줄 13음절 이내 (음운루프 약 2초)',
-  '- 한 절 4줄, 곡당 3절 이내 (작업기억 약 4청크)',
-  '- 구조: [Intro](훅 2회) → [Verse]들 → [Instrumental] → [Chorus](곡별 지정 횟수, 글자 그대로) → [Outro](훅) → [End]',
-  '- 멜로디는 곡 전체에서 하나만. 절마다 바꾸면 기억 이득이 사라진다.','',
-  '■ Style of Music', LYR.STYLE, '■ Exclude Styles', LYR.NEG, '', '■ 곡 배정'];
-  songs.forEach(function(o){
-    var sp=o.s;
-    L.push('', '── '+sp.no+'곡 · '+sp.ch+' (후렴 '+sp.rep+'회, 목표 '+sp.sec+'초)');
-    sp.facts.forEach(function(f,i){
-      L.push('  ['+(i+1)+'] Q: '+f.c.q);
-      L.push('      A: '+f.c.a+'   (누적실패 '+(f.c._lap||0)+(f.c._rich?', 아는줄알았는데':'')+')');
-    });
-    L.push('  ※ 훅으로 쓸 카드: [1]');
-  });
-  L.push('', '■ 검증 (통과한 것만)',
-   '- 라틴문자·숫자·허용 외 기호 0건, 태그 화이트리스트 준수',
-   '- 줄당 13음절 초과 줄 리포트',
-   '- [Chorus] 블록 수가 지정 횟수와 일치하고 블록끼리 글자 단위로 동일',
-   '- 근거표에서 출처가 빈 가사 줄이 하나라도 있으면 실패 처리 후 재검사','',
-   '■ 산출물: 곡당 .txt(Title·Style·Exclude·Lyrics) + suno_batch.csv + 근거표 docx',
-   '※ Suno 오디오 생성은 커넥터가 없어 수동 단계다. 가사 파일까지만.');
-  return L.join('\n');
+  var bad=songs[songI].lyr.split('\n').filter(function(l){ return l[0]!=='[' && /[A-Za-z0-9]/.test(l); });
+  $('lyrCheck').innerHTML = bad.length
+    ? '⚠️ 한글화 실패 라인 '+bad.length+'개 — 수동 확인 필요'
+    : '✅ 가사 100% 한글 · 구조 태그만 영문 · 숫자·로마자 없음 (Suno 규격 통과)';
+  $('lyrCheck').className='lyrchk'+(bad.length?' bad':'');
 }
 
 /* ---------- SETTINGS ---------- */
@@ -2632,7 +2272,6 @@ $('wJson').onclick=function(){
   }), null, 1), 'application/json');
 };
 $('lyrCopy').onclick=function(){ copyTxt($('lyrText').value, this); };
-$('lyrCw').onclick=function(){ copyTxt(coworkPrompt(), this); };
 $('styleCopy').onclick=function(){ copyTxt($('styleText').value, this); };
 $('lyrDl').onclick=function(){
   var t=songs.map(function(s){ return '### '+s.title+'\n\n'+s.lyr; }).join('\n\n\n')
