@@ -350,36 +350,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .trow .tf.bad{background:var(--no)} .trow .tf.mid{background:var(--amb)}
 .trow .tv{width:62px;text-align:right;font-size:12px;font-weight:800;
   font-variant-numeric:tabular-nums;color:var(--ink2)}
-/* ===== [v8] 혼동 지도 ===== */
-.cfrow{padding:13px 0;border-bottom:1px solid var(--line2)}
-.cfrow:last-child{border-bottom:0}
-.cfhead{display:flex;align-items:center;gap:9px;margin-bottom:7px}
-.cfrank{flex:none;width:20px;height:20px;border-radius:6px;background:var(--vio-soft);
-  color:var(--vio-d);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
-.cfname{flex:1;font-size:14.5px;font-weight:750;color:var(--ink);line-height:1.45}
-.cfname em{font-style:normal;color:var(--vio);font-weight:800;padding:0 2px}
-.cfscore{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink3)}
-.cftrack{height:6px;background:var(--line2);border-radius:4px;overflow:hidden;margin-bottom:8px}
-.cffill{height:100%;background:linear-gradient(90deg,var(--vio),var(--no));border-radius:4px}
-.cfdir{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--ink2);
-  font-weight:600;line-height:1.5;margin-bottom:7px}
-.cfdir b{color:var(--ink)}
-.cfdir b.n{font-family:var(--mono);color:var(--no)}
-.cfmeta{display:flex;gap:5px;flex-wrap:wrap}
-.cftag{font-size:11px;font-weight:800;padding:4px 9px;border-radius:999px}
-.cftag.bi{background:var(--no-soft);color:var(--no)}
-.cftag.uni{background:var(--teal-soft);color:var(--teal-d)}
-.cftag.neg{background:var(--amb-soft);color:#7A4A00}
-.cfempty{padding:22px 6px;text-align:center;font-size:13.5px;line-height:1.75;color:var(--ink2)}
-.cfempty small{color:var(--ink3)}
-.cftog{display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:12px 13px;border-radius:12px;border:1px solid var(--line2);background:var(--card)}
-.cftl{font-size:13px;font-weight:700;color:var(--ink);line-height:1.5}
-.cftl small{display:block;font-weight:600;color:var(--ink3);font-size:11.5px;margin-top:3px}
-.cfsw{flex:none;font-size:12px;font-weight:800;padding:7px 15px;border-radius:999px;
-  background:var(--line2);color:var(--ink3);cursor:pointer;border:0}
-.cfsw.on{background:var(--teal);color:#fff}
-
 </style>
 </head>
 <body>
@@ -404,7 +374,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
     <div class="badges">
 <button class="badge vio" id="calibBtn"><span class="em">🎯</span><span>확신 배신율<br><b id="bdBetray">—</b></span></button>
 <button class="badge dngr hidden" id="leechBtn"><span class="em">🪤</span><span>격리된 카드<br><b id="bdLeech">0</b></span></button>
-<button class="badge" id="confBtn"><span class="em">🔀</span><span>혼동 쌍<br><b id="bdConf">0</b></span></button>
 </div>
 <div id="focusBox" class="focusbox">
       <div class="fh"><div class="ft">🎯 챕터 집중 모드 (blocked practice)</div><span id="focusOn" class="fon hidden">ON</span></div>
@@ -747,57 +716,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 <b>요행률</b> = 「찍음」 ÷ 맞힌 전체. 정답률이 높아도 요행률이 높으면 실력이 아니라 운입니다.
 </div>
   </section>
-
-<!-- ===== [v8] 혼동 지도 ===== -->
-<section id="conf" class="hidden">
-<div class="top"><div class="brand">🔀 혼동 지도</div><button class="exit" id="cfBack">✕</button></div>
-<div class="stats">
-<div class="stat vio"><div class="n" id="cfLogged">0</div><div class="l">기록된 오답 짝</div></div>
-<div class="stat"><div class="n" id="cfPairs">0</div><div class="l">채굴된 쌍</div></div>
-<div class="stat no"><div class="n" id="cfDueN">0</div><div class="l">감별 오늘 할 것</div></div>
-</div>
-<div class="panel pad">
-<div class="sec-t">상위 혼동 쌍 <small style="font-weight:600;text-transform:none">(최근 오답에 가중)</small></div>
-<div id="cfList"></div>
-</div>
-<div class="panel pad">
-<div class="cftog">
-<div class="cftl">데이터 주도 인터리빙
-<small>상위 8쌍의 두 개념을 오늘 카드 큐 안에서 3~7칸 간격으로 병치합니다</small></div>
-<button class="cfsw" id="cfWeave">켜짐</button>
-</div>
-</div>
-<button class="btn btn-vio mt14" id="cfGen">🛠 감별 카드 만들기 (<span id="cfGenN">0</span>장 보유)</button>
-<button class="btn btn-primary" id="cfDrill" style="margin-top:8px">▶ 감별 드릴 시작</button>
-<div class="note">
-<b>왜 이게 필요한가</b> — 기존 채점은 「틀렸다」만 남기고 <b>무엇으로 착각했는지</b>는 버립니다.
-객관식 오답 선택지를 로깅하면 <b>(정답개념 → 오답개념)</b> 방향 행렬이 쌓이고, 상위 쌍을
-A/B 감별 카드로 바로 뽑을 수 있어요.<br>
-<b>🔁 양방향</b>이 진짜 위험한 쌍입니다. 한쪽으로만 틀리면 단순히 한 개념을 덜 안 것이고,
-양쪽으로 틀리면 <b>둘을 가르는 축 자체가 없는 것</b>이에요. 점수는 최근 오답에 가중치를 주고
-양방향에 ×1.8까지 얹습니다.<br>
-<b>1회 오답은 버립니다</b> — 우연히 찍어서 틀린 조합까지 넣으면 인터리빙이 노이즈를 학습합니다.
-같은 조합을 2회 이상 틀려야 쌍으로 인정돼요.<br>
-<b>생성 카드는 지어내지 않습니다</b> — 발문·보기·해설을 출처 문항에서 그대로 가져오고 문항 id를 남깁니다.
-</div>
-</section>
-
-<!-- ===== [v8] 감별 드릴 ===== -->
-<section id="cfrun" class="hidden">
-<div class="rbar">
-<button class="exit" id="cfExit" aria-label="나가기">✕</button>
-<div class="rtrack"><div class="rfill" id="cfFill" style="width:0%"></div></div>
-<div class="rnum" id="cfNum">0/0</div>
-</div>
-<div class="eqbox">
-<div class="eqmeta" id="cfMeta"></div>
-<div class="eqtext" id="cfStem"></div>
-<div class="eopts" id="cfOpts"></div>
-<div id="cfFeed"></div>
-</div>
-<button class="btn btn-primary mt14" id="cfSubmit">제출</button>
-</section>
-
 
 </div>
 
@@ -1160,317 +1078,6 @@ return {H:H,topicOf:topicOf,lineOf:lineOf,build:build,plan:plan,lyricsOf:lyricsO
 
 </script>
 <script>
-/* ===================== [v8] 혼동 쌍 채굴 엔진 =====================
-   안키는 "틀렸다"만 남긴다. 무엇으로 착각했는지는 안 남는다.
-   객관식 오답 선택지를 로깅하면 (정답개념 → 오답개념) 방향 행렬이 쌓이고,
-   상위 혼동 쌍을 A/B 감별 카드로 자동 생성할 수 있다.
-   인터리빙을 사람이 짜지 않고 데이터가 짠다.
-
-   [grounding 불변식] 생성 카드의 모든 문자열은 기출 발문·보기·해설에서
-   그대로 가져온다. 판별 기준을 새로 지어내지 않는다. 출처 id를 항상 남긴다. */
-var CONF=(function(){
-'use strict';
-
-var SEP='\u0001';
-var MIN_N=2;        /* 최소 2회 이상 혼동해야 채굴 — 1회는 우연 */
-var HALF=14;        /* 최근성 반감기(일) */
-var BIDI_W=0.8;     /* 양방향 혼동 가중 — 양쪽으로 헷갈리면 진짜 변별 실패 */
-var MAX_CH=24;      /* 개념 키 최대 글자수 */
-var MAX_WORD=4;     /* 개념 키 최대 어절수 */
-var GAP_MIN=3, GAP_MAX=7;  /* 인터리빙 간격: 0이면 대조는 되나 인출이 안 되고,
-                              너무 멀면 대조가 안 된다 */
-var TOP=12;
-var MAX_SRC=8;
-
-/* ---------- 개념 키 정규화 ---------- */
-var ENDRE=/(다|요|까|죠|네)[.?!]?$/;                 /* 한국어 종결 → 서술형 */
-var PARENRE=/[（(]\s*([^()（）]*)\s*[)）]\s*$/;
-var LATIN=/^[A-Za-z0-9 .,\-α-ωΑ-Ω+'’/]+$/;
-/* 「ㄱ, ㄷ, ㅁ」 「가, 나」 「A-B-C-D」 같은 보기조합·순서배열 — 개념이 아니라 답안 코드다.
-   나열 기호로 쪼갠 뒤 모든 토큰이 '한 글자짜리 순서표 기호'면 조합으로 본다.
-   「핵, 인」처럼 진짜 한 글자 개념은 순서표에 없으므로 살아남는다. */
-var SEQCH='가나다라마바사아자차카타파하ABCDEFGHabcdefghㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊ0123456789①②③④⑤⑥⑦⑧⑨⑩';
-function isCombo(h){
-  var parts=h.split(/\s*[,·、\/\-–—→>]\s*/).filter(function(x){ return x; });
-  if(parts.length<2) return false;
-  return parts.every(function(p){ return p.length===1 && SEQCH.indexOf(p)>=0; });
-}
-
-function clean(t){
-  return String(t==null?'':t)
-    .replace(/^[①-⑩]\s*/,'')
-    .replace(/^[→\-–—·•]\s*/,'')
-    .replace(/\s+/g,' ')
-    .replace(/^[\s'"“”‘’]+/,'')
-    .replace(/[\s'"“”‘’.,;]+$/,'')
-    .trim();
-}
-
-/* 반환: {ok, k(표제), en(영문별칭), num(수치형), phrase(개념구 여부), raw} */
-function normKey(raw){
-  var t=clean(raw);
-  if(!t) return {ok:false};
-  var en=null, head=t, m=t.match(PARENRE);
-  if(m){
-    var inner=clean(m[1]);
-    var pre=clean(t.slice(0,m.index));
-    if(pre && inner && LATIN.test(inner)){ head=pre; en=inner.toLowerCase(); }
-  }
-  var num=/^[0-9]+\s*(개|가지|종|배|번|명|%|퍼센트|쌍)?$/.test(head);
-  var combo=isCombo(head);
-  var words=head.split(' ').length;
-  var phrase = !ENDRE.test(head) && !combo && head.length<=MAX_CH && words<=MAX_WORD;
-  return {ok:true, k:head, en:en, num:num, combo:combo, phrase:phrase, raw:t};
-}
-
-/* ---------- 저장소 ---------- */
-function store(db){
-  if(!db.conf) db.conf={v:1, m:{}, lab:{}, gen:{}, gst:{}, seen:{}};
-  var C=db.conf;
-  if(!C.m) C.m={}; if(!C.lab) C.lab={}; if(!C.gen) C.gen={};
-  if(!C.gst) C.gst={}; if(!C.seen) C.seen={};
-  return C;
-}
-
-function bump(C, ak, bk, src, date, neg){
-  if(!ak || !bk || ak===bk) return false;
-  var key=ak+SEP+bk, e=C.m[key];
-  if(!e) e=C.m[key]={n:0, ls:date, s:[]};
-  e.n++; e.ls=date;
-  if(e.s.indexOf(src)<0 && e.s.length<MAX_SRC) e.s.push(src);
-  if(neg) e.neg=1;
-  return true;
-}
-
-/* ---------- 로깅: 기출 1문항 ----------
-   q: {id, opts:{n:text}, ans:[n], neg, topic}
-   pick: [n]  (사용자가 고른 번호)
-   틀린 경우에만 호출한다. */
-function logExam(C, q, pick, date){
-  if(!q || !pick || !pick.length) return 0;
-  var A=q.ans||[], P=pick, hit=0;
-  var missed=A.filter(function(n){ return P.indexOf(n)<0; });   /* 놓친 정답 */
-  var extra=P.filter(function(n){ return A.indexOf(n)<0; });    /* 잘못 고른 것 */
-  if(!missed.length || !extra.length) return 0;
-  for(var i=0;i<missed.length && i<3;i++){
-    for(var j=0;j<extra.length && j<3;j++){
-      var a=normKey(q.opts[missed[i]]), b=normKey(q.opts[extra[j]]);
-      if(!a.ok||!b.ok) continue;
-      if(!a.phrase||!b.phrase) continue;      /* 서술형·보기조합형은 개념 쌍이 아니다 */
-      if(a.num||b.num) continue;              /* 순수 수치는 개념 혼동이 아니라 계산 흔들림 */
-      C.lab[a.k]=C.lab[a.k]||a.raw;
-      C.lab[b.k]=C.lab[b.k]||b.raw;
-      if(bump(C, a.k, b.k, q.id, date, q.neg?1:0)) hit++;
-    }
-  }
-  return hit;
-}
-
-/* ---------- 로깅: 감별 카드 오답 ---------- */
-function logCard(C, ansText, pickText, src, date){
-  var a=normKey(ansText), b=normKey(pickText);
-  if(!a.ok||!b.ok||!a.phrase||!b.phrase) return 0;
-  C.lab[a.k]=C.lab[a.k]||a.raw;
-  C.lab[b.k]=C.lab[b.k]||b.raw;
-  return bump(C, a.k, b.k, src, date, 0)?1:0;
-}
-
-/* ---------- 채굴 ---------- */
-function ageW(ls, today){
-  var d=dayDiff(ls, today);
-  if(!(d>0)) return 1;
-  return Math.pow(0.5, d/HALF);
-}
-function parseD(s){ var a=String(s).split('-'); return new Date(+a[0],+a[1]-1,+a[2]); }
-function dayDiff(a,b){ return Math.round((parseD(b)-parseD(a))/86400000); }
-
-function mine(C, today, opts){
-  opts=opts||{};
-  var minN=opts.minN==null?MIN_N:opts.minN;
-  var top=opts.top==null?TOP:opts.top;
-  var P={};
-  Object.keys(C.m).forEach(function(key){
-    var p=key.split(SEP), a=p[0], b=p[1], e=C.m[key];
-    var pk = a<b ? a+SEP+b : b+SEP+a;
-    var o=P[pk];
-    if(!o) o=P[pk]={a:(a<b?a:b), b:(a<b?b:a), nab:0, nba:0, wab:0, wba:0,
-                    raw:0, ls:e.ls, src:{}, neg:0};
-    var w=e.n*ageW(e.ls, today);
-    if(a===o.a){ o.nab+=e.n; o.wab+=w; } else { o.nba+=e.n; o.wba+=w; }
-    o.raw+=e.n;
-    if(e.neg) o.neg=1;
-    if(e.ls>o.ls) o.ls=e.ls;
-    var dir=(a===o.a)?'ab':'ba';
-    if(!o.src[dir]) o.src[dir]=[];
-    e.s.forEach(function(s){ if(o.src[dir].indexOf(s)<0) o.src[dir].push(s); });
-  });
-  var out=[];
-  Object.keys(P).forEach(function(pk){
-    var o=P[pk];
-    if(o.raw<minN) return;
-    var hi=Math.max(o.wab,o.wba), lo=Math.min(o.wab,o.wba);
-    o.bidi = hi>0 ? lo/hi : 0;
-    o.score = (o.wab+o.wba)*(1+BIDI_W*o.bidi);
-    o.key=pk;
-    out.push(o);
-  });
-  out.sort(function(x,y){ return y.score-x.score || y.raw-x.raw; });
-  return out.slice(0, top);
-}
-
-/* ---------- 감별 카드 자동 생성 ----------
-   근거 문항의 발문·보기·해설을 그대로 쓴다. 판별 기준을 새로 만들지 않는다. */
-function h32(s){ var h=5381,i; for(i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))|0; }
-  return (h>>>0).toString(36); }
-
-function genCards(pairs, EIDX, lab){
-  var out=[];
-  pairs.forEach(function(p){
-    ['ab','ba'].forEach(function(dir){
-      var srcs=(p.src&&p.src[dir])||[];
-      if(!srcs.length) return;
-      var ans = dir==='ab' ? p.a : p.b;
-      var oth = dir==='ab' ? p.b : p.a;
-      var qid=srcs[0], q=EIDX[qid];
-      if(!q) return;
-      var A=lab[p.a]||p.a, B=lab[p.b]||p.b;
-      var ansLab = dir==='ab'?A:B, othLab = dir==='ab'?B:A;
-      out.push({
-        id:'CF-'+h32(p.key+'|'+dir+'|'+qid),
-        pair:p.key,
-        dir:dir,
-        q:q.stem,
-        opts:[ansLab, othLab],
-        a:ansLab,
-        neg:!!q.neg,
-        exp:q.exp||'',
-        src:qid,
-        topic:q.topic||'',
-        unit:q.unit||''
-      });
-    });
-  });
-  /* 같은 쌍에서 같은 발문이 두 번 나오지 않게 */
-  var seen={}, uniq=[];
-  out.forEach(function(c){ var k=c.pair+'|'+c.q; if(seen[k]) return; seen[k]=1; uniq.push(c); });
-  return uniq;
-}
-
-/* ---------- 감별 카드 경량 SRS (3상자) ---------- */
-var CF_IV=[0,1,4,12];
-function cfDue(C, id, today){
-  var s=C.gst[id];
-  if(!s) return true;
-  return s.due<=today;
-}
-function cfGrade(C, id, ok, today){
-  var s=C.gst[id]||{b:0,n:0,w:0,due:today};
-  s.n++;
-  if(ok){ s.b=Math.min(3,(s.b||0)+1); }
-  else { s.w++; s.b=0; }
-  s.due=addDays(today, CF_IV[s.b]||0);
-  s.ls=today;
-  C.gst[id]=s;
-  return s;
-}
-function addDays(s,n){ var d=parseD(s); d.setDate(d.getDate()+n);
-  return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate()); }
-function p2(n){ return (n<10?'0':'')+n; }
-
-/* ---------- 데이터 주도 인터리빙 ----------
-   상위 혼동 쌍의 두 개념을 같은 세션 안에서 3~7칸 간격으로 병치한다.
-   붙여놓으면 대조는 되나 인출이 안 되고, 너무 멀면 대조가 안 된다. */
-function tagOf(text, keys){
-  var out=[];
-  for(var i=0;i<keys.length;i++){ if(text.indexOf(keys[i])>=0) out.push(keys[i]); }
-  return out;
-}
-function weave(ids, pairs, textOf, opts){
-  opts=opts||{};
-  var gmin=opts.gapMin==null?GAP_MIN:opts.gapMin;
-  var gmax=opts.gapMax==null?GAP_MAX:opts.gapMax;
-  var keys={}, kl=[];
-  pairs.forEach(function(p){ keys[p.a]=1; keys[p.b]=1; });
-  kl=Object.keys(keys);
-  if(!kl.length || ids.length<3) return {ids:ids.slice(), woven:[], missing:[]};
-
-  var tag={};
-  ids.forEach(function(id){ tag[id]=tagOf(String(textOf(id)||''), kl); });
-
-  var arr=ids.slice(), locked={}, woven=[], missing=[];
-  pairs.forEach(function(p){
-    var ia=-1, ib=-1, i;
-    for(i=0;i<arr.length;i++){
-      var t=tag[arr[i]]||[];
-      if(ia<0 && !locked[arr[i]] && t.indexOf(p.a)>=0) ia=i;
-    }
-    for(i=0;i<arr.length;i++){
-      var t2=tag[arr[i]]||[];
-      if(ib<0 && !locked[arr[i]] && i!==ia && t2.indexOf(p.b)>=0) ib=i;
-    }
-    if(ia<0 || ib<0){ missing.push({pair:p.key, hasA:ia>=0, hasB:ib>=0}); return; }
-    var gap=gmin + (parseInt(h32(p.key).slice(-3),36) % (gmax-gmin+1));
-    var item=arr.splice(ib,1)[0];
-    if(ib<ia) ia--;
-    var pos=Math.min(arr.length, ia+gap);
-    arr.splice(pos,0,item);
-    locked[arr[ia]]=1; locked[item]=1;
-    woven.push({pair:p.key, a:arr[ia], b:item, gap:pos-ia});
-  });
-  return {ids:arr, woven:woven, missing:missing};
-}
-
-/* ---------- 형제 카드에서 미끼 채굴 ----------
-   같은 부모(p)의 형제 → 같은 단원(ch)의 같은 길이대 답 순으로 고른다.
-   전부 프로젝트 소스 문자열이다. 새로 지어내지 않는다. */
-function distractors(card, CARDS, idxByParent, n){
-  n=n||3;
-  var out=[], seen={}, i, c;
-  seen[String(card.a)]=1;
-  var sib=(idxByParent[card.p]||[]);
-  for(i=0;i<sib.length && out.length<n;i++){
-    c=sib[i];
-    if(c.id===card.id) continue;
-    if(seen[String(c.a)]) continue;
-    if(!c.a || String(c.a).length>40) continue;
-    seen[String(c.a)]=1; out.push(c.a);
-  }
-  if(out.length<n){
-    var L=String(card.a).length;
-    var pool=CARDS.filter(function(x){
-      return x.ch===card.ch && x.id!==card.id && x.a && !seen[String(x.a)] &&
-             Math.abs(String(x.a).length-L)<=Math.max(6, L*0.6);
-    });
-    pool.sort(function(x,y){
-      return Math.abs(String(x.a).length-L)-Math.abs(String(y.a).length-L);
-    });
-    for(i=0;i<pool.length && out.length<n;i++){
-      seen[String(pool[i].a)]=1; out.push(pool[i].a);
-    }
-  }
-  return out;
-}
-
-/* ---------- 요약 통계 ---------- */
-function summary(C, today){
-  var pairs=mine(C, today, {top:9999});
-  var tot=0; Object.keys(C.m).forEach(function(k){ tot+=C.m[k].n; });
-  var bidi=pairs.filter(function(p){ return p.bidi>=0.5; }).length;
-  var gen=Object.keys(C.gen||{}).length;
-  var due=0;
-  Object.keys(C.gen||{}).forEach(function(id){ if(cfDue(C,id,today)) due++; });
-  return {logged:tot, pairs:pairs.length, bidi:bidi, gen:gen, due:due};
-}
-
-return {
-  SEP:SEP, MIN_N:MIN_N, HALF:HALF, BIDI_W:BIDI_W, GAP_MIN:GAP_MIN, GAP_MAX:GAP_MAX,
-  clean:clean, normKey:normKey, isCombo:isCombo, store:store, bump:bump,
-  logExam:logExam, logCard:logCard, mine:mine, genCards:genCards,
-  cfDue:cfDue, cfGrade:cfGrade, weave:weave, tagOf:tagOf,
-  distractors:distractors, summary:summary, h32:h32, addDays:addDays
-};
-})();
-
 /* ===================== 생물 SRS v2 — 마이크로 카드 + 오답노트 + 세뇌형 가사 ===================== */
 (function(){
 "use strict";
@@ -1780,8 +1387,7 @@ function buildQueue(){
   var pt=partition(); sortDue(pt.due);
   var nNew=Math.min(pt.neu.length, DB.newCap, Math.max(0, DB.budget-pt.due.length));
   sortNew(pt.neu);
-  /* [v8] 혼동 쌍이 큐 배치를 결정한다 — 사람이 인터리빙을 짜지 않는다 */
-  return confWeave(interleave(pt.due, pt.neu.slice(0,nNew)).slice(0,DB.budget).map(function(c){return c.id;}));
+  return interleave(pt.due, pt.neu.slice(0,nNew)).slice(0,DB.budget).map(function(c){return c.id;});
 }
 function unseenTotal(){
   var n=0; for(var i=0;i<CARDS.length;i++){ var s=DB.states[CARDS[i].id]; if(!s||!s.seen) n++; }
@@ -1919,7 +1525,7 @@ function reasonStats(days){
 
 /* ---------- DOM ---------- */
 function $(id){ return document.getElementById(id); }
-var SECS=['home','review','summary','settings','wrongs','song','leech','calib','exam','exrun','exres','exstat','conf','cfrun'];
+var SECS=['home','review','summary','settings','wrongs','song','leech','calib','exam','exrun','exres','exstat'];
 function show(sec){ SECS.forEach(function(s){ $(s).classList.toggle('hidden', s!==sec); }); window.scrollTo(0,0); }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];}); }
 
@@ -1998,9 +1604,6 @@ function renderHome(){
   var L=leechList().filter(function(x){return x.sus;}).length;
   $('bdLeech').textContent=L;
   $('leechBtn').classList.toggle('hidden', L===0);
-  /* [v8] 혼동 배지 */
-  var cs=CONF.summary(cStore(), today());
-  $('bdConf').textContent = cs.pairs + (cs.due?(' · 감별 '+cs.due):'');
 
   /* [v3] 스윕 진행률 */
   if(inSweep()){
@@ -2204,7 +1807,6 @@ function submitEQ(){
   if(!shown && !xPick.length) return;
   if(!shown){
     var ok=eqCorrect(q, xPick);
-    if(!ok) confLogWrong(q, xPick);          /* [v8] 무엇으로 착각했는지 기록 */
     var sec=Math.round((Date.now()-s.tq0)/1000);
     s.tq[q.id]=sec;
     var st=exSt(q.id) || {n:0,w:0,lg:null,ls:null,r:null,t:0};
@@ -2229,7 +1831,6 @@ function finishExam(){
     var q=EIDX[id], ok=s.res[id]===1;
     if(s.res[id]==null){                              /* 미제출(실전모드 끝까지 안 고른 것) */
       var okk=eqCorrect(q, s.sel[id]||[]);
-      if(!okk) confLogWrong(q, s.sel[id]||[]);   /* [v8] */
       s.res[id]=okk?1:0;
       var st=exSt(id)||{n:0,w:0,lg:null,ls:null,r:null,t:0};
       st.n++; if(!okk) st.w++; st.lg=okk?1:0; st.ls=today();
@@ -2979,19 +2580,6 @@ $('fNew').oninput=project;
 $('wBack').onclick=showHome;
 /* [v3] */
 $('calibBtn').onclick=showCalib;
-/* [v8] 혼동 지도 */
-$('confBtn').onclick=showConf;
-$('cfBack').onclick=showHome;
-$('cfExit').onclick=showConf;
-$('cfSubmit').onclick=submitDrill;
-$('cfDrill').onclick=startDrill;
-$('cfGen').onclick=function(){
-  var r=confGenerate();
-  alert(r.add? ('감별 카드 '+r.add+'장 생성 (총 '+r.total+'장)\n상위 '+r.pairs+'쌍에서 뽑았습니다.')
-             : ('새로 만들 카드가 없습니다.\n보유 '+r.total+'장 · 채굴된 쌍 '+r.pairs+'개'));
-  renderConf();
-};
-$('cfWeave').onclick=function(){ var C=cStore(); C.weave = cWeaveOn()?0:1; save(); renderConf(); };
 /* [v4] 기출 실전 */
 $('examBtn').onclick=showExam;
 $('xBack').onclick=showHome;
@@ -3069,172 +2657,6 @@ document.addEventListener('keydown', function(e){
   var map={'1':5,'2':3,'3':2,'4':0,'5':1,'6':4};
   if(map.hasOwnProperty(e.key)){ e.preventDefault(); grade(map[e.key]); }
 });
-
-
-/* ═══════════════ [v8] 혼동 지도 · 감별 드릴 ═══════════════
-   기출에서 "무엇을 무엇으로 착각했는지"를 로깅해 혼동 행렬을 쌓고,
-   상위 쌍을 A/B 감별 카드로 자동 생성한다. 인터리빙은 데이터가 짠다. */
-
-function cStore(){ return CONF.store(DB); }
-function cPairs(n){ return CONF.mine(cStore(), today(), {top:n||14}); }
-function cLab(k){ var C=cStore(); return C.lab[k]||k; }
-function cWeaveOn(){ var C=cStore(); return C.weave!==0; }
-
-/* ---------- 기출 오답 → 혼동 로깅 ---------- */
-function confLogWrong(q, pick){
-  if(!q || !pick || !pick.length) return;
-  try{ CONF.logExam(cStore(), q, pick, today()); }catch(e){}
-}
-
-/* ---------- 감별 카드 생성 ---------- */
-function confGenerate(){
-  var C=cStore(), pairs=CONF.mine(C, today(), {top:20});
-  var cards=CONF.genCards(pairs, EIDX, C.lab);
-  var add=0;
-  cards.forEach(function(c){ if(!C.gen[c.id]){ C.gen[c.id]=c; add++; } });
-  save();
-  return {add:add, total:Object.keys(C.gen).length, pairs:pairs.length};
-}
-function confDueList(){
-  var C=cStore(), t=today(), out=[];
-  Object.keys(C.gen).forEach(function(id){
-    if(CONF.cfDue(C, id, t)) out.push(C.gen[id]);
-  });
-  /* 최근 혼동이 심한 쌍부터 */
-  var rank={}; cPairs(30).forEach(function(p,i){ rank[p.key]=i; });
-  out.sort(function(a,b){ return (rank[a.pair]==null?99:rank[a.pair])-(rank[b.pair]==null?99:rank[b.pair]); });
-  return out;
-}
-
-/* ---------- 혼동 지도 화면 ---------- */
-function showConf(){ renderConf(); show('conf'); }
-function renderConf(){
-  var C=cStore(), t=today();
-  var s=CONF.summary(C, t);
-  $('cfLogged').textContent=s.logged;
-  $('cfPairs').textContent=s.pairs;
-  $('cfDueN').textContent=s.due;
-
-  var pairs=cPairs(14);
-  var box=$('cfList');
-  if(!pairs.length){
-    box.innerHTML='<div class="cfempty">아직 채굴된 쌍이 없습니다.<br>'
-      +'기출 실전에서 <b>객관식 오답을 2회 이상</b> 같은 조합으로 틀리면 여기에 쌓입니다.<br>'
-      +'<small>1회 오답은 우연으로 보고 버립니다 — 노이즈가 인터리빙을 망치니까요.</small></div>';
-  } else {
-    var mx=pairs[0].score||1;
-    box.innerHTML=pairs.map(function(p,i){
-      var A=esc(cLab(p.a)), B=esc(cLab(p.b));
-      var w=Math.max(6, Math.round(p.score/mx*100));
-      var bd=p.bidi>=0.5
-        ? '<span class="cftag bi">🔁 양방향</span>'
-        : '<span class="cftag uni">→ 단방향</span>';
-      var ng=p.neg?'<span class="cftag neg">🔻 부정문</span>':'';
-      var srcs=[].concat(p.src.ab||[], p.src.ba||[]).slice(0,4)
-        .map(function(x){ return '<span class="chip">'+esc(x)+'</span>'; }).join('');
-      return '<div class="cfrow">'
-        +'<div class="cfhead"><span class="cfrank">'+(i+1)+'</span>'
-        +'<span class="cfname">'+A+' <em>↔</em> '+B+'</span>'
-        +'<span class="cfscore">'+p.score.toFixed(1)+'</span></div>'
-        +'<div class="cftrack"><div class="cffill" style="width:'+w+'%"></div></div>'
-        +'<div class="cfdir">'
-          +'<span>'+A+' 인데 <b>'+B+'</b>라 답함 <b class="n">'+p.nab+'</b>회</span>'
-          +'<span>'+B+' 인데 <b>'+A+'</b>라 답함 <b class="n">'+p.nba+'</b>회</span>'
-        +'</div>'
-        +'<div class="cfmeta">'+bd+ng+srcs+'</div>'
-        +'</div>';
-    }).join('');
-  }
-
-  var wv=$('cfWeave');
-  wv.classList.toggle('on', cWeaveOn());
-  wv.textContent = cWeaveOn() ? '켜짐' : '꺼짐';
-
-  var gb=$('cfDrill');
-  gb.disabled = s.due===0;
-  gb.style.opacity = s.due===0 ? .5 : 1;
-  gb.textContent = s.due ? ('▶ 감별 드릴 시작 ('+s.due+'장)') : '감별 드릴 — 오늘 할 카드 없음';
-  $('cfGenN').textContent = s.gen;
-}
-
-/* ---------- 감별 드릴 ---------- */
-var cfQ=[], cfI=0, cfPick=null, cfShown=false, cfRight=0;
-function startDrill(){
-  cfQ=confDueList(); cfI=0; cfPick=null; cfShown=false; cfRight=0;
-  if(!cfQ.length){ showConf(); return; }
-  renderDrill(); show('cfrun');
-}
-function curCF(){ return cfQ[cfI]; }
-function renderDrill(){
-  var c=curCF();
-  if(!c){ finishDrill(); return; }
-  $('cfFill').style.width=Math.round(cfI/cfQ.length*100)+'%';
-  $('cfNum').textContent=(cfI+1)+'/'+cfQ.length;
-  var meta='<span class="chip">'+esc(ETOP[c.topic]?ETOP[c.topic].label:c.topic)+'</span>'
-    +'<span class="chip">출처 '+esc(c.src)+'</span>';
-  if(c.neg) meta+='<span class="chip rich">🔻 부정문</span>';
-  $('cfMeta').innerHTML=meta;
-  $('cfStem').innerHTML=hlNeg(c.q, true);
-  $('cfOpts').innerHTML=c.opts.map(function(o,i){
-    var cls='eopt';
-    if(cfShown){
-      if(o===c.a) cls+=' right';
-      else if(cfPick===i) cls+=' wrong';
-    } else if(cfPick===i) cls+=' sel';
-    return '<button class="'+cls+'" data-i="'+i+'"'+(cfShown?' disabled':'')+'>'
-      +'<span class="num">'+'AB'[i]+'</span><span>'+esc(o)+'</span></button>';
-  }).join('');
-  if(!cfShown) $('cfOpts').querySelectorAll('.eopt').forEach(function(b){
-    b.onclick=function(){ cfPick=+b.getAttribute('data-i'); renderDrill(); };
-  });
-  if(cfShown){
-    var ok=c.opts[cfPick]===c.a;
-    var h='<div class="everdict '+(ok?'ok':'no')+'">'+(ok?'✅ 정답':'❌ 오답')
-      +'  <small style="font-weight:700;color:var(--ink3)">'+esc(c.a)+'</small></div>';
-    if(c.exp) h+='<div class="eexp">'+esc(c.exp)+'</div>';
-    h+='<div class="eexp" style="background:var(--teal-soft);color:var(--teal-d)">이 문항은 <b>'+esc(c.src)
-      +'</b>의 발문·보기·해설을 그대로 씁니다. 판별 기준을 새로 만들지 않았어요.</div>';
-    $('cfFeed').innerHTML=h;
-  } else $('cfFeed').innerHTML='';
-  var btn=$('cfSubmit');
-  btn.textContent = cfShown ? (cfI+1>=cfQ.length?'결과 보기':'다음 →') : '제출';
-  btn.disabled = !cfShown && cfPick==null;
-  btn.style.opacity = btn.disabled ? .5 : 1;
-}
-function submitDrill(){
-  var c=curCF(); if(!c) return;
-  if(!cfShown){
-    if(cfPick==null) return;
-    var ok=c.opts[cfPick]===c.a;
-    if(ok) cfRight++;
-    CONF.cfGrade(cStore(), c.id, ok, today());
-    /* 감별에서 또 틀렸다면 그 쌍은 아직 안 잡힌 것 — 행렬에 되먹인다 */
-    if(!ok) CONF.logCard(cStore(), c.a, c.opts[cfPick], c.id, today());
-    save();
-    cfShown=true; renderDrill(); return;
-  }
-  cfI++; cfPick=null; cfShown=false;
-  if(cfI>=cfQ.length) finishDrill(); else renderDrill();
-}
-function finishDrill(){
-  var n=cfQ.length;
-  alert('감별 드릴 완료 — '+cfRight+'/'+n+' 정답\n'
-    +'틀린 쌍은 상자가 0으로 돌아가 오늘 다시 나옵니다.');
-  showConf();
-}
-
-/* ---------- 데이터 주도 인터리빙 ---------- */
-function confWeave(ids){
-  if(!cWeaveOn()) return ids;
-  var pairs=cPairs(8);
-  if(!pairs.length) return ids;
-  try{
-    var r=CONF.weave(ids, pairs, function(id){
-      var c=IDX[id]; return c ? (c.q+' '+c.a+' '+(c.n||'')) : '';
-    });
-    return r.ids;
-  }catch(e){ return ids; }
-}
 
 /* ---------- init ---------- */
 load();
