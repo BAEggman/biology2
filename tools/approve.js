@@ -11,16 +11,21 @@ const R=JSON.parse(fs.readFileSync(path.join(ROOT,'outputs/rank.json'),'utf8'));
 const BATCH=parseInt(process.argv[2]||'1',10), SIZE=parseInt(process.argv[3]||'40',10);
 const IMGBASE=process.env.IMGBASE||'https://baeggman.github.io/biology2/img/';
 
-/* 실패 정도로 거른다. 격리(sus)와 lap 9+ 는 태깅으로 안 풀린다 —
-   마스터노트: "8번 넘게 무너진 카드는 더 돌려도 안 붙는다. 카드를 고쳐야 한다."
-   실제로 A(그림이 이미 걸린 91장)의 평균 lap이 6.7로 B(4.8)보다 높다.
-   그림만 붙이면 붙는다는 가정은 데이터로 뒷받침되지 않는다. */
-const LAP=(process.env.LAP||'3-8').split('-').map(Number);
-const pool=R.B
-  .filter(r=>!r.sus && r.lap>=LAP[0] && r.lap<=LAP[1])
-  .sort((a,b)=> b.lap-a.lap || b.rich-a.rich || b.wrong-a.wrong);
+/* 대상: 격리(🧊) 전부 + lap 3~8 구간.
+   격리는 가장 크게 무너진 것들이라 제일 먼저 붙어야 한다.
+   앞서 이걸 뺐던 건 오판이었다 — 「그림이 걸린 카드가 더 많이 무너졌다」를
+   그림이 무용하다는 뜻으로 읽었는데, 실제로는 스케치가 아직 완성이 안 된 것이다.
+   그림이 부실해서 안 붙는 것과 그림이 안 걸려서 안 붙는 것은 다르다.
+   빼는 건 lap 0~2 뿐이다 — 이미 붙고 있다.
+   MODE=all 이면 전부, MODE=leech 면 격리만. */
+const MODE=process.env.MODE||'both';
+const inSet=r=> MODE==='all'   ? true
+              : MODE==='leech' ? !!r.sus
+              : (!!r.sus || (r.lap>=3 && r.lap<=8));
+const pool=R.B.filter(inSet)
+  .sort((a,b)=> (b.sus?1:0)-(a.sus?1:0) || b.lap-a.lap || b.rich-a.rich || b.wrong-a.wrong);
 const items=pool.slice((BATCH-1)*SIZE, BATCH*SIZE);
-if(!items.length){ console.error('그 배치엔 카드가 없다. 대상 '+pool.length+'장 (lap '+LAP.join('-')+', 격리 제외).'); process.exit(1); }
+if(!items.length){ console.error('그 배치엔 카드가 없다. 대상 '+pool.length+'장.'); process.exit(1); }
 const nBatch=Math.ceil(pool.length/SIZE);
 
 // 도해 패널은 이미지가 없다
@@ -116,8 +121,9 @@ button.none.on{background:#FEF2F2;border-color:#FCA5A5;color:#B91C1C;font-weight
   <button class="btn btn-p" id="copy">결과 복사</button>
 </header>
 <main>
-  <p class="hint"><b>lap ${LAP[0]}~${LAP[1]} · 격리 제외</b> — 흔들리지만 아직 안 무너진 구간이다.
-  여기가 그림을 붙여서 값이 나는 곳이다. 그림을 눌러 고른다. <b>여러 개 고를 수 있다</b> — 한 카드가 두 패널에 걸치는 경우가 있다.
+  <p class="hint"><b>격리(🧊) 전부 + 3~8번 무너진 것</b> — 가장 크게 무너진 순서다.
+  <b>맞는 그림이 없으면 「해당 없음」이 정답이다</b> — 그게 곧 「이건 그려야 한다」는 뜻이고, 그 목록이 다음 작업이 된다.
+  그림을 눌러 고른다. <b>여러 개 고를 수 있다</b> — 한 카드가 두 패널에 걸치는 경우가 있다.
   맞는 게 없으면 <b>해당 없음</b>. 진행은 자동 저장된다.</p>
   ${cards}
 </main>
@@ -180,6 +186,6 @@ const out=path.join(ROOT,'outputs','approve_'+BATCH+'.html');
 fs.mkdirSync(path.dirname(out),{recursive:true});
 fs.writeFileSync(out, html);
 const opts=items.reduce((a,r)=>a+r.cand.reduce((s,c)=>s+c.panels.length,0),0);
-console.log(`대상 ${pool.length}장 (B ${R.B.length}장 중 lap ${LAP.join('-')} · 격리 제외)`);
+console.log(`대상 ${pool.length}장 (B ${R.B.length}장 중 · 격리 ${pool.filter(r=>r.sus).length} + lap3~8 ${pool.filter(r=>!r.sus).length})`);
 console.log(`배치 ${BATCH}/${nBatch} — 카드 ${items.length}장 · 선택지 ${opts}개 (카드당 ${(opts/items.length).toFixed(1)})`);
 console.log(`→ ${out}  (${(Buffer.byteLength(html)/1024).toFixed(0)}KB)`);
