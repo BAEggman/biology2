@@ -1,4 +1,12 @@
 {
+  "name": "biology2",
+  "private": true,
+  "description": "생물 SRS + Sketchy 시각 니모닉. 사실표(sketchy.html)가 단일 소스이고 연결 지도는 build.js가 생성한다.",
+  "scripts": {
+    "build": "node build.js",
+    "check": "node build.js --check",
+    "test": "node test/all.js"
+  },
   "dependencies": {
     "jsdom": "^30.0.1"
   }
