@@ -28,6 +28,11 @@ const items=pool.slice((BATCH-1)*SIZE, BATCH*SIZE);
 if(!items.length){ console.error('그 배치엔 카드가 없다. 대상 '+pool.length+'장.'); process.exit(1); }
 const nBatch=Math.ceil(pool.length/SIZE);
 
+// 패널별 요약(br)과 사실표(f) — 「이 그림에 뭐가 들어있나」를 보여주려면 이게 필요하다
+const IXH=fs.readFileSync(path.join(ROOT,'index.html'),'utf8');
+const PBR  =JSON.parse(IXH.match(/var PBR=(\{.*?\});/s)[1]);
+const PFACT=JSON.parse(IXH.match(/var PFACT=(\{.*?\});/s)[1]);
+
 // 도해 패널은 이미지가 없다
 const NOIMG=new Set(JSON.parse(fs.readFileSync(path.join(ROOT,'index.html'),'utf8')
   .match(/var PNOIMG=(\[.*?\]);/s)[1]));
@@ -40,11 +45,18 @@ const cards=items.map((r,i)=>{
         <span class="hits">${S.hits.map(esc).join(' · ')}</span></div>
       <div class="panels">
         ${S.panels.map(p=>`
-        <button class="p" data-card="${esc(r.id)}" data-pid="${esc(p.pid)}">
-          ${NOIMG.has(p.pid)?'<div class="noimg">도해<br>(이미지 없음)</div>'
-            :`<img loading="lazy" src="${IMGBASE}${esc(p.pid)}.webp" alt="">`}
-          <div class="pt">${esc(p.t)}</div><div class="pid">${esc(p.pid)}</div>
-        </button>`).join('')}
+        <div class="opt">
+          <button class="p" data-card="${esc(r.id)}" data-pid="${esc(p.pid)}">
+            ${NOIMG.has(p.pid)?'<div class="noimg">도해<br>(이미지 없음)</div>'
+              :`<img loading="lazy" src="${IMGBASE}${esc(p.pid)}.webp" alt="">`}
+            <div class="pt">${esc(p.t)}</div><div class="pid">${esc(p.pid)}</div>
+          </button>
+          <div class="facts">
+            ${PBR[p.pid]?`<div class="br">${PBR[p.pid]}</div>`:''}
+            <table>${(PFACT[p.pid]||[]).map(f=>
+              `<tr><td class="fp">${esc(f[0])}</td><td>${esc(f[1])}</td></tr>`).join('')}</table>
+          </div>
+        </div>`).join('')}
       </div>
     </div>`).join('');
   return `
@@ -94,9 +106,18 @@ main{max-width:960px;margin:0 auto;padding:16px}
 .shead{font-size:13px;font-weight:800;color:#78350F;margin-bottom:8px}
 .shead em{font-style:normal;font-weight:700;color:#B91C1C;font-size:11px}
 .hits{display:block;font-weight:600;font-size:11px;color:var(--ink2);margin-top:2px}
-.panels{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.panels{display:grid;gap:10px}
+.opt{display:grid;grid-template-columns:170px 1fr;gap:12px;align-items:start;
+  border:1px solid var(--line);border-radius:12px;padding:8px;background:#FCFCFD}
+.opt:has(button.p.on){border-color:var(--ok);background:#F0FDF4}
+.facts{font-size:12px;line-height:1.5;min-width:0}
+.facts .br{background:#FEF3C7;border-radius:7px;padding:7px 9px;margin-bottom:6px;word-break:keep-all}
+.facts table{width:100%;border-collapse:collapse}
+.facts td{border-top:1px solid var(--line);padding:3px 5px;vertical-align:top;word-break:keep-all}
+.facts .fp{color:#92400E;font-weight:700;width:38%}
+@media(max-width:700px){.opt{grid-template-columns:1fr}}
 button.p{border:2px solid var(--line);background:#fff;border-radius:12px;padding:6px;cursor:pointer;
-  text-align:left;font:inherit;transition:.12s}
+  text-align:left;font:inherit;transition:.12s;width:100%}
 button.p:hover{border-color:var(--amber)}
 button.p.on{border-color:var(--ok);background:#F0FDF4}
 button.p.on .pt{color:var(--ok)}
@@ -122,7 +143,8 @@ button.none.on{background:#FEF2F2;border-color:#FCA5A5;color:#B91C1C;font-weight
 </header>
 <main>
   <p class="hint"><b>격리(🧊) 전부 + 3~8번 무너진 것</b> — 가장 크게 무너진 순서다.
-  <b>맞는 그림이 없으면 「해당 없음」이 정답이다</b> — 그게 곧 「이건 그려야 한다」는 뜻이고, 그 목록이 다음 작업이 된다.
+  <b>그림 옆에 그 그림의 사실표를 같이 폈다</b> — 답이 표 안에 있으면 그 그림을 누른다.
+  <b>없으면 「해당 없음」이 정답이다</b> — 그게 곧 「이건 그려야 한다」는 뜻이고, 그 목록이 다음 작업이 된다.
   그림을 눌러 고른다. <b>여러 개 고를 수 있다</b> — 한 카드가 두 패널에 걸치는 경우가 있다.
   맞는 게 없으면 <b>해당 없음</b>. 진행은 자동 저장된다.</p>
   ${cards}
