@@ -114,7 +114,17 @@ const weight=w=>Math.pow(w.length,0.9)/2.4 / Math.log2(2+(DF[w]||0));  // 긴 �
 function candidates(card){
   const text=(card.q||'')+' '+(card.a||'');
   const cch=chNum(card.ch);
-  const pool=PAN.filter(p=>p.gate.includes(card.g) || cch.some(n=>p.ch.includes(n)));
+  /* 챕터가 게이트를 이긴다. 게이트는 넓다 — P(식물 생식·반응)는 ch38 생식과 ch39 반응을
+     함께 묶는데 장면은 ch39(온실 시계탑)밖에 없다. 게이트만 보면 화분립 카드에
+     식물호르몬 장면이 붙는다. 챕터가 맞는 장면이 하나라도 있으면 그것만 쓴다. */
+  const byCh = PAN.filter(p=>cch.some(n=>p.ch.includes(n)));
+  /* 챕터 번호가 없는 장면(s33 「생화학 지엽」, s13 면역, s23 신경계 …)은
+     챕터로 배제할 수 없다. 번호가 없으니 어긋날 것도 없다 — 게이트가 맞으면 넣는다.
+     이걸 빠뜨리면 오탄당 인산 경로 카드에서 s33(곁문 공장)이 통째로 사라진다. */
+  const noCh = PAN.filter(p=>!p.ch.length && p.gate.includes(card.g));
+  const strong=[...byCh, ...noCh];
+  const pool = strong.length ? strong : PAN.filter(p=>p.gate.includes(card.g));
+  const weak = !strong.length;                // 챕터도 없고 번호없는 장면도 없다 = 약한 추천
   if(!pool.length) return [];
 
   const byScene={};
@@ -129,9 +139,9 @@ function candidates(card){
                    s:+sc.toFixed(2), linked:!!Object.values(PMAP).flat().includes(p.pid)});
   }
   return Object.values(byScene)
-    .filter(S=>S.best>=0.8)
+    .filter(S=>S.best >= (weak?2.0:0.8))
     .sort((a,b)=>b.best-a.best).slice(0,2)
-    .map(S=>({...S, hits:(hs=>hs.filter(w=>!hs.some(v=>v!==w&&w.startsWith(v))))   /* 전자전달계의/전자전달계 중복 제거 */
+    .map(S=>({...S, weak, hits:(hs=>hs.filter(w=>!hs.some(v=>v!==w&&w.startsWith(v))))   /* 전자전달계의/전자전달계 중복 제거 */
                        ([...S.hits]).sort((x,y)=>weight(y)-weight(x)).slice(0,6),
               panels:S.panels.sort((a,b)=>a.pid.localeCompare(b.pid))}));
 }
@@ -174,14 +184,17 @@ B.forEach((r,i)=>{
   md+=`### ${i+1}. \`${r.id}\`  ·  🔴${r.rich} 💥${r.lap} ✗${r.wrong}/${r.n}${r.sus?' · 🧊격리':''}\n`;
   md+=`**Q** ${r.q}\n**A** ${r.a}\n_${r.g} ${r.gn} · ${r.ch}_\n\n`;
   r.cand.forEach(S=>{
-    md+=`**${S.sid} ${S.scene}**  _(겹친 말: ${S.hits.join(' · ')})_\n`;
+    md+=`**${S.sid} ${S.scene}**${S.weak?' ⚠️ _챕터가 다르다 — 게이트만 같음_':''}`
+      +`  _(겹친 말: ${S.hits.join(' · ')})_\n`;
     S.panels.forEach(p=>md+=`- [ ] \`${p.pid}\` ${p.t}\n`);
   });
   md+=`\n`;
 });
 
 md+=`\n## C — 그림 없음 (${C.length}장)\n\n`;
-C.forEach(r=>md+=`- \`${r.id}\` 🔴${r.rich} 💥${r.lap} — ${r.q}  _(${r.g} · ${r.ch})_\n`);
+const chHas=ch=>PAN.some(p=>chNum(ch).some(n=>p.ch.includes(n)));
+C.forEach(r=>md+=`- \`${r.id}\` 🔴${r.rich} 💥${r.lap} — ${r.q}`
+  +`  _(${r.g} · ${r.ch}${chHas(r.ch)?'':' · **이 단원에 장면이 없다**'})_\n`);
 
 md+=`\n## A — 이미 연결됨 (${A.length}장, 참고용)\n\n`;
 A.forEach(r=>{ const p=Array.isArray(PMAP[r.id])?PMAP[r.id]:[PMAP[r.id]];
