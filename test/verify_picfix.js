@@ -1,0 +1,125 @@
+const L=require('./_lib');
+const FX=L.ensure();
+/* index.new.html 검증 스위트 — 제안 1·2 */
+const fs=require('fs'), path=require('path');
+const NEW=require('path').join(L.ROOT,'index.html'), OLD=FX.BASE, IMGDIR=require('path').join(L.ROOT,'img');
+const h=fs.readFileSync(NEW,'utf8'), o=fs.readFileSync(OLD,'utf8');
+let pass=0, fail=0;
+const T=(name,fn)=>{ try{ const m=fn(); console.log('  ✓',name, m===undefined?'':'— '+m); pass++; }
+                     catch(e){ console.log('  ✗',name,'—',e.message); fail++; } };
+const eq=(a,b,m)=>{ if(String(a)!==String(b)) throw new Error((m||'')+' got '+a+' want '+b); return a; };
+const grab=(re,s)=>{ const m=(s||h).match(re); if(!m) throw new Error('패턴 없음'); return m[1]; };
+
+const PMAP=JSON.parse(grab(/var PMAP=(\{.*?\});/s));
+const PTIT=JSON.parse(grab(/var PTIT=(\{.*?\});/s));
+const PBR =JSON.parse(grab(/var PBR=(\{.*?\});/s));
+const PFACT=JSON.parse(grab(/var PFACT=(\{.*?\});/s));
+const PNOIMG=JSON.parse(grab(/var PNOIMG=(\[.*?\]);/s));
+const DATA=(()=>{ const s=fs.readFileSync(FX.DATAJSON,'utf8'); return JSON.parse(s); })();
+const ALL=DATA.flatMap(s=>s.panels.map(p=>p.id));
+
+console.log('\n── A. 데이터 무결성 ──');
+T('PTIT 전 패널 106', ()=>eq(Object.keys(PTIT).length,106));
+T('PTIT에 유령 패널 없음', ()=>eq(Object.keys(PTIT).filter(p=>!ALL.includes(p)).length,0));
+T('PTIT 누락 없음', ()=>eq(ALL.filter(p=>!PTIT[p]).length,0));
+T('PBR 106', ()=>eq(Object.keys(PBR).length,106));
+T('PFACT 590행', ()=>eq(Object.values(PFACT).reduce((a,b)=>a+b.length,0),590));
+T('PFACT 모든 행이 2요소', ()=>eq(Object.values(PFACT).flat().filter(r=>r.length!==2).length,0));
+
+console.log('\n── B. 제안 1: 죽은 링크 수리 ──');
+const flat=v=>Array.isArray(v)?v:[v];
+T('PMAP 깨진 참조 0', ()=>eq(Object.values(PMAP).flatMap(flat).filter(p=>!ALL.includes(p)).length,0));
+T('s20p01/s12p02 잔존 0', ()=>eq(Object.values(PMAP).flatMap(flat).filter(p=>p==='s20p01'||p==='s12p02').length,0));
+T('G1-26 오태깅 삭제됨', ()=>{ if(PMAP['G1-26']) throw new Error('아직 있음'); return 'ok'; });
+T('옥신 카드 → s20p01a', ()=>['P1-3','P1-3#2','P1-12','P1-13','P1-14'].map(k=>eq(PMAP[k],'s20p01a',k)).length+'장');
+T('ABA·에틸렌·브라시노 → s20p01b', ()=>['P1-6','P1-6#2','P1-7','P1-8','P1-8#3'].map(k=>eq(PMAP[k],'s20p01b',k)).length+'장');
+T('시토키닌 계열 → s20p01a', ()=>['P1-4','X-PL-28'].map(k=>eq(PMAP[k],'s20p01a',k)).length+'장');
+T('걸친 카드 2장은 배열', ()=>['S-PL-14','X-PL-27'].map(k=>{
+  if(!Array.isArray(PMAP[k])) throw new Error(k+' 배열 아님');
+  eq(PMAP[k].join(','),'s20p01a,s20p01b',k); return k; }).join(' '));
+T('G1-95 → s12p02a', ()=>eq(PMAP['G1-95'],'s12p02a'));
+T('PMAP 총수 705', ()=>eq(Object.keys(PMAP).length,705));
+T('원본 대비 -1장(오태깅만)', ()=>{
+  const P0=JSON.parse(o.match(/var PMAP=(\{.*?\});/s)[1]);
+  const gone=Object.keys(P0).filter(k=>!PMAP[k]);
+  eq(gone.join(','),'G1-26'); return '삭제=G1-26';
+});
+T('카드ID가 전부 실재', ()=>{
+  const C=JSON.parse(h.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
+  const ids=new Set(C.map(c=>c.id));
+  return eq(Object.keys(PMAP).filter(k=>!ids.has(k)).length,0);
+});
+T('고아 패널 26 → 23', ()=>{
+  const P0=JSON.parse(o.match(/var PMAP=(\{.*?\});/s)[1]);
+  const u0=new Set(Object.values(P0));
+  eq(ALL.filter(p=>!u0.has(p)).length,26,'원본 고아');
+  const used=new Set(Object.values(PMAP).flatMap(flat));
+  return eq(ALL.filter(p=>!used.has(p)).length,23)+'장 남음(제안3 대상)';
+});
+T('커버 패널 80 → 83', ()=>{
+  const used=new Set(Object.values(PMAP).flatMap(flat));
+  return eq(used.size,83)+' (s20p01a·s20p01b·s12p02a 부활)';
+});
+
+console.log('\n── C. 제안 2: 오답 복구 ──');
+T('picFix DOM 존재', ()=>eq((h.match(/id="picFix"/g)||[]).length,1));
+T('pfNext 생성 코드 존재', ()=>eq((h.match(/id="pfNext"/g)||[]).length,1));
+T('CSS .picfix 존재', ()=>eq(/\.picfix\{/.test(h),true));
+T('발동 조건 g<=3', ()=>eq(/g<=3 && pidList\(PMAP\[id\]\)\.length/.test(h),true));
+T('DB.picFix 토글 반영', ()=>eq(/DB\.picFix!==0/.test(h),true));
+T('설정 체크박스 존재', ()=>eq((h.match(/id="fPicFix"/g)||[]).length,1));
+T('advance() 분리됨', ()=>eq((h.match(/function advance\(\)/g)||[]).length,1));
+T('grade가 advance 호출', ()=>eq(/save\(\);\s*\n\s*if\(DB\.picFix!==0/.test(h),true));
+T('키보드 picFixOn 분기', ()=>eq(/if\(picFixOn\)\{/.test(h),true));
+T('PNOIMG = 도해 11장', ()=>eq(PNOIMG.length,11));
+T('PNOIMG가 전부 도해', ()=>eq(PNOIMG.filter(p=>!/^d0/.test(p)).length,0));
+
+console.log('\n── D. 이미지 파일 ──');
+const files=fs.readdirSync(IMGDIR).filter(f=>f.endsWith('.webp'));
+T('파일 95개', ()=>eq(files.length,95));
+T('PNOIMG 외 전 패널에 파일 존재', ()=>{
+  const miss=ALL.filter(p=>!PNOIMG.includes(p)).filter(p=>!fs.existsSync(path.join(IMGDIR,p+'.webp')));
+  return eq(miss.length,0);
+});
+T('전부 RIFF/WEBP 헤더', ()=>{
+  const bad=files.filter(f=>{ const b=fs.readFileSync(path.join(IMGDIR,f));
+    return b.slice(0,4).toString()!=='RIFF' || b.slice(8,12).toString()!=='WEBP'; });
+  return eq(bad.length,0);
+});
+T('합계 ≤ 12MB', ()=>{ const t=files.reduce((a,f)=>a+fs.statSync(path.join(IMGDIR,f)).size,0);
+  if(t>12*1048576) throw new Error((t/1048576).toFixed(1)+'MB'); return (t/1048576).toFixed(2)+'MB'; });
+
+console.log('\n── E. DOM · 회귀 ──');
+const {JSDOM}=require('jsdom');
+let dom;
+T('jsdom 파싱', ()=>{ dom=new JSDOM(h,{runScripts:'outside-only'}); return 'ok'; });
+T('필수 엘리먼트 전부 존재', ()=>{
+  const need=['picLink','picFix','grades','ansBlock','qText','aText','fPicFix','fNew','setSave'];
+  const miss=need.filter(i=>!dom.window.document.getElementById(i));
+  return eq(miss.length,0)+'/'+need.length;
+});
+T('picFix 초기 hidden', ()=>eq(dom.window.document.getElementById('picFix').className.includes('hidden'),true));
+T('script 개수 원본과 동일', ()=>eq((h.match(/<script/g)||[]).length,(o.match(/<script/g)||[]).length));
+T('CARDS 5531 무변경', ()=>{
+  const C=JSON.parse(h.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
+  const C0=JSON.parse(o.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
+  eq(C.length,5531); return eq(JSON.stringify(C)===JSON.stringify(C0),true)&&'동일';
+});
+T('EXAM 블록 무변경', ()=>{
+  const g=s=>s.match(/id=["']EXAM["'][^>]*>([\s\S]*?)<\/script>/)[1];
+  return eq(g(h)===g(o),true)&&'동일';
+});
+T('localStorage 키 무변경', ()=>{
+  const k=s=>(s.match(/KEY\s*=\s*['"]([^'"]+)/)||[])[1];
+  return eq(k(h),k(o));
+});
+T('JS 문법 (script 전체 파싱)', ()=>{
+  const blocks=[...h.matchAll(/<script(?![^>]*type=["']application)[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
+  blocks.forEach((b,i)=>{ try{ new Function(b); }catch(e){ throw new Error('script#'+i+': '+e.message); } });
+  return blocks.length+'개 블록 OK';
+});
+T('용량 증가 ≤150KB', ()=>{ const d=Buffer.byteLength(h)-fs.statSync(OLD).size;
+  if(d>150*1024) throw new Error((d/1024).toFixed(0)+'KB'); return '+'+(d/1024).toFixed(0)+'KB'; });
+
+console.log('\n'+(fail?'❌':'✅')+' 통과 '+pass+' / 실패 '+fail);
+process.exit(fail?1:0);
