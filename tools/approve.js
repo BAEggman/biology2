@@ -53,8 +53,10 @@ const cards=items.map((r,i)=>{
           </button>
           <div class="facts">
             ${PBR[p.pid]?`<div class="br">${PBR[p.pid]}</div>`:''}
-            <table>${(PFACT[p.pid]||[]).map(f=>
-              `<tr><td class="fp">${esc(f[0])}</td><td>${esc(f[1])}</td></tr>`).join('')}</table>
+            <table>${(PFACT[p.pid]||[]).map((f,ri)=>
+              `<tr class="frow" data-card="${esc(r.id)}" data-pid="${esc(p.pid)}" data-row="${ri}"
+                   title="이 행이 답이면 여기를 누른다 — 복구 화면에서 이 행만 강조된다"
+               ><td class="fp">${esc(f[0])}</td><td>${esc(f[1])}</td><td class="fx"></td></tr>`).join('')}</table>
           </div>
         </div>`).join('')}
       </div>
@@ -115,6 +117,14 @@ main{max-width:960px;margin:0 auto;padding:16px}
 .facts table{width:100%;border-collapse:collapse}
 .facts td{border-top:1px solid var(--line);padding:3px 5px;vertical-align:top;word-break:keep-all}
 .facts .fp{color:#92400E;font-weight:700;width:38%}
+.facts tr.frow{cursor:pointer}
+.facts tr.frow:hover td{background:#FFFBEB}
+.facts tr.frow.on td{background:#DCFCE7}
+.facts .fx{width:24px;text-align:center;font-weight:800}
+.facts .fx::after{content:'＋';color:#CBD5E1}
+.facts tr.frow.on .fx::after{content:'✓';color:var(--ok)}
+button.p.rowsel{border-color:var(--ok)}
+.opt:has(button.p.rowsel){border-color:var(--ok);background:#F0FDF4}
 @media(max-width:700px){.opt{grid-template-columns:1fr}}
 button.p{border:2px solid var(--line);background:#fff;border-radius:12px;padding:6px;cursor:pointer;
   text-align:left;font:inherit;transition:.12s;width:100%}
@@ -145,7 +155,9 @@ button.none.on{background:#FEF2F2;border-color:#FCA5A5;color:#B91C1C;font-weight
   <p class="hint"><b>격리(🧊) 전부 + 3~8번 무너진 것</b> — 가장 크게 무너진 순서다.
   <b>그림 옆에 그 그림의 사실표를 같이 폈다</b> — 답이 표 안에 있으면 그 그림을 누른다.
   <b>없으면 「해당 없음」이 정답이다</b> — 그게 곧 「이건 그려야 한다」는 뜻이고, 그 목록이 다음 작업이 된다.
-  그림을 눌러 고른다. <b>여러 개 고를 수 있다</b> — 한 카드가 두 패널에 걸치는 경우가 있다.
+  <b>답이 되는 사실표 행을 직접 누르는 게 가장 좋다</b> — 그러면 나중에 이 카드를 틀렸을 때
+  복구 화면이 <b>그 행만 노랗게 집어준다</b>. 어느 행인지 애매하면 <b>그림 자체를 눌러</b> 패널 통째로 건다.
+  <b>여러 개 고를 수 있다</b> — 한 카드가 두 패널에 걸치기도 한다.
   맞는 게 없으면 <b>해당 없음</b>. 진행은 자동 저장된다.</p>
   ${cards}
 </main>
@@ -160,8 +172,13 @@ try{ pick=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
 
 function render(){
   document.querySelectorAll('button.p').forEach(function(b){
-    var v=pick[b.dataset.card]||[];
-    b.classList.toggle('on', v.indexOf(b.dataset.pid)>=0);
+    var v=pick[b.dataset.card]||[], pid=b.dataset.pid;
+    b.classList.toggle('on', v.indexOf(pid)>=0);
+    b.classList.toggle('rowsel', v.some(function(x){return x.indexOf(pid+'#')===0;}));
+  });
+  document.querySelectorAll('tr.frow').forEach(function(t){
+    var v=pick[t.dataset.card]||[];
+    t.classList.toggle('on', v.indexOf(t.dataset.pid+'#'+t.dataset.row)>=0);
   });
   document.querySelectorAll('button.none').forEach(function(b){
     b.classList.toggle('on', (pick[b.dataset.card]||[]).length===0 && pick[b.dataset.card]!==undefined);
@@ -187,10 +204,18 @@ function render(){
 }
 document.addEventListener('click', function(e){
   var b=e.target.closest('button.p');
-  if(b){ var c=b.dataset.card, v=pick[c]||[];
-    var i=v.indexOf(b.dataset.pid);
-    if(i>=0) v.splice(i,1); else v.push(b.dataset.pid);
+  if(b){ var c=b.dataset.card, pid=b.dataset.pid;
+    /* 통짜와 행은 한 패널 안에서 배타 — build.js가 중복을 경고한다 */
+    var v=(pick[c]||[]).filter(function(x){return x.indexOf(pid+'#')!==0;});
+    var i=v.indexOf(pid);
+    if(i>=0) v.splice(i,1); else v.push(pid);
     pick[c]=v; render(); return; }
+  var tr=e.target.closest('tr.frow');
+  if(tr){ var c3=tr.dataset.card, pid3=tr.dataset.pid, k=pid3+'#'+tr.dataset.row;
+    var v3=(pick[c3]||[]).filter(function(x){return x!==pid3;});
+    var i3=v3.indexOf(k);
+    if(i3>=0) v3.splice(i3,1); else v3.push(k);
+    pick[c3]=v3; render(); return; }
   var nb=e.target.closest('button.none');
   if(nb){ var c2=nb.dataset.card;
     if(pick[c2]!==undefined && pick[c2].length===0) delete pick[c2]; else pick[c2]=[];

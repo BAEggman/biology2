@@ -7,6 +7,7 @@ const SUITES=[
   ['verify_build.js',  '제안4 · 빌드 파이프라인'],
   ['smoke_links.js',   '실구동 · 링크'],
   ['smoke_picfix.js',  '실구동 · 복구 화면'],
+  ['verify_apply.js',  '제안5 · 승인 큐 주입기'],
   ['migrate_safe.js',  '실사용 DB 진도 보존'],
 ];
 let bad=[];
