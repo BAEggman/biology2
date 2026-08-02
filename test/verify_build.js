@@ -33,13 +33,17 @@ T('pc 값이 전부 유효한 카드 ID', ()=>{
     .flatMap(m=>JSON.parse('['+m[1]+']')).filter(id=>!CARDS.has(id));
   return eq(bad.length,0)+'건 무효';
 });
-T('사실표 590행 유지', ()=>{
+T('사실표 행 수 (기준본 이상)', ()=>{
   const D=eval('('+(()=>{ const s=sk, st=s.indexOf('[',s.indexOf('const DATA')); let d=0,q=null,e=false;
     for(let k=st;k<s.length;k++){const c=s[k];
       if(q){if(e){e=false;continue}if(c==='\\'){e=true;continue}if(c===q)q=null;continue}
       if(c==='"'||c==="'"||c==='`'){q=c;continue}
       if(c==='[')d++;else if(c===']'){d--;if(!d)return s.slice(st,k+1)}}})()+')');
-  return eq(D.reduce((a,s)=>a+s.panels.reduce((x,p)=>x+(p.f||[]).length,0),0),590);
+  /* v12 기준 590행. 그라운딩 규칙상 「그림에 있는데 표에 없는 소품」은 행을 추가한다.
+     그러니 줄면 안 되고 늘어나는 건 정상이다. */
+  const n=D.reduce((a,s)=>a+s.panels.reduce((x,p)=>x+(p.f||[]).length,0),0);
+  if(n<590) throw new Error('행이 줄었다: '+n);
+  return n+'행 (v12 590 + '+(n-590)+')';
 });
 
 console.log('\n── B. 빌드 산출물 == 손으로 만든 v10b 지도 ──');
@@ -51,12 +55,13 @@ T('PMAP 값이 한 건도 안 바뀜', ()=>{
   const d=Object.keys(a).filter(k=>a[k]!==b[k]);
   return eq(d.length,0)+'건 차이'; });
 /* [수정] PFACT 내용은 사실표를 고치면 당연히 바뀐다. 형태만 본다. */
-T('PTIT·PBR 키 집합 동일 · PFACT 590행 유지', ()=>{
+T('PTIT·PBR 키 집합 동일 · PFACT는 소스와 일치', ()=>{
   ['PTIT','PBR'].forEach(n=>eq(Object.keys(J(prev,n)).sort().join()===Object.keys(J(now,n)).sort().join(),true,n));
   const rows=o=>Object.values(o).reduce((a,b)=>a+b.length,0);
-  eq(rows(J(now,'PFACT')),590,'PFACT 행');
+  const src=L.parseDATA(sk).reduce((a,s)=>a+s.panels.reduce((x,p)=>x+(p.f||[]).length,0),0);
+  eq(rows(J(now,'PFACT')),src,'PFACT 행 == 소스');
   eq(Object.keys(J(now,'PFACT')).length,Object.keys(J(prev,'PFACT')).length,'PFACT 패널');
-  return '키 동일 · 590행';
+  return '키 동일 · '+rows(J(now,'PFACT'))+'행';
 });
 T('PNOIMG 동일', ()=>eq(JSON.parse(now.match(/var PNOIMG=(\[.*?\]);/s)[1]).join()
                        ===JSON.parse(prev.match(/var PNOIMG=(\[.*?\]);/s)[1]).join(),true));

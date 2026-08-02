@@ -23,7 +23,11 @@ T('PTIT 전 패널 106', ()=>eq(Object.keys(PTIT).length,106));
 T('PTIT에 유령 패널 없음', ()=>eq(Object.keys(PTIT).filter(p=>!ALL.includes(p)).length,0));
 T('PTIT 누락 없음', ()=>eq(ALL.filter(p=>!PTIT[p]).length,0));
 T('PBR 106', ()=>eq(Object.keys(PBR).length,106));
-T('PFACT 590행', ()=>eq(Object.values(PFACT).reduce((a,b)=>a+b.length,0),590));
+/* 행 수를 상수로 박으면 사실표를 한 행 늘릴 때마다 깨진다. 소스와 대조한다. */
+T('PFACT 행 수 == sketchy.html 사실표', ()=>{
+  const src=L.parseDATA(fs.readFileSync(require('path').join(L.ROOT,'sketchy.html'),'utf8'))
+    .reduce((a,s)=>a+s.panels.reduce((x,p)=>x+(p.f||[]).length,0),0);
+  return eq(Object.values(PFACT).reduce((a,b)=>a+b.length,0), src)+'행 (소스와 일치)'; });
 T('PFACT 모든 행이 2요소', ()=>eq(Object.values(PFACT).flat().filter(r=>r.length!==2).length,0));
 
 console.log('\n── B. 제안 1: 죽은 링크 수리 ──');
