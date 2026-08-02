@@ -10,8 +10,12 @@ const sh=c=>execSync(c,{cwd:ROOT,maxBuffer:1e9,encoding:'utf8'});
 /* 비교 기준이 되는 과거 커밋. 태그가 아니라 내용으로 찾는다 —
    커밋 해시가 리베이스로 바뀌어도 안 깨지게. */
 function findCommit(pred, label){
-  const list=sh('git log --format=%H -n 60').trim().split('\n');
+  const list=sh('git log --format=%H -n 60').trim().split('\n').filter(Boolean);
   for(const h of list){ try{ if(pred(h)) return h; }catch(e){} }
+  if(list.length<5) throw new Error(
+    '기준 커밋을 못 찾았다: '+label+'\n'+
+    '  히스토리가 '+list.length+'개뿐이다. shallow clone이면 전체 히스토리를 받아야 한다:\n'+
+    '    git fetch --unshallow      (또는 git clone 시 --depth 를 빼고)');
   throw new Error('기준 커밋을 못 찾았다: '+label);
 }
 const has=(h,f,re)=>re.test(sh(`git show ${h}:${f}`));

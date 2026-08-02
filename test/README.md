@@ -6,6 +6,9 @@ node test/all.js     # 전체
 node test/verify_build.js   # 하나만
 ```
 
+**전체 히스토리가 필요하다.** 비교 기준본을 과거 커밋에서 꺼내 쓴다.
+`--depth 1` 로 클론했으면 먼저 `git fetch --unshallow`.
+
 | 파일 | 무엇을 지키나 |
 |---|---|
 | `verify_links.js` | PMAP에 죽은 참조가 없다 · PTIT 106패널 전수 · 카드ID 실재 |
