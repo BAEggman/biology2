@@ -11,9 +11,17 @@ const R=JSON.parse(fs.readFileSync(path.join(ROOT,'outputs/rank.json'),'utf8'));
 const BATCH=parseInt(process.argv[2]||'1',10), SIZE=parseInt(process.argv[3]||'40',10);
 const IMGBASE=process.env.IMGBASE||'https://baeggman.github.io/biology2/img/';
 
-const items=R.B.slice((BATCH-1)*SIZE, BATCH*SIZE);
-if(!items.length){ console.error('그 배치엔 카드가 없다. 전체 '+R.B.length+'장.'); process.exit(1); }
-const nBatch=Math.ceil(R.B.length/SIZE);
+/* 실패 정도로 거른다. 격리(sus)와 lap 9+ 는 태깅으로 안 풀린다 —
+   마스터노트: "8번 넘게 무너진 카드는 더 돌려도 안 붙는다. 카드를 고쳐야 한다."
+   실제로 A(그림이 이미 걸린 91장)의 평균 lap이 6.7로 B(4.8)보다 높다.
+   그림만 붙이면 붙는다는 가정은 데이터로 뒷받침되지 않는다. */
+const LAP=(process.env.LAP||'3-8').split('-').map(Number);
+const pool=R.B
+  .filter(r=>!r.sus && r.lap>=LAP[0] && r.lap<=LAP[1])
+  .sort((a,b)=> b.lap-a.lap || b.rich-a.rich || b.wrong-a.wrong);
+const items=pool.slice((BATCH-1)*SIZE, BATCH*SIZE);
+if(!items.length){ console.error('그 배치엔 카드가 없다. 대상 '+pool.length+'장 (lap '+LAP.join('-')+', 격리 제외).'); process.exit(1); }
+const nBatch=Math.ceil(pool.length/SIZE);
 
 // 도해 패널은 이미지가 없다
 const NOIMG=new Set(JSON.parse(fs.readFileSync(path.join(ROOT,'index.html'),'utf8')
@@ -108,7 +116,8 @@ button.none.on{background:#FEF2F2;border-color:#FCA5A5;color:#B91C1C;font-weight
   <button class="btn btn-p" id="copy">결과 복사</button>
 </header>
 <main>
-  <p class="hint">그림을 눌러 고른다. <b>여러 개 고를 수 있다</b> — 한 카드가 두 패널에 걸치는 경우가 있다.
+  <p class="hint"><b>lap ${LAP[0]}~${LAP[1]} · 격리 제외</b> — 흔들리지만 아직 안 무너진 구간이다.
+  여기가 그림을 붙여서 값이 나는 곳이다. 그림을 눌러 고른다. <b>여러 개 고를 수 있다</b> — 한 카드가 두 패널에 걸치는 경우가 있다.
   맞는 게 없으면 <b>해당 없음</b>. 진행은 자동 저장된다.</p>
   ${cards}
 </main>
@@ -171,5 +180,6 @@ const out=path.join(ROOT,'outputs','approve_'+BATCH+'.html');
 fs.mkdirSync(path.dirname(out),{recursive:true});
 fs.writeFileSync(out, html);
 const opts=items.reduce((a,r)=>a+r.cand.reduce((s,c)=>s+c.panels.length,0),0);
+console.log(`대상 ${pool.length}장 (B ${R.B.length}장 중 lap ${LAP.join('-')} · 격리 제외)`);
 console.log(`배치 ${BATCH}/${nBatch} — 카드 ${items.length}장 · 선택지 ${opts}개 (카드당 ${(opts/items.length).toFixed(1)})`);
 console.log(`→ ${out}  (${(Buffer.byteLength(html)/1024).toFixed(0)}KB)`);
