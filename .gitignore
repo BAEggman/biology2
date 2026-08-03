@@ -3,3 +3,4 @@ package-lock.json
 test/.tmp/
 outputs/
 !outputs/need_picture.md
+!outputs/그릴것_*.md
