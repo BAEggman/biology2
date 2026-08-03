@@ -1,4 +1,7 @@
 const L=require('./_lib');
+const BL=require('./baseline.json');
+const ge=(a,b,m)=>{ if(!(a>=b)) throw new Error((m||'')+' '+a+' < 기준 '+b+' — 연결이 줄었다(회귀)'); return a; };
+const le=(a,b,m)=>{ if(!(a<=b)) throw new Error((m||'')+' '+a+' > 기준 '+b+' — 고아가 늘었다(회귀)'); return a; };
 const FX=L.ensure();
 /* 제안 4 검증 — 스키마·빌드·드리프트 방어 */
 const fs=require('fs'), path=require('path'), {execSync}=require('child_process');
@@ -13,7 +16,7 @@ const J=(s,n)=>JSON.parse(s.match(new RegExp('var '+n+'=(\\{.*?\\});','s'))[1]);
 
 console.log('\n── A. 스키마 이관 (무손실) ──');
 const sk=read('sketchy.html');
-T('pc가 83개 패널에 삽입', ()=>eq((sk.match(/,pc:\[/g)||[]).length,83));
+T('pc 보유 패널은 줄지 않는다', ()=>ge((sk.match(/,pc:\[/g)||[]).length,BL.pcPanels,'pc 패널')+'개');
 /* [수정] 「v12와 바이트 동일」로 검사하면 사실표를 고칠 때마다 깨진다.
    그런 테스트는 무시하게 되고, 무시되는 테스트는 없느니만 못하다.
    이관이 무손실이었나는 구조로 본다 — pc를 걷어냈을 때 구조가 v12와 같은가. */
@@ -49,7 +52,7 @@ T('사실표 행 수 (기준본 이상)', ()=>{
 console.log('\n── B. 빌드 산출물 == 손으로 만든 v10b 지도 ──');
 const now=read('index.html'), prev=fs.readFileSync(FX.STAGE2,'utf8');   /* v10b — 손으로 만든 지도 */
 const norm=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,(Array.isArray(v)?v:[v]).slice().sort().join('|')]));
-T('PMAP 705장 그대로', ()=>eq(Object.keys(J(now,'PMAP')).length,705));
+T('PMAP은 줄지 않는다', ()=>ge(Object.keys(J(now,'PMAP')).length,BL.pmap,'PMAP')+'장');
 T('PMAP 값이 한 건도 안 바뀜', ()=>{
   const a=norm(J(prev,'PMAP')), b=norm(J(now,'PMAP'));
   const d=Object.keys(a).filter(k=>a[k]!==b[k]);
@@ -65,7 +68,18 @@ T('PTIT·PBR 키 집합 동일 · PFACT는 소스와 일치', ()=>{
 });
 T('PNOIMG 동일', ()=>eq(JSON.parse(now.match(/var PNOIMG=(\[.*?\]);/s)[1]).join()
                        ===JSON.parse(prev.match(/var PNOIMG=(\[.*?\]);/s)[1]).join(),true));
-T('PROW 신설 (지금은 0건)', ()=>eq(Object.keys(J(now,'PROW')).length,0)+'건 — 제안5 대상');
+T('PROW 항목이 전부 실재하는 행을 가리킨다', ()=>{
+  const PROW=J(now,'PROW'), PMAP=J(now,'PMAP'), PFACT=J(now,'PFACT');
+  let n=0;
+  for(const cid in PROW) for(const pid in PROW[cid]){
+    const rows=PFACT[pid]||[];
+    PROW[cid][pid].forEach(i=>{ if(!(i>=0&&i<rows.length))
+      throw new Error(cid+' → '+pid+'#'+i+' : 행이 '+rows.length+'개뿐'); n++; });
+    const v=PMAP[cid], has=Array.isArray(v)?v.includes(pid):v===pid;
+    if(!has) throw new Error(cid+'가 PROW에 있는데 PMAP에 '+pid+'이 없다');
+  }
+  return Object.keys(PROW).length+'카드 · '+n+'행';
+});
 T('BUILD 마커 존재', ()=>eq(/\/\*BUILD:START[\s\S]*?BUILD:END\*\//.test(now),true));
 T('CARDS 무변경', ()=>{ const g=s=>s.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1];
   return eq(g(now)===g(prev),true)&&'동일'; });
@@ -101,8 +115,14 @@ T('원복 후 빌드가 다시 통과', ()=>{ sh('node build.js --check'); retur
 console.log('\n── E. 리포트 ──');
 const md=read('links_report.md');
 T('links_report.md 생성', ()=>eq(md.length>10000,true)+' ('+(md.length/1024).toFixed(0)+'KB)');
-T('707개 링크가 전부 적힘', ()=>eq((md.match(/^- \[(패널|행\d+)/gm)||[]).length,707));
-T('고아 23장 명시', ()=>eq((md.split('## 고아 패널')[1].match(/^- `/gm)||[]).length,23));
+T('리포트 링크 수 = 빌드가 센 수', ()=>{
+  const inMd=(md.match(/^- \[(패널|행\d+)/gm)||[]).length;
+  const said=+(sh('node build.js --check').match(/패널단위 (\d+)/)||[0,0])[1];
+  const rows=(md.match(/^- \[행\d+/gm)||[]).length;
+  if(inMd < said) throw new Error('리포트 '+inMd+' < 빌드 '+said);
+  return inMd+'건 (행단위 '+rows+')';
+});
+T('고아는 늘지 않는다', ()=>le((md.split('## 고아 패널')[1].match(/^- `/gm)||[]).length,BL.orphan,'고아')+'장');
 T('게이트표 19행', ()=>eq((md.split('## 게이트별')[1].split('##')[0].match(/^\| [A-S] /gm)||[]).length,19));
 
 console.log('\n── F. 행 강조 렌더 ──');

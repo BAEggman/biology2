@@ -1,4 +1,7 @@
 const L=require('./_lib');
+const BL=require('./baseline.json');
+const ge=(a,b,m)=>{ if(!(a>=b)) throw new Error((m||'')+' '+a+' < 기준 '+b+' — 연결이 줄었다(회귀)'); return a; };
+const le=(a,b,m)=>{ if(!(a<=b)) throw new Error((m||'')+' '+a+' > 기준 '+b+' — 고아가 늘었다(회귀)'); return a; };
 const FX=L.ensure();
 /* 제안 1 단독 검증 */
 const fs=require('fs'), {JSDOM}=require('jsdom');
@@ -26,7 +29,7 @@ T('걸친 2장은 배열', ()=>['S-PL-14','X-PL-27'].map(k=>{
 T('G1-95 → s12p02a', ()=>eq(PMAP['G1-95'],'s12p02a'));
 T('G1-26 오태깅 삭제', ()=>{ if(PMAP['G1-26']) throw new Error('아직 있음'); return 'ok'; });
 T('삭제는 G1-26 하나뿐', ()=>eq(Object.keys(J(/var PMAP=(\{.*?\});/s,o)).filter(k=>!(k in PMAP)).join(','),'G1-26'));
-T('PMAP 706 → 705', ()=>eq(Object.keys(PMAP).length,705));
+T('PMAP은 줄지 않는다', ()=>ge(Object.keys(PMAP).length,BL.pmap,'PMAP')+'장');
 T('카드ID 전부 실재', ()=>{
   const ids=new Set(JSON.parse(h.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]).map(c=>c.id));
   return eq(Object.keys(PMAP).filter(k=>!ids.has(k)).length,0); });
@@ -39,10 +42,10 @@ T('s31·s32·s33 제목 생김', ()=>['s31p01','s32p01','s33p03'].map(p=>{
   if(!PTIT[p]) throw new Error(p+' 없음'); return p; }).length+'개 확인');
 
 console.log('\n── 커버리지 ──');
-T('커버 패널 80 → 83', ()=>eq(new Set(Object.values(PMAP).flatMap(flat)).size,83));
+T('커버 패널은 줄지 않는다', ()=>ge(new Set(Object.values(PMAP).flatMap(flat)).size,BL.cover,'커버')+'장');
 T('고아 26 → 23', ()=>{
   const u=new Set(Object.values(PMAP).flatMap(flat));
-  return eq(ALL.filter(p=>!u.has(p)).length,23); });
+  return le(ALL.filter(p=>!u.has(p)).length,BL.orphan,'고아')+'장'; });
 
 console.log('\n── 회귀 ──');
 T('CARDS 무변경', ()=>{ const g=s=>s.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1];

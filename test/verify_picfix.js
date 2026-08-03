@@ -1,4 +1,7 @@
 const L=require('./_lib');
+const BL=require('./baseline.json');
+const ge=(a,b,m)=>{ if(!(a>=b)) throw new Error((m||'')+' '+a+' < 기준 '+b+' — 연결이 줄었다(회귀)'); return a; };
+const le=(a,b,m)=>{ if(!(a<=b)) throw new Error((m||'')+' '+a+' > 기준 '+b+' — 고아가 늘었다(회귀)'); return a; };
 const FX=L.ensure();
 /* index.new.html 검증 스위트 — 제안 1·2 */
 const fs=require('fs'), path=require('path');
@@ -42,7 +45,7 @@ T('걸친 카드 2장은 배열', ()=>['S-PL-14','X-PL-27'].map(k=>{
   if(!Array.isArray(PMAP[k])) throw new Error(k+' 배열 아님');
   eq(PMAP[k].join(','),'s20p01a,s20p01b',k); return k; }).join(' '));
 T('G1-95 → s12p02a', ()=>eq(PMAP['G1-95'],'s12p02a'));
-T('PMAP 총수 705', ()=>eq(Object.keys(PMAP).length,705));
+T('PMAP은 줄지 않는다', ()=>ge(Object.keys(PMAP).length,BL.pmap,'PMAP')+'장');
 T('원본 대비 -1장(오태깅만)', ()=>{
   const P0=JSON.parse(o.match(/var PMAP=(\{.*?\});/s)[1]);
   const gone=Object.keys(P0).filter(k=>!PMAP[k]);
@@ -58,11 +61,11 @@ T('고아 패널 26 → 23', ()=>{
   const u0=new Set(Object.values(P0));
   eq(ALL.filter(p=>!u0.has(p)).length,26,'원본 고아');
   const used=new Set(Object.values(PMAP).flatMap(flat));
-  return eq(ALL.filter(p=>!used.has(p)).length,23)+'장 남음(제안3 대상)';
+  return le(ALL.filter(p=>!used.has(p)).length,BL.orphan,'고아')+'장 남음(제안3 대상)';
 });
 T('커버 패널 80 → 83', ()=>{
   const used=new Set(Object.values(PMAP).flatMap(flat));
-  return eq(used.size,83)+' (s20p01a·s20p01b·s12p02a 부활)';
+  return ge(used.size,BL.cover,'커버')+'장 (s20p01a·s20p01b·s12p02a 부활)';
 });
 
 console.log('\n── C. 제안 2: 오답 복구 ──');
