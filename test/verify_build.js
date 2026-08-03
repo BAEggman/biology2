@@ -24,10 +24,17 @@ T('pc를 걷어내면 구조가 v12와 같다', ()=>{
   const strip=t=>t.replace(/(\{id:'[sd]\d+p\d+[ab]?')\,pc:\[[^\]]*\]\,/g,'$1,');
   const shape=t=>(t.match(/\{id:'[sd]\d+p?\d*[ab]?'/g)||[]).join('|');
   const orig=fs.readFileSync(FX.BASESK,'utf8');
-  eq(shape(strip(sk)), shape(orig), '장면·패널 구조');
+  /* [정정] 완전 일치는 패널을 추가하면 깨진다 — 추가가 이 프로젝트의 목적이다.
+     불변식은 「v12의 장면·패널이 하나도 사라지지 않았고 순서도 그대로다」이다. */
+  const now=shape(strip(sk)).split('|'), was=shape(orig).split('|');
+  let i=0; const gone=[];
+  for(const k of was){ const j=now.indexOf(k,i); if(j<0) gone.push(k); else i=j+1; }
+  eq(gone.join(','),'', 'v12에서 사라진 것');
+  const added=now.filter(k=>!was.includes(k));
+  if(added.length) console.log('      + 추가: '+added.join(' '));
   const nf=t=>(t.match(/,f:\[/g)||[]).length;
-  eq(nf(sk), nf(orig), '사실표 보유 패널 수');
-  return '구조 동일 (내용 수정은 허용)';
+  ge(nf(sk), nf(orig), '사실표 보유 패널 수');
+  return '소실 0 · 추가 '+added.length;
 });
 T('pc 값이 전부 유효한 카드 ID', ()=>{
   const CARDS=new Set(JSON.parse(read('index.html')
@@ -59,15 +66,24 @@ T('PMAP 값이 한 건도 안 바뀜', ()=>{
   return eq(d.length,0)+'건 차이'; });
 /* [수정] PFACT 내용은 사실표를 고치면 당연히 바뀐다. 형태만 본다. */
 T('PTIT·PBR 키 집합 동일 · PFACT는 소스와 일치', ()=>{
-  ['PTIT','PBR'].forEach(n=>eq(Object.keys(J(prev,n)).sort().join()===Object.keys(J(now,n)).sort().join(),true,n));
+  /* [정정] 「키 집합이 동일」은 패널을 추가하면 깨진다 — 추가는 이 프로젝트의 목적이다.
+     불변식은 「이전 키가 하나도 사라지지 않았다」이다. */
+  ['PTIT','PBR'].forEach(n=>{
+    const before=Object.keys(J(prev,n)), after=new Set(Object.keys(J(now,n)));
+    const gone=before.filter(k=>!after.has(k));
+    eq(gone.join(','),'',n+' 소실');
+  });
   const rows=o=>Object.values(o).reduce((a,b)=>a+b.length,0);
   const src=L.parseDATA(sk).reduce((a,s)=>a+s.panels.reduce((x,p)=>x+(p.f||[]).length,0),0);
   eq(rows(J(now,'PFACT')),src,'PFACT 행 == 소스');
-  eq(Object.keys(J(now,'PFACT')).length,Object.keys(J(prev,'PFACT')).length,'PFACT 패널');
+  ge(Object.keys(J(now,'PFACT')).length,Object.keys(J(prev,'PFACT')).length,'PFACT 패널');
   return '키 동일 · '+rows(J(now,'PFACT'))+'행';
 });
-T('PNOIMG 동일', ()=>eq(JSON.parse(now.match(/var PNOIMG=(\[.*?\]);/s)[1]).join()
-                       ===JSON.parse(prev.match(/var PNOIMG=(\[.*?\]);/s)[1]).join(),true));
+T('PNOIMG의 기존 항목이 사라지지 않았다', ()=>{
+  const before=JSON.parse(prev.match(/var PNOIMG=(\[.*?\]);/s)[1]);
+  const after=new Set(JSON.parse(now.match(/var PNOIMG=(\[.*?\]);/s)[1]));
+  return eq(before.filter(x=>!after.has(x)).join(','),'')||before.length+'장 유지';
+});
 T('PROW 항목이 전부 실재하는 행을 가리킨다', ()=>{
   const PROW=J(now,'PROW'), PMAP=J(now,'PMAP'), PFACT=J(now,'PFACT');
   let n=0;

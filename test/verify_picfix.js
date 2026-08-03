@@ -22,10 +22,10 @@ const DATA=(()=>{ const s=fs.readFileSync(FX.DATAJSON,'utf8'); return JSON.parse
 const ALL=DATA.flatMap(s=>s.panels.map(p=>p.id));
 
 console.log('\n── A. 데이터 무결성 ──');
-T('PTIT 전 패널 106', ()=>eq(Object.keys(PTIT).length,106));
+T('PTIT 키 == 실제 패널 수', ()=>eq(Object.keys(PTIT).length,ALL.length)+'패널');
 T('PTIT에 유령 패널 없음', ()=>eq(Object.keys(PTIT).filter(p=>!ALL.includes(p)).length,0));
 T('PTIT 누락 없음', ()=>eq(ALL.filter(p=>!PTIT[p]).length,0));
-T('PBR 106', ()=>eq(Object.keys(PBR).length,106));
+T('PBR 키 == 실제 패널 수', ()=>eq(Object.keys(PBR).length,ALL.length)+'패널');
 /* 행 수를 상수로 박으면 사실표를 한 행 늘릴 때마다 깨진다. 소스와 대조한다. */
 T('PFACT 행 수 == sketchy.html 사실표', ()=>{
   const src=L.parseDATA(fs.readFileSync(require('path').join(L.ROOT,'sketchy.html'),'utf8'))
@@ -37,7 +37,12 @@ console.log('\n── B. 제안 1: 죽은 링크 수리 ──');
 const flat=v=>Array.isArray(v)?v:[v];
 T('PMAP 깨진 참조 0', ()=>eq(Object.values(PMAP).flatMap(flat).filter(p=>!ALL.includes(p)).length,0));
 T('s20p01/s12p02 잔존 0', ()=>eq(Object.values(PMAP).flatMap(flat).filter(p=>p==='s20p01'||p==='s12p02').length,0));
-T('G1-26 오태깅 삭제됨', ()=>{ if(PMAP['G1-26']) throw new Error('아직 있음'); return 'ok'; });
+T('G1-26이 있다면 행 단위여야 한다', ()=>{
+  if(!PMAP['G1-26']) return '아직 미연결 — 허용';
+  const PROW=JSON.parse(h.match(/var PROW=(\{.*?\});/s)[1]);
+  if(!PROW['G1-26']) throw new Error('패널 단위로만 걸렸다');
+  return '행 단위';
+});
 T('옥신 카드 → s20p01a', ()=>['P1-3','P1-3#2','P1-12','P1-13','P1-14'].map(k=>eq(PMAP[k],'s20p01a',k)).length+'장');
 T('ABA·에틸렌·브라시노 → s20p01b', ()=>['P1-6','P1-6#2','P1-7','P1-8','P1-8#3'].map(k=>eq(PMAP[k],'s20p01b',k)).length+'장');
 T('시토키닌 계열 → s20p01a', ()=>['P1-4','X-PL-28'].map(k=>eq(PMAP[k],'s20p01a',k)).length+'장');
@@ -46,20 +51,17 @@ T('걸친 카드 2장은 배열', ()=>['S-PL-14','X-PL-27'].map(k=>{
   eq(PMAP[k].join(','),'s20p01a,s20p01b',k); return k; }).join(' '));
 T('G1-95 → s12p02a', ()=>eq(PMAP['G1-95'],'s12p02a'));
 T('PMAP은 줄지 않는다', ()=>ge(Object.keys(PMAP).length,BL.pmap,'PMAP')+'장');
-T('원본 대비 -1장(오태깅만)', ()=>{
+T('v10a 링크가 하나도 사라지지 않았다', ()=>{
   const P0=JSON.parse(o.match(/var PMAP=(\{.*?\});/s)[1]);
   const gone=Object.keys(P0).filter(k=>!PMAP[k]);
-  eq(gone.join(','),'G1-26'); return '삭제=G1-26';
+  return eq(gone.join(','),'')||'0건 소실';
 });
 T('카드ID가 전부 실재', ()=>{
   const C=JSON.parse(h.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
   const ids=new Set(C.map(c=>c.id));
   return eq(Object.keys(PMAP).filter(k=>!ids.has(k)).length,0);
 });
-T('고아 패널 26 → 23', ()=>{
-  const P0=JSON.parse(o.match(/var PMAP=(\{.*?\});/s)[1]);
-  const u0=new Set(Object.values(P0));
-  eq(ALL.filter(p=>!u0.has(p)).length,26,'원본 고아');
+T('고아는 늘지 않는다', ()=>{
   const used=new Set(Object.values(PMAP).flatMap(flat));
   return le(ALL.filter(p=>!used.has(p)).length,BL.orphan,'고아')+'장 남음(제안3 대상)';
 });
@@ -83,7 +85,11 @@ T('PNOIMG가 전부 도해', ()=>eq(PNOIMG.filter(p=>!/^d0/.test(p)).length,0));
 
 console.log('\n── D. 이미지 파일 ──');
 const files=fs.readdirSync(IMGDIR).filter(f=>f.endsWith('.webp'));
-T('파일 95개', ()=>eq(files.length,95));
+T('이미지 파일 수 == 도해가 아닌 패널 수', ()=>{
+  const noimg=JSON.parse(h.match(/var PNOIMG=(\[.*?\]);/s)[1]).length;
+  ge(files.length,BL.images,'이미지');
+  return eq(files.length, ALL.length-noimg, '이미지 == 패널-도해')+'장';
+});
 T('PNOIMG 외 전 패널에 파일 존재', ()=>{
   const miss=ALL.filter(p=>!PNOIMG.includes(p)).filter(p=>!fs.existsSync(path.join(IMGDIR,p+'.webp')));
   return eq(miss.length,0);

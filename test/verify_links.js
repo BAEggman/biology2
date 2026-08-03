@@ -27,15 +27,30 @@ T('걸친 2장은 배열', ()=>['S-PL-14','X-PL-27'].map(k=>{
   if(!Array.isArray(PMAP[k])) throw new Error(k+' 배열 아님');
   return eq(PMAP[k].join(','),'s20p01a,s20p01b',k); }).join(' / '));
 T('G1-95 → s12p02a', ()=>eq(PMAP['G1-95'],'s12p02a'));
-T('G1-26 오태깅 삭제', ()=>{ if(PMAP['G1-26']) throw new Error('아직 있음'); return 'ok'; });
-T('삭제는 G1-26 하나뿐', ()=>eq(Object.keys(J(/var PMAP=(\{.*?\});/s,o)).filter(k=>!(k in PMAP)).join(','),'G1-26'));
+/* [정정] v10a는 G1-26을 「어느 패널에도 대응 소품이 없다」는 이유로 지웠다.
+   s12p04(회장 문 — 비타민 결핍)를 그리면서 그 소품이 생겼으므로 되살아나는 게 옳다.
+   지켜야 할 불변식은 「링크에는 대응 소품이 있다」이고, 행 단위 링크가 그 증거다. */
+T('G1-26이 있다면 행 단위여야 한다 (대응 소품 증명)', ()=>{
+  if(!PMAP['G1-26']) return '아직 미연결 — 허용';
+  const PROW=J(/var PROW=(\{.*?\});/s,h);
+  if(!PROW['G1-26']) throw new Error('패널 단위로만 걸렸다 — 대응 소품이 증명되지 않는다');
+  return '행 단위 '+JSON.stringify(PROW['G1-26']);
+});
+T('v10a에 있던 링크가 사라지지 않았다', ()=>{
+  const P0=J(/var PMAP=(\{.*?\});/s,o);
+  const gone=Object.keys(P0).filter(k=>!(k in PMAP));
+  return eq(gone.join(','),'')||'0건 소실';
+});
 T('PMAP은 줄지 않는다', ()=>ge(Object.keys(PMAP).length,BL.pmap,'PMAP')+'장');
 T('카드ID 전부 실재', ()=>{
   const ids=new Set(JSON.parse(h.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]).map(c=>c.id));
   return eq(Object.keys(PMAP).filter(k=>!ids.has(k)).length,0); });
 
 console.log('\n── PTIT ──');
-T('106패널 전수', ()=>eq(Object.keys(PTIT).length,106));
+T('패널 수는 줄지 않는다 · PTIT과 자기일관', ()=>{
+  ge(ALL.length,BL.panels,'패널');
+  return eq(Object.keys(PTIT).length,ALL.length,'PTIT 키 == 패널 수')&&(ALL.length+'패널');
+});
 T('누락 0', ()=>eq(ALL.filter(p=>!PTIT[p]).length,0));
 T('유령 0 (s20p01·s12p02 제거)', ()=>eq(Object.keys(PTIT).filter(p=>!ALL.includes(p)).length,0));
 T('s31·s32·s33 제목 생김', ()=>['s31p01','s32p01','s33p03'].map(p=>{
