@@ -55,7 +55,7 @@ for(const id in DB.states){
 rows.sort((a,b)=> b.rich-a.rich || b.lap-a.lap || b.wrong-a.wrong || a.box-b.box || b.sr-a.sr);
 
 /* ── 2. 후보 패널 찾기 (연결 안 된 카드에 한해) ─────────────────── */
-const chNum = s => (String(s||'').match(/^[\d·]+/)||[''])[0].split('·').filter(Boolean);
+const {chNum}=require('./_terms');
 const PAN=[];                                     // 패널 → 게이트·챕터·용어
 {
   const sk=fs.readFileSync(path.join(REPO,'sketchy.html'),'utf8');
@@ -75,25 +75,9 @@ const PAN=[];                                     // 패널 → 게이트·챕�
         facts:(p.f||[]).map(r=>r[0]+' '+r[1]).join(' ')+' '+strip(p.br)+' '+strip(p.bx)+' '+p.t});
   }
 }
-/* 한국어라 토큰 비교가 안 된다 — 「전자전달계의」는 「전자전달계」와 다른 말로 잡힌다.
-   그래서 사실표에서 용어 사전을 만들고, 카드 본문에 그 용어가 들어 있는지를 본다(부분일치).
-   방향이 사실표 → 카드라 조사·어미가 붙어도 걸린다. */
-const STRIP=/(으로써|으로서|에게서|이라는|라는|에서|에게|한테|처럼|같이|부터|까지|보다|으로|이나|이란|과의|와의|의|은|는|이|가|을|를|와|과|도|만|로|에|랑|나)$/;
-const terms=t=>{
-  const out=new Set();
-  for(const w of String(t).match(/[가-힣]{2,}/g)||[]){
-    out.add(w); const b=w.replace(STRIP,''); if(b.length>=2) out.add(b);
-  }
-  for(const w of String(t).match(/[A-Za-z][A-Za-z0-9₀-₉\-]{1,}/g)||[]) out.add(w);
-  return out;
-};
-/* 사실표에 흔한 빈 말 — 소품 서술이 위치·수량·모양으로 되어 있어 이런 말이 많다.
-   DF만으로는 안 걸러진다. 106패널 중 2~3곳에만 나오면 오히려 높은 가중을 받는다. */
-const STOP=new Set(('마지막 처음 하나 둘 셋 넷 다섯 여섯 사람 사람이 인부 작업 오른쪽 왼쪽 가운데 '
- +'아래 위쪽 아래쪽 바깥 안쪽 모양 같은 다른 전부 각각 여럿 자리 방향 크기 색깔 그대로 '
- +'되는 하는 하고 있는 없는 만든 들고 나가는 들어 이것 저것 경우 상태 부분 전체 통째로 '
- +'개씩 개가 개를 번째 쪽으로 위에 밑에 옆에 안에 밖에 그림 표시 이름 서로 함께 다시 '
- +'무엇 에서 에게 으로 이나 하나씩 무슨 어떤 어느 얼마 언제 그것').split(' '));
+/* 용어 매칭은 tools/_terms.js 공용부. orphan.js와 규칙이 갈라지면 안 된다. */
+const {terms, STOP}=require('./_terms');
+
 const PTERM=new Map(PAN.map(p=>[p.pid,
   [...terms(p.facts)].filter(w=>w.length>=2 && !STOP.has(w))]));
 
