@@ -21,6 +21,7 @@ const fs=require('fs'), path=require('path');
 const ROOT=path.resolve(__dirname,'..');
 /* SKETCHY 환경변수로 대상 파일을 바꿀 수 있다 — 검증 스위트가 사본에 대고 돌린다 */
 const SK=process.env.SKETCHY||path.join(ROOT,'sketchy.html'), IX=path.join(ROOT,'index.html');
+const NEEDPIC=process.env.NEEDPIC||path.join(ROOT,'outputs/need_picture.md');
 const CHECK=process.argv.includes('--check');
 const SRC=process.argv[2];
 
@@ -180,16 +181,18 @@ jobs.slice().reverse().forEach(j=>console.log('  ✓ '+j.tag));
 if(skipped.length){ console.log(''); skipped.forEach(s=>console.log('  · '+s)); }
 console.log('\n  주입 '+added.length+'건 — 행 단위 '+nRow+' · 패널 단위 '+nPan+' · 건너뜀 '+skipped.length);
 
+if(CHECK){ console.log('\n  해당 없음 '+none.length+'건 (기록은 실제 실행 때)');
+           console.log('\n✅ --check 통과 (아무것도 쓰지 않았다)'); process.exit(0); }
+
 if(none.length){
-  const out=path.join(ROOT,'outputs','need_picture.md');
+  const out=NEEDPIC;
   fs.mkdirSync(path.dirname(out),{recursive:true});
   const prev=fs.existsSync(out)?fs.readFileSync(out,'utf8'):'# 그림이 필요한 카드 — 승인 큐에서 「해당 없음」이 나온 것\n\n맞는 그림이 없다고 판정된 카드다. 다음에 그릴 장면의 1차 후보가 된다.\n\n';
   const have=new Set((prev.match(/^- `([^`]+)`/gm)||[]).map(s=>s.slice(3,-1)));
   const add=none.filter(c=>!have.has(c));
   if(add.length) fs.writeFileSync(out, prev+add.map(c=>'- `'+c+'`  '+CARDQ.get(c)).join('\n')+'\n');
-  console.log('  해당 없음 '+none.length+'건 → outputs/need_picture.md (신규 '+add.length+')');
+  console.log('  해당 없음 '+none.length+'건 → '+path.relative(ROOT,out)+' (신규 '+add.length+')');
 }
 
-if(CHECK){ console.log('\n✅ --check 통과 (아무것도 쓰지 않았다)'); process.exit(0); }
 fs.writeFileSync(SK, sk);
 console.log('\n✅ sketchy.html 저장 — 이제 `npm run build && npm test`');

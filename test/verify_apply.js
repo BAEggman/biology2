@@ -13,6 +13,8 @@ const eq=(a,b,m)=>{ if(String(a)!==String(b)) throw new Error((m||'')+' got '+a+
 fs.mkdirSync(TMP,{recursive:true});
 const ORIG=fs.readFileSync(path.join(R,'sketchy.html'),'utf8');
 const COPY=path.join(TMP,'sk_apply.html'), PICK=path.join(TMP,'pick.txt');
+/* 실제 산출물(outputs/need_picture.md)을 절대 안 건드린다 — 테스트가 사용자의 작업을 지우면 안 된다 */
+const NP=path.join(TMP,'need_picture.md');
 const CARDS=JSON.parse(fs.readFileSync(path.join(R,'index.html'),'utf8')
   .match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
 const CID=CARDS.map(c=>c.id);
@@ -20,7 +22,7 @@ const CID=CARDS.map(c=>c.id);
 const run=(txt,flags='')=>{
   fs.writeFileSync(COPY,ORIG); fs.writeFileSync(PICK,txt);
   return execSync(`node tools/apply.js ${PICK} ${flags}`,
-    {cwd:R,encoding:'utf8',maxBuffer:1e9,env:{...process.env,SKETCHY:COPY}});
+    {cwd:R,encoding:'utf8',maxBuffer:1e9,env:{...process.env,SKETCHY:COPY,NEEDPIC:NP}});
 };
 const runFail=(txt)=>{ try{ run(txt); return null; }catch(e){ return (e.stdout||'')+(e.stderr||''); } };
 const out=()=>fs.readFileSync(COPY,'utf8');
@@ -131,13 +133,21 @@ T('--check는 파일을 안 쓴다', ()=>{
 
 console.log('\n── E. 해당 없음 ──');
 T('빈 우변은 need_picture.md로 간다', ()=>{
-  const np=path.join(R,'outputs/need_picture.md');
+  const np=NP;
   if(fs.existsSync(np)) fs.unlinkSync(np);
   run(`${C1}=`);
   if(!fs.existsSync(np)) throw new Error('파일이 안 생겼다');
   const t=fs.readFileSync(np,'utf8');
   if(!t.includes(C1)) throw new Error('카드가 안 적혔다');
   return eq(out().length, ORIG.length, 'sketchy 불변')&&'기록됨';
+});
+
+T('--check는 need_picture.md도 안 쓴다', ()=>{
+  const np=NP;
+  if(fs.existsSync(np)) fs.unlinkSync(np);
+  run(`${C1}=`,'--check');
+  if(fs.existsSync(np)) throw new Error('--check인데 파일을 썼다 — 출력은 「안 썼다」고 한다');
+  return '무기록';
 });
 
 fs.rmSync(COPY,{force:true}); fs.rmSync(PICK,{force:true});
