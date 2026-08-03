@@ -45,8 +45,11 @@ T('행 지정이 셋째 자리에 들어간다', ()=>{
   if(!f.includes('"'+C1+'"')) throw new Error('카드가 안 들어갔다 (큰따옴표 형식이어야 한다)');
   return C1+' → '+PID+'#0';
 });
-T('주입 후에도 DATA가 파싱된다', ()=>{
-  const s=out();
+/* 장면·패널 수를 고정값(37)으로 검사했더니 장면을 하나 그릴 때마다 이 테스트가 깨졌다.
+   주입기가 지켜야 할 불변식은 「37장면」이 아니라 「주입이 장면·패널을 늘리거나 줄이지
+   않는다」이다. 그래서 원본과 대조한다. 사실 개수는 늘어도 되지만(셋째 자리가 붙으므로)
+   장면·패널 수는 절대 안 바뀐다. */
+const shape=s=>{
   const st=s.indexOf('[',s.indexOf('const DATA'));
   let d=0,q=null,e=false,end=-1;
   for(let k=st;k<s.length;k++){const c=s[k];
@@ -54,7 +57,16 @@ T('주입 후에도 DATA가 파싱된다', ()=>{
     if(c==='"'||c==="'"||c==='`'){q=c;continue}
     if(c==='[')d++; else if(c===']'){d--; if(!d){end=k;break}}}
   const D=eval('('+s.slice(st,end+1)+')');
-  return eq(D.length,37)+'장면 · '+D.reduce((a,x)=>a+x.panels.length,0)+'패널';
+  return {n:D.length, p:D.reduce((a,x)=>a+x.panels.length,0),
+          ids:D.flatMap(x=>x.panels.map(p=>p.id)).sort().join(',')};
+};
+const BASE=shape(ORIG);
+T('주입 후에도 DATA가 파싱되고 장면·패널이 그대로다', ()=>{
+  const A=shape(out());
+  eq(A.n,BASE.n,'장면 수가 바뀌었다:');
+  eq(A.p,BASE.p,'패널 수가 바뀌었다:');
+  eq(A.ids,BASE.ids,'패널 ID 집합이 바뀌었다:');
+  return BASE.n+'장면 · '+BASE.p+'패널 (원본과 동일)';
 });
 T('build.js가 PROW를 실제로 만든다', ()=>{
   const sk=path.join(R,'sketchy.html'), bak=path.join(TMP,'sk_bak.html');
