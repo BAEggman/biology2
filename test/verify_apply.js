@@ -92,6 +92,55 @@ T('주입된 pc가 JSON.parse 된다 (verify_build 호환)', ()=>{
   return '전부 JSON';
 });
 
+console.log('\n── B2. 같은 자리에 여럿 (회귀) ──');
+/* 배열 리터럴의 최상위 원소를 센다 — 문자열 안의 괄호에 속으면 안 된다 */
+function cells(src, lb){
+  let d=0,q=null,e=false,st=null,out=[];
+  const rb=(()=>{ let dd=0,qq=null,ee=false;
+    for(let k=lb;k<src.length;k++){ const c=src[k];
+      if(qq){ if(ee){ee=false;continue} if(c==='\\'){ee=true;continue} if(c===qq)qq=null; continue }
+      if(c==='"'||c==="'"||c==='`'){qq=c;continue}
+      if(c==='[')dd++; else if(c===']'){ dd--; if(!dd) return k; } } })();
+  for(let k=lb+1;k<rb;k++){ const c=src[k];
+    if(q){ if(e){e=false;continue} if(c==='\\'){e=true;continue} if(c===q)q=null; continue }
+    if(c==='"'||c==="'"||c==='`'){ if(st===null)st=k; q=c; continue }
+    if(c==='['||c==='{'){ if(!d&&st===null)st=k; d++; continue }
+    if(c===']'||c==='}'){ d--; continue }
+    if(c===','&&!d){ if(st!==null){out.push(src.slice(st,k)); st=null;} continue }
+    if(!d&&st===null&&!/\s/.test(c)) st=k; }
+  if(st!==null) out.push(src.slice(st,rb));
+  return out;
+}
+T('한 행에 카드 둘 → 셋째 자리는 하나', ()=>{
+  run(`${C1}=${PID}#0\n${C2}=${PID}#0`);
+  const s=span(out(),PID);
+  const fb=s.indexOf('[', s.indexOf(',f:['));
+  const row0=cells(s, fb)[0];
+  const cs=cells(s, s.indexOf(row0)===-1?fb:s.indexOf('[', s.indexOf(row0)-1));
+  const n=cells(row0, 0).length;
+  if(n!==3) throw new Error('행 원소가 '+n+'개다 (3 기대) — 셋째 자리 중복: '+row0.slice(0,110));
+  if(!row0.includes(C1)||!row0.includes(C2)) throw new Error('둘 다 안 들어갔다: '+row0.slice(0,110));
+  return '원소 3 · ["'+C1+'","'+C2+'"]';
+});
+T('한 행에 카드 둘 → build.js가 받아준다', ()=>{
+  const sk=path.join(R,'sketchy.html'), bak=path.join(TMP,'sk_bak2.html');
+  fs.copyFileSync(sk,bak);
+  try{
+    fs.copyFileSync(COPY,sk);
+    const o=execSync('node build.js --check',{cwd:R,encoding:'utf8',maxBuffer:1e9});
+    if(!/통과/.test(o)) throw new Error('빌드가 안 통과: '+o.slice(-160));
+    return (o.match(/행단위 (\d+)/)||[])[0]||'ok';
+  } finally { fs.copyFileSync(bak,sk); fs.unlinkSync(bak); }
+});
+T('한 패널에 카드 둘 → pc 하나에 둘', ()=>{
+  run(`${C1}=${PID2}\n${C2}=${PID2}`);
+  const s=span(out(),PID2);
+  const pc=s.slice(s.indexOf('pc:['), s.indexOf(']',s.indexOf('pc:['))+1);
+  if((s.match(/pc:\[/g)||[]).length!==1) throw new Error('pc가 여러 번 생겼다');
+  if(!pc.includes(C1)||!pc.includes(C2)) throw new Error('둘 다 안 들어갔다: '+pc);
+  return pc.slice(0,50);
+});
+
 console.log('\n── C. 멱등·충돌 ──');
 T('이미 있는 링크는 건너뛴다', ()=>{
   const has=ORIG.match(/\{id:'([sd]\d+p\d+[ab]?)',pc:\["([^"]+)"/);

@@ -94,6 +94,19 @@ if(bad.length) die('읽을 수 없는 줄 '+bad.length+'개:\n   '+bad.join('\n 
    그래서 「할 일」을 먼저 전부 계산하고 위치 역순으로 적용한다. */
 const jobs=[], skipped=[], added=[];
 
+/* ⚠ 같은 자리에 카드 둘이 오면 한 번에 처리해야 한다.
+   전에는 픽마다 독립적으로 「셋째 자리 신설」을 계산했다. 편집은 끝에서
+   한꺼번에 적용되므로 두 픽이 같은 미수정 원본을 보고 각각 `,["A"]` `,["B"]`를
+   예약했고, 결과가 ['소품','사실',["A"],["B"]] — 원소 4개짜리 행이 됐다.
+   build.js가 거부해서 배포는 안 됐지만, 목표 단위로 먼저 묶는 게 옳다. */
+const TGT=new Map();                              // "pid#row" 또는 "pid" → [카드,...]
+for(const j of picks){
+  const k=j.pid+(j.row===null?'':'#'+j.row);
+  if(!TGT.has(k)) TGT.set(k,{pid:j.pid, row:j.row, cids:[]});
+  const t=TGT.get(k);
+  if(!t.cids.includes(j.cid)) t.cids.push(j.cid);
+}
+
 function panelSpan(pid){
   const key="{id:'"+pid+"'";
   const n=sk.split(key).length-1;
@@ -107,58 +120,77 @@ function keyArray(pid, ps, pe, key){              // pc:[  또는  f:[
   if(!m) return null;
   return ps + m.index + m[0].length - 1;          // '[' 위치
 }
+/* 배열 안에 넣을 목록을 만든다 — 이미 있는 건 빼고, 없으면 skipped에 남긴다 */
+function fresh(cids, cur, where){
+  const out=[];
+  for(const cid of cids){
+    if(HAS(cid).test(cur)) skipped.push(cid+' → '+where+' (이미 있다)');
+    else { out.push(cid); added.push({cid, where}); }
+  }
+  return out;
+}
 
-for(const j of picks){
-  const [ps,pe]=panelSpan(j.pid);
-  if(j.row===null){
+for(const t of TGT.values()){
+  const [ps,pe]=panelSpan(t.pid);
+  if(t.row===null){
     /* ── 패널 단위 → pc ── */
-    const lb=keyArray(j.pid,ps,pe,'pc');
+    const lb=keyArray(t.pid,ps,pe,'pc');
     if(lb===null){                                 // pc가 아예 없다 → 새로 만든다
-      const at=ps+("{id:'"+j.pid+"'").length;
-      jobs.push({at, del:0, ins:',pc:['+Q(j.cid)+']', tag:j.cid+' → '+j.pid+' (pc 신설)'});
-      added.push(j); continue;
+      const at=ps+("{id:'"+t.pid+"'").length;
+      t.cids.forEach(c=>added.push({cid:c, where:t.pid}));
+      jobs.push({at, del:0, ins:',pc:['+t.cids.map(Q).join(',')+']',
+                 tag:t.cids.join(' · ')+' → '+t.pid+' (pc 신설)'});
+      continue;
     }
     const rb=matchAt(sk,lb);
     const cur=sk.slice(lb,rb+1);
-    if(HAS(j.cid).test(cur)){ skipped.push(j.cid+' → '+j.pid+' (이미 있다)'); continue; }
+    const add=fresh(t.cids, cur, t.pid);
+    if(!add.length) continue;
     const empty=/^\[\s*\]$/.test(cur);
-    jobs.push({at:rb, del:0, ins:(empty?'':',')+Q(j.cid), tag:j.cid+' → '+j.pid+' (pc)'});
-    added.push(j);
+    jobs.push({at:rb, del:0, ins:(empty?'':',')+add.map(Q).join(','),
+               tag:add.join(' · ')+' → '+t.pid+' (pc)'});
   } else {
     /* ── 행 단위 → f[row][2] ── */
-    const fb=keyArray(j.pid,ps,pe,'f');
-    if(fb===null) die(j.pid+': 사실표(f)가 없는데 행을 지정했다');
+    const fb=keyArray(t.pid,ps,pe,'f');
+    if(fb===null) die(t.pid+': 사실표(f)가 없는데 행을 지정했다');
     const rows=elems(sk,fb);
-    if(j.row>=rows.length) die(j.pid+'#'+j.row+': 행이 '+rows.length+'개뿐이다');
-    const [rs,re_]=rows[j.row];
-    const rowSrc=sk.slice(rs,re_);
+    if(t.row>=rows.length) die(t.pid+'#'+t.row+': 행이 '+rows.length+'개뿐이다');
+    const [rs,re_]=rows[t.row];
     const cells=elems(sk,rs);
-    if(cells.length<2) die(j.pid+'#'+j.row+': 행 형식이 이상하다 — '+rowSrc.slice(0,60));
-    if(cells.length>=3){
-      const [cs,ce]=cells[2];
-      const cur=sk.slice(cs,ce);
-      if(!cur.trim().startsWith('[')) die(j.pid+'#'+j.row+': 셋째 자리가 배열이 아니다');
-      if(HAS(j.cid).test(cur)){ skipped.push(j.cid+' → '+j.pid+'#'+j.row+' (이미 있다)'); continue; }
-      const rb2=matchAt(sk, sk.indexOf('[',cs));
-      const empty=/^\[\s*\]$/.test(sk.slice(sk.indexOf('[',cs), rb2+1));
-      jobs.push({at:rb2, del:0, ins:(empty?'':',')+Q(j.cid), tag:j.cid+' → '+j.pid+'#'+j.row});
+    if(cells.length<2) die(t.pid+'#'+t.row+': 행 형식이 이상하다 — '+sk.slice(rs,re_).slice(0,60));
+    if(cells.length>3) die(t.pid+'#'+t.row+': 원소가 '+cells.length+'개다 (최대 3) — 이미 깨진 행이다');
+    const where=t.pid+'#'+t.row;
+    if(cells.length===3){
+      const [cs]=cells[2];
+      const lb2=sk.indexOf('[',cs);
+      const rb2=matchAt(sk, lb2);
+      const cur=sk.slice(lb2,rb2+1);
+      if(!cur.trim().startsWith('[')) die(where+': 셋째 자리가 배열이 아니다');
+      const add=fresh(t.cids, cur, where);
+      if(!add.length) continue;
+      const empty=/^\[\s*\]$/.test(cur);
+      jobs.push({at:rb2, del:0, ins:(empty?'':',')+add.map(Q).join(','),
+                 tag:add.join(' · ')+' → '+where});
     } else {
+      t.cids.forEach(c=>added.push({cid:c, where}));
       const rb2=matchAt(sk, rs);                   // 행 배열의 ']'
-      jobs.push({at:rb2, del:0, ins:',['+Q(j.cid)+']', tag:j.cid+' → '+j.pid+'#'+j.row+' (셋째 자리 신설)'});
+      jobs.push({at:rb2, del:0, ins:',['+t.cids.map(Q).join(',')+']',
+                 tag:t.cids.join(' · ')+' → '+where+' (셋째 자리 신설)'});
     }
-    added.push(j);
-    /* 같은 패널의 pc에 같은 카드가 있으면 뺀다 — build.js가 중복을 경고한다 */
-    const lb=keyArray(j.pid,ps,pe,'pc');
+    /* 같은 패널의 pc에 같은 카드가 있으면 뺀다 — 행이 이긴다 */
+    const lb=keyArray(t.pid,ps,pe,'pc');
     if(lb!==null){
       const rb=matchAt(sk,lb);
       const cur=sk.slice(lb,rb+1);
-      const pat=new RegExp("\\s*,?\\s*['\"]"+rx(j.cid)+"['\"]\\s*,?");
-      const mm=cur.match(pat);
-      if(mm){
-        const abs=lb+mm.index;
-        let ins='';
-        if(/^\s*,/.test(mm[0]) && /,\s*$/.test(mm[0])) ins=',';   // 가운데였으면 쉼표 하나 남긴다
-        jobs.push({at:abs, del:mm[0].length, ins, tag:j.cid+' ← '+j.pid+'.pc 에서 제거 (행이 이긴다)'});
+      for(const cid of t.cids){
+        const pat=new RegExp("\\s*,?\\s*['\"]"+rx(cid)+"['\"]\\s*,?");
+        const mm=cur.match(pat);
+        if(mm){
+          const abs=lb+mm.index;
+          let ins='';
+          if(/^\s*,/.test(mm[0]) && /,\s*$/.test(mm[0])) ins=',';
+          jobs.push({at:abs, del:mm[0].length, ins, tag:cid+' ← '+t.pid+'.pc 에서 제거 (행이 이긴다)'});
+        }
       }
     }
   }
@@ -175,7 +207,7 @@ try{ eval('('+sk.slice(sk.indexOf('[',sk.indexOf('const DATA')), matchAt(sk, sk.
 catch(e){ die('주입 후 DATA 파싱 실패 — 아무것도 안 썼다: '+e.message); }
 
 /* ── 보고 ──────────────────────────────────────────────────────────── */
-const nRow=added.filter(j=>j.row!==null).length, nPan=added.length-nRow;
+const nRow=added.filter(a=>a.where.includes('#')).length, nPan=added.length-nRow;
 console.log('');
 jobs.slice().reverse().forEach(j=>console.log('  ✓ '+j.tag));
 if(skipped.length){ console.log(''); skipped.forEach(s=>console.log('  · '+s)); }
