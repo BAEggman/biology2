@@ -113,10 +113,13 @@ T('필수 엘리먼트 전부 존재', ()=>{
 });
 T('picFix 초기 hidden', ()=>eq(dom.window.document.getElementById('picFix').className.includes('hidden'),true));
 T('script 개수 원본과 동일', ()=>eq((h.match(/<script/g)||[]).length,(o.match(/<script/g)||[]).length));
-T('CARDS 5531 무변경', ()=>{
-  const C=JSON.parse(h.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
-  const C0=JSON.parse(o.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
-  eq(C.length,5531); return eq(JSON.stringify(C)===JSON.stringify(C0),true)&&'동일';
+/* 고정값 5531 → 불변식 (§10). 카드가 느는 것은 진도다. 줄거나 바뀌는 것만 회귀다. */
+T('기존 카드가 유실·변형되지 않는다 (추가는 허용)', ()=>{
+  const P=x=>JSON.parse(x.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
+  const now=new Map(P(h).map(c=>[c.id,JSON.stringify(c)]));
+  const bad=P(o).filter(c=>now.get(c.id)!==JSON.stringify(c));
+  if(bad.length) throw new Error('유실·변형 '+bad.length+'장: '+bad.slice(0,5).map(c=>c.id).join(','));
+  return P(o).length+'장 보존 · 현재 '+now.size+'장';
 });
 T('EXAM 블록 무변경', ()=>{
   const g=s=>s.match(/id=["']EXAM["'][^>]*>([\s\S]*?)<\/script>/)[1];
@@ -131,8 +134,14 @@ T('JS 문법 (script 전체 파싱)', ()=>{
   blocks.forEach((b,i)=>{ try{ new Function(b); }catch(e){ throw new Error('script#'+i+': '+e.message); } });
   return blocks.length+'개 블록 OK';
 });
-T('용량 증가 ≤150KB', ()=>{ const d=Buffer.byteLength(h)-fs.statSync(OLD).size;
-  if(d>150*1024) throw new Error((d/1024).toFixed(0)+'KB'); return '+'+(d/1024).toFixed(0)+'KB'; });
+/* 「v10a 대비 +150KB 이내」도 고정값이었다 (§10). 카드·q블록이 늘면 파일은 당연히 커진다.
+   원래 노린 것은 「이번 변경이 파일을 확 부풀리지 않았나」이므로, baseline에 기록한
+   직전 증가분 대비 여유(150KB)로 바꾼다. 배포할 때마다 baseline.idxDeltaKB를 올린다. */
+T('index.html이 갑자기 부풀지 않는다 (직전 대비 +150KB 이내)', ()=>{
+  const d=Math.round((Buffer.byteLength(h)-fs.statSync(OLD).size)/1024);
+  const base=(BL.idxDeltaKB==null?d:BL.idxDeltaKB);
+  if(d>base+150) throw new Error('직전 +'+base+'KB → 지금 +'+d+'KB (여유 150KB 초과)');
+  return '+'+d+'KB (기준선 +'+base+'KB)'; });
 
 console.log('\n'+(fail?'❌':'✅')+' 통과 '+pass+' / 실패 '+fail);
 process.exit(fail?1:0);

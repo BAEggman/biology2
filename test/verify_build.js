@@ -97,8 +97,14 @@ T('PROW 항목이 전부 실재하는 행을 가리킨다', ()=>{
   return Object.keys(PROW).length+'카드 · '+n+'행';
 });
 T('BUILD 마커 존재', ()=>eq(/\/\*BUILD:START[\s\S]*?BUILD:END\*\//.test(now),true));
-T('CARDS 무변경', ()=>{ const g=s=>s.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1];
-  return eq(g(now)===g(prev),true)&&'동일'; });
+/* 고정값 → 불변식 (§10). build.js는 CARDS를 읽기만 하므로 「빌드가 카드를 건드리지 않는다」가
+   진짜 불변식이고, 사람이 카드를 더 넣는 것은 막을 이유가 없다. */
+T('빌드가 기존 카드를 건드리지 않는다 (추가는 허용)', ()=>{
+  const P=s=>JSON.parse(s.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
+  const cur=new Map(P(now).map(c=>[c.id,JSON.stringify(c)]));
+  const bad=P(prev).filter(c=>cur.get(c.id)!==JSON.stringify(c));
+  if(bad.length) throw new Error('빌드가 카드를 바꿨다 '+bad.length+'장: '+bad.slice(0,5).map(c=>c.id).join(','));
+  return P(prev).length+'장 보존 · 현재 '+cur.size+'장'; });
 
 console.log('\n── C. 재현성 ──');
 T('두 번 돌려도 동일 (idempotent)', ()=>{

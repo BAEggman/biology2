@@ -63,8 +63,15 @@ T('고아 26 → 23', ()=>{
   return le(ALL.filter(p=>!u.has(p)).length,BL.orphan,'고아')+'장'; });
 
 console.log('\n── 회귀 ──');
-T('CARDS 무변경', ()=>{ const g=s=>s.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1];
-  return eq(g(h)===g(o),true)&&'동일'; });
+/* ⚠ 「CARDS 5531 무변경」이라는 고정값 테스트였다. v17이 신경·감각·근육 카드 148장을
+   정당하게 추가하자 깨졌다 — 마스터노트 §10이 말한 그 병의 여덟 번째다.
+   불변식으로 바꾼다: 기존 카드가 유실·변형되지 않으면 통과. 추가는 진도이므로 허용한다. */
+T('기존 카드가 유실·변형되지 않는다 (추가는 허용)', ()=>{
+  const P=s=>JSON.parse(s.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
+  const now=new Map(P(h).map(c=>[c.id,JSON.stringify(c)]));
+  const bad=P(o).filter(c=>now.get(c.id)!==JSON.stringify(c));
+  if(bad.length) throw new Error('유실·변형 '+bad.length+'장: '+bad.slice(0,5).map(c=>c.id).join(','));
+  return P(o).length+'장 보존 · 현재 '+now.size+'장'; });
 T('EXAM 무변경', ()=>{ const g=s=>s.match(/id=["']EXAM["'][^>]*>([\s\S]*?)<\/script>/)[1];
   return eq(g(h)===g(o),true)&&'동일'; });
 T('localStorage 키 무변경', ()=>eq((h.match(/KEY\s*=\s*['"]([^'"]+)/)||[])[1],'bio_srs_v1'));
