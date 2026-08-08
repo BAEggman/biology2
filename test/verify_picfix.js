@@ -99,31 +99,27 @@ T('전부 RIFF/WEBP 헤더', ()=>{
     return b.slice(0,4).toString()!=='RIFF' || b.slice(8,12).toString()!=='WEBP'; });
   return eq(bad.length,0);
 });
-T('합계 ≤ 12MB', ()=>{ const t=files.reduce((a,f)=>a+fs.statSync(path.join(IMGDIR,f)).size,0);
-  if(t>12*1048576) throw new Error((t/1048576).toFixed(1)+'MB'); return (t/1048576).toFixed(2)+'MB'; });
-/* [신규 2026-08-08] sketchy.html 은 그림을 base64 로 품고 index.html 은 img/*.webp 를 쓴다.
-   img/ 만 갈아 끼우면 두 화면이 조용히 갈라진다 — 실제로 18장이 갈라져 있었고 7장은
-   sketchy.html 에서 src="" 였다. 원본은 img/ 하나다. 어긋나면 python3 tools/sync_img.py. */
-T('sketchy.html의 IMG == img/*.webp (바이트 동일)', ()=>{
+/* [수정 2026-08-08] 상한을 12MB → 30MB.
+   12MB 는 sketchy.html 이 같은 그림을 base64 로 한 벌 더 갖고 있던 시절의 값이다
+   (img/ 11.9MB + sketchy 안 15.9MB = 27MB). 그 중복을 없앴으므로 img/ 만 남았고,
+   상한의 목적은 「무한정 늘지 않게」 하나다. 30MB 면 패널 260장까지 간다. */
+T('합계 ≤ 30MB', ()=>{ const t=files.reduce((a,f)=>a+fs.statSync(path.join(IMGDIR,f)).size,0);
+  if(t>30*1048576) throw new Error((t/1048576).toFixed(1)+'MB'); return (t/1048576).toFixed(2)+'MB'; });
+/* [신규 2026-08-08] 예전에는 sketchy.html 이 그림을 base64 로 품었고, img/ 만 갈아 끼우면
+   두 화면이 조용히 갈라졌다(실제로 18장이 낡았고 7장은 src="" 빈칸이었다).
+   이제 sketchy.html 도 img/ 경로를 쓴다 — 원본이 하나뿐이라 갈라질 수가 없다.
+   되돌아가지 않도록 「base64 가 하나도 없고 경로를 쓴다」를 못 박는다. */
+T('sketchy.html에 base64 그림이 없다', ()=>{
   const sk=fs.readFileSync(path.join(L.ROOT,'sketchy.html'),'utf8');
-  const A='const IMG = ', i=sk.indexOf(A)+A.length;
-  if(i<A.length) throw new Error('IMG 앵커 없음');
-  let d=0,q=null,j=i;
-  for(;j<sk.length;j++){ const c=sk[j];
-    if(q){ if(c==='\\'){j++;continue} if(c===q)q=null; continue }
-    if(c==='"'||c==="'"||c==='`'){q=c;continue}
-    if(c==='{')d++; else if(c==='}'){ d--; if(!d)break } }
-  const IMG=JSON.parse(sk.slice(i,j+1));
-  const want=ALL.filter(p=>!PNOIMG.includes(p));
-  const missing=want.filter(p=>!IMG[p]);
-  if(missing.length) throw new Error('IMG에 없는 패널: '+missing.join(' '));
-  const bad=want.filter(p=>{
-    const b=fs.readFileSync(path.join(IMGDIR,p+'.webp')).toString('base64');
-    return IMG[p]!=='data:image/webp;base64,'+b; });
-  if(bad.length) throw new Error('img/와 다른 패널: '+bad.join(' '));
-  const ghost=Object.keys(IMG).filter(p=>!want.includes(p));
-  if(ghost.length) throw new Error('IMG에만 있는 유령: '+ghost.join(' '));
-  return want.length+'장 일치';
+  const n=(sk.match(/data:image\/[a-z]+;base64/g)||[]).length;
+  if(n) throw new Error(n+'건 — 그림은 img/ 에만 둔다 (tools/unembed_img.py)');
+  if(/const IMG\s*=/.test(sk)) throw new Error('IMG 객체가 되살아났다');
+  return (fs.statSync(path.join(L.ROOT,'sketchy.html')).size/1048576).toFixed(2)+'MB';
+});
+T('sketchy.html이 img/ 경로로 그림을 부른다', ()=>{
+  const sk=fs.readFileSync(path.join(L.ROOT,'sketchy.html'),'utf8');
+  if(!sk.includes('src="img/${p.id}.webp"')) throw new Error('경로 렌더가 없다');
+  return 'img/${p.id}.webp';
 });
 
 console.log('\n── E. DOM · 회귀 ──');

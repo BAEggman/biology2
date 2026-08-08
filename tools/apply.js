@@ -202,7 +202,9 @@ for(const jb of jobs) sk = sk.slice(0,jb.at) + jb.ins + sk.slice(jb.at+jb.del);
 
 /* ── 검사 ──────────────────────────────────────────────────────────── */
 if(sk.split('const DATA').length-1!==1) die('const DATA가 1개가 아니다');
-if(sk.split('const IMG').length-1!==1) die('const IMG가 1개가 아니다');
+/* [수정 2026-08-08] 예전에는 `const IMG` 가 1개인지로 파일이 안 뭉개졌나를 봤다.
+   이제 그림은 base64 가 아니라 img/ 경로라 IMG 객체가 없다. 같은 목적의 앵커로 바꾼다. */
+if(sk.split('src="img/${p.id}.webp"').length-1!==1) die('그림 렌더 앵커가 1개가 아니다');
 try{ eval('('+sk.slice(sk.indexOf('[',sk.indexOf('const DATA')), matchAt(sk, sk.indexOf('[',sk.indexOf('const DATA')))+1)+')'); }
 catch(e){ die('주입 후 DATA 파싱 실패 — 아무것도 안 썼다: '+e.message); }
 
