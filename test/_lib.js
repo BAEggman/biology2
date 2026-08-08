@@ -9,9 +9,14 @@ const sh=c=>execSync(c,{cwd:ROOT,maxBuffer:1e9,encoding:'utf8'});
 
 /* 비교 기준이 되는 과거 커밋. 태그가 아니라 내용으로 찾는다 —
    커밋 해시가 리베이스로 바뀌어도 안 깨지게. */
+/* [수정 2026-08-08] 예전에는 `git log -n 60`으로 최신 60개만 훑었다.
+   커밋이 61개가 되는 순간 v12 기준본이 창 밖으로 밀려나 스위트 전체가 죽었다 —
+   진도가 나갈수록 반드시 깨지는 테스트였다(래칫 원칙 위반: 「무시되는 테스트는 없느니만 못하다」).
+   기준본은 정의상 히스토리의 **앞쪽**에 있으므로 전체 로그를 오래된 것부터 훑는다.
+   그러면 히스토리가 아무리 길어져도 첫 몇 번의 git show 로 끝난다. */
 function findCommit(pred, label){
-  const list=sh('git log --format=%H -n 60').trim().split('\n').filter(Boolean);
-  for(const h of list){ try{ if(pred(h)) return h; }catch(e){} }
+  const list=sh('git log --format=%H').trim().split('\n').filter(Boolean);
+  for(let i=list.length-1;i>=0;i--){ try{ if(pred(list[i])) return list[i]; }catch(e){} }
   if(list.length<5) throw new Error(
     '기준 커밋을 못 찾았다: '+label+'\n'+
     '  히스토리가 '+list.length+'개뿐이다. shallow clone이면 전체 히스토리를 받아야 한다:\n'+

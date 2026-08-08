@@ -60,10 +60,18 @@ console.log('\n── B. 빌드 산출물 == 손으로 만든 v10b 지도 ──
 const now=read('index.html'), prev=fs.readFileSync(FX.STAGE2,'utf8');   /* v10b — 손으로 만든 지도 */
 const norm=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,(Array.isArray(v)?v:[v]).slice().sort().join('|')]));
 T('PMAP은 줄지 않는다', ()=>ge(Object.keys(J(now,'PMAP')).length,BL.pmap,'PMAP')+'장');
-T('PMAP 값이 한 건도 안 바뀜', ()=>{
+/* [수정 2026-08-08] 「한 건도 안 바뀜」은 카드를 옮기는 것을 아예 막는다.
+   그런데 그림을 다시 그리면 어떤 사실의 근거가 다른 패널로 넘어가는 일이 실제로 생긴다.
+   불변식은 「아무도 안 움직인다」가 아니라 「이유 없이 움직인 카드가 없다」이다.
+   의도한 이동은 baseline.json 의 pmapMoved 에 from·to·why 를 적어 두고, 그 밖은 전부 실패시킨다. */
+T('PMAP 값이 안 바뀜 (기록된 이동만 허용)', ()=>{
   const a=norm(J(prev,'PMAP')), b=norm(J(now,'PMAP'));
+  const moved=BL.pmapMoved||{};
   const d=Object.keys(a).filter(k=>a[k]!==b[k]);
-  return eq(d.length,0)+'건 차이'; });
+  const bad=d.filter(k=>{ const m=moved[k]; return !(m && m.from===a[k] && m.to===b[k] && m.why); });
+  if(bad.length) throw new Error('기록에 없는 이동 '+bad.length+'건: '
+    +bad.map(k=>k+' '+a[k]+'→'+b[k]).join(', '));
+  return d.length?d.length+'건 이동 — 전부 baseline.pmapMoved에 기록됨':'0건 차이'; });
 /* [수정] PFACT 내용은 사실표를 고치면 당연히 바뀐다. 형태만 본다. */
 T('PTIT·PBR 키 집합 동일 · PFACT는 소스와 일치', ()=>{
   /* [정정] 「키 집합이 동일」은 패널을 추가하면 깨진다 — 추가는 이 프로젝트의 목적이다.
