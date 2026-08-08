@@ -82,7 +82,10 @@ for(const raw of lines){
   if(!CARDSET.has(cid)){ bad.push(ln+'   ← 없는 카드 ID'); continue; }
   if(!rhs){ none.push(cid); continue; }
   for(const tok of rhs.split(',').map(x=>x.trim()).filter(Boolean)){
-    const t=tok.match(/^([a-z]\d{2}p\d{2})(?:#(\d+))?$/);
+    /* [수정 2026-08-08] 접미 a/b 를 받아 준다.
+       s20p01a·s20p01b·s12p02a·s12p02b 는 DATA 에 실재하는 패널인데 이 정규식이 막고 있어
+       지금까지 한 번도 주입할 수 없었다(2차 훑기에서 P1-12 계열 5장이 걸려 발견). */
+    const t=tok.match(/^([a-z]\d{2}p\d{2}[ab]?)(?:#(\d+))?$/);
     if(!t){ bad.push(ln+'   ← 알 수 없는 패널 표기: '+tok); continue; }
     picks.push({cid, pid:t[1], row:t[2]===undefined?null:parseInt(t[2],10)});
   }
