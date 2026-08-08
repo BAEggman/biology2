@@ -101,6 +101,30 @@ T('전부 RIFF/WEBP 헤더', ()=>{
 });
 T('합계 ≤ 12MB', ()=>{ const t=files.reduce((a,f)=>a+fs.statSync(path.join(IMGDIR,f)).size,0);
   if(t>12*1048576) throw new Error((t/1048576).toFixed(1)+'MB'); return (t/1048576).toFixed(2)+'MB'; });
+/* [신규 2026-08-08] sketchy.html 은 그림을 base64 로 품고 index.html 은 img/*.webp 를 쓴다.
+   img/ 만 갈아 끼우면 두 화면이 조용히 갈라진다 — 실제로 18장이 갈라져 있었고 7장은
+   sketchy.html 에서 src="" 였다. 원본은 img/ 하나다. 어긋나면 python3 tools/sync_img.py. */
+T('sketchy.html의 IMG == img/*.webp (바이트 동일)', ()=>{
+  const sk=fs.readFileSync(path.join(L.ROOT,'sketchy.html'),'utf8');
+  const A='const IMG = ', i=sk.indexOf(A)+A.length;
+  if(i<A.length) throw new Error('IMG 앵커 없음');
+  let d=0,q=null,j=i;
+  for(;j<sk.length;j++){ const c=sk[j];
+    if(q){ if(c==='\\'){j++;continue} if(c===q)q=null; continue }
+    if(c==='"'||c==="'"||c==='`'){q=c;continue}
+    if(c==='{')d++; else if(c==='}'){ d--; if(!d)break } }
+  const IMG=JSON.parse(sk.slice(i,j+1));
+  const want=ALL.filter(p=>!PNOIMG.includes(p));
+  const missing=want.filter(p=>!IMG[p]);
+  if(missing.length) throw new Error('IMG에 없는 패널: '+missing.join(' '));
+  const bad=want.filter(p=>{
+    const b=fs.readFileSync(path.join(IMGDIR,p+'.webp')).toString('base64');
+    return IMG[p]!=='data:image/webp;base64,'+b; });
+  if(bad.length) throw new Error('img/와 다른 패널: '+bad.join(' '));
+  const ghost=Object.keys(IMG).filter(p=>!want.includes(p));
+  if(ghost.length) throw new Error('IMG에만 있는 유령: '+ghost.join(' '));
+  return want.length+'장 일치';
+});
 
 console.log('\n── E. DOM · 회귀 ──');
 const {JSDOM}=require('jsdom');
