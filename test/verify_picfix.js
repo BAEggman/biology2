@@ -80,7 +80,10 @@ T('설정 체크박스 존재', ()=>eq((h.match(/id="fPicFix"/g)||[]).length,1))
 T('advance() 분리됨', ()=>eq((h.match(/function advance\(\)/g)||[]).length,1));
 T('grade가 advance 호출', ()=>eq(/save\(\);\s*\n\s*if\(DB\.picFix!==0/.test(h),true));
 T('키보드 picFixOn 분기', ()=>eq(/if\(picFixOn\)\{/.test(h),true));
-T('PNOIMG = 도해 11장', ()=>eq(PNOIMG.length,11));
+/* [수정 2026-08-14] 「도해 11장」 고정값은 도해를 한 장 더 그리면 깨진다 — 그리는 것이 이 프로젝트의
+   목적이다. 그런 테스트는 무시하게 되고, 무시되는 테스트는 없느니만 못하다(baseline.json의 _왜와 같은 이유).
+   불변식은 「도해가 줄지 않는다」이고, 「기존 항목이 사라지지 않았다」는 아래 줄이 이미 따로 지킨다. */
+T('도해는 줄지 않는다', ()=>ge(PNOIMG.length,BL.noimg,'도해')+'장');
 T('PNOIMG가 전부 도해', ()=>eq(PNOIMG.filter(p=>!/^d0/.test(p)).length,0));
 
 console.log('\n── D. 이미지 파일 ──');
