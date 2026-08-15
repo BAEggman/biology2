@@ -1,0 +1,117 @@
+<svg viewBox="0 0 880 452" role="img" aria-labelledby="t5 d5d">
+    <title id="t5">심장 전도 경로와 심전도 파형의 시간 대응</title>
+    <desc id="d5d">동방결절부터 심근까지의 전도 경로, 심전도의 P·QRS·T파, PR 간격과 PR 분절의 구분, ST 분절 상승, 심음 S1·S2 발생 시점을 같은 시간축에 맞춰 표시한 그림</desc>
+
+    <!-- ============ 1. 전도 경로 — 강조는 이름표 굵기 하나로만 ============ -->
+    <text x="40" y="26" font-size="13" font-weight="700" fill="#374151">전도 경로</text>
+    <g fill="#F3F4F6" stroke="#9CA3AF" stroke-width="1.5">
+      <circle cx="120" cy="60" r="20"/>
+      <circle cx="300" cy="60" r="20"/>
+      <circle cx="470" cy="60" r="20"/>
+      <circle cx="640" cy="60" r="20"/>
+      <rect x="760" y="42" width="70" height="36" rx="8"/>
+    </g>
+    <g text-anchor="middle" font-size="11.5" font-weight="700" fill="#374151">
+      <text x="120" y="65">SA</text>
+      <text x="300" y="65">AV</text>
+      <text x="470" y="65">히스</text>
+      <text x="640" y="65">푸르</text>
+      <text x="795" y="65">심근</text>
+    </g>
+    <g stroke="#9CA3AF" stroke-width="1.5">
+      <line x1="142" y1="60" x2="278" y2="60"/><line x1="322" y1="60" x2="448" y2="60"/>
+      <line x1="492" y1="60" x2="618" y2="60"/><line x1="662" y1="60" x2="756" y2="60"/>
+    </g>
+    <g fill="#9CA3AF">
+      <polygon points="278,60 268,55 268,65"/><polygon points="448,60 438,55 438,65"/>
+      <polygon points="618,60 608,55 608,65"/><polygon points="756,60 746,55 746,65"/>
+    </g>
+    <!-- 이름표: 굵은 진주황 = 사실을 나르는 자리 / 보통 회색 = 보조 -->
+    <g text-anchor="middle" font-size="11">
+      <text x="120" y="100" font-weight="700" fill="#7C2D12">동방결절 · 박동원</text>
+      <text x="300" y="100" font-weight="700" fill="#7C2D12">방실결절 · 여기서 지연</text>
+      <text x="470" y="100" fill="#6B7280">히스속 · 좌우각</text>
+      <text x="640" y="100" font-weight="700" fill="#7C2D12">푸르킨예 · 전도 최고속</text>
+      <text x="795" y="100" fill="#6B7280">심실근 · 전도의 끝</text>
+    </g>
+    <text x="450" y="122" text-anchor="middle" font-size="10" fill="#9CA3AF">굵은 이름표 = 이 자리가 사실을 나른다</text>
+
+    <!-- ============ 2. 심전도 ============ -->
+    <text x="40" y="158" font-size="13" font-weight="700" fill="#374151">심전도</text>
+
+    <!-- P파 기둥 — PR 간격이 더 품고 있는 바로 그 폭 -->
+    <rect x="110" y="178" width="30" height="92" fill="#FFEDD5" opacity="0.75"/>
+
+    <!-- 기저선 -->
+    <line x1="60" y1="270" x2="850" y2="270" stroke="#E5E7EB"/>
+
+    <!-- 세로 정렬 점선 (구조 안내 = 회색 하나로 통일) -->
+    <g stroke="#9CA3AF" stroke-width="1.2" stroke-dasharray="3 3">
+      <line x1="320" y1="216" x2="320" y2="270"/>
+      <line x1="380" y1="270" x2="380" y2="352"/>
+      <line x1="668" y1="270" x2="668" y2="352"/>
+    </g>
+
+    <!-- ST 분절 상승 (주황 점선 = 이상 소견) -->
+    <path d="M 380 270 C 390 252, 398 250, 412 250 L 570 250 C 584 250, 592 258, 600 270"
+      fill="none" stroke="#C2410C" stroke-width="2.2" stroke-dasharray="6 4"/>
+    <g stroke="#C2410C" stroke-width="1.2" fill="#C2410C">
+      <line x1="500" y1="268" x2="500" y2="257"/>
+      <polygon points="500,250 496,258 504,258"/>
+    </g>
+    <text x="490" y="240" text-anchor="middle" font-size="11" font-weight="700" fill="#7C2D12">ST 분절 상승 = 심근경색</text>
+    <!-- ST 분절이 어디인지 이름부터 -->
+    <g stroke="#9CA3AF" stroke-width="1.2">
+      <line x1="380" y1="284" x2="600" y2="284"/>
+      <line x1="380" y1="280" x2="380" y2="288"/><line x1="600" y1="280" x2="600" y2="288"/>
+    </g>
+    <text x="490" y="302" text-anchor="middle" font-size="10" fill="#6B7280">ST 분절 — 정상은 기저선과 같은 높이</text>
+
+    <!-- 정상 파형 -->
+    <polyline points="70,270 110,270 125,246 140,270 300,270 320,270 335,282 350,190 365,302 380,270 560,270 600,270 630,240 660,270 850,270"
+      fill="none" stroke="#1E40AF" stroke-width="2.5"/>
+    <g font-size="12" font-weight="700" fill="#1E40AF" text-anchor="middle">
+      <text x="125" y="236">P</text><text x="350" y="180">QRS</text><text x="630" y="230">T</text>
+    </g>
+    <g font-size="11" fill="#4B5563" text-anchor="middle">
+      <text x="125" y="296">심방 탈분극</text>
+      <text x="624" y="322">심실 재분극</text>
+    </g>
+    <!-- S1 점선을 피해 오른쪽 끝을 344에서 끊는다 -->
+    <g text-anchor="end">
+      <text x="344" y="322" font-size="11" fill="#4B5563">심실 탈분극</text>
+      <text x="344" y="338" font-size="10.5" fill="#7C2D12">심방 재분극은 여기 묻혀 안 보인다</text>
+    </g>
+
+    <!-- PR 간격 : P파 시작 ~ QRS 시작 (P파를 포함한다) -->
+    <text x="215" y="154" text-anchor="middle" font-size="11" font-weight="700" fill="#7C2D12">PR 간격 = P파 시작 ~ QRS 시작</text>
+    <text x="215" y="167" text-anchor="middle" font-size="10" fill="#7C2D12">정의상 P파를 포함한다 — 그만큼 PR 분절보다 길다</text>
+    <g stroke="#C2410C" stroke-width="1.5">
+      <line x1="110" y1="178" x2="320" y2="178"/>
+      <line x1="110" y1="172" x2="110" y2="184"/><line x1="320" y1="172" x2="320" y2="184"/>
+    </g>
+
+    <!-- PR 분절 : P파 끝 ~ QRS 시작 = 방실결절 지연 -->
+    <text x="230" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#7C2D12">PR 분절 = 방실결절 지연 (약 0.1초)</text>
+    <g stroke="#C2410C" stroke-width="1.5">
+      <line x1="140" y1="208" x2="320" y2="208"/>
+      <line x1="140" y1="202" x2="140" y2="214"/><line x1="320" y1="202" x2="320" y2="214"/>
+    </g>
+
+    <!-- ============ 3. 심음 · 판막 ============ -->
+    <text x="40" y="348" font-size="13" font-weight="700" fill="#374151">심음 · 판막</text>
+    <g>
+      <rect x="319" y="352" width="122" height="36" rx="8" fill="#FFEDD5" stroke="#C2410C"/>
+      <text x="380" y="369" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7C2D12">제1심음 S1</text>
+      <text x="380" y="383" text-anchor="middle" font-size="10.5" fill="#7C2D12">방실판막 닫힘</text>
+
+      <rect x="607" y="352" width="122" height="36" rx="8" fill="#FFEDD5" stroke="#C2410C"/>
+      <text x="668" y="369" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7C2D12">제2심음 S2</text>
+      <text x="668" y="383" text-anchor="middle" font-size="10.5" fill="#7C2D12">반월판막 닫힘</text>
+    </g>
+
+    <g text-anchor="middle" font-size="11.5" fill="#6B7280">
+      <text x="450" y="416">세로 점선을 따라 읽는다 — S1은 QRS 직후, S2는 T파 끝 무렵</text>
+      <text x="450" y="436">판막 개폐 순서 — AV 닫힘 → 반월판 열림 → 반월판 닫힘 → AV 열림</text>
+    </g>
+  </svg>
