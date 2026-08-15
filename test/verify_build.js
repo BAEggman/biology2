@@ -27,14 +27,30 @@ T('pc를 걷어내면 구조가 v12와 같다', ()=>{
   /* [정정] 완전 일치는 패널을 추가하면 깨진다 — 추가가 이 프로젝트의 목적이다.
      불변식은 「v12의 장면·패널이 하나도 사라지지 않았고 순서도 그대로다」이다. */
   const now=shape(strip(sk)).split('|'), was=shape(orig).split('|');
-  let i=0; const gone=[];
-  for(const k of was){ const j=now.indexOf(k,i); if(j<0) gone.push(k); else i=j+1; }
+  /* [정정 2026-08-15] 패널을 둘로 쪼개면 옛 id가 사라진다 — 소품 6개 상한(규칙 10)에 맞추느라
+     실제로 여러 번 그렇게 했다. 「사라졌다」로 잡으면 정당한 분할마다 깨지고, 그런 테스트는
+     무시하게 된다. pmapMoved와 같은 방식으로 baseline.panelSplit에 적어 둔 분할만 통과시킨다 —
+     적지 않고 사라지면 여전히 잡힌다. */
+  const SPLIT=BL.panelSplit||{};
+  const key=id=>"{id:'"+id+"'";
+  let i=0; const gone=[], split=[];
+  for(const k of was){
+    const j=now.indexOf(k,i);
+    if(j>=0){ i=j+1; continue; }
+    const id=(k.match(/'([^']+)'/)||[])[1];
+    const kids=(SPLIT[id]||{}).to||[];
+    let p=i, ok=kids.length>0;
+    for(const c of kids){ const jj=now.indexOf(key(c),p); if(jj<0){ ok=false; break; } p=jj+1; }
+    if(ok){ i=p; split.push(id+'→'+kids.join('+')); continue; }
+    gone.push(k);
+  }
   eq(gone.join(','),'', 'v12에서 사라진 것');
+  if(split.length) console.log('      ↔ 기록된 분할: '+split.join(' · '));
   const added=now.filter(k=>!was.includes(k));
   if(added.length) console.log('      + 추가: '+added.join(' '));
   const nf=t=>(t.match(/,f:\[/g)||[]).length;
   ge(nf(sk), nf(orig), '사실표 보유 패널 수');
-  return '소실 0 · 추가 '+added.length;
+  return '소실 0 · 추가 '+added.length+(split.length?' · 분할 '+split.length:'');
 });
 T('pc 값이 전부 유효한 카드 ID', ()=>{
   const CARDS=new Set(JSON.parse(read('index.html')
