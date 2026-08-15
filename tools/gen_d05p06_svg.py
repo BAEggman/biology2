@@ -94,7 +94,7 @@ def indiv(cx, cy, sex, spec, gtparts, pheno, w=214, h=112):
 def gambox(cx, cy, spec, gtparts, w=96, h=74):
     g = ['<rect x="%g" y="%g" width="%g" height="%g" rx="8" fill="%s" stroke="%s" '
          'stroke-width="1.3"/>' % (cx - w / 2, cy - h / 2, w, h, PALE, PALE_S)]
-    g.append(bars(cx, cy - 4, spec, gap=22))
+    g.append(bars(cx, cy - 8, spec, gap=22, bh=38))
     g.append(geno(cx, cy + h / 2 - 8, gtparts, 11.5, MID))
     return ''.join(g)
 
