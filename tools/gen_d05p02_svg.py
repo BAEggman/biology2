@@ -103,7 +103,7 @@ def band_b():
 def band_c():
     # 축
     px0, px1, py0, py1 = 128, 748, 738, 524     # py0 = RF 0, py1 = RF 60
-    dmax, rmax = 110.0, 60.0
+    dmax, rmax = 250.0, 60.0
     def X(d): return px0 + (px1 - px0) * d / dmax
     def Y(r): return py0 - (py0 - py1) * r / rmax
     g = [txt(14, 490, 'C. 지도거리와 실제 관측 재조합빈도', 12.5, 700, GREY, 'start')]
@@ -115,7 +115,7 @@ def band_c():
     g.append('<text x="%g" y="%g" text-anchor="middle" font-size="11.5" font-weight="700" '
              'fill="%s" transform="rotate(-90 %g %g)">관측 재조합빈도 (%%)</text>'
              % (86, (py0 + py1) / 2, MID, 86, (py0 + py1) / 2))
-    for d in (0, 25, 50, 75, 100):
+    for d in (0, 50, 100, 150, 200, 250):
         g.append('<line x1="%g" y1="%g" x2="%g" y2="%g" stroke="%s" stroke-width="1.2"/>'
                  % (X(d), py0, X(d), py0 + 6, MID))
         g.append(txt(X(d), py0 + 20, str(d), 10.5, 700, MID))
@@ -132,7 +132,7 @@ def band_c():
     # 이론선 y = x
     g.append('<line x1="%g" y1="%g" x2="%g" y2="%g" stroke="%s" stroke-width="1.6" '
              'stroke-dasharray="4 4"/>' % (X(0), Y(0), X(rmax), Y(rmax), GREY))
-    g.append(txt(X(38), Y(52), '자 눈금 그대로라면', 10.5, 700, GREY, 'end'))
+    g.append(txt(X(46), Y(56), '자 눈금 그대로라면', 10.5, 700, GREY, 'start'))
 
     # 관측 곡선 — 50에서 포화
     pts = []
@@ -140,19 +140,18 @@ def band_c():
     while d <= dmax + 0.01:
         r = 50 * (1 - math.exp(-d / 50.0))
         pts.append('%g %g' % (X(d), Y(r)))
-        d += 2.0
+        d += 4.0
     g.append('<path d="M%s" fill="none" stroke="%s" stroke-width="2.6" '
              'stroke-linejoin="round"/>' % (' L'.join(pts), TEAL_S))
 
     # 표시점
-    for d, lab in ((9.0, '가까우면 거의 같다'), (100.0, '멀면 천장에 붙는다')):
+    for d, lab in ((9.0, '가까우면 거의 같다'), (200.0, '멀면 천장에 붙는다')):
         r = 50 * (1 - math.exp(-d / 50.0))
         g.append('<circle cx="%g" cy="%g" r="5" fill="#FFFFFF" stroke="%s" stroke-width="2.2"/>'
                  % (X(d), Y(r), TEAL_S))
-    g.append(txt(X(9) + 10, Y(50 * (1 - math.exp(-9 / 50.0))) - 12, '가까우면 거의 같다',
-                 10.5, 700, TEAL_T, 'start'))
-    g.append(txt(X(100), Y(50 * (1 - math.exp(-100 / 50.0))) + 22, '멀면 천장에 붙는다',
-                 10.5, 700, TEAL_T, 'end'))
+    g.append(txt(X(30), Y(24), '가까우면 거의 같다', 10.5, 700, TEAL_T, 'end'))
+    g.append(txt(X(200), Y(50 * (1 - math.exp(-200 / 50.0))) + 24, '멀면 천장에 붙는다',
+                 10.5, 700, TEAL_T, 'middle'))
     # 원점
     g.append('<circle cx="%g" cy="%g" r="5" fill="#FFFFFF" stroke="%s" stroke-width="2.2"/>'
              % (X(0), Y(0), TEAL_S))

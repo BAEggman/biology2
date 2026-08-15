@@ -57,8 +57,7 @@ def col(cx, cis):
     # 쌍이라는 표시 — 왼쪽에 대괄호
     g.append('<path d="M%g 66 L%g 66 L%g 122 L%g 122" fill="none" stroke="%s" '
              'stroke-width="1.4"/>' % (bx - 14, bx - 20, bx - 20, bx - 14, GREY))
-    g.append(txt(bx - 30, 98, '쌍', 10.5, 700, GREY))
-
+    
     # ── ② 배우자 — 막대를 통째로 물려받는다
     g.append('<path d="M%g 132 L%g 156" stroke="%s" stroke-width="1.6" fill="none" '
              'marker-end="url(#ar)"/>' % (cx, cx, GREY))
@@ -73,7 +72,7 @@ def col(cx, cis):
         cells = [('#CCFBF1', '3', '#115E59'), ('#F3F4F6', '1', '#4B5563')]
         ratio, note = '3 : 1', '두 가지 표현형'
     else:
-        cells = [('#FFEDD5', '1', '#C2410C'), ('#CCFBF1', '2', '#115E59'),
+        cells = [('#EDE9FE', '1', '#6D28D9'), ('#CCFBF1', '2', '#115E59'),
                  ('#DBEAFE', '1', '#1E40AF')]
         ratio, note = '1 : 2 : 1', '세 가지 표현형'
     n = len(cells)
@@ -111,7 +110,7 @@ def main():
     p.append('<line x1="440" y1="26" x2="440" y2="374" stroke="#E5E7EB" stroke-width="1.4"/>')
 
     # 왼쪽 단계 라벨
-    for y, t in ((104, '① 상동염색체'), (196, '② 배우자'), (306, '③ 자가교배')):
+    for y, t in ((104, '① 상동염색체 쌍'), (196, '② 배우자'), (306, '③ 자가교배')):
         p.append(txt(14, y, t, 11, 700, GREY, 'start'))
 
     p.append(col(228, True))
@@ -134,12 +133,16 @@ def main():
     p.append('<rect x="460" y="404" width="290" height="132" rx="7" fill="#FFF7ED" '
              'stroke="#FDBA74" stroke-width="1.4"/>')
     p.append(txt(605, 426, '불완전연관 — 감수 1분열 전기에 교차', 12.5, 700, '#9A3412'))
-    p.append(bar(486, 440, True, True, w=100, h=16))
-    p.append(bar(486, 464, False, False, w=100, h=16))
-    p.append(txt(536, 494, '부모형 (많다)', 10.5, 700, MID))
-    p.append(bar(624, 440, True, False, w=100, h=16))
-    p.append(bar(624, 464, False, True, w=100, h=16))
-    p.append(txt(674, 494, '재조합형 (적다)', 10.5, 700, '#C2410C'))
+    # ★ 수의 불균형을 글자가 아니라 더미 두께로 나른다 — 부모형은 세 겹, 재조합형은 한 겹.
+    #   막대 길이를 줄이면 염색체가 짧아 보여 거짓이 되므로 길이는 건드리지 않는다.
+    for k in (2, 1, 0):
+        off = k * 4
+        p.append(bar(486 - off, 436 + off, True, True, w=100, h=15))
+        p.append(bar(486 - off, 458 + off, False, False, w=100, h=15))
+    p.append(txt(536, 500, '부모형 — 더미가 두껍다', 10.5, 700, MID))
+    p.append(bar(624, 436, True, False, w=100, h=15))
+    p.append(bar(624, 458, False, True, w=100, h=15))
+    p.append(txt(674, 500, '재조합형 — 한 겹뿐', 10.5, 700, '#C2410C'))
     p.append(txt(605, 521, '★ 배우자 네 가지 — 그런데 수가 같지 않다', 11, 700, '#9A3412'))
 
     # 범례 — 아래 왼쪽 빈 자리에 둔다(막대와 겹치지 않는 유일한 곳)
