@@ -84,7 +84,11 @@ T('PMAP 값이 안 바뀜 (기록된 이동만 허용)', ()=>{
   const a=norm(J(prev,'PMAP')), b=norm(J(now,'PMAP'));
   const moved=BL.pmapMoved||{};
   const d=Object.keys(a).filter(k=>a[k]!==b[k]);
-  const bad=d.filter(k=>{ const m=moved[k]; return !(m && m.from===a[k] && m.to===b[k] && m.why); });
+  const rm=BL.pmapRemoved||{};   /* 「그린 것만 건다」로 뗀 것 — to가 undefined이고 근거가 있어야 한다 */
+  const bad=d.filter(k=>{ const m=moved[k];
+    if(m && m.from===a[k] && m.to===b[k] && m.why) return false;
+    const r=rm[k]; if(r && r.from===a[k] && b[k]===undefined && r.why) return false;
+    return true; });
   if(bad.length) throw new Error('기록에 없는 이동 '+bad.length+'건: '
     +bad.map(k=>k+' '+a[k]+'→'+b[k]).join(', '));
   return d.length?d.length+'건 이동 — 전부 baseline.pmapMoved에 기록됨':'0건 차이'; });

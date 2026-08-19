@@ -38,7 +38,10 @@ T('G1-26이 있다면 행 단위여야 한다 (대응 소품 증명)', ()=>{
 });
 T('v10a에 있던 링크가 사라지지 않았다', ()=>{
   const P0=J(/var PMAP=(\{.*?\});/s,o);
-  const gone=Object.keys(P0).filter(k=>!(k in PMAP));
+  const RM=BL.pmapRemoved||{};                 /* 「그린 것만 건다」로 뗀 것 — baseline에 근거가 있어야 통과 */
+  const gone=Object.keys(P0).filter(k=>!(k in PMAP)).filter(k=>{
+    const r=RM[k]; if(r&&r.why) return false;
+    return true; });
   return eq(gone.join(','),'')||'0건 소실';
 });
 T('PMAP은 줄지 않는다', ()=>ge(Object.keys(PMAP).length,BL.pmap,'PMAP')+'장');

@@ -53,7 +53,10 @@ T('G1-95 → s12p02a', ()=>eq(PMAP['G1-95'],'s12p02a'));
 T('PMAP은 줄지 않는다', ()=>ge(Object.keys(PMAP).length,BL.pmap,'PMAP')+'장');
 T('v10a 링크가 하나도 사라지지 않았다', ()=>{
   const P0=JSON.parse(o.match(/var PMAP=(\{.*?\});/s)[1]);
-  const gone=Object.keys(P0).filter(k=>!PMAP[k]);
+  const RM=BL.pmapRemoved||{};                 /* 「그린 것만 건다」로 뗀 것 — baseline에 근거가 있어야 통과 */
+  const gone=Object.keys(P0).filter(k=>!(k in PMAP)).filter(k=>{
+    const r=RM[k]; if(r&&r.why) return false;
+    return true; });
   return eq(gone.join(','),'')||'0건 소실';
 });
 T('카드ID가 전부 실재', ()=>{
