@@ -4,3 +4,4 @@ test/.tmp/
 outputs/
 !outputs/need_picture.md
 !outputs/그릴것_*.md
+tools/__pycache__/
