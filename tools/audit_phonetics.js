@@ -60,8 +60,17 @@ const EPO = [...new Set(EPONYM)];
 const SYL = {A:'에이',B:'비',C:'씨',D:'디',E:'이',F:'에프',G:'지',H:'에이치',I:'아이',J:'제이',
              K:'케이',L:'엘',M:'엠',N:'엔',O:'오',P:'피',Q:'큐',R:'알',S:'에스',T:'티',U:'유',
              V:'브이',W:'더블유',X:'엑스',Y:'와이',Z:'제트'};
+/* ★ 확정 후크 사전 — tools/hooks.json. 여기 적힌 짝은 「나른다」로 인정한다.
+   후크를 그림에 넣었으면 여기에도 적어야 감사 숫자가 실제로 줄어든다. */
+const HOOKS = (() => {
+  try { return JSON.parse(fs.readFileSync(__dirname + '/hooks.json', 'utf8')).hooks || {}; }
+  catch (e) { return {}; }
+})();
+
 function carries(prop, name) {
   const P = prop.toLowerCase();
+  const hk = HOOKS[name];
+  if (hk && (hk.props || []).some(w => prop.includes(w))) return true;
   if (P.includes(name.toLowerCase())) return true;
   // 통음 음차: ENaC→이낙/에낙, ROMK→롬크, CFTR→씨에프티알 …
   const kor = [...name.toUpperCase()].map(ch => SYL[ch] || '').join('');
