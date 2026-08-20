@@ -20,7 +20,11 @@ const flat=v=>Array.isArray(v)?v:[v];
 console.log('\n── 죽은 링크 ──');
 T('깨진 참조 0', ()=>eq(Object.values(PMAP).flatMap(flat).filter(p=>!ALL.includes(p)).length,0));
 T('s20p01/s12p02 잔존 0', ()=>eq(Object.values(PMAP).flatMap(flat).filter(p=>['s20p01','s12p02'].includes(p)).length,0));
-T('옥신 5장 → s20p01a', ()=>['P1-3','P1-3#2','P1-12','P1-13','P1-14'].map(k=>eq(PMAP[k],'s20p01a',k)).length);
+/* [정정 2026-08-20] P1-3·P1-3#2는 뗐다. 답이 「생산 부위 + 신장 + 정단우성 + 굴광성·굴중성」인데
+   s20p01a에는 신장과 정단우성만 그려져 있고 굴광성·굴중성은 덱 어디에도 없다.
+   근거는 baseline.pmapRemoved에 있고, 굴성을 그리면 되살린다. 「그린 것만 건다」. */
+T('옥신 3장 → s20p01a', ()=>['P1-12','P1-13','P1-14'].map(k=>eq(PMAP[k],'s20p01a',k)).length);
+T('P1-3은 뗀 채로 남아 있다 (굴성 미작화)', ()=>eq(PMAP['P1-3']===undefined&&PMAP['P1-3#2']===undefined,true));
 T('시토키닌 2장 → s20p01a', ()=>['P1-4','X-PL-28'].map(k=>eq(PMAP[k],'s20p01a',k)).length);
 T('억제계 5장 → s20p01b', ()=>['P1-6','P1-6#2','P1-7','P1-8','P1-8#3'].map(k=>eq(PMAP[k],'s20p01b',k)).length);
 T('걸친 2장은 배열', ()=>['S-PL-14','X-PL-27'].map(k=>{
