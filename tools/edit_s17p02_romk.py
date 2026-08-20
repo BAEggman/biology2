@@ -14,6 +14,7 @@ NKCC2 만 그려졌고 ROMK 가 없다」였고, 「로마 투구와 칼을 하�
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pc_judge_batch1 import add_row
+from hookedit import swap
 
 NEWROW = ('s17p02',
           '★ 굵은 부분 벽 위쪽 — <b>로마 병정 투구</b>를 쓴 사람이 <b>칼</b>로 작은 문을 비틀어 열자 '
@@ -26,7 +27,16 @@ NEWROW = ('s17p02',
           ['S-RN-4', 'X-RN-15'])
 
 
+SWAP = [
+    ('s17p02', '가 줄지어 기계로 들어간다',
+     '위 굵은 부분에만 붙은 기계 — 그 곁에 <b>소금 자루 하나</b> · <b>칼 하나</b> · '
+     '<b>염소 두 마리</b>가 그 기계 하나를 향해 서 있다',
+     ' ★ <b>넷이 한 기계로 간다</b>는 것이 공수송이다 — 따로따로가 아니라 <b>같이</b> 실려야 움직인다'),
+]
+
+
 def main():
+    if swap(SWAP): return 1
     add_row(*NEWROW)
     print('★ baseline.pmapRemoved 에서 S-RN-4 · X-RN-15 를 지워야 한다')
     return 0
