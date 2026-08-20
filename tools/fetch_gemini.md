@@ -119,3 +119,19 @@
     computer left_click (업로드 및 도구 ref)
     computer screenshot          ← 이게 있어야 한다
     javascript: input[type=file] 조회  → 3개
+
+## ★★★ 탭이 다운로드 상태에 갇힌다 (2026-08-20 최종 해결)
+
+한 탭에서 두어 번 받고 나면 그 뒤로는 버튼을 눌러도, 새로고침해도, 실제 마우스로 눌러도
+파일이 **영영 안 떨어진다.** 크롬 주소창에는 차단 아이콘도 안 뜨고 저장 위치를 묻는 창도 없다.
+사이트 설정에서 자동 다운로드를 허용해도 소용없다.
+
+**해결: 새 탭을 연다.**
+
+    tabs_create_mcp
+    navigate(새 탭, 대화 URL)
+    → 30초 기다린다 → 스크롤 → 다운로드 버튼 click  ← 바로 먹는다
+    → 다 쓴 탭은 tabs_close_mcp
+
+⚠ 탭을 닫으면 탭 그룹이 사라져서 `tabs_context_mcp({createIfEmpty:true})` 로 다시 만들어야 한다.
+**그림 두 장마다 새 탭**이라고 생각하면 된다.
