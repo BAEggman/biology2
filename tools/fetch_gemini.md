@@ -110,3 +110,12 @@
     → device_bash 로 최신 파일 확인
 
 그림 하나마다 새로고침 한 번이라고 생각하면 된다.
+
+## ⚠ file input 이 안 잡힐 때
+
+「업로드 및 도구」를 눌러 메뉴가 떠도 `input[type=file]` 이 **0개**로 나올 때가 있다.
+기다려도 안 생긴다. **screenshot 을 한 번 찍으면 그때 잡힌다** — 렌더가 강제되는 듯하다.
+
+    computer left_click (업로드 및 도구 ref)
+    computer screenshot          ← 이게 있어야 한다
+    javascript: input[type=file] 조회  → 3개
