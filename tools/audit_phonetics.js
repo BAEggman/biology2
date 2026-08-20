@@ -31,7 +31,12 @@ Type Group Phase Cis Trans Ori Pol Km Vmax pI pKa Da kDa nm um mm cm mL uL mol m
 BM Ig IgG IgM IgA IgE IgD Th Tc Treg NK B T
 DNA RNA mRNA tRNA rRNA ATP ADP AMP NAD NADH NADP NADPH FAD FADH GTP GDP
 RNAi cDNA snRNA miRNA siRNA hnRNA PCR ATPase pH ABO Rh X Y Z W A B C D E F G H I S M N O P T U V
-XX XY XO ZZ ZW II III IV VI VII VIII IX XI XII`.split(/\s+/));
+XX XY XO ZZ ZW II III IV VI VII VIII IX XI XII
+cM Morgan cGy Gy Sv rpm rcf bp kb Mb Gb
+AB BA HCO ss ds ssRNA dsRNA ssDNA dsDNA IA IB Ii F1 F2 F3 P1 ES iPS
+CO CoA ER SER RER G1 G2 G0 S1 S2
+cAMP cGMP cyclic
+Lac Trp Ara Gal Glc Fru Suc Mal Lys Arg His Asp Glu Ser Thr Asn Gln Cys Gly Pro Ala Val Ile Leu Phe Tyr Trp Met`.split(/\s+/));
 
 /* 로마자 라벨: 대문자 하나 이상 · 두 글자 이상 · 숫자/붙임표 허용 */
 const ROMAN = /\b[A-Za-z][A-Za-z0-9]*(?:\d)?\b/g;
