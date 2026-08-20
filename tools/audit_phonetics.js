@@ -101,7 +101,12 @@ for (const sc of DATA) for (const p of (sc.panels || [])) for (const r of (p.f |
   for (const m of (fact.match(GREEK) || [])) names.add(m);
   for (const n of EPO) if (fact.includes(n)) names.add(n);
   if (!names.size) continue;
-  const bad = [...names].filter(n => !carries(prop, n));
+  /* ★ 후크는 「같은 행」이 아니라 「같은 판」에 있으면 된다.
+     s19p01처럼 루비(Rb)와 F자 장대(E2F)가 이웃한 두 행에 나뉘어 있어도
+     보는 사람은 한 그림으로 본다. 그래서 판 전체 소품 + 제목 + br을 함께 본다. */
+  const panelProps = (p.f || []).map(x => strip(x[0])).join(' ')
+    + ' ' + strip(p.t || '') + ' ' + strip(p.br || '');
+  const bad = [...names].filter(n => !carries(prop, n) && !carries(panelProps, n));
   rows.push({gate: sc.gate, scene: sc.id, panel: p.id, prop, fact,
              nc: cards.length, names: [...names], bad});
 }
