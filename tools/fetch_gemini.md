@@ -37,3 +37,59 @@
 
 세션마다 한 번 `device_request_folder_access(["~/Downloads"])` 를 받아야 한다.
 2026-08-20 세션에서 `/Users/mac/Downloads` 로 허용받았다. 기기는 m1-local (macOS arm64).
+
+---
+
+# ★ 기존 그림을 Gemini에 올려 편집하기 (2026-08-20 신설)
+
+재생성은 잘 된 후크를 잃을 위험이 있다. 편집은 나머지를 안 건드린다.
+그런데 옛 패널의 그림은 지금 대화에 없으므로 **올려야** 한다.
+
+## ① 컨테이너의 그림을 세션 uploads 폴더로 옮긴다
+
+    python3 -c "
+    from PIL import Image
+    Image.open('/tmp/b2/img/s19p01.webp').convert('RGB').save('/mnt/user-data/uploads/_edit_s19p01.png')"
+
+⚠ **경로가 `/mnt/user-data/uploads/` 여야 한다.** 기기 경로(`/Users/mac/Downloads/...`)는
+크롬 확장이 거부한다 — 「only files this session is allowed to read」.
+
+## ② Gemini 컴포저의 「업로드 및 도구」 버튼을 눌러 file input 을 만든다
+
+    find(query='파일 추가 / 이미지 업로드 플러스 버튼 (컴포저 왼쪽)')  → ref
+    computer left_click ref
+
+메뉴(파일 업로드 / Drive에서 파일 추가)가 뜨는데 **메뉴 항목은 누르지 않는다** —
+누르면 네이티브 파일 선택창이 열려서 손댈 수 없다. 메뉴가 뜨는 것만으로 DOM 에
+`input[type=file]` 셋이 생긴다.
+
+## ③ 이미지용 input 을 골라 잠깐 보이게 만든다 (find 는 숨은 요소를 못 본다)
+
+    const f=[...document.querySelectorAll('input[type=file]')];
+    f.forEach((e,i)=>{ if(!e.id) e.id='__fi'+i; });
+    f.map((e,i)=>i+'|'+e.id+'|img:'+/png|image/i.test(e.accept||''))
+    // accept 가 image/* 인 것을 고른다 (보통 __fi1)
+
+    const e=document.getElementById('__fi1');
+    e.removeAttribute('hidden');
+    e.style.cssText='position:fixed;left:20px;top:120px;width:320px;height:44px;opacity:1;z-index:99999;display:block;visibility:visible';
+    e.setAttribute('aria-label','내가 노출시킨 이미지 업로드 입력');
+
+## ④ file_upload 로 넣는다
+
+    find(query='내가 노출시킨 이미지 업로드 입력') → ref
+    mcp__claude-in-chrome__file_upload(ref, paths=['/mnt/user-data/uploads/_edit_s19p01.png'])
+
+성공하면 **컴포저가 비어 있어도 「메시지 보내기」가 enabled** 가 된다. 그것이 붙었다는 신호다.
+넣은 뒤 input 을 도로 숨긴다:
+
+    document.getElementById('__fi1').style.cssText='position:absolute;left:-9999px;width:1px;height:1px;opacity:0';
+
+## ⑤ 편집 프롬프트를 쓴다
+
+    Work only from the attached picture — ignore the picture above, that one is finished.
+    Redraw the attached picture keeping everything exactly as it is, and change one single thing.
+    <바꿀 것 하나>
+    Everything else stays identical: <바뀌면 안 되는 것을 하나하나 나열>
+
+★ 같은 대화에 다른 그림이 있으면 **「attached picture 만 보라」를 첫 줄에 못 박는다.**
