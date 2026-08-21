@@ -105,9 +105,21 @@ for (const sc of DATA) for (const p of (sc.panels || [])) for (const r of (p.f |
   if (!names.size) continue;
   /* ★ 후크는 「같은 행」이 아니라 「같은 판」에 있으면 된다.
      s19p01처럼 루비(Rb)와 F자 장대(E2F)가 이웃한 두 행에 나뉘어 있어도
-     보는 사람은 한 그림으로 본다. 그래서 판 전체 소품 + 제목 + br을 함께 본다. */
+     보는 사람은 한 그림으로 본다. 그래서 판 전체 소품 + 제목 + br을 함께 본다.
+
+     ★★ [정정 2026-08-21] SVG 도해는 **그림에 이름을 글자로 찍는다.**
+     이 감사의 전제는 「그림을 외운 뒤 이름을 따로 외워야 하니 Sketchy가 아니다」인데,
+     도해는 따로 외울 것이 없다 — 이름이 차트 위에 쓰여 있고 학생은 그것을 보고 읽는다.
+     d02p02는 「동방결절 · 방실결절 · 히스 · 푸르킨예」를, d05p05는 「클라인펠터」를
+     실제로 찍고 있는데도 소품 칸에 그 말이 없다는 이유로 12장을 위반으로 세고 있었다.
+     ⚠ 다만 <text> 안의 **보이는 글자만** 읽는다. <title>·<desc>는 화면에 안 나오고
+        속성값·id는 그림이 아니다 — 그것까지 읽으면 감사가 구멍이 된다. */
+  const svgText = p.svg
+    ? [...String(p.svg).matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)]
+        .map(m => strip(m[1])).join(' ')
+    : '';
   const panelProps = (p.f || []).map(x => strip(x[0])).join(' ')
-    + ' ' + strip(p.t || '') + ' ' + strip(p.br || '');
+    + ' ' + strip(p.t || '') + ' ' + strip(p.br || '') + ' ' + svgText;
   const bad = [...names].filter(n => !carries(prop, n) && !carries(panelProps, n));
   rows.push({gate: sc.gate, scene: sc.id, panel: p.id, prop, fact,
              nc: cards.length, names: [...names], bad});
