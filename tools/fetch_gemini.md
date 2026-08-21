@@ -3,6 +3,28 @@
 전체 설명은 프로젝트 문서 `claude/생물Sketchy_Gemini자동화_해결.md`에 있다.
 여기는 명령만 적어 둔다.
 
+## ⓪ 어느 대화에 보내는가 (2026-08-21 신설)
+
+**지금 쓰는 대화** — `https://gemini.google.com/app/bea759ffdafa7418`
+(옛 대화 `45be42d49b3a8149` 는 그림이 12장 쌓여 **렌더러가 얼어붙었다**. 더 쓰지 않는다.)
+
+### ★ 그림 열 장쯤 되면 대화를 새로 판다
+
+대화가 무거워지면 이런 증상이 순서대로 나온다 —
+`computer screenshot` 이 `Script injection timed out`,
+그다음 `javascript_tool` 이 `CDP Runtime.evaluate timed out`,
+끝내 확장 자체가 `did not respond in time`.
+탭을 새로 열어도 같은 대화면 똑같이 얼어붙는다. **대화를 바꿔야 풀린다.**
+
+새로 파는 법 — `https://gemini.google.com/app` 으로 이동해 바로 프롬프트를 보낸다.
+보내고 나면 URL 이 `/app/<새 id>` 로 바뀐다. 그 id 를 여기 적어 둔다.
+
+⚠ 보낸 직후 화면은 **아직 입력창에 글이 남은 것처럼 보인다.** 속지 말 것 —
+`대답 생성 중지` 버튼이 있고 URL 에 id 가 붙었으면 보내진 것이다.
+
+⚠ 새 대화에서도 **모델이 Pro 인지** 확인한다
+(`aria-label` 에 「현재 Pro 모드 사용 중」이 있으면 맞다).
+
 ## ① 다운로드 버튼을 누른다 (Chrome, javascript_tool)
 
     const im=[...document.querySelectorAll('img')].filter(i=>i.naturalWidth>400).pop();
