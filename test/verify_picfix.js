@@ -46,11 +46,17 @@ T('G1-26이 있다면 행 단위여야 한다', ()=>{
 /* [정정 2026-08-20] P1-3·P1-3#2는 굴광성·굴중성이 덱에 없어 뗐다 — baseline.pmapRemoved 참조 */
 T('옥신 카드 → s20p01a', ()=>['P1-12','P1-13','P1-14'].map(k=>eq(PMAP[k],'s20p01a',k)).length+'장');
 /* [정정 2026-08-21] P1-8#3은 배열로 내려갔다 — 아래 「걸친 카드」 검사가 받는다. */
-T('ABA·에틸렌 → s20p01b', ()=>['P1-6','P1-6#2','P1-7','P1-8'].map(k=>eq(PMAP[k],'s20p01b',k)).length+'장');
+/* [정정 2026-08-21] P1-6은 s20p01c(갓 쓴 아비)로 옮겼다 — 셔터는 넷 중 하나만 그린다 */
+T('에틸렌·브라시노 → s20p01b', ()=>['P1-7','P1-8'].map(k=>eq(PMAP[k],'s20p01b',k)).length+'장');   /* P1-6#2는 배열 */
+T('ABA 계열 → s20p01c', ()=>['P1-6','P1-6#1','P1-6#3','P1-6#4'].map(k=>eq(PMAP[k],'s20p01c',k)).length+'장');
 T('시토키닌 계열 → s20p01a', ()=>['P1-4','X-PL-28'].map(k=>eq(PMAP[k],'s20p01a',k)).length+'장');
-T('걸친 카드 3장은 배열', ()=>['S-PL-14','X-PL-27','P1-8#3'].map(k=>{
+T('걸친 카드 2장은 s20p01a|s20p01b', ()=>['S-PL-14','P1-8#3'].map(k=>{
   if(!Array.isArray(PMAP[k])) throw new Error(k+' 배열 아님');
   eq(PMAP[k].join(','),'s20p01a,s20p01b',k); return k; }).join(' '));
+/* [정정 2026-08-21] 휴면 그림이 s20p01c로 옮겨 갔다 */
+T('X-PL-27은 s20p01a|s20p01c', ()=>{
+  if(!Array.isArray(PMAP['X-PL-27'])) throw new Error('배열 아님');
+  return eq(PMAP['X-PL-27'].join(','),'s20p01a,s20p01c','X-PL-27'); });
 T('G1-95 → s12p02a', ()=>eq(PMAP['G1-95'],'s12p02a'));
 T('PMAP은 줄지 않는다', ()=>ge(Object.keys(PMAP).length,BL.pmap,'PMAP')+'장');
 T('v10a 링크가 하나도 사라지지 않았다', ()=>{
