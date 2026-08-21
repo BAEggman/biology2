@@ -38,6 +38,8 @@ IAIA IAi IBIB IBi IAIB IAIi ii Aa AA aa BB Bb bb AaBb AABB aabb Rr RR rr Tt TT t
 Ab aB Ba bA AaBB AAbb aaBB AaBb Bv Vv Cc CC cc Dd DD dd Ee EE ee Ff FF ff Gg GG gg Hh HH hh
 CO CoA ER SER RER G1 G2 G0 S1 S2
 cAMP cGMP cyclic
+H1 H2A H2B H3 H4 PPi Pi IIa IIb IIx MN OFF ON
+Xw XW XwXw XwXW XWXw XWXW XwY XWY
 Lac Trp Ara Gal Glc Fru Suc Mal Lys Arg His Asp Glu Ser Thr Asn Gln Cys Gly Pro Ala Val Ile Leu Phe Tyr Trp Met`.split(/\s+/));
 
 /* 로마자 라벨: 대문자 하나 이상 · 두 글자 이상 · 숫자/붙임표 허용 */
