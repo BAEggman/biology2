@@ -71,6 +71,11 @@ const SYL = {A:'에이',B:'비',C:'씨',D:'디',E:'이',F:'에프',G:'지',H:'�
              V:'브이',W:'더블유',X:'엑스',Y:'와이',Z:'제트'};
 /* ★ 확정 후크 사전 — tools/hooks.json. 여기 적힌 짝은 「나른다」로 인정한다.
    후크를 그림에 넣었으면 여기에도 적어야 감사 숫자가 실제로 줄어든다. */
+/* 인명 낱말을 품고 있지만 사람이 아닌 말 — 지우고 나서 인명을 찾는다 */
+const FALSE_EPONYM = (() => {
+  try { return JSON.parse(fs.readFileSync(__dirname + '/hooks.json', 'utf8'))._인명오탐 || []; }
+  catch (e) { return []; }
+})();
 const HOOKS = (() => {
   try { return JSON.parse(fs.readFileSync(__dirname + '/hooks.json', 'utf8')).hooks || {}; }
   catch (e) { return {}; }
@@ -101,7 +106,14 @@ for (const sc of DATA) for (const p of (sc.panels || [])) for (const r of (p.f |
     names.add(m);
   }
   for (const m of (fact.match(GREEK) || [])) names.add(m);
-  for (const n of EPO) if (fact.includes(n)) names.add(n);
+  /* ★ [정정 2026-08-21] 인명은 부분 문자열로 잡혀 오탐이 난다.
+     「모노시스트론성」의 「모노」를 자코브·모노로 세고 있었다 — 실제 카드(F0-175)는
+     사람 이야기를 하지 않는다. 인명이 아닌 낱말을 먼저 지우고 찾는다.
+     목록은 hooks.json 의 _인명오탐 에 둔다 — 코드가 아니라 자료다.
+     ⚠ 전수 대조해 보니 오탐은 「모노」 하나뿐이었다. 목록을 늘릴 때는 반드시
+        그 낱말이 정말 사람이 아닌지 확인한다 — 늘리는 만큼 감사가 눈을 감는다. */
+  const factEpo = FALSE_EPONYM.reduce((t, w) => t.split(w).join(' '), fact);
+  for (const n of EPO) if (factEpo.includes(n)) names.add(n);
   if (!names.size) continue;
   /* ★ 후크는 「같은 행」이 아니라 「같은 판」에 있으면 된다.
      s19p01처럼 루비(Rb)와 F자 장대(E2F)가 이웃한 두 행에 나뉘어 있어도
