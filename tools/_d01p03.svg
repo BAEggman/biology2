@@ -1,4 +1,4 @@
-<svg viewBox="0 0 880 612" role="img" aria-labelledby="t3 d3d">
+<svg viewBox="0 0 880 724" role="img" aria-labelledby="t3 d3d">
     <title id="t3">비순환적 전자 흐름의 Z 도식과 엽록체 이름 앵커</title>
     <desc id="d3d">위쪽은 물에서 시작한 전자가 광계 II에서 들뜨고 전자전달계를 내려온 뒤 광계 I에서 다시 들떠 NADP+로 가고 NADPH가 되는 경로를 에너지 준위로 나타낸 그림. 순환적 경로 호 위에는 빗금 친 산소 거품이 놓여 O2가 나지 않음을 표시한다. 아래쪽은 깔개 한 장 위에 납작한 주머니를 포개 쌓은 더미와 그 더미 밖으로 뻗은 낱장 주머니를 그린 그림으로, 더미 위에 광계 II가 낱장 위에 광계 I이 얹혀 있고 깔개 위에서 캘빈회로가 돈다</desc>
 
@@ -60,7 +60,7 @@
     <!-- 순환적 경로 -->
     <path d="M 560 66 C 556 12, 296 8, 250 96" fill="none" stroke="#9CA3AF" stroke-width="1.8" stroke-dasharray="6 4"/>
     <polygon points="248,104 256,92 244,90" fill="#9CA3AF"/>
-    <text x="290" y="20" text-anchor="middle" font-size="11.5" fill="#6B7280">순환적 — 광계 I만 사용, ATP만 생성</text>
+    <text x="290" y="20" text-anchor="middle" font-size="11.5" fill="#6B7280">순환적 — 광계 I만 사용, ATP만 생성 · 캘빈이 ATP를 더 쓰니 그 비를 맞춘다</text>
 
     <!-- 빗금 친 O₂ 거품 — 순환 경로에는 산소가 없다 -->
     <clipPath id="cxo2d3"><circle cx="421" cy="28" r="13"/></clipPath>
@@ -76,7 +76,7 @@
     <text x="450" y="326" text-anchor="middle" font-size="13" fill="#6B7280">물 → 광계 II → 전달계 → 광계 I → NADP⁺ · 번호가 아니라 흐름 순서로 읽는다</text>
 
     <!-- ================= 이름 앵커 — 주머니 · 낟알 · 깔개 ================= -->
-    <rect x="44" y="346" width="812" height="254" rx="10" fill="#F9FAFB" stroke="#E5E7EB"/>
+    <rect x="44" y="346" width="812" height="366" rx="10" fill="#F9FAFB" stroke="#E5E7EB"/>
     <text x="62" y="370" font-size="11" fill="#4B5563">두 광계는 고르게 분포하지 않는다 — PSII는 쌓아 올린 더미에, PSI은 밖으로 뻗은 낱장에</text>
 
     <!-- 깔개 = 스트로마 -->
@@ -123,5 +123,27 @@
     <polygon points="734,507.5 724.4,510.6 725.8,501.7" fill="#1E40AF"/>
     <text x="698" y="489" text-anchor="middle" font-size="10" fill="#1E40AF">ATP · NADPH</text>
 
-    <text x="450" y="584" text-anchor="middle" font-size="10.5" fill="#6B7280">thylakos 주머니 → 틸라코이드 · granum 낟알 → 그라나 · strōma 깔아 놓은 것 → 스트로마</text>
+    <line x1="60" y1="556" x2="840" y2="556" stroke="#E5E7EB"/>
+<text x="62" y="576" font-size="11.5" font-weight="700" fill="#4B5563">주머니 한 장을 갈라 보면 — ATP가 나는 자리</text>
+<line x1="330" y1="530" x2="270" y2="588" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3 3"/>
+<rect x="120" y="588" width="300" height="46" rx="14" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.8"/>
+<text x="150" y="606" font-size="10.5" font-weight="700" fill="#7C2D12">틸라코이드 루멘</text>
+<g fill="#C2410C">
+<circle cx="152" cy="622" r="3.5"/><circle cx="170" cy="622" r="3.5"/><circle cx="188" cy="622" r="3.5"/>
+<circle cx="206" cy="622" r="3.5"/><circle cx="224" cy="622" r="3.5"/><circle cx="242" cy="622" r="3.5"/>
+</g>
+<text x="262" y="626" font-size="10" font-weight="700" fill="#7C2D12">H⁺가 여기 쌓인다</text>
+<text x="129" y="650" font-size="9.5" fill="#C2410C">← 테두리가 틸라코이드막</text>
+<line x1="360" y1="600" x2="360" y2="624" stroke="#C2410C" stroke-width="2.2"/>
+<polygon points="360,632 355,622 365,622" fill="#C2410C"/>
+<rect x="356" y="632" width="9" height="12" fill="#1E40AF"/>
+<circle cx="360.5" cy="654" r="11" fill="#DBEAFE" stroke="#1E40AF" stroke-width="1.6"/>
+<text x="392" y="642" font-size="10.5" font-weight="700" fill="#1E40AF">ATP 합성효소</text>
+<text x="392" y="657" font-size="11" font-weight="700" fill="#1E40AF">→ ATP</text>
+<text x="120" y="672" font-size="10" fill="#6B7280">아래쪽이 스트로마 — 캘빈회로가 ATP를 쓰는 바로 그 자리다</text>
+<text x="655" y="592" text-anchor="middle" font-size="11" font-weight="700" fill="#4B5563">꼭 갈라야 하는 세 공간</text>
+<text x="655" y="610" text-anchor="middle" font-size="10.5" fill="#6B7280">스트로마 · 틸라코이드막 · 틸라코이드 루멘</text>
+<text x="655" y="630" text-anchor="middle" font-size="10" fill="#6B7280">H⁺는 루멘에 쌓였다가 막의 합성효소를 거쳐 스트로마로 나온다</text>
+<text x="655" y="646" text-anchor="middle" font-size="10" fill="#6B7280">그래서 ATP는 스트로마 쪽에서 난다 — 쓰는 자리에서 만든다</text>
+<text x="450" y="696" text-anchor="middle" font-size="10.5" fill="#6B7280">thylakos 주머니 → 틸라코이드 · granum 낟알 → 그라나 · strōma 깔아 놓은 것 → 스트로마</text>
   </svg>
