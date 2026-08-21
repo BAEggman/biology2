@@ -192,3 +192,33 @@
 
 ⚠ 탭을 닫으면 탭 그룹이 사라져서 `tabs_context_mcp({createIfEmpty:true})` 로 다시 만들어야 한다.
 **그림 두 장마다 새 탭**이라고 생각하면 된다.
+
+## ★★ 송신 버튼은 좌표로 못 누른다 — `find` 로 ref 를 얻어 누른다 (2026-08-21 확정)
+
+스크린샷 좌표와 페이지 좌표가 **안 맞는다.** 실측: 스크린샷 1291px 인데 `innerWidth` 1527,
+`devicePixelRatio` 2.2. 송신 버튼이 JS 로는 `(1088,543)` 인데 스크린샷에는 `(1011,505)` 로 보인다.
+어느 쪽 좌표로 눌러도 안 먹었고, `Enter` 도 안 먹었다(줄바꿈조차 안 들어갔다).
+
+    mcp__claude-in-chrome__find  query="메시지 보내기 send button"  →  ref_NNN
+    computer  action=hover      ref=ref_NNN
+    computer  action=left_click ref=ref_NNN
+
+★ 컴포저 클릭은 좌표로도 먹는다(포커스는 잡힌다). **버튼만 ref 가 필요하다.**
+⚠ 누른 직후 `입력창.innerText.length` 가 아직 3천대일 수 있다 — DOM 반영이 늦다.
+   `document.body.innerText` 에 「말씀하신 내용」이 있으면 보내진 것이다. 다시 누르지 말 것.
+
+## ★ 새 대화를 팔 때 execCommand 가 길이 1을 돌려주면
+
+컴포저가 아직 포커스를 못 받은 것이다. **컴포저를 두 번 클릭하고 JS 로 `c.focus()` 까지** 부른 뒤
+다시 넣으면 들어간다.
+
+## ⑦ 생성이 5~7분 걸릴 수 있다 (Pro + 확장된 사고)
+
+`Creating your image` 가 6분 넘게 떠 있어도 정상이다. `img[src^="blob:"]` 가 **하나 생겼는데
+`naturalWidth` 가 0**이면 디코드 중이다 — **대화 URL 로 새로고침**하면 1024 로 잡힌다.
+없다고 판단하고 다시 보내면 판을 하나 낭비한다.
+
+## ⑧ 대화 id (2026-08-21 갱신)
+
+지금 쓰는 대화 — `https://gemini.google.com/app/6fa255aa0a3dd6a9` (s20p01c 부터)
+앞 대화 `bea759ffdafa7418` 는 그림 6장에서 목록 렌더가 느려졌다.
