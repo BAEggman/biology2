@@ -179,6 +179,17 @@ console.log('\n── F. 행 강조 렌더 ──');
 T('CSS .pfhit', ()=>eq(/\.pftab tr\.pfhit td\{/.test(now),true));
 T('showPicFix가 PROW를 읽는다', ()=>eq(/PROW\[id\] && PROW\[id\]\[pid\]/.test(now),true));
 T('PROW 없어도 안전 (typeof 가드)', ()=>eq(/typeof PROW!=='undefined'/.test(now),true));
+/* [2026-08-21] 도해 판은 webp 가 없어 복구 화면이 사실표만 띄웠다 — 460장이 그랬다.
+   PSVG 로 원본을 심어 고쳤으니, 그림 없는 판은 반드시 SVG 를 갖고 있어야 한다. */
+T('PNOIMG 판은 전부 PSVG 를 갖는다', ()=>{
+  const NO=JSON.parse(now.match(/var PNOIMG=(\[.*?\]);/s)[1]);
+  const SV=JSON.parse(now.match(/var PSVG=(\{.*?\});var |var PSVG=(\{[\s\S]*?\});\/\*BUILD:END/)[0].replace(/^var PSVG=/,'').replace(/;.*$/s,''));
+  const miss=NO.filter(p=>!SV[p]);
+  if(miss.length) throw new Error('그림도 도해도 없는 판: '+miss.join(' '));
+  return NO.length+'개 판 · SVG '+Object.keys(SV).length+'개';
+});
+T('복구 화면이 PSVG 를 그린다', ()=>eq(/PSVG\[pid\]/.test(now)&&/class="pfsvg"/.test(now),true));
+T('PSVG 없어도 안전 (typeof 가드)', ()=>eq(/typeof PSVG!=='undefined'/.test(now),true));
 T('JS 문법 OK', ()=>{
   const b=[...now.matchAll(/<script(?![^>]*type=["']application)[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
   b.forEach((x,i)=>{ try{ new Function(x); }catch(e){ throw new Error('script#'+i+': '+e.message); } });

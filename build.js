@@ -17,6 +17,7 @@
      PBR   패널 → 요약
      PFACT 패널 → 사실표
      PNOIMG 이미지 없는 패널(도해)
+     PSVG  패널 → 도해 SVG 원본 (복구 화면에 인라인으로 그린다)
 
    검증에 걸리면 아무것도 안 쓰고 죽는다. 조용히 썩지 않는 게 목적이다.
    사용: node build.js [--check]      --check 는 쓰지 않고 검사만
@@ -51,7 +52,7 @@ catch(e){ die('CARDS 파싱 실패: '+e.message); }
 const CARD=new Map(CARDS.map(c=>[c.id,c]));
 
 /* ── 2. 순회하며 지도 생성 + 검증 ──────────────────────────────────── */
-const PMAP={}, PROW={}, PTIT={}, PBR={}, PFACT={};
+const PMAP={}, PROW={}, PTIT={}, PBR={}, PFACT={}, PSVG={};
 const errs=[], warns=[], report=[];
 const seenPanel=new Set();
 let nRowLinks=0, nPanelLinks=0, nRows=0;
@@ -62,6 +63,7 @@ for(const sc of DATA){
     seenPanel.add(p.id);
     PTIT[p.id]=sc.t+' · '+p.t;
     if(p.br) PBR[p.id]=p.br;
+    if(p.svg) PSVG[p.id]=p.svg;
     const f=p.f||[];
     if(f.length) PFACT[p.id]=f.map(r=>[r[0],r[1]]);
     nRows+=f.length;
@@ -134,7 +136,8 @@ const block='/*BUILD:START — build.js 생성물. 손으로 고치지 말 것. 
  +';var PTIT='+JSON.stringify(PTIT)
  +';var PBR='+JSON.stringify(PBR)
  +';var PFACT='+JSON.stringify(PFACT)
- +';var PNOIMG='+JSON.stringify(NOIMG)+';/*BUILD:END*/';
+ +';var PNOIMG='+JSON.stringify(NOIMG)
+ +';var PSVG='+JSON.stringify(PSVG)+';/*BUILD:END*/';
 
 let out;
 if(ix.includes('/*BUILD:START')){

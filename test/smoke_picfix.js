@@ -60,7 +60,13 @@ setTimeout(()=>{
   });
   T('  이미지 태그 src가 img/*.webp', ()=>{
     const im=$('picFix').querySelector('img.pfimg');
-    if(!im) return '도해 패널(이미지 없음)';
+    if(!im){
+      /* [2026-08-21] 예전에는 여기서 그냥 통과시켰다 — 그래서 도해 판이 그림 없이
+         복구되는 것을 460장이나 놓쳤다. 이제 인라인 SVG 가 있어야 통과한다. */
+      const sv=$('picFix').querySelector('.pfsvg svg');
+      if(!sv) throw new Error('그림도 도해도 없다 — 복구 화면에 볼 것이 사실표뿐이다');
+      return '도해 패널 · 인라인 SVG';
+    }
     if(!/^img\/\w+\.webp$/.test(im.getAttribute('src'))) throw new Error(im.getAttribute('src'));
     if(im.getAttribute('loading')!=='lazy') throw new Error('lazy 아님');
     return im.getAttribute('src');
