@@ -56,8 +56,21 @@ def _add_to_row(blk, needle, cards):
     a = k if blk[k] == '[' else blk.rindex('[', fi, k)
     b = close_brace(blk, a)
     row = blk[a:b + 1]
-    p1 = 1; p2 = row.index('"', p1 + 1)
-    f1 = row.index('"', p2 + 1); f2 = row.index('"', f1 + 1)
+    # ⚠ 사실표의 행은 큰따옴표로 쓴 것도 있고 **작은따옴표**로 쓴 것도 있다
+    #    (s34p05·s34p06 이 그렇다). 여는 따옴표를 보고 맞춘다.
+    qc = row[1]
+    assert qc in '"\'', '행이 따옴표로 시작하지 않는다: ' + row[:40]
+
+    def _endq(t, i):                      # i = 여는 따옴표 자리, 닫는 따옴표 자리를 준다
+        k = i + 1
+        while k < len(t):
+            if t[k] == '\\': k += 2; continue
+            if t[k] == qc: return k
+            k += 1
+        raise AssertionError('닫는 따옴표를 못 찾음')
+
+    p1 = 1; p2 = _endq(row, p1)
+    f1 = row.index(qc, p2 + 1); f2 = _endq(row, f1)
     rest = row[f2 + 1:-1].strip()
     old = [x.strip().strip('"') for x in rest.strip(',').strip('[]').split(',') if x.strip()]
     for c in cards:
