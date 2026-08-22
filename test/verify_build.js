@@ -147,13 +147,21 @@ T('--check는 아무것도 안 쓴다', ()=>{
 console.log('\n── D. 드리프트 방어 (일부러 망가뜨려 본다) ──');
 const bak=sk;
 const restore=()=>fs.writeFileSync(path.join(R,'sketchy.html'),bak);
+/* [정정 2026-08-21] 예전에는 s12p01 의 **pc 목록**에 끼워 넣었다. pc 훑기로 s12p01 의 pc 가
+   0이 되자 치환이 아무 일도 안 해서 「다른 이유로 죽음」이 됐다.
+   ★ 검사해야 하는 불변식은 「없는 카드 ID면 빌드가 죽는다」이지 pc 라는 자료 구조가 아니다.
+   그래서 그 판의 **첫 행 카드 배열**에 끼운다 — pc 가 다 사라져도 살아남는 앵커다. */
 T('없는 카드 ID를 넣으면 빌드가 죽는다', ()=>{
-  fs.writeFileSync(path.join(R,'sketchy.html'), sk.replace("{id:'s12p01',pc:[","{id:'s12p01',pc:[\"ZZ-NOPE-9\","));
+  const _i=sk.indexOf("{id:'s12p01'"), _j=sk.indexOf(',["', _i);
+  if(_j<0) return '앵커 없음(스킵)';
+  fs.writeFileSync(path.join(R,'sketchy.html'), sk.slice(0,_j)+',["ZZ-NOPE-9",'+sk.slice(_j+3));
   try{ sh('node build.js'); restore(); throw new Error('안 죽었다'); }
   catch(e){ restore(); if(!/ZZ-NOPE-9|빌드 중단/.test(e.stdout+e.stderr+e.message)) throw new Error('다른 이유로 죽음');
     return '중단됨'; } });
 T('행 셋째 자리가 배열이 아니면 죽는다', ()=>{
-  const D0="['하반신이 붉은 벽돌인 인부','벽세포 — 벽돌로 이름을 박았다']";
+  /* [정정 2026-08-21] 이 행에도 카드가 걸려 앵커가 깨졌다.
+     카드가 아직 없는 행을 골라 셋째 자리에 **배열이 아닌 것**을 넣는다. */
+  const D0='["벽돌 인부가 붓는 맑은 산","염산 HCl"]';   /* ⚠ 이 판은 큰따옴표를 쓴다 */
   if(!sk.includes(D0)) return '앵커 없음(스킵)';
   fs.writeFileSync(path.join(R,'sketchy.html'), sk.replace(D0, D0.slice(0,-1)+",'G1-31']"));
   try{ sh('node build.js'); restore(); throw new Error('안 죽었다'); }
