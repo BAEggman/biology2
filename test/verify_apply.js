@@ -36,6 +36,19 @@ const span=(s,pid)=>{ /* 패널 객체 전체 — bx가 길어 고정 길이로 
 /* 사실표가 있고 아직 셋째 자리가 없는 패널을 하나 고른다 */
 const PID='s31p01', PID2='s33p01';
 const C1=CID.find(x=>x==='B1-51')||CID[0], C2=CID.find(x=>x==='B1-209')||CID[1];
+/* [정정 2026-08-22] pc 훑기가 끝나 덱에 pc 가 한 곳도 남지 않았다(패널단위 0).
+   아래 세 검사는 ORIG 에서 pc 패널을 **찾아** 썼기 때문에 null 을 읽고 죽었다.
+   그런데 지켜야 할 불변식은 「덱에 pc 가 있다」가 아니라 「주입기가 pc 를 다룰 줄 안다」이다.
+   pc 는 앞으로도 새 그림을 넣을 때 임시로 생겼다가 행으로 내려가며 사라진다 —
+   그 왕복을 검사하려면 덱 상태에 기대지 말고 씨앗을 심어서 검사해야 한다. */
+const SEED=(()=>{ const h="{id:'"+PID2+"'"; const i=ORIG.indexOf(h);
+  if(i<0) throw new Error(PID2+' 를 못 찾았다');
+  return ORIG.slice(0,i+h.length)+',pc:["'+C2+'"]'+ORIG.slice(i+h.length); })();
+const runS=(txt,flags='')=>{
+  fs.writeFileSync(COPY,SEED); fs.writeFileSync(PICK,txt);
+  return execSync(`node tools/apply.js ${PICK} ${flags}`,
+    {cwd:R,encoding:'utf8',maxBuffer:1e9,env:{...process.env,SKETCHY:COPY,NEEDPIC:NP}});
+};
 
 console.log('\n── A. 행 단위 주입 (PROW) ──');
 T('행 지정이 셋째 자리에 들어간다', ()=>{
@@ -88,13 +101,12 @@ T('pc가 없는 패널에 pc를 새로 만든다', ()=>{
   return 'pc 신설';
 });
 T('pc가 있는 패널에는 덧붙인다', ()=>{
-  const has=ORIG.match(/\{id:'([sd]\d+p\d+[ab]?)',pc:\[[^\]]+\]/);
-  const pid=has[1];
-  run(`${C1}=${pid}`);
-  const s=span(out(),pid);
+  runS(`${C1}=${PID2}`);
+  const s=span(out(),PID2);
   const pc=s.slice(s.indexOf('pc:['), s.indexOf(']',s.indexOf('pc:['))+1);
   if(!pc.includes('"'+C1+'"')) throw new Error('덧붙이기 실패: '+pc.slice(0,80));
-  return pid+' → '+pc.split(',').length+'개';
+  if(!pc.includes('"'+C2+'"')) throw new Error('원래 있던 것을 덮어썼다: '+pc.slice(0,80));
+  return PID2+' → '+pc.split(',').length+'개';
 });
 
 T('주입된 pc가 JSON.parse 된다 (verify_build 호환)', ()=>{
@@ -155,20 +167,20 @@ T('한 패널에 카드 둘 → pc 하나에 둘', ()=>{
 
 console.log('\n── C. 멱등·충돌 ──');
 T('이미 있는 링크는 건너뛴다', ()=>{
-  const has=ORIG.match(/\{id:'([sd]\d+p\d+[ab]?)',pc:\["([^"]+)"/);
-  const o=run(`${has[2]}=${has[1]}`);
+  const o=runS(`${C2}=${PID2}`);
   if(!/이미 있다/.test(o)) throw new Error('건너뛰지 않았다');
-  return eq(out().length, ORIG.length, '길이 불변')&&'무변경';
+  return eq(out().length, SEED.length, '길이 불변')&&'무변경';
 });
 T('행이 이기고 pc에서 빠진다', ()=>{
-  const has=ORIG.match(/\{id:'([sd]\d+p\d+[ab]?)',pc:\["([^"]+)"/);
-  const pid=has[1], cid=has[2];
-  const o=run(`${cid}=${pid}#0`);
+  const o=runS(`${C2}=${PID2}#0`);
   if(!/pc 에서 제거/.test(o)) throw new Error('pc에서 안 뺐다');
-  const s=span(out(),pid);
-  const pc=s.slice(s.indexOf('pc:['), s.indexOf(']',s.indexOf('pc:['))+1);
-  if(pc.includes('"'+cid+'"')) throw new Error('pc에 아직 있다');
-  return '중복 0';
+  const s=span(out(),PID2);
+  const j=s.indexOf('pc:[');
+  const pc=j<0?'':s.slice(j, s.indexOf(']',j)+1);
+  if(pc.includes('"'+C2+'"')) throw new Error('pc에 아직 있다');
+  const f=s.slice(s.indexOf(',f:['));
+  if(!f.includes('"'+C2+'"')) throw new Error('행으로 안 내려갔다');
+  return '중복 0 · 행으로 내려감';
 });
 
 console.log('\n── D. 잘못된 입력은 아무것도 안 쓴다 ──');
