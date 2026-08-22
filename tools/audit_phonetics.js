@@ -81,6 +81,19 @@ const HOOKS = (() => {
   try { return JSON.parse(fs.readFileSync(__dirname + '/hooks.json', 'utf8')).hooks || {}; }
   catch (e) { return {}; }
 })();
+/* ★ [정정 2026-08-22] 뜻이 글자인 약어는 후크가 필요 없다 — 붙이면 오히려 짐이다.
+   ENaC 이 대표다. s17p03 의 행은 스스로 「ENaC은 뜻이 있는 약어(Epithelial Na Channel)」라고
+   적어 두었는데, 감사는 그 **설명 문장**에서 Epithelial·Channel 을 임의 라벨로 잡아
+   7장을 위반으로 세고 있었다. 규칙은 이미 hooks.json 의 「_후크가 필요 없는 것」에 있었으나
+   코드가 읽지 않아 죽은 규칙이었다.
+   ⚠ 늘리는 만큼 감사가 눈을 감는다 — _인명오탐 과 같은 경고가 걸린다. 그래서
+     목록은 코드가 아니라 자료에 두고, 항목마다 이유를 적게 하고, 테스트가 이유를 검사한다.
+   ⚠ 아래첨자·번호가 자의적인 것(CD4·M2·RyR1)은 여기가 아니라 hooks 에 후크로 등재한다. */
+const MEANINGFUL = (() => {
+  try { return new Set(Object.keys(
+    JSON.parse(fs.readFileSync(__dirname + '/hooks.json', 'utf8'))['_뜻이있는약어']['목록'])); }
+  catch (e) { return new Set(); }
+})();
 
 function carries(prop, name) {
   const P = prop.toLowerCase();
@@ -103,6 +116,7 @@ for (const sc of DATA) for (const p of (sc.panels || [])) for (const r of (p.f |
     if (m.length < 2) continue;
     if (!/[A-Z]/.test(m)) continue;
     if (KNOWN.has(m)) continue;
+    if (MEANINGFUL.has(m)) continue;         /* 뜻이 글자인 약어 — hooks.json 「_뜻이있는약어」 */
     if (/^[IVX]+$/.test(m)) continue;                 // 로마숫자
     names.add(m);
   }
@@ -146,6 +160,32 @@ for (const r of viol) {
 }
 const ent = Object.entries(byPanel).sort((a, b) => b[1].cards - a[1].cards);
 
+/* ★ 죽은 후크 — 사전에 적은 소품이 **그 라벨이 나오는 판**에 없다.
+   소품이 덱 어딘가에 있기만 해서는 안 된다. E2F 의 「F자 장대」가 s19p01 에 있다고
+   s03p04 의 fMet 이 나른 것이 되지는 않는다 — 학생은 그 판을 보고 있기 때문이다.
+   후크판 「그린 것만 건다」다. */
+if (process.argv[2] === '--dead') {
+  const factPanels = {};                       // 라벨 → 그 라벨이 사실 칸에 나오는 판들
+  const propsOf = {};
+  for (const sc of DATA) for (const p of (sc.panels || [])) {
+    const svgText = p.svg
+      ? [...String(p.svg).matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(m => strip(m[1])).join(' ')
+      : '';
+    propsOf[p.id] = (p.f || []).map(x => strip(x[0])).join(' ')
+      + ' ' + strip(p.t || '') + ' ' + strip(p.br || '') + ' ' + svgText;
+    const facts = (p.f || []).map(x => strip(x[1])).join(' ') + ' ' + strip(p.br || '');
+    for (const k of Object.keys(HOOKS))
+      if (facts.includes(k)) (factPanels[k] = factPanels[k] || []).push(p.id);
+  }
+  const dead = [];
+  for (const [k, v] of Object.entries(HOOKS)) {
+    const pans = factPanels[k] || [];
+    if (!pans.length) continue;                // 아직 안 쓰는 후크는 죽은 것이 아니다
+    if (!pans.some(pid => (v.props || []).some(w => propsOf[pid].includes(w)))) dead.push(k);
+  }
+  console.log('죽은 후크 ' + dead.length + '건' + (dead.length ? ': ' + dead.join(' ') : ''));
+  process.exit(0);
+}
 const arg = process.argv[2];
 if (arg === '--sum') {
   console.log(`임의 라벨을 담은 행 ${rows.length}`);

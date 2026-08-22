@@ -9,6 +9,7 @@ const SUITES=[
   ['smoke_picfix.js',  '실구동 · 복구 화면'],
   ['verify_apply.js',  '제안5 · 승인 큐 주입기'],
   ['migrate_safe.js',  '실사용 DB 진도 보존'],
+  ['verify_hooks.js',  '음성 후크 사전'],
 ];
 let bad=[];
 for(const [f,label] of SUITES){
