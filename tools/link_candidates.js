@@ -36,14 +36,40 @@ const out=[];
 for(const sc of DATA) for(const p of (sc.panels||[])){
   const rows=(p.f||[]).map((f,k)=>({k, prop:strip(f[0]), fact:strip(f[1]), ids:(f[2]||[])}));
   if(!rows.length) continue;
-  const anchors=rows.flatMap(r=>r.ids).map(id=>parsed.find(c=>c.id===id)).filter(Boolean);
-  if(!anchors.length) continue;
+  let anchors=rows.flatMap(r=>r.ids).map(id=>parsed.find(c=>c.id===id)).filter(Boolean);
+  /* ★ 걸린 카드가 하나도 없는 판은 앵커가 없어 후보도 0장이 된다 — 정작 가장 비어 있는 판인데.
+     같은 장면의 형제 판에서 접두어를 빌린다(번호 이웃은 못 쓰고 글자 겹침만 쓴다). */
+  if(!anchors.length){
+    const sib=(sc.panels||[]).flatMap(x=>(x.f||[]).flatMap(f=>f[2]||[])).map(id=>parsed.find(c=>c.id===id)).filter(Boolean);
+    if(!sib.length) continue;
+    anchors=sib.map(c=>({...c, n:-999}));      /* n 을 멀리 두어 번호 이웃은 안 걸리게 */
+  }
   const cand=new Map();
   for(const a of anchors) for(const c of (byPrefix[a.p]||[])){
     if(linked.has(c.id)) continue;
     if(Math.abs(c.n-a.n)>GAP) continue;
     cand.set(c.id,c);
   }
+  /* ★ [보강 2026-08-22] 번호 이웃만으로는 **이미 걸린 카드가 적은 판**에서 후보가 안 나온다.
+     s18p02 는 걸린 카드가 0장이라 후보도 0장이었다 — 정작 가장 비어 있는 판인데.
+     그래서 같은 접두어의 미연결 카드를 전부 모으고 **행의 사실 문장과 글자가 겹치는 순**으로
+     추린다. 겹침은 순위를 매기는 데만 쓴다 — 판정은 여전히 2단계 사람(에이전트)이 한다. */
+  const TOPN=Number(process.env.TOPN||40);
+  const stop=new Set(['이것','그것','하는','되는','에서','으로','이다','한다','된다','있다','없다','같은','다른','때문','경우','통해','만든','만들']);
+  const grams=t=>{const g=new Set();const w=String(t).replace(/[^가-힣A-Za-z0-9]/g,' ').split(/\s+/).filter(Boolean);
+    for(const x of w){ if(x.length>=2&&!stop.has(x)) g.add(x);
+      if(/[가-힣]/.test(x)) for(let k=0;k+2<=x.length;k++){const b=x.slice(k,k+2); if(!stop.has(b)) g.add(b);} }
+    return g;};
+  const rowG=rows.map(r=>grams(r.prop+' '+r.fact));
+  const allG=new Set(); for(const g of rowG) for(const x of g) allG.add(x);
+  const scored=[];
+  for(const a of new Set(anchors.map(x=>x.p))) for(const c of (byPrefix[a]||[])){
+    if(linked.has(c.id)||cand.has(c.id)) continue;
+    const cg=grams(c.q+' '+c.a); let hit=0; for(const x of cg) if(allG.has(x)) hit++;
+    if(hit>=3) scored.push({c,hit});
+  }
+  scored.sort((x,y)=>y.hit-x.hit);
+  for(const {c} of scored.slice(0,TOPN)) cand.set(c.id,c);
   out.push({id:p.id, scene:sc.id, gate:sc.gate, title:strip(p.t||''), rows,
             empty:rows.filter(r=>!r.ids.length).length, cards:rows.reduce((s,r)=>s+r.ids.length,0),
             cand:[...cand.values()].sort((x,y)=>x.p===y.p?x.n-y.n:x.p<y.p?-1:1)});
