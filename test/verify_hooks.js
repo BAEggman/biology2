@@ -66,6 +66,34 @@ else {
   T('후크 미달 판이 늘지 않는다', () => le(panels, BL.hookPanels, '미달 판') + '판');
   T('후크 미달 카드가 늘지 않는다', () => le(cards, BL.hookCards, '미달 장') + '장');
 }
+/* ★ [신설 2026-08-22] 한글 음차 외래어 — 감사의 눈먼 자리였다.
+   audit_phonetics.js 는 로마자와 인명만 본다. 「아포플라스트」 「심플라스트」 「익스팬신」
+   「수베린」 처럼 한글로 음차한 외래어는 통째로 감사 밖에 있었고, 학생이 외워야 하는
+   임의 이름이라는 점에서는 GPCR 과 똑같다. 사용자가 지적해서 찾았다. */
+const lsum = execSync('node ' + path.join(R, 'tools/audit_loanwords.js') + ' --sum',
+  { cwd: R, encoding: 'utf8', maxBuffer: 1e9 });
+const lm = lsum.match(/못 나르는 행 (\d+)\s*·\s*패널 (\d+)개\s*·\s*카드 (\d+)장/);
+if (!lm) { console.log('  ✗ 음차 감사 출력을 못 읽었다'); fail++; }
+else {
+  const [, lrows, lpanels, lcards] = lm.map(Number);
+  T('음차 후크 미달 행이 늘지 않는다', () => le(lrows, BL.loanRows, '미달 행') + '행');
+  T('음차 후크 미달 판이 늘지 않는다', () => le(lpanels, BL.loanPanels, '미달 판') + '판');
+  T('음차 후크 미달 카드가 늘지 않는다', () => le(lcards, BL.loanCards, '미달 장') + '장');
+}
+T('음차 면제 항목마다 이유가 있다', () => {
+  const L = (H['_외래어면제'] || {})['목록'] || {};
+  const bad = Object.entries(L).filter(([, v]) => !v || !String(v).trim());
+  if (bad.length) throw new Error('이유 없는 면제 ' + bad.length + '건: ' + bad.map(x => x[0]).join(' '));
+  return Object.keys(L).length + '건';
+});
+T('음차 면제가 소리 없이 늘지 않는다', () => {
+  const n = Object.keys((H['_외래어면제'] || {})['목록'] || {}).length;
+  if (n > BL.loanFree) throw new Error(
+    '음차 면제가 ' + n + '건으로 늘었다(기준 ' + BL.loanFree + '). '
+    + '늘리려면 baseline.loanFree 를 고치면서 hooks.json 에 이유를 남긴다');
+  return n + '건';
+});
+
 /* 면제는 늘어나도 되지만 **소리 없이는 안 된다** — baseline 을 고치는 손이 한 번 더 들어가야 한다 */
 T('면제 목록이 소리 없이 늘지 않는다', () => {
   const n = Object.keys((H['_뜻이있는약어'] || {})['목록'] || {}).length;
