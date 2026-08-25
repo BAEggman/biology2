@@ -55,9 +55,9 @@ T('걸친 카드 2장은 s20p01a|s20p01b', ()=>['S-PL-14','P1-8#3'].map(k=>{
   if(!Array.isArray(PMAP[k])) throw new Error(k+' 배열 아님');
   eq(PMAP[k].join(','),'s20p01a,s20p01b',k); return k; }).join(' '));
 /* [정정 2026-08-21] 휴면 그림이 s20p01c로 옮겨 갔다 */
-T('X-PL-27은 s20p01a|s20p01c', ()=>{
+T('X-PL-27은 s20p01a|s20p01b|s20p01c', ()=>{
   if(!Array.isArray(PMAP['X-PL-27'])) throw new Error('배열 아님');
-  return eq(PMAP['X-PL-27'].join(','),'s20p01a,s20p01c','X-PL-27'); });
+  return eq(PMAP['X-PL-27'].join(','),'s20p01a,s20p01b,s20p01c','X-PL-27'); });
 T('G1-95 → s12p02a', ()=>eq(PMAP['G1-95'],'s12p02a'));
 T('PMAP은 줄지 않는다', ()=>ge(Object.keys(PMAP).length,BL.pmap,'PMAP')+'장');
 T('v10a 링크가 하나도 사라지지 않았다', ()=>{
