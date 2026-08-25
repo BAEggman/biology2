@@ -14,6 +14,14 @@
  *   「프라이머」는 인출할 것이 아니라 주어진 것이다. 인출해야 하는 것은 답에 있는 말뿐이고,
  *   후크는 인출을 돕는 장치다. 답이 아닌 말에 후크를 붙이면 짐만 는다.
  *
+ * ★ 증거는 **그 카드가 걸린 판 전부**의 소품 + SVG 글자다 (제목·br 은 안 친다)
+ *   [고침 2026-08-25] 한 판만 보던 것을 여러 판의 합으로 바꿨다. 답이 목록인 카드
+ *   (「HIV 약물 3종」·「2차 전령별 표적 넷」·「균류 5군」)가 여러 판에 한 조각씩 걸리면
+ *   그 판이 안 그린 나머지 이름이 전부 미달로 잡혔는데, 실제 화면은 그렇지 않다 —
+ *   showPicFix() 가 PMAP 의 판을 전부 펼쳐 그림과 사실표를 나란히 그린다.
+ *   학생이 보는 것이 여러 판의 합이므로 증거도 합이어야 한다. 174 → 152장.
+ *   ⚠ 한 판에만 걸린 카드(대다수)는 값이 그대로다 — 감사가 느슨해지지 않는다.
+ *
  * ★ 증거는 **소품 + SVG 글자**뿐이다 (제목·br 은 안 친다)
  *   제목과 한 줄 요약은 그림 옆의 **글자**이지 그림이 아니다. 「그린 것만 건다」.
  *   ⚠ audit_phonetics.js 는 아직 제목·br 을 증거로 친다 — 둘의 기준이 다르다는 것을 알고 있다.
@@ -64,15 +72,35 @@ function carries(evidence, w) {
   return false;
 }
 
-const viol = [];
+/* ── 판마다의 증거 ─────────────────────────────────────────────────────── */
+const EV = {};
 for (const sc of DATA) for (const p of (sc.panels || [])) {
   const svg = p.svg ? [...String(p.svg).matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(m => strip(m[1])).join(' ') : '';
-  const ev = (p.f || []).map(x => strip(x[0])).join(' ') + ' ' + svg;
+  EV[p.id] = (p.f || []).map(x => strip(x[0])).join(' ') + ' ' + svg;
+}
+
+/* ★ 카드가 걸린 판 전부 — 「배열 카드」의 증거는 **여러 판의 합**이다 ─────────
+   [고침 2026-08-25] 지금까지는 한 판의 소품만 증거로 봤다. 그래서 답이 목록인
+   카드(「HIV 약물 3종」·「2차 전령별 표적 넷」·「균류 5군」)가 여러 판에 한 조각씩
+   걸리면, 그 판이 안 그린 나머지 이름이 전부 미달로 잡혔다.
+   그런데 실제 화면은 그렇지 않다 — index.html 의 showPicFix() 는 PMAP 에 든
+   **판을 전부 펼쳐** 그림과 사실표를 나란히 그리고, 「🖼 그림으로 보기 — 제목A + 제목B」
+   로 두 제목을 이어 붙인다. 학생이 보는 것이 여러 판의 합이므로 증거도 합이어야 한다.
+   ★ 한 판에만 걸린 카드(대다수)는 값이 그대로다 — 감사가 느슨해지지 않는다. */
+const CARDPANELS = {};
+for (const sc of DATA) for (const p of (sc.panels || []))
+  for (const r of (p.f || [])) for (const id of (r[2] || []))
+    (CARDPANELS[id] = CARDPANELS[id] || new Set()).add(p.id);
+const cardEv = id => [...(CARDPANELS[id] || [])].map(x => EV[x] || '').join(' ');
+
+const viol = [];
+for (const sc of DATA) for (const p of (sc.panels || [])) {
   for (const r of (p.f || [])) {
     const ids = r[2] || []; if (!ids.length) continue;
     const bad = new Set();
     for (const id of ids) {
       const c = A[id]; if (!c) continue;
+      const ev = cardEv(id);                   /* ★ 이 카드가 걸린 판 전부의 소품 */
       const ans = strip(c.a || '');            /* ★ 답만 본다 */
       for (let t of (ans.match(KOR) || [])) {
         t = t.replace(JOSA, '');
