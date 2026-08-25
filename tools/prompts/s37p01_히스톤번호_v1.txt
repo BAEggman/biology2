@@ -1,0 +1,35 @@
+One square illustration in a hand-inked storybook style: thin dark brown-black ink outlines, soft flat watercolour washes, a warm cream paper background, muted colours. No written words and no numbers anywhere in the picture.
+
+the scene
+
+One plain grey wooden shelf unit seen straight on, filling the whole picture. It has five shelves, one above the other. A single pale blue cord runs down through all five shelves, leaving each shelf at one side and entering the next, so that it plainly reads as one continuous cord from top to bottom.
+
+what is on each shelf, from the top down
+
+1. top shelf. The blue cord lies loose in slack waves, wound around nothing at all.
+
+2. second shelf. One wooden barrel lying on its side, and the blue cord is wrapped twice around its middle. The barrel's body is built of four upright staves of four different colours, side by side — one pale cream, one warm terracotta, one dull olive, one soft blue-grey. On the staves:
+- the pale cream stave carries two round brass studs, and above them one small brass fitting shaped like a pair of straight legs splayed apart with a crossbar between them, like a little step-ladder
+- the terracotta stave carries two round brass studs, and above them one small brass clasp made of two round bellies stacked one above the other against a straight upright bar
+- the olive stave carries three round brass studs in a row and no fitting above them
+- the blue-grey stave carries four round brass studs in a row and no fitting above them
+Every stud is a plain round brass dome, all of them the same size and large enough to count at a glance.
+
+3. just below that barrel, gripping the cord where it leaves the barrel. One small iron clip, quite separate from the barrel and touching only the cord. That clip carries exactly one brass stud and nothing else.
+
+4. third shelf. Six identical small barrels threaded along the blue cord like beads, evenly spaced; at the right-hand end the cord twists up into a thicker rope.
+
+5. fourth shelf. That rope is slung over a horizontal wooden rail and hangs below it in four large open loops.
+
+6. bottom shelf. The rope is wound into one short thick coil.
+
+what must be true when you are done
+
+- the barrel on the second shelf has exactly four staves and each stave is a different colour
+- count the studs: two on the cream stave, two on the terracotta stave, three on the olive stave, four on the blue-grey stave, and no other studs anywhere on the barrel
+- the splayed step-ladder fitting sits on the cream stave and the two-bellied clasp sits on the terracotta stave, and the two fittings are clearly different shapes
+- the iron clip is outside the barrel, touches only the cord, and carries exactly one stud
+- the blue cord is wrapped exactly twice around the barrel
+- there are exactly six small barrels on the third shelf and exactly four hanging loops on the fourth shelf
+- one shelf unit, one square scene, not a grid and not split into panels
+- warm cream paper background, thin hand-drawn linework, no lettering of any kind
