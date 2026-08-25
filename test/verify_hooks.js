@@ -86,6 +86,31 @@ T('음차 면제 항목마다 이유가 있다', () => {
   if (bad.length) throw new Error('이유 없는 면제 ' + bad.length + '건: ' + bad.map(x => x[0]).join(' '));
   return Object.keys(L).length + '건';
 });
+/* ★ 오탐은 면제와 다르다 — 「애초에 음차가 아니다」(순 한국어·일상 낱말)다.
+   면제만큼이나 소리 없이 늘면 감사가 눈을 감으므로 같은 두 검사를 건다. */
+T('음차 오탐 항목마다 이유가 있다', () => {
+  const L = (H['_음차오탐'] || {})['목록'] || {};
+  const bad = Object.entries(L).filter(([, v]) => !v || !String(v).trim());
+  if (bad.length) throw new Error('이유 없는 오탐 ' + bad.length + '건: ' + bad.map(x => x[0]).join(' '));
+  return Object.keys(L).length + '건';
+});
+T('음차 오탐이 소리 없이 늘지 않는다', () => {
+  const n = Object.keys((H['_음차오탐'] || {})['목록'] || {}).length;
+  if (n > BL.loanMiss) throw new Error(
+    '음차 오탐이 ' + n + '건으로 늘었다(기준 ' + BL.loanMiss + '). '
+    + '늘리려면 baseline.loanMiss 를 고치면서 hooks.json 에 이유를 남긴다. '
+    + '★ 진짜 음차를 오탐으로 밀어 넣는 것이 이 목록의 가장 쉬운 오용이다');
+  return n + '건';
+});
+/* 오탐과 면제가 겹치면 한쪽이 죽은 항목이다 */
+T('오탐과 면제가 겹치지 않는다', () => {
+  const F = Object.keys((H['_외래어면제'] || {})['목록'] || {});
+  const M = new Set(Object.keys((H['_음차오탐'] || {})['목록'] || {}));
+  const dup = F.filter(x => M.has(x));
+  if (dup.length) throw new Error('두 목록에 다 있다 ' + dup.length + '건: ' + dup.join(' '));
+  return '0건';
+});
+
 T('음차 면제가 소리 없이 늘지 않는다', () => {
   const n = Object.keys((H['_외래어면제'] || {})['목록'] || {}).length;
   if (n > BL.loanFree) throw new Error(

@@ -36,6 +36,10 @@ const strip = x => String(x == null ? '' : x).replace(/<[^>]+>/g, '');
 const H = JSON.parse(fs.readFileSync(path.join(__dirname, 'hooks.json'), 'utf8'));
 const HOOKS = H.hooks || {};
 const FREE = new Set(Object.keys((H['_외래어면제'] || {})['목록'] || {}));
+/* ★ 오탐은 면제와 다르다 — 면제는 「음차가 맞지만 후크가 필요 없다」이고
+   오탐은 「애초에 음차가 아니다」(순 한국어·일상 낱말)다. isLoan 이 어림짐작이라 섞여 든다.
+   둘을 한 통에 담으면 면제 래칫이 도구 결함까지 재게 된다. */
+const MISS = new Set(Object.keys((H['_음차오탐'] || {})['목록'] || {}));
 
 /* ㅡ 로 끝나는 무받침 음절과 외래어 전용 음절이 음차의 표지다 */
 const EU = new Set('프브트드크그스즈츠르므느흐쁘뜨쓰쯔플블틀들클글슬즐츨를믈늘흘'.split(''));
@@ -72,7 +76,7 @@ for (const sc of DATA) for (const p of (sc.panels || [])) {
       const ans = strip(c.a || '');            /* ★ 답만 본다 */
       for (let t of (ans.match(KOR) || [])) {
         t = t.replace(JOSA, '');
-        if (!isLoan(t) || FREE.has(t)) continue;
+        if (!isLoan(t) || FREE.has(t) || MISS.has(t)) continue;
         if (carries(ev, t)) continue;
         bad.add(t);
       }
