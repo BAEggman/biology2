@@ -32,6 +32,26 @@ for(const c of CARDS){
 const byPrefix={}; for(const c of parsed) (byPrefix[c.p]=byPrefix[c.p]||[]).push(c);
 const linked=new Set(Object.keys(PMAP));
 
+/* ── 공통 글자 그램 ─────────────────────────────────────────────────────────
+   [보강 2026-08-25] 지금까지 후보는 **판에 이미 걸린 카드의 접두어**에서만 나왔다.
+   그래서 앵커가 1~2장뿐인 판은 엉뚱한 접두어만 훑고, 정작 맞는 단원은 통째로
+   안 보였다 (s33p02 가 EZ-062·EZ-063 을, s17p05 가 H1-1~H1-5 를 놓친 것이 그것).
+   접두어를 아예 안 보고 **미연결 카드 전부**를 행 글자와 겹치는 순으로 훑는 갈래를
+   하나 더 둔다. 문턱을 높여(HITG) 잡음을 막고, 판정은 여전히 2단계가 한다. */
+const STOP=new Set(['이것','그것','하는','되는','에서','으로','이다','한다','된다','있다','없다','같은','다른','때문','경우','통해','만든','만들','무엇','어느','어떤','가지','대해','한다면','라고','것은','것이','에는','에서는','하면','하고','이나','또는','그리고']);
+function GRAMS(t){
+  const g=new Set();
+  const w=String(t).replace(/[^가-힣A-Za-z0-9]/g,' ').split(/\s+/).filter(Boolean);
+  for(const x of w){
+    if(x.length>=2&&!STOP.has(x)) g.add(x);
+    if(/[가-힣]/.test(x)) for(let k=0;k+2<=x.length;k++){const b=x.slice(k,k+2); if(!STOP.has(b)) g.add(b);}
+  }
+  return g;
+}
+const UNLINKED=parsed.filter(c=>!linked.has(c.id));
+const UG=new Map();                                  /* 카드 → 그램 (한 번만) */
+for(const c of UNLINKED) UG.set(c.id, GRAMS(c.q+' '+c.a));
+
 const out=[];
 for(const sc of DATA) for(const p of (sc.panels||[])){
   const rows=(p.f||[]).map((f,k)=>({k, prop:strip(f[0]), fact:strip(f[1]), ids:(f[2]||[])}));
@@ -70,6 +90,19 @@ for(const sc of DATA) for(const p of (sc.panels||[])){
   }
   scored.sort((x,y)=>y.hit-x.hit);
   for(const {c} of scored.slice(0,TOPN)) cand.set(c.id,c);
+
+  /* ★ 갈래 4 — 접두어를 안 보고 덱 전체의 미연결 카드를 훑는다.
+     겹침이 HITG 이상인 것만, 그중 위 TOPG 장. 앵커가 적은 판을 살리는 갈래다. */
+  const TOPG=Number(process.env.TOPG||25), HITG=Number(process.env.HITG||6);
+  const gsc=[];
+  for(const c of UNLINKED){
+    if(cand.has(c.id)) continue;
+    const cg=UG.get(c.id); let hit=0;
+    for(const x of cg) if(allG.has(x)) hit++;
+    if(hit>=HITG) gsc.push({c,hit});
+  }
+  gsc.sort((x,y)=>y.hit-x.hit);
+  for(const {c} of gsc.slice(0,TOPG)) cand.set(c.id,c);
   out.push({id:p.id, scene:sc.id, gate:sc.gate, title:strip(p.t||''), rows,
             empty:rows.filter(r=>!r.ids.length).length, cards:rows.reduce((s,r)=>s+r.ids.length,0),
             cand:[...cand.values()].sort((x,y)=>x.p===y.p?x.n-y.n:x.p<y.p?-1:1)});
