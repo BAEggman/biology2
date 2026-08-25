@@ -94,6 +94,10 @@ for(const sc of DATA) for(const p of (sc.panels||[])){
   /* ★ 갈래 4 — 접두어를 안 보고 덱 전체의 미연결 카드를 훑는다.
      겹침이 HITG 이상인 것만, 그중 위 TOPG 장. 앵커가 적은 판을 살리는 갈래다. */
   const TOPG=Number(process.env.TOPG||25), HITG=Number(process.env.HITG||6);
+  /* NEWONLY=1 — 갈래 1~3(접두어 기반)의 후보를 **버리고** 이 갈래만 남긴다.
+     1~5차에서 이미 훑은 판을 다시 넘길 때 쓴다. 그 판들의 접두어 후보는 이미
+     탈락 판정을 받았으므로 다시 보여 주면 판정자의 눈만 흐려진다. */
+  if(process.env.NEWONLY) cand.clear();
   const gsc=[];
   for(const c of UNLINKED){
     if(cand.has(c.id)) continue;
@@ -107,6 +111,27 @@ for(const sc of DATA) for(const p of (sc.panels||[])){
             empty:rows.filter(r=>!r.ids.length).length, cards:rows.reduce((s,r)=>s+r.ids.length,0),
             cand:[...cand.values()].sort((x,y)=>x.p===y.p?x.n-y.n:x.p<y.p?-1:1)});
 }
+/* ── 여러 판을 한 번에 — DUMPDIR 이 있으면 인자로 준 판들을 파일로 쏟는다.
+      13.7MB 를 판마다 다시 읽으면 63판에 2분이 넘는다. */
+if(process.env.DUMPDIR){
+  const dir=process.env.DUMPDIR;
+  const ids=process.argv.slice(2);
+  fs.mkdirSync(dir,{recursive:true});
+  let tot=0;
+  for(const id of ids){
+    const p=out.find(x=>x.id===id);
+    if(!p){ fs.writeFileSync(path.join(dir,id+'.txt'), id+' — 후보 없음\n'); continue; }
+    const L=['══ '+p.id+'  '+p.title+'   ['+p.gate+']  '+p.rows.length+'행 · 빈 행 '+p.empty+' · 걸린 카드 '+p.cards];
+    for(const r of p.rows) L.push('  '+String(r.k).padStart(2)+'. '+r.prop.slice(0,54)+'\n       → '+r.fact.slice(0,96)+(r.ids.length?'\n       ['+r.ids.join(' ')+']':''));
+    L.push('','── 후보 '+p.cand.length+'장 ──');
+    for(const c of p.cand) L.push('  '+c.id.padEnd(10)+' '+c.q.slice(0,60)+'  →  '+c.a.slice(0,74));
+    fs.writeFileSync(path.join(dir,id+'.txt'), L.join('\n')+'\n');
+    tot+=p.cand.length;
+  }
+  console.log(ids.length+'판 · 후보 연인원 '+tot+'장 → '+dir);
+  process.exit(0);
+}
+
 const arg=process.argv[2];
 if(arg){
   const p=out.find(x=>x.id===arg);
