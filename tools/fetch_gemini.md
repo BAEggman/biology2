@@ -326,11 +326,16 @@ await new Promise(r=>setTimeout(r,9000));  /* → 1024×1024 */
 
 ```
 1) execCommand('insertText') 로 글을 넣는다
-2) mcp__claude-in-chrome__find  query="메시지 보내기 send submit button"  → ref_NNN
-3) computer  action=hover       ref=ref_NNN
-4) computer  action=left_click  ref=ref_NNN
-5) editorLen 이 1 로 떨어지고 busy 가 true 면 보내진 것이다
+2) mcp__claude-in-chrome__find  query="메시지 보내기 send button"  → ref_NNN
+3) computer  action=left_click  ref=ref_NNN      ← ★ 곧바로 누른다
+4) editorLen 이 1 로 떨어지고 busy 가 true 면 보내진 것이다
 ```
+
+⚠ **hover 를 먼저 하지 마라.** hover 한 뒤 같은 ref 로 클릭하면 안 먹는다(2026-08-25 에 겪었다).
+   `find` 바로 다음에 `left_click` 을 해야 한다. 안 먹었으면 **다시 `find` 하고 다시 누른다.**
+⚠ 앞 응답이 아직 돌고 있으면 `find` 가 「대답 생성 중지」 단추를 돌려준다 — 그때는 보낼 수 없다.
+   `busy` 가 false 가 될 때까지 기다리고, **몇 분이 지나도 busy 가 안 풀리면 대화 URL 로 새로고침**한다
+   (그림은 이미 다 나왔는데 busy 만 남아 있는 일이 잦다).
 
 `find` 는 접근성 트리에서 찾으므로 창 크기·확대율과 무관하다.
 Enter 키도, `fire()` 이벤트 열 개도, 스크린샷 좌표 클릭도 **믿지 마라** —
