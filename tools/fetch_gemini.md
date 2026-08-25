@@ -1,5 +1,55 @@
 # Gemini 그림 회수 — 사용자 손을 안 빌리는 절차 (2026-08-20)
 
+# ★★★ 2026-08-25 — 좌표 대신 **JS 이벤트 열 개**를 쏘면 다 된다
+
+지난 세션들이 「모드 선택 메뉴가 안 열린다」 「송신 버튼이 안 먹는다」로 막혔던 것이
+한 가지 원인이었다. **Angular Material 은 hover 계열 이벤트가 먼저 오지 않으면 클릭을 무시한다.**
+`computer left_click` 은 좌표만 보내고, 스크린샷 좌표와 페이지 좌표가 어긋나 있어 더 안 맞았다.
+
+**되는 방법 — 요소를 DOM 에서 찾아 이벤트를 순서대로 쏜다.**
+
+    const b=[...document.querySelectorAll('button')]
+      .find(x=>/모드 선택 도구/.test(x.getAttribute('aria-label')||''));   // 또는 /메시지 보내기/
+    const r=b.getBoundingClientRect(), cx=r.x+r.width/2, cy=r.y+r.height/2;
+    for(const t of ['pointerover','pointerenter','mouseover','pointermove','mousemove',
+                    'pointerdown','mousedown','pointerup','mouseup','click'])
+      b.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,composed:true,
+                                        clientX:cx,clientY:cy,button:0,
+                                        buttons:t.includes('down')?1:0}));
+
+앞의 다섯(hover 계열)이 핵심이다. `click` 만 쏘면 안 먹는다.
+이 방법으로 **모드 메뉴 열기 · 메뉴 항목 고르기 · 메시지 보내기**가 전부 됐다.
+
+## 모델 고르기 (2026-08-25 UI)
+
+컴포저 오른쪽의 알약 버튼 `aria-label="모드 선택 도구 열기, 현재 ○○ 모드 사용 중"`.
+위 방법으로 열면 메뉴에 네 줄이 뜬다 — `3.5 Flash-Lite` · `3.7 Flash` · `3.1 Pro` · `확장된 사고 모델`.
+`[role="menuitem"]` 로 잡아 같은 이벤트 열 개를 쏘면 골라진다.
+고른 뒤 알약이 「Pro」로 바뀌는 것으로 확인한다.
+
+⚠ **대화 안에서는 이 알약이 안 보인다.** 새 채팅 화면에서만 뜬다 —
+모델은 대화를 시작할 때 정해지고 그 대화 내내 유지된다.
+
+## ★ 내려받기는 **탭 하나에 한 번**이 맞다 (재확정)
+
+2026-08-21 에 「대화가 무거워서였다」로 정정했었는데, 2026-08-25 에 그림 3장짜리 가벼운
+대화에서도 똑같이 걸렸다. **같은 탭에서 두 번째 클릭은 조용히 무시된다** — 오류도 안 난다.
+대화 URL 로 `navigate` 해서 새로고침해도 **안 풀린다.**
+
+  ★ 규칙 — **그림 하나에 새 탭 하나.** `tabs_create_mcp` → 대화 URL 로 이동 →
+    10초 대기 → `computer scroll` 아래로 → 6초 대기 → 다운로드 버튼 클릭.
+    (JS `scrollTop` 만으로는 지연 로딩이 안 풀릴 때가 있어 실제로 굴려야 한다.)
+
+## 파일 회수 경로 (2026-08-25 확인)
+
+    device_bash:  ls -t "$HOME/mnt/Downloads"/Gemini_Generated_Image_*.png | head -1
+    device_stage_files: paths=["/Users/mac/Downloads/<이름>"]   ← ★ 기기 경로로 준다
+      ⚠ device_bash 가 찍어 주는 /sessions/... 경로를 그대로 주면 거부된다
+      ("is not inside a folder connected to Cowork"). 연결된 폴더는 /Users/mac/Downloads 다.
+    → /mnt/user-data/uploads/Downloads/<이름>  (2048×2048 PNG)
+
+
+
 전체 설명은 프로젝트 문서 `claude/생물Sketchy_Gemini자동화_해결.md`에 있다.
 여기는 명령만 적어 둔다.
 
