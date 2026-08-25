@@ -276,3 +276,42 @@
 
 지금 쓰는 대화 — `https://gemini.google.com/app/6fa255aa0a3dd6a9` (s20p01c 부터)
 앞 대화 `bea759ffdafa7418` 는 그림 6장에서 목록 렌더가 느려졌다.
+
+## ★★★ 2026-08-25(2) — 송신은 「JS 로 캐럿을 끝에 놓고 Enter」가 제일 잘 먹는다
+
+이 세션에서 송신 버튼이 세 가지 방법을 다 튕겨 냈다 — `fire()` 이벤트 열 개도,
+스크린샷 좌표 클릭도, 사이드바 접기도. `editorLen` 이 계속 4,116 그대로였다.
+
+먹은 방법은 이것이다:
+
+```js
+const box=document.querySelector('div.ql-editor[contenteditable="true"]');
+box.focus();
+const sel=window.getSelection(), rng=document.createRange();
+rng.selectNodeContents(box); rng.collapse(false);   /* ★ 캐럿을 글 끝으로 */
+sel.removeAllRanges(); sel.addRange(rng);
+```
+그 다음 **computer action=key text="Return"**.
+
+→ `editorLen` 이 1 로 떨어지고 `busy` 가 true 가 된다. 그것이 보내진 표시다.
+
+★ 왜 Enter 가 먹고 클릭이 안 먹나 — 컴포저가 포커스를 쥐고 있으면 Enter 는
+Quill 의 키 핸들러로 직행한다. 클릭은 Angular Material 의 히트 테스트를 통과해야 하는데
+스크린샷 좌표(1374×734)와 페이지 좌표가 어긋나 있어 빗나간다.
+**앞으로는 송신을 이 순서로 한다 — 넣기(execCommand) → 캐럿 끝 → Enter.**
+버튼 클릭은 그 다음 수단이다.
+
+## ⑨ 이미지가 0×0 으로 안 뜰 때 — src 를 손으로 다시 물린다
+
+새로고침해도 `naturalWidth` 가 0 이면 (2026-08-25 에 겪었다) 이렇게 다시 물린다.
+
+```js
+const L=[...document.querySelectorAll('img.image')].pop();
+L.removeAttribute('srcset');
+const s=L.src; L.src=''; await new Promise(r=>setTimeout(r,300)); L.src=s;
+await new Promise(r=>setTimeout(r,9000));  /* → 1024×1024 */
+```
+
+⚠ 그리고 **내려받기 버튼은 그림이 0×0 이어도 먹는다** — 파일은 따로 받아 온다.
+내려받기가 실패한 줄 알고 다시 누르지 말고 `ls -lt ~/mnt/Downloads` 로 시각을 확인할 것
+(2026-08-25 에 성공한 내려받기를 실패로 오판했다).
