@@ -596,3 +596,60 @@ return JSON.stringify({want:TXT.length, got:ed.innerText.trim().length,
   Return 칸은 정정한다). 다만 `computer type` 은 여전히 보이는 탭에서만 먹으니,
   execCommand 로 넣는 이 절차를 쓰면 **가시성 자체를 신경 쓸 일이 없다**.
 - 모델 알약(Pro + 확장된 사고) 확인은 그대로 필요하다.
+
+## ★★★★★★★★ 2026-08-26(2) — [재정정] Enter 는 **역시 보이는 탭에만** 닿는다
+
+같은 날 앞 절에서 「hidden 이어도 Return 이 두 번 다 먹었다」고 적었는데 **틀렸다.**
+s08p02 를 보내려 할 때 hidden 상태에서 **Enter 가 네 번 다 배달되지 않았다** —
+`edLen` 도 `blocks`(31)도 그대로였다. 즉 키 이벤트가 아예 안 온 것이다.
+
+앞 절의 두 번은 그 순간 창이 실제로 앞에 있었던 것으로 본다
+(`javascript_tool` 로 읽은 `visibilityState` 는 조회 시점의 값이라 그 사이에 바뀔 수 있다).
+
+| 상황 | `computer key "Return"` |
+|---|---|
+| `visibilityState === 'visible'` | ✅ 먹는다 |
+| `hidden` (`hasFocus:true` 여도) | ❌ **안 먹는다** |
+
+★ `resize_window` 를 부르면 `document.hasFocus()` 는 true 가 되지만
+`visibilityState` 는 **여전히 hidden 이고 키는 안 온다.** 창을 앞으로 꺼내는 방법이 아니다.
+
+★ 송신 단추 `fire()` 는 **역시 안 먹는다** — 2026-08-25(5) 의 기록이 맞다.
+`execCommand` 로 넣은 글에는 단추가 「메시지 보내기」로 멀쩡히 바뀌고 클릭도 받지만
+아무 일도 일어나지 않는다. **그래서 Enter 말고는 길이 없고, Enter 는 보이는 탭에만 닿는다.**
+
+### 그러니 순서는 이렇다
+
+```
+① execCommand 로 글을 넣는다 (좌표도 가시성도 필요 없다 — 여기까진 hidden 에서 다 된다)
+② 정규화 대조로 검증한다 (아래)
+③ visibilityState 를 읽어 'visible' 인지 본다
+   → hidden 이면 **사용자에게 창을 앞으로 꺼내 달라고 말한다.** 글은 컴포저에 안전하게 남는다
+④ visible 이면 캐럿을 끝에 놓고 computer key "Return"
+⑤ URL 이 /app/<id> 로 바뀌었는지 확인
+```
+
+## ★★★ 2026-08-26(3) — 줄바꿈이 있는 프롬프트의 검증은 **정규화 해시**로 한다
+
+`execCommand` 는 줄바꿈을 살려 넣는데, Quill 이 각 줄을 `<p>` 로 만들면서
+`innerText` 에 빈 줄이 더 생긴다. 그래서 **글자 수가 안 맞는다** (3,383 → 3,425).
+이때 「match:false 니까 보내지 마라」로 멈추면 멀쩡한 프롬프트를 버리게 된다.
+
+**공백을 뭉개고 견주면 정확히 맞는지 알 수 있다.** 양쪽에서 같은 셈을 한다.
+
+브라우저에서:
+```js
+const norm=s=>s.replace(/ /g,' ').replace(/\s+/g,' ').trim();
+const n=norm(document.querySelector('.ql-editor').innerText);
+let h=5381; for(let i=0;i<n.length;i++){h=((h*33)^n.charCodeAt(i))>>>0;}
+JSON.stringify({len:n.length,hash:h})
+```
+컨테이너에서:
+```python
+n=re.sub(r'\s+',' ', t.replace(' ',' ')).strip()
+h=5381
+for ch in n: h=((h*33) ^ ord(ch)) & 0xFFFFFFFF
+print(len(n), h)
+```
+둘의 **길이와 해시가 같으면** 잘림도 섞임도 없다 (s08p02 v2: 3371 / 997652139 로 일치).
+⚠ 한 줄짜리 프롬프트라면 예전대로 `got===TXT` 로 그냥 대조하면 된다.
