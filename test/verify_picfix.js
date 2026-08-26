@@ -51,7 +51,11 @@ T('옥신 카드 → s20p01a', ()=>['P1-12','P1-12#1','P1-14'].map(k=>eq(PMAP[k]
 T('에틸렌·브라시노 → s20p01b', ()=>['P1-7','P1-8'].map(k=>eq(PMAP[k],'s20p01b',k)).length+'장');   /* P1-6#2는 배열 */
 T('ABA 계열 → s20p01c', ()=>['P1-6','P1-6#1','P1-6#3','P1-6#4'].map(k=>eq(PMAP[k],'s20p01c',k)).length+'장');
 T('시토키닌 계열 → s20p01a', ()=>['P1-4','X-PL-28'].map(k=>eq(PMAP[k],'s20p01a',k)).length+'장');
-T('걸친 카드 2장은 s20p01a|s20p01b', ()=>['S-PL-14','P1-8#3'].map(k=>{
+/* ★ [고침 2026-08-26] S-PL-14 를 이 어서션에서 뺐다.
+   답에 ABA 가 들어 있는데 ABA 의 후크(갓 쓴 늙은 아비)는 s20p01c 에 있어
+   세 판에 걸었다(baseline.pmapMoved 참조). 「a|b 두 판」으로 못 박아 두면
+   정당한 겹걸기를 막는다 — X-PL-27 을 a|b|c 로 고친 것과 같은 자리다. */
+T('걸친 카드 2장은 s20p01a|s20p01b (S-PL-14 는 뺐다)', ()=>['P1-8#3'].map(k=>{
   if(!Array.isArray(PMAP[k])) throw new Error(k+' 배열 아님');
   eq(PMAP[k].join(','),'s20p01a,s20p01b',k); return k; }).join(' '));
 /* [정정 2026-08-21] 휴면 그림이 s20p01c로 옮겨 갔다 */

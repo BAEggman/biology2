@@ -82,7 +82,7 @@ function carries(prop, name) {
 }
 
 /* 위첨자가 뜯긴 이온 등 — 도구 결함이지 위반이 아니다 */
-const ARTIFACT = new Set('Ca2 Mg2 Fe2 Fe3 Na1 K1 Cl1 Zn2 Cu2 Mn2 NH NO SO PO HCO CO2 O2 N2 SiO CaCO H2O H2S NH4 NO3 NO2'.split(' '));  /* 위첨자·아래첨자가 뜯긴 이온 — 도구 결함이지 위반이 아니다 */
+const ARTIFACT = new Set('Ca2 Mg2 Fe2 Fe3 Na1 K1 Cl1 Zn2 Cu2 Mn2 NH NO SO PO HCO CO2 O2 N2 SiO CaCO H2O H2S NH4 NO3 NO2 CN CO HCN N3 SO4 PO4'.split(' '));  /* 위첨자·아래첨자가 뜯긴 이온 — 도구 결함이지 위반이 아니다 */
 const ROMAN = /\b[A-Za-z][A-Za-z0-9]*\b/g;
 
 const rows = [];
