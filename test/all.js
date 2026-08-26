@@ -10,6 +10,7 @@ const SUITES=[
   ['verify_apply.js',  '제안5 · 승인 큐 주입기'],
   ['migrate_safe.js',  '실사용 DB 진도 보존'],
   ['verify_hooks.js',  '음성 후크 사전'],
+  ['verify_srslink.js','카드 ↔ 그림 링크 이음매'],
 ];
 let bad=[];
 for(const [f,label] of SUITES){
