@@ -140,5 +140,33 @@ T('면제 목록이 소리 없이 늘지 않는다', () => {
   return n + '건';
 });
 
+/* ★ [보탬 2026-08-26] 인명 면제도 같은 규율을 받는다.
+   _인명면제 는 「사람이 맞지만 후크가 필요 없다」는 목록이라 늘리면 감사가 눈을 감는다.
+   그래서 ① 항목마다 이유 ② 후크와 겹치지 않음 ③ 소리 없이 늘지 않음 — 셋을 다 검사한다. */
+T('인명 면제 항목마다 이유가 있다', () => {
+  const L = (H['_인명면제'] || {})['목록'] || {};
+  const bad = Object.entries(L).filter(([k, v]) => !v || String(v).trim().length < 10).map(([k]) => k);
+  if (bad.length) throw new Error('이유가 없거나 너무 짧다: ' + bad.join(' '));
+  return Object.keys(L).length + '건';
+});
+
+T('인명 면제와 후크가 겹치지 않는다', () => {
+  const L = Object.keys((H['_인명면제'] || {})['목록'] || {});
+  const dup = L.filter(x => (H.hooks || {})[x]);
+  if (dup.length) throw new Error(
+    '후크가 있는데 면제에도 있다 ' + dup.length + '건: ' + dup.join(' ')
+    + ' — 후크가 있으면 면제하지 않는다');
+  return '0건';
+});
+
+T('인명 면제가 소리 없이 늘지 않는다', () => {
+  const n = Object.keys((H['_인명면제'] || {})['목록'] || {}).length;
+  if (n > BL.epoFree) throw new Error(
+    '인명 면제가 ' + n + '건으로 늘었다(기준 ' + BL.epoFree + '). '
+    + '늘리려면 baseline.epoFree 를 고치면서 왜 면제인지 hooks.json 에 이유를 남긴다. '
+    + '⚠ 카드가 그 이름을 답으로 요구하면 넣으면 안 된다');
+  return n + '건';
+});
+
 console.log('\n' + (fail ? '❌' : '✅') + ' 후크 사전 통과 ' + pass + ' / 실패 ' + fail);
 process.exit(fail ? 1 : 0);

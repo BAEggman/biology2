@@ -89,6 +89,17 @@ const HOOKS = (() => {
    ⚠ 늘리는 만큼 감사가 눈을 감는다 — _인명오탐 과 같은 경고가 걸린다. 그래서
      목록은 코드가 아니라 자료에 두고, 항목마다 이유를 적게 하고, 테스트가 이유를 검사한다.
    ⚠ 아래첨자·번호가 자의적인 것(CD4·M2·RyR1)은 여기가 아니라 hooks 에 후크로 등재한다. */
+/* ★ [보탬 2026-08-26] 인명에도 면제가 필요하다 — 그전에는 길이 아예 없었다.
+   골지체·헨레고리처럼 **한국 교과서가 구조 이름으로 굳혀 쓴 것**은 따로 외울 것이 없다.
+   그런데 코드에 통로가 없어서, 그런 이름들이 「br 에 적혀 있다」는 이유로만 통과하고 있었다.
+   ⚠ _인명오탐(애초에 사람이 아니다)과 다르다 — 여기는 「사람이 맞지만 후크가 필요 없다」다.
+   ⚠ 카드가 그 이름을 **답으로 요구하면 넣지 않는다** (메셀슨·프랭클린이 그래서 목록에 없다). */
+const EPOFREE = (() => {
+  try { return new Set(Object.keys(
+    JSON.parse(fs.readFileSync(__dirname + '/hooks.json', 'utf8'))['_인명면제']['목록'])); }
+  catch (e) { return new Set(); }
+})();
+
 const MEANINGFUL = (() => {
   try { return new Set(Object.keys(
     JSON.parse(fs.readFileSync(__dirname + '/hooks.json', 'utf8'))['_뜻이있는약어']['목록'])); }
@@ -128,7 +139,7 @@ for (const sc of DATA) for (const p of (sc.panels || [])) for (const r of (p.f |
      ⚠ 전수 대조해 보니 오탐은 「모노」 하나뿐이었다. 목록을 늘릴 때는 반드시
         그 낱말이 정말 사람이 아닌지 확인한다 — 늘리는 만큼 감사가 눈을 감는다. */
   const factEpo = FALSE_EPONYM.reduce((t, w) => t.split(w).join(' '), fact);
-  for (const n of EPO) if (factEpo.includes(n)) names.add(n);
+  for (const n of EPO) if (!EPOFREE.has(n) && factEpo.includes(n)) names.add(n);
   if (!names.size) continue;
   /* ★ 후크는 「같은 행」이 아니라 「같은 판」에 있으면 된다.
      s19p01처럼 루비(Rb)와 F자 장대(E2F)가 이웃한 두 행에 나뉘어 있어도
