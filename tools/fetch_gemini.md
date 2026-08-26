@@ -512,3 +512,38 @@ v2 에서 CD8 을 「**더블브레스티드 조끼 — 넷씩 두 줄**」로, 
 오늘 5초에 없길래 실패로 보고 새 탭에서 다시 눌렀더니 `(1)` 붙은 중복이 생겼다.
 「탭 하나에 한 번만」은 여전히 맞지만, **판정은 시각으로 한다** —
 `ls -lt --time-style=+%H:%M:%S` 로 방금 시각의 파일이 있는지 본다.
+
+## ★★★★★★★ 2026-08-25(10) — 새 대화를 열면 모델이 **Flash 로 되돌아가 있다**
+
+`/app` 으로 옮길 때마다 모드가 초기화되는데, **가끔 `Flash Extended` 로 돌아온다.**
+그런데 「Extended 가 켜져 있으면 건너뛴다」는 검사는 그것을 통과시킨다.
+
+```js
+// ✗ 틀림 — Flash Extended 도 통과한다
+if(!/Extended/.test(pill.innerText)) { ...켠다... }
+
+// ✓ 맞음 — Pro 와 Extended 를 따로 본다
+const need = !/Pro/.test(pill.innerText) || !/Extended/.test(pill.innerText);
+```
+
+되돌리는 절차는 **두 번 연다** — ① 알약 열고 「3.1 Pro」를 누르고,
+② 다시 알약을 열어 「확장된 사고 모델」을 누른다. 한 번에는 안 된다.
+끝나면 `aria-label` 이 「현재 **Pro Extended** 모드 사용 중」인지 반드시 읽어 확인한다.
+
+## ★★★★★★★ 2026-08-25(11) — 키보드는 **보이는 탭에만** 닿는다 (타이핑도 그렇다)
+
+전에는 「hidden 이면 **송신만** 실패한다」고 적었는데, 더 정확히는 이렇다.
+
+| | hidden |
+|---|---|
+| `javascript_tool` (JS 실행·`fire()`·`el.focus()`) | ✅ 된다 |
+| `computer action=left_click` | ✅ 좌표는 닿는다 |
+| **`computer action=type` (실제 키 입력)** | ❌ **아무 데도 안 들어간다** |
+| **`computer action=key "Return"` (송신)** | ❌ 조용히 실패 |
+
+★ `el.focus()` 가 `activeElement` 를 컴포저로 바꿔 놓아도 소용없다 —
+**키 이벤트 자체가 안 배달된다.** 그래서 타이핑 전에도 `visibilityState` 를 봐야 한다.
+
+⚠ 한 번 **보이는 상태에서 치기 시작하면** 도중에 창이 뒤로 가도 글은 끝까지 들어간다
+(s17p01 3,802자가 그랬다. CDP 30초 시간 초과가 나도 마찬가지다).
+그러니 순서는 **① visible 확인 → ② 클릭 → ③ 타이핑 → ④ 길이 검증 → ⑤ 다시 visible 확인 → ⑥ Enter**.
