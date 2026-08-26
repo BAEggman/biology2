@@ -1464,7 +1464,7 @@
  "_인명오탐_왜": "인명은 부분 문자열로 잡히므로 오탐이 난다. 「모노시스트론성」의 「모노」를 자코브·모노로 세고 있었다 — 실제 카드(F0-175 원핵·진핵 시스트론)는 사람 이야기를 하지 않고, 소품 「네모 도안이 하나뿐이다」가 이미 mono(하나)를 나른다. 전수 대조해 보니 오탐은 「모노」 하나뿐이었다 — 나머지는 다 실제 인명이다.",
  "_뜻이있는약어": {
   "_왜": "약어의 글자가 그 뜻의 머리글자이고 그 뜻이 이미 그림에 있으면, 학생은 그림 → 뜻 → 글자로 그냥 흘러간다. 따로 외울 것이 없으니 소리 후크는 짐이다. audit_phonetics.js 가 이 목록을 읽어 건너뛴다. ⚠ 늘리는 만큼 감사가 눈을 감는다 — _인명오탐 과 같은 경고가 여기에도 걸린다. 항목마다 이유를 적고, 이유가 「글자가 곧 뜻이다」를 실제로 보이지 못하면 넣지 않는다. 아래첨자·번호가 자의적인 것(CD4·SGLT1·M2·RyR1)은 여기가 아니라 hooks 에 후크로 등재한다.",
-  "_판정일": "2026-08-22 · 71행 전수 판정 · ENaC·ADH 는 hooks 에 소품이 있어 면제에서 뺐다",
+  "_판정일": "2026-08-22 · 71행 전수 판정 · ENaC·ADH 는 hooks 에 소품이 있어 면제에서 뺐다 ｜ 2026-08-26: audit_answers.js 와 br 구멍 훑기에서 나온 27건을 더했다. 전부 「글자가 곧 뜻」이고, 자의적인 숫자·아래첨자(CD4·M2·SGLT1·MHC I)는 여기가 아니라 hooks 에 후크로 있다. ⚠ LGIC·GPCR·MMR·DAG 는 넣으려다 **뺐다** — 넷 다 이미 hooks 에 진짜 후크가 있다(창구 뒤 직통문 · 토큰 뒤집는 주자 · 꽃 도장 · 닭). 「면제와 후크가 겹치지 않는다」 검사가 잡아 줬다. 후크가 있으면 면제하지 않는다.",
   "목록": {
    "Epithelial": "ENaC 을 풀어 쓴 영어 낱말이다. s17p03 의 행은 스스로 「ENaC은 뜻이 있는 약어(Epithelial Na Channel)」라고 적고 있는데 감사가 그 설명 자체를 위반으로 세고 있었다 — 7장",
    "Channel": "같은 줄의 영어 낱말",
@@ -1495,7 +1495,30 @@
    "G6Pase": "Glucose-6-Phosphatase — 기질 이름 + -ase",
    "DNP": "Di-Nitro-Phenol — 글자가 그대로 화학 구조다",
    "FADH2": "KNOWN 의 FAD·FADH 와 같은 것인데 아래첨자 2 때문에 따로 잡혔다",
-   "HbA": "Hemoglobin A — 성인 헤모글로빈"
+   "HbA": "Hemoglobin A — 성인 헤모글로빈",
+   "SGLT": "Sodium-GLucose Transporter — 나트륨-포도당 공동수송체. 글자가 곧 뜻이고 s17p01 의 「자루(Na⁺)와 꾸러미(포도당)를 든 짐꾼」이 그 뜻을 그린다. ⚠ 뒤의 숫자(SGLT1·SGLT2)는 자의적이라 자루 개수로 따로 후크가 걸려 있다",
+   "GLUT": "GLUcose Transporter — 포도당 수송체. 글자가 곧 뜻이다",
+   "PCT": "Proximal Convoluted Tubule — 근위곡세뇨관. 세 글자가 그대로 자리 이름이다",
+   "DCT": "Distal Convoluted Tubule — 원위곡세뇨관",
+   "IMCD": "Inner Medullary Collecting Duct — 속수질 집합관",
+   "RTK": "Receptor Tyrosine Kinase — 수용체 타이로신 인산화효소. s16p01 의 「둘이 나란히 서서 서로의 등에 도장」이 그 뜻(이합체 자가인산화)을 그린다",
+   "PLC": "PhosphoLipase C — 인지질분해효소 C",
+   "CaM": "CalModulin — Ca(칼슘) + Modulin(조절). Ca 는 이미 KNOWN 이고 나머지가 뜻이다",
+   "MLCK": "Myosin Light Chain Kinase — 미오신 경쇄 인산화효소. 네 글자가 그대로 이름이다",
+   "MLCP": "Myosin Light Chain Phosphatase — 위의 반대쪽",
+   "MHC": "Major Histocompatibility Complex — 주조직적합성복합체. 글자가 곧 뜻이다. ⚠ 뒤의 I·II 는 자의적이라 s13p03 에 「작은 쟁반 / 큰 판」으로 따로 그려져 있다",
+   "BER": "Base Excision Repair — 염기 하나를 도려내는 수선. s11p03 의 「흙손으로 벽돌 한 장만 들어낸다」가 그 뜻이다",
+   "NER": "Nucleotide Excision Repair — 뉴클레오타이드를 판째로 잘라내는 수선. 「톱으로 벽을 잘라 판째 들어낸다」가 그 뜻이다",
+   "PSI": "PhotoSystem I — 광계 I. Photo+System 이 곧 뜻이다",
+   "PSII": "PhotoSystem II — 광계 II",
+   "AV": "AtrioVentricular — 방실(심방-심실). 답에 「방실결절」이 함께 나오는 자리다",
+   "SA": "SinoAtrial — 동방(동방결절)",
+   "PRL": "PRoLactin — 프로락틴의 머리글자다. 낱말을 줄인 것뿐이다",
+   "PCO2": "partial pressure of CO2 — P 가 압력이고 CO2 는 이미 KNOWN 이다",
+   "PO2": "partial pressure of O2",
+   "PN2": "partial pressure of N2",
+   "SAR": "Stramenopile + Alveolate + Rhizaria 세 무리의 머리글자 — 글자가 곧 목록이다. 세 무리 각각은 따로 후크가 있다(스트라메노파일 = 털 난 빨대)",
+   "DHEA": "DeHydroEpiAndrosterone — 화학명의 머리글자다. 화학명은 이 덱이 일관되게 면제해 온 부류다"
   }
  },
  "_후크완료": {
@@ -1827,15 +1850,13 @@
   }
  },
  "_답면제": {
-  "_왜": "audit_answers.js 전용 면제 목록. 카드의 **답**에 나오지만 후크가 필요 없는 이름이다. 잣대는 로마자 쪽 _뜻이있는약어 와 같다 — 「글자가 곧 뜻이거나, 학생이 이미 낱말로 안다」. ⚠ 늘리는 만큼 감사가 눈을 감는다. 항목마다 이유를 적고, 아래첨자·번호가 자의적인 것(CD4·M2·RyR1·X4·R5·Cas9)은 여기가 아니라 hooks 에 후크로 등재한다.",
+  "_왜": "audit_answers.js 전용 면제 목록. 카드의 **답**에 나오지만 후크가 필요 없는 이름이다. 잣대는 로마자 쪽 _뜻이있는약어 와 같다 — 「글자가 곧 뜻이거나, 학생이 이미 낱말로 안다」. ⚠ 늘리는 만큼 감사가 눈을 감는다. 항목마다 이유를 적고, 아래첨자·번호가 자의적인 것(CD4·M2·RyR1·X4·R5·Cas9)은 여기가 아니라 hooks 에 후크로 등재한다. ⚠ 후크가 이미 있는 것은 여기에 두지 않는다 — LGIC·GPCR 을 그래서 뺐다.",
   "_언제 만들었나": "2026-08-26 · audit_answers.js 를 세우며. 사용자가 「phonetic link 를 빠뜨리지 않게」 지적한 뒤 훑기에서 나왔다.",
   "목록": {
    "SGLT": "Sodium-GLucose Transporter — 글자가 곧 뜻이다(나트륨-포도당 수송체)",
    "GLUT": "GLUcose Transporter — 글자가 곧 뜻이다",
    "PCT": "Proximal Convoluted Tubule — 근위곡세뇨관, 글자가 곧 뜻이다",
    "DCT": "Distal Convoluted Tubule — 원위곡세뇨관",
-   "LGIC": "Ligand-Gated Ion Channel — 리간드개폐 이온통로, 글자가 곧 뜻이다",
-   "GPCR": "G-Protein-Coupled Receptor — G단백질연결수용체",
    "RTK": "Receptor Tyrosine Kinase — 수용체 타이로신 인산화효소",
    "PLC": "PhosphoLipase C — 인지질분해효소 C",
    "CaM": "CalModulin — Ca + Modulin, 글자가 곧 뜻이고 Ca 가 이미 칼슘이다",
