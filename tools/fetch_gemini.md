@@ -683,3 +683,44 @@ s02p04 는 **네 자리에 두 무늬**를 번갈아 놓으라는 것이었고, 
 
 ⚠ 설치하지 않았으므로 잃은 것은 없다. s02p04 는 보류로 남긴다 —
 1장을 얻으려고 7장이 걸린 판을 거는 일이기도 하다.
+
+---
+
+## 2026-08-26(5) — 첨부 input 이 `find` 때문에 사라지던 것을 고쳤다
+
+★ **증상.** 「업로드 및 도구」를 열면 `input[type=file]` 셋이 생긴다. 그런데
+`file_upload` 는 **ref** 가 있어야 하고 ref 는 `find` 로만 얻는다. 그런데
+`find` 가 접근성 스냅숏을 뜨는 순간 **Material 메뉴가 닫히고 overlay 가 통째로
+지워져** input 이 DOM 에서 사라진다 → `Element is no longer in the document`.
+
+★ **고침 — input 을 `document.body` 로 옮겨 놓고 `find` 를 부른다.**
+노드를 옮겨도 리스너는 따라가므로 업로드가 그대로 먹는다. 메뉴가 닫혀도
+body 에 붙은 input 은 살아남는다.
+
+```js
+// ① 메뉴 열기 (한 호출로 끝낸다 — 아래 ⚠ 참고)
+const b=[...document.querySelectorAll('button,[role="button"]')]
+  .find(x=>(x.getAttribute('aria-label')||'').trim()==='업로드 및 도구');
+window.__fire(b);
+// ② 다음 호출에서 옮긴다
+const i=[...document.querySelectorAll('input[type=file]')]
+  .find(x=>(x.accept||'')==='image/*');
+document.body.appendChild(i);            // ← 이 한 줄이 핵심이다
+i.id='__imgup';
+i.style.cssText='position:fixed;left:12px;top:12px;width:240px;height:48px;'
+              +'opacity:1;z-index:2147483647;display:block;visibility:visible';
+// ③ 이제 find 를 불러도 안전하다 → file_upload(ref, [...])
+// ④ 보내기 전에 다시 감춘다: document.getElementById('__imgup').style.display='none'
+```
+
+⚠ **`aria-label` 은 정확히 일치로 찾아라.** `/업로드/` 같은 부분 일치는
+사이드바의 다른 단추를 집어 아무 일도 일어나지 않는다.
+
+⚠⚠ **숨은 탭에서 `setTimeout` 루프를 돌리지 마라.** 크롬이 배경 탭의 타이머를
+분 단위로 늦춰서 `await new Promise(r=>setTimeout(r,500))` × 16 이
+**CDP 45초 시간초과**로 죽는다. 이 세션에서 한 번 그렇게 죽었다.
+기다림이 필요하면 **호출을 나눠라** — 한 호출에 하나씩, 타이머 없이.
+
+⚠ **같은 그림이 두 번 붙을 수 있다.** 실패한 줄 알았던 업로드가 늦게 들어온다.
+보내기 전에 `첨부파일 닫기` 단추 수를 세어 **1인지 확인**하고, 둘이면
+`fire(btns[1])` 로 하나를 지운다.
