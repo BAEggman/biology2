@@ -46,6 +46,9 @@ const FREE = new Set(Object.keys((H['_외래어면제'] || {})['목록'] || {}))
 const LOANMISS = new Set(Object.keys((H['_음차오탐'] || {})['목록'] || {}));
 const NAMEMISS = new Set(H['_인명오탐'] || []);
 const ANSFREE = new Set(Object.keys((H['_답면제'] || {})['목록'] || {}));
+/* ★ [고침 2026-08-26] audit_phonetics.js 가 읽는 _인명면제 를 여기서도 읽는다.
+   두 감사가 같은 잣대를 써야 한다 — 안 그러면 한쪽에서 면제한 이름이 다른 쪽에서 살아난다. */
+const EPOFREE = new Set(Object.keys((H['_인명면제'] || {})['목록'] || {}));
 
 /* ── audit_phonetics.js 의 KNOWN·EPONYM 을 그대로 가져다 쓴다 (두 감사가 갈리면 안 된다) ── */
 const pj = R('tools/audit_phonetics.js');
@@ -55,7 +58,12 @@ const EPO = [...new Set(pj.match(/const EPONYM = `([\s\S]*?)`/)[1].split(/\s+/).
 /* ── 판별 소품 · 카드→판 ── */
 const PROPS = {}, WHERE = {};
 for (const sc of DATA) for (const p of (sc.panels || [])) {
-  PROPS[p.id] = (p.f || []).map(r => strip(r[0])).join(' | ');
+  /* ★ [고침 2026-08-26] svg 도해는 **그림 위에 이름을 글자로 찍는다** — 학생이 보고 읽으므로
+     소품과 같이 센다. audit_phonetics.js 와 같은 처리다(<text> 안의 보이는 글자만). */
+  const svgT = p.svg
+    ? [...String(p.svg).matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(m => strip(m[1])).join(' ')
+    : '';
+  PROPS[p.id] = (p.f || []).map(r => strip(r[0])).join(' | ') + ' | ' + svgT;
   for (const r of (p.f || [])) for (const cid of (r[2] || []))
     (WHERE[cid] = WHERE[cid] || new Set()).add(p.id);
 }
@@ -74,7 +82,7 @@ function carries(prop, name) {
 }
 
 /* 위첨자가 뜯긴 이온 등 — 도구 결함이지 위반이 아니다 */
-const ARTIFACT = new Set('Ca2 Mg2 Fe2 Fe3 Na1 K1 Cl1 Zn2 Cu2 Mn2 NH NO SO PO HCO CO2 O2 N2'.split(' '));  /* 위첨자·아래첨자가 뜯긴 이온 — 도구 결함이지 위반이 아니다 */
+const ARTIFACT = new Set('Ca2 Mg2 Fe2 Fe3 Na1 K1 Cl1 Zn2 Cu2 Mn2 NH NO SO PO HCO CO2 O2 N2 SiO CaCO H2O H2S NH4 NO3 NO2'.split(' '));  /* 위첨자·아래첨자가 뜯긴 이온 — 도구 결함이지 위반이 아니다 */
 const ROMAN = /\b[A-Za-z][A-Za-z0-9]*\b/g;
 
 const rows = [];
@@ -92,7 +100,7 @@ for (const cid of Object.keys(WHERE)) {
   }
   for (const ep of EPO) {
     if (ep.length < 3 || !ans.includes(ep)) continue;
-    if (FREE.has(ep) || LOANMISS.has(ep) || NAMEMISS.has(ep) || ANSFREE.has(ep)) continue;
+    if (FREE.has(ep) || LOANMISS.has(ep) || NAMEMISS.has(ep) || ANSFREE.has(ep) || EPOFREE.has(ep)) continue;
     names.add(ep);
   }
   const miss = [...names].filter(n => !qq.includes(n)).filter(n => !carries(prop, n)).sort();
