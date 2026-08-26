@@ -547,3 +547,52 @@ const need = !/Pro/.test(pill.innerText) || !/Extended/.test(pill.innerText);
 ⚠ 한 번 **보이는 상태에서 치기 시작하면** 도중에 창이 뒤로 가도 글은 끝까지 들어간다
 (s17p01 3,802자가 그랬다. CDP 30초 시간 초과가 나도 마찬가지다).
 그러니 순서는 **① visible 확인 → ② 클릭 → ③ 타이핑 → ④ 길이 검증 → ⑤ 다시 visible 확인 → ⑥ Enter**.
+
+## ★★★★★★★★ 2026-08-26(1) — [정정] **execCommand 로 넣은 글도 보내진다.** `type` 은 이제 안 써도 된다
+
+2026-08-25(5) 에 「친 글만 보내진다」고 적었는데 **절반만 맞았다.** 오늘 s04p04 v2·v3 를
+둘 다 `document.execCommand('insertText')` 로 넣고 **`computer action=key "Return"`** 으로
+보냈고 **둘 다 정상으로 접수됐다**(대화 `b72b319122ca478f`, 3,031자와 1,864자).
+
+| 넣는 방법 | 보내는 방법 | 결과 |
+|---|---|---|
+| `execCommand('insertText')` | **송신 단추 클릭** | ❌ 조용히 실패 (옛 기록) |
+| `execCommand('insertText')` | **`key "Return"`** | ✅ **보내진다** (오늘 두 번 확인) |
+| `computer type` | 단추 클릭 / Return | ✅ 보내진다 (느리다) |
+
+갈리는 것은 **글을 넣는 방법이 아니라 보내는 방법**이었다. Quill 은 `beforeinput`/`input` 을
+듣고 있어서 execCommand 로 넣은 글이 **제 모델에 정상으로 들어간다**. 그 모델을 읽는 것은
+**키보드 처리기**이고, 송신 단추는 다른(앵귤러 쪽) 상태를 읽는 듯하다.
+
+### ★ 그래서 새 절차는 이렇다 — 훨씬 빠르고 안전하다
+
+```js
+// ① 프롬프트를 base64 로 실어 보낸다 (따옴표·유니코드 이스케이프 걱정이 없다)
+const bin=atob(B64); const b=new Uint8Array(bin.length);
+for(let i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);
+const TXT=new TextDecoder('utf-8').decode(b).trim();
+// ② 캐럿을 컴포저 전체에 걸고 통째로 갈아 끼운다
+const ed=document.querySelector('.ql-editor'); ed.focus();
+const sel=getSelection(), r=document.createRange();
+r.selectNodeContents(ed); sel.removeAllRanges(); sel.addRange(r);
+document.execCommand('insertText',false,TXT);
+// ③ 길이를 **문자 단위로 정확히** 맞춰 본다
+return JSON.stringify({want:TXT.length, got:ed.innerText.trim().length,
+                       match:ed.innerText.trim()===TXT});
+```
+그 다음 `computer action=key "Return"` 한 번.
+
+### ★ 이것이 없애 주는 골칫거리 셋
+
+1. **좌표를 안 쓴다** — 컴포저가 363↔388↔391 로 움직여도 상관없다.
+   2026-08-25 에 프롬프트 넷을 통째로 날린 사고가 이 좌표 어긋남 때문이었다.
+2. **CDP 30초 시간 초과가 없다** — 3,000자가 한 호출에 즉시 들어간다.
+3. **쪼개 치다 반쪽이 보내지는 사고가 없다** — 통째로 갈아 끼우니 반쪽이 있을 수 없다.
+
+### ⚠ 그래도 남는 것
+
+- 길이 검증은 **여전히 반드시 한다.** `match:false` 면 절대 Enter 를 치지 마라.
+- **`hidden` 이어도 `key "Return"` 은 오늘 두 번 다 먹었다**(2026-08-25(11) 의 표에서
+  Return 칸은 정정한다). 다만 `computer type` 은 여전히 보이는 탭에서만 먹으니,
+  execCommand 로 넣는 이 절차를 쓰면 **가시성 자체를 신경 쓸 일이 없다**.
+- 모델 알약(Pro + 확장된 사고) 확인은 그대로 필요하다.
