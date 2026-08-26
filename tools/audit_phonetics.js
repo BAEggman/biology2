@@ -119,6 +119,33 @@ function carries(prop, name) {
   return false;
 }
 
+/* ★ [고침 2026-08-26 ③단계] 증거를 두 군데 고쳤다.
+ *
+ * ⓐ **p.t 와 p.br 을 뺐다.** 둘은 그려진 소품이 아니라 **글**이다. 거기 이름이 적혀 있다는
+ *    이유로 통과시키면 이 감사의 전제(「그림을 외운 뒤 이름을 따로 외워야 하니 Sketchy가
+ *    아니다」)가 무너진다. 실제로 s38p03 의 「샤가프」가 br 에만 있는 채로 한 번도 안 걸리고
+ *    있었다. svg 의 <text> 는 남긴다 — 그것은 **그림 위에 찍힌 글자**라 학생이 보고 읽는다.
+ *
+ * ⓑ **걸린 카드가 걸린 판 전부의 소품을 함께 본다(cardEv).** 덱의 원칙 그대로다 —
+ *    「★ 증거는 걸린 판 전부의 합」. s16p02#0 은 사실 칸이 스스로 「나머지는 옆방의
+ *    Ca²⁺·DAG·IP₃… 이 카드는 그 판들에 함께 걸려 있어 그림이 차례로 뜬다」고 적어 두었고,
+ *    s11p01 의 DnaA·B·G 는 자매 판 s11p01b(판 제목이 아예 「이름이 붙는 자리」다)가 그린다.
+ *    행 하나만 보면 이것들이 전부 공백으로 잡히는데, 학생은 그림 둘을 차례로 본다.
+ *
+ * ⚠ ⓑ 는 ⓐ 때문에 반드시 함께 들어가야 한다. ⓐ 만 하면 42장이 헛되이 빨개진다. */
+const CARDPANELS = {};                    /* 카드 id → 그 카드가 걸린 판 id 들 */
+const PANELPROPS = {};                    /* 판 id → 그 판의 소품 전부 (+ svg 글자) */
+for (const sc of DATA) for (const p of (sc.panels || [])) {
+  const svgT = p.svg
+    ? [...String(p.svg).matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(m => strip(m[1])).join(' ')
+    : '';
+  PANELPROPS[p.id] = (p.f || []).map(x => strip(x[0])).join(' ') + ' ' + svgT;
+  for (const r of (p.f || [])) for (const cid of (r[2] || []))
+    (CARDPANELS[cid] = CARDPANELS[cid] || new Set()).add(p.id);
+}
+const cardEv = cards => [...new Set(cards.flatMap(c => [...(CARDPANELS[c] || [])]))]
+  .map(pid => PANELPROPS[pid] || '').join(' ');
+
 const rows = [];
 for (const sc of DATA) for (const p of (sc.panels || [])) for (const r of (p.f || [])) {
   const prop = strip(r[0]), fact = strip(r[1]), cards = (r[2] || []);
@@ -156,9 +183,10 @@ for (const sc of DATA) for (const p of (sc.panels || [])) for (const r of (p.f |
     ? [...String(p.svg).matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)]
         .map(m => strip(m[1])).join(' ')
     : '';
-  const panelProps = (p.f || []).map(x => strip(x[0])).join(' ')
-    + ' ' + strip(p.t || '') + ' ' + strip(p.br || '') + ' ' + svgText;
-  const bad = [...names].filter(n => !carries(prop, n) && !carries(panelProps, n));
+  const panelProps = (p.f || []).map(x => strip(x[0])).join(' ') + ' ' + svgText;
+  const ev = cardEv(cards);          /* ★ 걸린 판 전부의 합 */
+  const bad = [...names].filter(n =>
+    !carries(prop, n) && !carries(panelProps, n) && !carries(ev, n));
   rows.push({gate: sc.gate, scene: sc.id, panel: p.id, prop, fact,
              nc: cards.length, names: [...names], bad});
 }
