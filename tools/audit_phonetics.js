@@ -106,7 +106,17 @@ const MEANINGFUL = (() => {
   catch (e) { return new Set(); }
 })();
 
+/* ★ [신설 2026-08-26] 표기 별칭 — 같은 이름의 다른 표기를 잇는다.
+   면제가 아니다. 「후크가 이미 있는데 감사가 표기가 달라 못 알아본다」를 고친다.
+   별칭이 가리키는 이름에 hooks 등재가 없으면 verify_hooks.js 가 막는다. */
+const ALIAS = (() => {
+  try { const L = JSON.parse(fs.readFileSync(__dirname + '/hooks.json','utf8'))['_표기별칭']['목록'];
+        const m = {}; for (const [k, v] of Object.entries(L)) m[k] = v['이름']; return m; }
+  catch (e) { return {}; }
+})();
+
 function carries(prop, name) {
+  if (ALIAS[name] && ALIAS[name] !== name && carries(prop, ALIAS[name])) return true;
   const P = prop.toLowerCase();
   const hk = HOOKS[name];
   if (hk && (hk.props || []).some(w => prop.includes(w))) return true;

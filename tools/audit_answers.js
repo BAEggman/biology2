@@ -71,7 +71,15 @@ for (const sc of DATA) for (const p of (sc.panels || [])) {
 const SYL = {A:'에이',B:'비',C:'씨',D:'디',E:'이',F:'에프',G:'지',H:'에이치',I:'아이',J:'제이',
              K:'케이',L:'엘',M:'엠',N:'엔',O:'오',P:'피',Q:'큐',R:'알',S:'에스',T:'티',U:'유',
              V:'브이',W:'더블유',X:'엑스',Y:'와이',Z:'제트'};
+/* ★ [신설 2026-08-26] 표기 별칭 — audit_phonetics.js 와 같은 것을 읽는다(두 감사가 갈리면 안 된다). */
+const ALIAS = (() => {
+  try { const L = H['_표기별칭']['목록']; const m = {};
+        for (const [k, v] of Object.entries(L)) m[k] = v['이름']; return m; }
+  catch (e) { return {}; }
+})();
+
 function carries(prop, name) {
+  if (ALIAS[name] && ALIAS[name] !== name && carries(prop, ALIAS[name])) return true;
   const hk = HOOKS[name];
   if (hk && (hk.props || []).some(w => prop.includes(w))) return true;
   if (prop.toLowerCase().includes(name.toLowerCase())) return true;
@@ -113,6 +121,13 @@ for (const r of rows) for (const p of r.pids) (byPanel[p] = byPanel[p] || []).pu
 const names = {};
 for (const r of rows) for (const n of r.miss) names[n] = (names[n] || 0) + 1;
 
+/* ★ [신설 2026-08-26] --sum — test/verify_hooks.js 가 읽는 래칫용 한 줄.
+   로마자 감사·음차 감사에는 래칫이 있는데 답 쪽에만 없었다. 없으면 소리 없이 늘어난다. */
+if (process.argv.includes('--sum')) {
+  console.log(`답에만 있고 소품이 안 나르는 이름 — 카드 ${rows.length}장 · 이름 ${Object.keys(names).length}종 · 판 ${Object.keys(byPanel).length}개`);
+  for (const [n, k] of Object.entries(names).sort((a, b) => b[1] - a[1])) console.log(`  ${k}  ${n}`);
+  process.exit(0);
+}
 if (process.argv.includes('--json')) {
   console.log(JSON.stringify({ cards: rows.length, names: Object.keys(names).length,
     panels: Object.keys(byPanel).length, rows }, null, 1));

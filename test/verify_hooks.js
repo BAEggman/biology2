@@ -80,6 +80,47 @@ else {
   T('음차 후크 미달 판이 늘지 않는다', () => le(lpanels, BL.loanPanels, '미달 판') + '판');
   T('음차 후크 미달 카드가 늘지 않는다', () => le(lcards, BL.loanCards, '미달 장') + '장');
 }
+/* ★ [신설 2026-08-26] 표기 별칭 — 면제와 **잣대가 정반대다**.
+   면제는 「후크가 필요 없다」라 늘릴수록 감사가 눈을 감는다. 별칭은 「후크가 **이미 있다**」는
+   주장이므로, 가리키는 이름에 hooks 등재가 없으면 그 주장이 거짓이다 → 막는다.
+   이 검사가 있어야 별칭을 면제의 뒷문으로 쓸 수 없다. */
+{
+  const A = (H['_표기별칭'] || {})['목록'] || {};
+  T('표기 별칭 항목마다 이름·이유가 있다', () => {
+    const bad = Object.entries(A).filter(([, v]) =>
+      !v || !v['이름'] || !String(v['이름']).trim() || !v['왜'] || !String(v['왜']).trim());
+    if (bad.length) throw new Error('빠진 것 ' + bad.length + '건: ' + bad.map(x => x[0]).join(' '));
+    return Object.keys(A).length + '건';
+  });
+  T('★ 별칭이 가리키는 이름에 후크가 있다 (면제의 뒷문 막기)', () => {
+    const bad = Object.entries(A).filter(([, v]) => !H.hooks[v['이름']]);
+    if (bad.length) throw new Error('후크 없는 곳을 가리키는 별칭 ' + bad.length + '건: ' +
+      bad.map(x => x[0] + '→' + x[1]['이름']).join(' '));
+    return Object.keys(A).length + '건 전부 후크로 이어진다';
+  });
+  T('별칭이 저를 가리키지 않는다', () => {
+    const bad = Object.entries(A).filter(([k, v]) => k === v['이름']);
+    if (bad.length) throw new Error('제자리 별칭 ' + bad.length + '건: ' + bad.map(x => x[0]).join(' '));
+    return '0건';
+  });
+  T('별칭이 소리 없이 늘지 않는다', () => le(Object.keys(A).length, BL.alias, '별칭') + '건');
+}
+
+/* ★ [신설 2026-08-26] 답 쪽 래칫 — 로마자·음차에는 있는데 여기만 없었다.
+   답 쪽 감사(audit_answers.js)는 카드의 **답**에 있는 임의 이름을 본다. 숫자를 잠그지 않으면
+   새 카드를 걸 때마다 소리 없이 늘어난다. 남은 넷은 전부 까닭이 적힌 것이다 —
+   s23p02 M2(2장, 보류 확정: 숫자를 나르는 물건이 없다) · s36p01 UV · d05p03 Sex(둘 다
+   답의 괄호 안 부가 정보지만 후크가 있어 면제가 막힌다 — 규칙을 지키고 남겨 두기로 했다). */
+const asum = execSync('node ' + path.join(R, 'tools/audit_answers.js') + ' --sum',
+  { cwd: R, encoding: 'utf8', maxBuffer: 1e9 });
+const am = asum.match(/카드 (\d+)장\s*·\s*이름 (\d+)종\s*·\s*판 (\d+)개/);
+if (!am) { console.log('  ✗ 답 쪽 감사 출력을 못 읽었다'); fail++; }
+else {
+  const [, acards, anames, apanels] = am.map(Number);
+  T('답 쪽 미달 카드가 늘지 않는다', () => le(acards, BL.ansMissCards, '미달 장') + '장');
+  T('답 쪽 미달 이름이 늘지 않는다', () => le(anames, BL.ansMissNames, '미달 이름') + '종');
+  T('답 쪽 미달 판이 늘지 않는다', () => le(apanels, BL.ansMissPanels, '미달 판') + '판');
+}
 T('음차 면제 항목마다 이유가 있다', () => {
   const L = (H['_외래어면제'] || {})['목록'] || {};
   const bad = Object.entries(L).filter(([, v]) => !v || !String(v).trim());

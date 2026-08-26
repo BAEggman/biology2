@@ -5,3 +5,4 @@ outputs/
 !outputs/need_picture.md
 !outputs/그릴것_*.md
 tools/__pycache__/
+Gemini_Generated_Image_*.png
