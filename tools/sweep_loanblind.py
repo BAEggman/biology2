@@ -70,6 +70,35 @@ def load():
     H = json.load(open(os.path.join(R, 'tools/hooks.json'), encoding='utf-8'))
     return s, {c['id']: c for c in cards}, H
 
+class Exempt:
+    """면제 판정 — 원형뿐 아니라 **조사가 붙은 꼴 · 토막 난 꼴 · 붙어 버린 꼴**도 면제로 본다.
+
+    ★ 왜 (2026-08-31) — 혼동쌍 훑기의 잡음이 거의 다 이 셋이었다:
+        「호르몬인」(호르몬+조사) · 「붕괴될」(붕괴+어미) · 「스플라이싱이란」
+        「아데닐」(아데닐산의 앞토막) · 「시트르산나트륨」(시트르산+나트륨)
+      낱말을 자르는 쪽(JOSA)을 늘리면 <b>이름이 토막 난다</b>(헤파린→헤파).
+      그래서 <b>자르지 않고, 면제 목록에 있는 것과 맞춰만 본다</b> — 목록에 없는 것은 절대 통과하지 않는다.
+    """
+    def __init__(self, base):
+        self.base = set(base)
+        self.pref = set()                       # 토막 난 꼴을 되살릴 접두들
+        for e in self.base:
+            for k in (1, 2):
+                if len(e) - k >= 2: self.pref.add(e[:-k])
+
+    def __contains__(self, w):
+        if w in self.base: return True
+        for k in (1, 2):                        # 조사·어미가 붙은 꼴
+            if len(w) - k >= 2 and w[:-k] in self.base: return True
+        if w in self.pref: return True          # 토막 난 꼴 (아데닐 → 아데닐산)
+        for i in range(2, len(w) - 1):          # 붙어 버린 꼴 (시트르산 + 나트륨)
+            if w[:i] in self.base and w[i:] in self.base: return True
+        return False
+
+    def __iter__(self): return iter(self.base)
+    def __len__(self): return len(self.base)
+
+
 def build(s, H):
     L = lambda k: set((H.get(k) or {}).get('목록', {}))
     hooks = H['hooks']
@@ -104,7 +133,7 @@ def build(s, H):
         svg = ' '.join(strip(t) for t in re.findall(r'<text\b[^>]*>([\s\S]*?)</text>', blk))
         ev[m.group(1)] = props + ' ' + svg
         for c in re.findall(CID, blk): c2p[c].add(m.group(1))
-    return exempt, score, ev, c2p, hooks
+    return Exempt(exempt), score, ev, c2p, hooks
 
 def sweep(th=1.2):
     s, A, H = load()
