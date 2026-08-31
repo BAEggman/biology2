@@ -48,6 +48,15 @@ const FREE = new Set(Object.keys((H['_외래어면제'] || {})['목록'] || {}))
    오탐은 「애초에 음차가 아니다」(순 한국어·일상 낱말)다. isLoan 이 어림짐작이라 섞여 든다.
    둘을 한 통에 담으면 면제 래칫이 도구 결함까지 재게 된다. */
 const MISS = new Set(Object.keys((H['_음차오탐'] || {})['목록'] || {}));
+/* ★ 표기별칭 — 「후크가 이미 있는데 감사가 표기가 달라 못 알아본다」를 잇는다.
+   [보탬 2026-08-31] audit_phonetics.js·audit_answers.js 는 처음부터 이 통을 읽는데
+   이 도구만 안 읽고 있었다. 그래서 「부갑상선호르몬」(= PTH 의 한글 풀어쓴 표기)이
+   PTH 후크가 s07p03 에 서 있는데도 미달로 잡혔다. hooks.json 의 「_표기별칭」 항목이
+   ★ 세 감사가 갈리면 안 된다 ★ 고 못 박아 둔 그대로, 여기서도 읽는다.
+   ⚠ 이것은 사전을 늘리는 것이 아니라 도구를 맞추는 것이다 — 별칭은 verify_hooks.js 가
+   「가리키는 이름에 후크가 없으면 못 넣는다」로 이미 막고 있다. */
+const ALIAS = {};
+for (const [k, v] of Object.entries((H['_표기별칭'] || {})['목록'] || {})) ALIAS[k] = v['이름'];
 
 /* ㅡ 로 끝나는 무받침 음절과 외래어 전용 음절이 음차의 표지다 */
 const EU = new Set('프브트드크그스즈츠르므느흐쁘뜨쓰쯔플블틀들클글슬즐츨를믈늘흘'.split(''));
@@ -67,8 +76,12 @@ const JOSA = /(은|는|이|가|을|를|의|에|에서|으로|로|와|과|도|만
 
 function carries(evidence, w) {
   if (evidence.includes(w)) return true;
-  const hk = HOOKS[w];
-  if (hk && (hk.props || []).some(p => evidence.includes(p))) return true;
+  for (const name of [w, ALIAS[w]]) {
+    if (!name) continue;
+    if (name !== w && evidence.includes(name)) return true;
+    const hk = HOOKS[name];
+    if (hk && (hk.props || []).some(p => evidence.includes(p))) return true;
+  }
   return false;
 }
 
