@@ -11,6 +11,7 @@
  *   node tools/hookwords.js -n 이름 이름 …   판을 세우기 **전에**: 그 이름들의 후크 props 를 뽑는다
  *   node tools/hookwords.js <판 id>          그 판이 쓰는 이름 × props 대조 (빠진 것 · 근접어)
  *   node tools/hookwords.js --near           덱 전체 근접어 훑기 — 「글자만 다른」 자리를 다 뽑는다
+ *   node tools/hookwords.js --orphan         사전에는 있는데 **그린 데가 없는** 후크 (「그린 것만 건다」의 뒤집힌 쪽)
  *
  * ★ 규칙 — 새 판의 소품 칸은 **사전의 말을 그대로** 쓴다. 달라져야 하면 props 에 더한다.
  *
@@ -176,6 +177,13 @@ if (args[0] === '-n' || args[0] === '--names') {
   console.log('\n── 후크말 미리 보기 — 소품 칸에 이 말을 그대로 쓴다 ──');
   for (const n of args.slice(1)) showName(n);
   console.log('');
+} else if (args[0] === '--orphan') {
+  // 「그린 것만 건다」의 뒤집힌 쪽 — 사전이 약속만 하고 그리지 않은 자리
+  const ALL = Object.values(PANEL).map(P => P.props).join(' ');
+  const miss = Object.entries(HOOKS).filter(([, h]) => !h.props.some(p => ALL.includes(p)));
+  console.log('\n── 사전에는 있는데 그린 데가 없는 후크 ──');
+  for (const [n, h] of miss) console.log('  ✗ ' + n.padEnd(16) + '[' + h['형태'] + ']  ' + h.props.map(x => '「' + x + '」').join(' · '));
+  console.log('\n후크 ' + Object.keys(HOOKS).length + '개 중 ' + miss.length + '개');
 } else if (args[0] === '--near') {
   console.log('\n── 덱 전체 근접어 훑기 ── (★ = 그림은 있는데 말이 다르다 · ✗ = 아예 없다)');
   let n = 0, bad = 0;
