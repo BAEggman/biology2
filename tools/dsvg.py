@@ -7,8 +7,9 @@ def dump(pid, width=1320):
     s = io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'sketchy.html'), encoding='utf-8').read()
     i = s.find("{id:'%s'" % pid)
     assert i > 0, pid
-    j = s.find('f:[', i)
-    seg = s[i:j]
+    import sys as _s; _s.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from rowlib import close_brace
+    seg = s[i:close_brace(s, i) + 1]
     m = re.search(r"svg:`", seg)
     if not m:
         print('svg 없음:', pid); return None, []
