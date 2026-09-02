@@ -1,0 +1,31 @@
+[s19p01b v3 — 처음부터 다시. 쇠 글자를 글자로 못박고, 음반은 벽 못에 건다]
+★ 왜 v3 인가 — v2 에서 「위아래 두 배가 붙은 모양」이라고 기하로 풀어 적었더니 Gemini 가 그것을 A 로 바꿔 버렸다.
+   넷을 한 줄로 세우면 Gemini 는 그것을 낱말로 읽으려 든다. 그러니 글자를 글자라고 못박는 편이 낫다.
+   음반은 자전거 짐받이에 실으면 뭉쳐서 셀 수 없다 — 벽 못에 띄엄띄엄 걸어야 세어진다.
+
+Draw another picture in exactly the same style as the ones you just made - warm cream paper, thin hand-inked storybook outlines, soft flat watercolour washes, on bare cream ground. Wide image, about twice as wide as it is tall. Keep it simple and uncluttered.
+
+WHAT TO DRAW - a long depot wall seen straight on, divided by thin posts into exactly FOUR equal open BAYS in a row, left to right. One bicycle stands in each bay; all four bicycles are identical and their luggage racks are EMPTY.
+
+Above the wall, one sign hangs over each bay. Three of them are flat dark IRON CAPITAL LETTERS bolted to the wall; the third is not a letter at all.
+   - over BAY 1: a flat iron capital letter D
+   - over BAY 2: a flat iron capital letter E
+   - over BAY 3: NO iron letter. Instead a wooden folding STEP-LADDER stands open on top of the wall, its two legs spread into a peak.
+   - over BAY 4: a flat iron capital letter B
+These four signs are the only letter-shaped things in the picture.
+
+On the BACK WALL inside each bay, flat round DISCS like vinyl records hang on pegs, each disc on its own peg, spaced well apart with clear gaps so they can be counted at a glance:
+   - BAY 1: a row of FOUR discs, and directly above it a shorter row of TWO more discs. Four below, two above.
+   - BAY 2: exactly TWO discs, side by side.
+   - BAY 3: exactly TWO discs, side by side.
+   - BAY 4: exactly ONE disc, alone.
+
+BETWEEN BAY 2 AND BAY 3 a low stone ARCHWAY spans the gap between the two posts, standing on the ground, wide enough to walk a bicycle through.
+
+INSIDE BAY 4, on the floor beside its bicycle, stands a small square AMPLIFIER BOX with a round dial on its front.
+
+AT THE RIGHT END, a round metal BRAZIER full of flames stands on the ground just past the last post. The bay-4 bicycle is not upright: it has toppled to the right and its FRONT WHEEL is down inside the brazier's mouth with flames closing over that wheel, while its REAR WHEEL still rests on the bay floor. The bicycle and the brazier are touching.
+
+Nothing else is in the picture. No people, no hands.
+
+WHAT MUST NOT HAPPEN: any number of bays other than four; the letter over bay 1 drawn as anything but D; the letter over bay 2 drawn as anything but E, or drawn with a number of arms other than three; an iron letter appearing over bay 3 as well as the step-ladder; the letter over bay 4 drawn as A, or as anything but B - bay 4 must NOT repeat the ladder's A shape; the step-ladder drawn closed or folded flat; discs left on a bicycle's luggage rack; discs stacked or overlapping so they cannot be counted one by one; any disc count other than four-below-two-above in bay 1, two in bay 2, two in bay 3, one in bay 4; the amplifier box placed outside bay 4; the archway placed anywhere but between bays 2 and 3; the bay-4 bicycle drawn upright, or floating in the air clear of the brazier, or swallowed whole by the flames; a second brazier or a second burning bicycle; any writing, words, numbers, labels or arrows anywhere - the four signs above the bays are the ONLY letter shapes allowed.
