@@ -1,0 +1,12 @@
+[s17p01 v3 — 사용자 지적(2026-09-04): 「그림이 아직도 설명따라 수정이 안되어 있다」]
+
+그림을 열어 보니 오른쪽 짐꾼(SGLT1 = 자루 2 + 꾸러미 1)이 꾸러미를 **둘** 안고 있었다.
+자루 2 : 꾸러미 2 로 읽혀 「자루 개수가 이름의 숫자와 반대다」(2 Na⁺ : 1 포도당)가 통째로 죽는 자리였다.
+
+기존 그림(img/s17p01.webp)을 github.io 에서 열어 Cmd+A · Cmd+C 로 복사한 뒤 Gemini 편집기에 Cmd+V 로 붙여 넣고 편집을 시켰다.
+- v2: "Remove the second parcel" → 안 지워졌다 (Gemini 는 지우는 편집을 못 한다 — 네 번째 확인)
+- v3: "REPLACE the two stacked parcels with ONE single square parcel … Check before you finish: count the parcels" → 됐다
+
+Edit this attached picture. Keep everything exactly as it is - the market stalls, the two doors, the man standing astride the two posts, the spiked net with the straw bundle and arrow, the three boats with the hippopotamus, and the porter on the LEFT who carries one sack and one parcel. Change ONE thing only: the porter on the RIGHT (the one with a sack on each shoulder) is currently clutching TWO square parcels stacked against his chest. He must clutch exactly ONE square parcel, hugged tightly against his chest with both forearms. Remove the second parcel completely.
+
+(v3) Not yet - the porter on the right is still holding TWO stacked parcels. Redraw only that man's arms and load: REPLACE the two stacked parcels with ONE single square parcel, about the size of one of the old ones, hugged tight against his chest with both forearms wrapped around it. His two shoulder sacks stay exactly as they are. Everything else in the picture stays exactly as it is. Check before you finish: count the parcels on the right porter - there must be exactly one.

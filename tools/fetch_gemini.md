@@ -724,3 +724,23 @@ i.style.cssText='position:fixed;left:12px;top:12px;width:240px;height:48px;'
 ⚠ **같은 그림이 두 번 붙을 수 있다.** 실패한 줄 알았던 업로드가 늦게 들어온다.
 보내기 전에 `첨부파일 닫기` 단추 수를 세어 **1인지 확인**하고, 둘이면
 `fire(btns[1])` 로 하나를 지운다.
+
+## [2026-09-04] 기존 그림을 Gemini 에 올려 편집시키는 법 — 드디어 됐다
+
+옛 판(이번 대화에 없는 그림)을 고치려면 그림을 **올려야** 한다. 시도한 것 넷 가운데 하나만 됐다.
+
+| 방법 | 결과 |
+|---|---|
+| `fetch('https://baeggman.github.io/…')` → File → 합성 paste | ✗ Gemini 페이지의 CSP 가 connect-src 를 막는다 |
+| `<img crossorigin>` → canvas → File | ✗ img-src 도 막힌다 |
+| github.io 의 그림 탭에서 Cmd+A · Cmd+C → Gemini 편집기에 Cmd+V | △ 한 번은 됐고 한 번은 ⚠ 오류 칩이 떴다 — 믿을 수 없다 |
+| **「업로드 및 도구」 버튼을 실제 클릭 → 메뉴가 열리면 `input[type=file][accept="image/*"]` 가 DOM 에 생긴다 → `find` 로 ref 를 얻어 `file_upload`** | ✓ **된다.** 네이티브 파일 대화상자가 안 뜬다 |
+
+절차
+1. 컨테이너에서 `cp img/<pid>.webp → /mnt/user-data/outputs/<pid>_current.png` (PNG 로 변환해 둔다 — file_upload 는 세션 outputs 폴더의 파일만 받는다)
+2. `find("업로드 및 도구 button")` → `computer.left_click(ref)` — **실제 클릭**이어야 메뉴가 열린다
+3. `find("hidden file input that accepts image/*")` → ref 넷이 나온다. DOM 순서로 [문서용 · (가로챈 것) · **image/*** · 문서용] — 셋째가 그림용이다. 틀리면 「Element is not a file input」이 뜨니 다음 ref 로 넘어간다
+4. `file_upload(paths=[…], ref)` → 편집기에 썸네일 칩이 붙는다
+5. 편집 프롬프트를 insertText 로 넣고 보내기 7-이벤트 → 3~4분 기다린다
+
+⚠ 「지워라」는 여전히 안 듣는다(s17p01 v2 실패). **「둘을 하나로 바꿔라(REPLACE) … 끝내기 전에 세어 보라」**로 쓰면 듣는다(v3 성공).
