@@ -1,0 +1,23 @@
+[난할의 두 길 v3 — v2 에서 대문자 강조어가 전부 글자 라벨로 찍혀 나왔고(SPIRAL STAIRCASE, UNFINISHED …) 나선 더미가 구부러진 사슬이 됐다. 대문자 없이, 「글자 없음」을 앞뒤로 두 번, 나선은 「층마다 45도씩 돌아간 기둥」으로]
+
+Generate a brand-new image (ignore all earlier images in this chat). The picture contains no letters, words, labels, captions or numbers of any kind - nothing written anywhere. Draw a single illustration in this style: warm cream paper, thin hand-inked storybook outlines, soft flat watercolour washes, muted greys, tans and dusty blue-greens. Square image. A plain workbench top seen from straight on.
+
+Layout: along the very top runs one band with four objects in a row joined by small plain arrows. Below the band the picture is split into a left column and a right column by one thin vertical rule; each column holds three things stacked top to bottom, and the left and right things at each level sit side by side so they can be compared.
+
+The top band, left to right: (1) one plain round ball of pale dough; (2) the same ball, now divided by two crossing grooves into four equal wedges, still one ball, the same size; (3) the same ball cut open to show it is a thin shell around a hollow middle; (4) the same hollow ball with one side pushed in by a thumb so a short neck runs from outside into the hollow. All four balls are the same size - the ball never grows.
+
+Left column, top to bottom.
+First, a short standing column of small pale dough balls, four balls in each layer, three layers high. Each layer is turned about forty-five degrees relative to the layer beneath it, so every upper ball sits in the groove between two lower balls and, seen from the side, the whole column visibly twists like a screw thread. It should read at a glance as a twisted, spiralling column.
+Second, a saucer holding one small lump of dough that is plainly unfinished - a rough, misshapen, half-made blob that could never become a ball. A hand has just set it down.
+Third, one solid dull-red block of dough with a jagged crack running through its middle, the crack just opening into a narrow dark gap inside the block - still one block, splitting from within, not two separate pieces.
+
+Right column, top to bottom.
+First, a short standing column of small pale dough balls, four balls in each layer, three layers high, every layer squarely aligned with the layer beneath it - each upper ball sits directly on top of a lower ball, so the column is a straight, box-like grid with no twist and no offset.
+Second, a saucer holding one small but perfectly whole round ball of dough, smooth and complete, smaller than the others. A hand has just set it down.
+Third, a curved pale-yellow wall like a slice of a tunnel, with two round pouches budding off its outer side. Each pouch is a little hollow bag still joined to the wall by a narrow neck, about to pinch free; both pouches are drawn cut open so their empty insides show.
+
+What must not happen: any letters, words or labels anywhere in the picture; the top band balls changing size; the left column drawn as a chain, a flat pyramid or a loose heap - it is a compact standing column whose layers are rotated; the right column drawn offset or staggered - it is a straight grid; the two saucers swapped (left holds the rough lump, right holds the whole ball); the red block drawn as two separate slabs - it is one block with a crack inside; the pouches drawn as holes or dents in the wall - they bulge out from the wall as hollow bags on necks. Once more: no text of any kind.
+
+# 결과 (2026-09-04): v3 채택. 글자 없음 · 맨 위 띠 넷 같은 크기(덩이→네 쪽→속 빈 껍질→엄지로 누른 굴) · 왼쪽 더미는 어긋나게(위 공이 홈에 앉음)·오른쪽은 곧은 격자
+#   · 접시 왼쪽 덜 된 덩이/오른쪽 온전한 공 · 붉은 덩이 하나에 금 · 노란 굴 벽에서 목이 조여 떨어지는 속 빈 주머니 **셋**(둘을 시켰으나 셋 — 개수는 개념이 아니라 말을 그림에 맞춤).
+# 배운 것: 프롬프트의 대문자 강조어(SPIRAL STAIRCASE, UNFINISHED …)는 그대로 그림 속 라벨로 찍힌다 → 강조는 문장으로, 대문자 금지. 「no text」는 맨 앞과 맨 뒤에 두 번.
