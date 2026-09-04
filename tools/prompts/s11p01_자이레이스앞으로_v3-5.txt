@@ -1,0 +1,20 @@
+# s11p01 분기점 — 자이레이스(꼬임 뭉치+스패너)를 분기점 「앞」(오른쪽)으로 옮기기
+# 2026-09-04 · 기존 그림을 Gemini 에 올려 편집 (tools/fetch_gemini.md 「기존 그림을 올려 편집시키는 법」)
+# 사용자 지적: 「토포아이소머라아제가 분기점 앞의 오른쪽에 있어야 하는데 분기점 뒤의 왼쪽에 있고 그림 묘사도 부정확해」
+#
+# 결과: v5 채택. 읽는 순서(왼→오른): 열린 두 띠 → 주황 옷 사람이 지퍼 손잡이를 쥠 → 밧줄처럼 꼬인 뭉치 + 초록 옷 스패너 사람
+#       → 잘고 촘촘한 닫힌 이빨 → 분필 동그라미(안쪽만 크고 듬성한 이빨 둘) → 다시 잘고 촘촘한 이빨 → 분필 든 사람.
+#       위 갈래 도르래·줄, 요리사 프라이팬, 나무 메 둘, 모래시계, 오카리나, 용접공+라이터 전부 그대로.
+#
+# 배운 것:
+#  - 「move」는 왼쪽/오른쪽을 읽는 순서로 못 박아야 먹힌다 (v2 는 옮겼다면서 여전히 슬라이더 왼쪽). v3 에서 「reading left to right: … slider … THEN knot …」로 잡힘.
+#  - 지역 수정은 번지기 쉽다 — v3 가 동그라미 안 큰 이빨을 잃고, v4 는 큰 이빨을 닫힌 지퍼 전체에 깔았다. v5 처럼 「ONLY inside … / on BOTH sides small dense … check before you finish」로 안팎을 둘 다 적어야 멈춘다.
+
+## v3 (요지)
+Edit the attached image. Keep everything else identical. The rope-like twisted knot in the band, together with the man in the green shirt holding the big spanner, is currently on the WRONG side of the zipper slider. Reading the closed zipper from left to right: first the man in orange holding the zipper slider, THEN (to his right, on the still-closed part of the zipper) the twisted knot with the spanner man, THEN the closed interlocked teeth, THEN the chalk circle. The knot must be strictly to the RIGHT of the slider, ahead of it, never behind it. Remove the knot from its old place on the left. Count before you finish: exactly one knot, exactly one spanner, and the knot is right of the slider.
+
+## v4 (요지)
+The knot is now correctly right of the slider. But the teeth inside the chalk circle lost their look: inside the circle the teeth must be BIG, WIDE, BLOCKY and sparse with clear gaps between them, while everywhere else the teeth stay small and dense. Restore the big sparse teeth inside the chalk circle. Keep everything else identical.
+
+## v5 (채택)
+Almost. Now the big blocky teeth run along the whole closed zipper. They must appear ONLY inside the chalk circle. Fix it like this: (a) inside the chalk circle keep three big, wide, blocky teeth with clear gaps between them; (b) to the RIGHT of the chalk circle, up to the edge of the picture, the teeth are small, fine and densely packed, exactly like ordinary zipper teeth; (c) between the knot and the chalk circle the teeth are also small and dense. Keep the twisted knot, the spanner man, the man holding the slider, the chalk-drawing man and everything else exactly as they are. Check before you finish: big teeth only inside the circle; small dense teeth on both sides of it.
