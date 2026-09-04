@@ -87,13 +87,40 @@ setTimeout(()=>{
     return pid+' → '+PTIT[pid];
   });
 
-  T('Space 키로 계속 → 다음 카드', ()=>{
+  T('Space 키로 계속 → 다음 카드 · ★ 그 카드의 정답은 숨겨져 있어야 한다', ()=>{
     const before=$('rNum').textContent;
     d.dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));
     if(vis($('picFix'))) throw new Error('picFix 안 닫힘');
     if($('rNum').textContent===before) throw new Error('카드가 안 넘어감');
-    if(!vis($('grades')) && vis($('review'))) throw new Error('등급 버튼이 안 돌아옴');
-    return before+' → '+$('rNum').textContent;
+    /* [2026-09-04] 예전 줄은 「등급 버튼이 안 돌아옴」이면 실패였다 — 그것이 곧 버그(정답이 펴진 상태)를
+       기대 동작으로 적어 둔 것이었다. 새 카드는 정답도 등급도 숨기고 힌트만 보여야 한다. */
+    if(vis($('ansBlock'))) throw new Error('★ 다음 카드의 정답이 펴져 있다 (클릭 전파 버그)');
+    if(vis($('grades'))) throw new Error('★ 다음 카드의 등급 버튼이 펴져 있다');
+    if(!vis($('revealHint'))) throw new Error('정답 보기 힌트가 안 보인다');
+    return before+' → '+$('rNum').textContent+' · 정답 숨김';
+  });
+  T('마우스로 「계속」 클릭 → 다음 카드 · ★ 정답 숨김', ()=>{
+    /* 그림 걸린 카드를 하나 더 찾아 오답 처리하고, 이번에는 버튼을 직접 클릭한다 */
+    for(let i=0;i<400;i++){
+      d.querySelector('.qcard').click();
+      if(vis($('picLink'))) break;
+      d.querySelector('.gbtn[data-g="5"]').click();
+      if(!vis($('review'))) throw new Error('세션이 끝나버림');
+    }
+    d.querySelector('.gbtn[data-g="1"]').click();
+    if(!vis($('picFix'))) throw new Error('picFix 안 열림');
+    const before=$('rNum').textContent;
+    $('pfNext').click();                                   /* 실제 클릭 — 버블이 .qcard 까지 올라간다 */
+    if($('rNum').textContent===before) throw new Error('카드가 안 넘어감');
+    if(vis($('ansBlock'))) throw new Error('★ 다음 카드의 정답이 펴져 있다 (클릭 전파 버그)');
+    if(vis($('grades'))) throw new Error('★ 등급 버튼이 펴져 있다');
+    return before+' → '+$('rNum').textContent+' · 정답 숨김';
+  });
+  T('Space 자동 반복(e.repeat)은 정답을 펴지 않는다', ()=>{
+    if(vis($('ansBlock'))) throw new Error('시작부터 펴져 있음');
+    d.dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true,repeat:true}));
+    if(vis($('ansBlock'))) throw new Error('★ 반복 keydown 이 정답을 폈다');
+    return '무시됨';
   });
 
   console.log('\n── 회귀: 정답이면 방해하지 않는다 ──');

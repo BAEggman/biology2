@@ -1895,7 +1895,13 @@ function showPicFix(id){
   $('grades').classList.add('hidden');
   $('picLink').classList.add('hidden');   /* 바로 아래 같은 링크가 또 있으니 숨긴다 */
   picFixOn=true;
-  $('pfNext').onclick=function(){ picFixOn=false; box.classList.add('hidden'); box.innerHTML=''; advance(); };
+  /* [2026-09-04 버그] 「계속」의 클릭이 .qcard 까지 올라가 다음 카드의 정답을 펴 버렸다.
+     #picFix 는 .qcard 안(#ansBlock 안)에 있고 .qcard 에는 「탭으로 정답 보기」가 걸려 있다.
+     onclick 이 advance()→renderCard() 로 카드를 바꾼 **뒤에** 같은 클릭이 부모로 올라가
+     revealed=false 인 새 카드를 펴 버린다. Space 키의 pb.click() 도 같은 길로 올라간다.
+     → 여기서 전파를 끊는다. (아래 .qcard 리스너에도 이중 방어가 있다) */
+  $('pfNext').onclick=function(ev){ if(ev&&ev.stopPropagation) ev.stopPropagation();
+    picFixOn=false; box.classList.add('hidden'); box.innerHTML=''; advance(); };
   try{ box.scrollIntoView({block:'nearest'}); }catch(e){}
 }
 
@@ -3150,6 +3156,11 @@ document.querySelectorAll('.wtab').forEach(function(b){
 });
 $('qText').parentNode.addEventListener('click', function(e){
   if(e.target.closest('#grades')) return;
+  /* [2026-09-04] 복구 상자(#picFix)와 그림 링크(#picLink) 안의 클릭은 「정답 보기」가 아니다.
+     ⚠ 「계속」 버튼은 onclick 안에서 innerHTML='' 로 지워지므로, 클릭이 여기 닿을 때는
+        이미 떼어진 노드다 — closest('#picFix') 가 null 이 된다. 그래서 isConnected 로도 거른다. */
+  if(!e.target.isConnected) return;
+  if(e.target.closest('#picFix') || e.target.closest('#picLink')) return;
   if(!revealed) reveal();
 });
 document.querySelectorAll('.gbtn').forEach(function(b){
@@ -3157,6 +3168,7 @@ document.querySelectorAll('.gbtn').forEach(function(b){
 });
 document.addEventListener('keydown', function(e){
   if($('review').classList.contains('hidden')) return;
+  if(e.repeat) return;   /* [2026-09-04] 키를 꾹 누른 자동 반복은 한 번으로 친다 — 복구 화면을 닫은 Space 가 새 카드를 펴면 안 된다 */
   var t=e.target; if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA')) return;
   if(picFixOn){ if(e.key===' '||e.code==='Space'||e.key==='Enter'){ e.preventDefault();
     var pb=$('pfNext'); if(pb) pb.click(); } return; }
