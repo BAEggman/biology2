@@ -12,6 +12,13 @@ const dom=new JSDOM(fs.readFileSync(FILE,'utf8'),
 const w=dom.window, d=w.document;
 const $=id=>d.getElementById(id);
 const vis=el=>el && !el.classList.contains('hidden');
+/* [2026-09-06] reveal() 은 카드가 바뀐 직후 150ms · 복구 화면을 닫은 직후 450ms 의 입력을 무시한다
+   (연타·유령 탭 방어). 이 스모크는 기계 속도로 클릭하므로, 사람이 문제를 읽는 시간을 흉내내려면
+   시계를 앞으로 밀어 줘야 한다. 앱의 변수는 창에 노출돼 있지 않으므로 Date.now 를 민다.
+   ⚠ 잠금 자체를 검사하는 항목에서는 부르지 않는다 — 부르면 그 검사가 무의미해진다. */
+const realNow=w.Date.now.bind(w.Date); let skew=0;
+w.Date.now=()=>realNow()+skew;
+const asHuman=()=>{ skew+=1000; };
 
 let pass=0,fail=0;
 const T=(n,f)=>{ try{ const m=f(); console.log('  ✓',n,m===undefined?'':'— '+m); pass++; }
@@ -38,7 +45,7 @@ setTimeout(()=>{
     for(hops=0; hops<400; hops++){
       const cur=$('rNum').textContent;
       // 현재 카드 id는 picLink 표시 여부로 판별
-      d.querySelector('.qcard').click();                    // reveal
+      asHuman(); d.querySelector('.qcard').click();         // reveal
       const hasPic = vis($('picLink'));
       if(hasPic){ found=cur; return '카드 '+cur+' (그림 있음), '+hops+'장 만에'; }
       const btn=d.querySelector('.gbtn[data-g="5"]');       // 그림 없으면 정답 처리하고 넘김
@@ -102,7 +109,7 @@ setTimeout(()=>{
   T('마우스로 「계속」 클릭 → 다음 카드 · ★ 정답 숨김', ()=>{
     /* 그림 걸린 카드를 하나 더 찾아 오답 처리하고, 이번에는 버튼을 직접 클릭한다 */
     for(let i=0;i<400;i++){
-      d.querySelector('.qcard').click();
+      asHuman(); d.querySelector('.qcard').click();
       if(vis($('picLink'))) break;
       d.querySelector('.gbtn[data-g="5"]').click();
       if(!vis($('review'))) throw new Error('세션이 끝나버림');
@@ -116,6 +123,32 @@ setTimeout(()=>{
     if(vis($('grades'))) throw new Error('★ 등급 버튼이 펴져 있다');
     return before+' → '+$('rNum').textContent+' · 정답 숨김';
   });
+  T('★ 「계속」 직후의 두 번째 Space 는 다음 카드를 펴지 않는다', ()=>{
+    /* [2026-09-06] 사용자가 여전히 겪던 진짜 길 — 전파 버그가 아니라 **연타**였다.
+       Space 로 복구 화면을 닫고, 손가락이 한 번 더 Space 를 친다(≈90ms). 두 입력은 서로 달라
+       전파 차단으로는 안 잡힌다. reveal() 이 시각으로 막는다(복구 화면 닫고 450ms). */
+    for(let i=0;i<400;i++){
+      asHuman(); d.querySelector('.qcard').click();
+      if(vis($('picLink'))) break;
+      d.querySelector('.gbtn[data-g="5"]').click();
+      if(!vis($('review'))) throw new Error('세션이 끝나버림');
+    }
+    d.querySelector('.gbtn[data-g="1"]').click();
+    if(!vis($('picFix'))) throw new Error('picFix 안 열림');
+    d.dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));   // 계속
+    d.dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));   // 손가락이 한 번 더
+    if(vis($('ansBlock'))) throw new Error('★ 연타가 다음 카드의 정답을 폈다');
+    if(!vis($('revealHint'))) throw new Error('힌트가 안 보인다');
+    return '연타 무시됨';
+  });
+  T('  잠금이 풀리면 Space 는 정상적으로 정답을 편다', ()=>{
+    /* 잠금이 정상 조작까지 막으면 그것도 버그다. 사람이 문제를 읽을 만큼 시간을 준다. */
+    asHuman();
+    d.dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));
+    if(!vis($('ansBlock'))) throw new Error('★ 잠금이 풀렸는데도 정답이 안 펴진다');
+    d.querySelector('.gbtn[data-g="5"]').click(); asHuman();   /* 다음 항목을 위해 카드를 넘겨 둔다 */
+    return '정상';
+  });
   T('Space 자동 반복(e.repeat)은 정답을 펴지 않는다', ()=>{
     if(vis($('ansBlock'))) throw new Error('시작부터 펴져 있음');
     d.dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true,repeat:true}));
@@ -126,7 +159,7 @@ setTimeout(()=>{
   console.log('\n── 회귀: 정답이면 방해하지 않는다 ──');
   T('✅ 안 되짚음(5)은 복구 화면 없이 바로 넘어간다', ()=>{
     for(let i=0;i<60;i++){
-      d.querySelector('.qcard').click();
+      asHuman(); d.querySelector('.qcard').click();
       if(!vis($('picLink'))){ continue_: {} }
       const before=$('rNum').textContent;
       d.querySelector('.gbtn[data-g="5"]').click();

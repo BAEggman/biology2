@@ -1828,6 +1828,9 @@ function requiredNew(){
 
 /* ---------- session ---------- */
 var revealed=false, tStart=0;
+/* [2026-09-06] 새 카드가 뜬 시각 · 복구 화면을 닫은 시각.
+   「정답 보기」는 이 둘 직후의 입력을 무시한다 — 아래 reveal() 참조. */
+var cardShownAt=0, pfClosedAt=0;
 function startSession(){
   var t=today();
   if(!(DB.sess&&DB.sess.date===t&&!DB.sess.done&&DB.sess.i<DB.sess.ids.length)){
@@ -1901,7 +1904,8 @@ function showPicFix(id){
      revealed=false 인 새 카드를 펴 버린다. Space 키의 pb.click() 도 같은 길로 올라간다.
      → 여기서 전파를 끊는다. (아래 .qcard 리스너에도 이중 방어가 있다) */
   $('pfNext').onclick=function(ev){ if(ev&&ev.stopPropagation) ev.stopPropagation();
-    picFixOn=false; box.classList.add('hidden'); box.innerHTML=''; advance(); };
+    picFixOn=false; pfClosedAt=Date.now();   /* 이 직후의 「정답 보기」는 무시된다 — reveal() 참조 */
+    box.classList.add('hidden'); box.innerHTML=''; advance(); };
   try{ box.scrollIntoView({block:'nearest'}); }catch(e){}
 }
 
@@ -2563,6 +2567,7 @@ function renderCard(){
     } else _pb.classList.add('hidden');
   }
   picFixOn=false; if($('picFix')){ $('picFix').classList.add('hidden'); $('picFix').innerHTML=''; }
+  cardShownAt=Date.now();
   $('ansBlock').classList.add('hidden');
   $('revealHint').classList.remove('hidden');
   $('grades').classList.add('hidden');
@@ -2578,6 +2583,16 @@ function renderCard(){
    렌더러는 절대 추측하지 않는다. `it`가 없으면 정답을 통으로 보여준다. */
 function reveal(){
   if(revealed) return;
+  /* ★ [2026-09-06 버그 — 2차] 복구 화면을 닫은 「그 입력」이 다음 카드를 펴 버렸다.
+     1차 수정(전파 차단·e.repeat)은 한 번의 입력이 두 번 쓰이는 길만 막았다. 그런데 실제 손은
+     Space 를 두 번 친다(90ms 간격) · 휴대폰에서는 「계속」을 탭한 손가락이 곧바로 카드를 한 번 더 친다.
+     그 둘은 서로 다른 입력이라 전파 차단으로는 안 잡힌다 — 재현: tools/repro 로 확인.
+     그래서 **시간**으로 막는다. 사람이 새 문제를 읽고 정답을 보기까지 0.45초가 걸리지 않을 리 없다.
+       · 복구 화면을 닫은 뒤 450ms — 그림을 닫은 손이 다음 카드를 펴는 것을 막는다
+       · 카드가 바뀐 뒤 150ms — 키 채터링·유령 탭을 막는다 (정상 조작에는 걸릴 수 없는 길이) */
+  var now=Date.now();
+  if(now-pfClosedAt<450) return;
+  if(now-cardShownAt<150) return;
   revealed=true;
   $('ansBlock').classList.remove('hidden');
   $('revealHint').classList.add('hidden');
