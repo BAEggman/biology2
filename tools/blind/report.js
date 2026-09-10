@@ -51,5 +51,5 @@ L.push('');
 L.push('| 판 | 행 | 장 | cold | 소품 | 왜 |'); L.push('|---|---|---|---|---|---|');
 for(const b of weak.sort((a,b)=>b.cards-a.cards)) L.push(`| ${b.pid} | ${b.n} | ${b.cards} | ${b.cold} | ${b.prop.replace(/\|/g,'·')} | ${String(b.note||'').slice(0,120).replace(/\|/g,'·')} |`);
 const out=L.join('\n');
-if(md){ const p=path.join(__dirname,'..','..','outputs','블라인드테스트_2026-09-04.md'); fs.writeFileSync(p,out); console.log('→',p); }
+if(md){ const p=path.join(__dirname,'..','..','outputs','블라인드테스트_'+(process.env.BT_DATE||new Date().toISOString().slice(0,10))+'.md'); fs.writeFileSync(p,out); console.log('→',p); }
 console.log(out);
