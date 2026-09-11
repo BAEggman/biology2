@@ -26,3 +26,18 @@ the cushion sag slightly along the groove.」
    성공한 부재였던 까닭이 이것이다.
 2. 편집 프롬프트의 **첫 줄이 명령**이어야 한다. 「keep everything」을 앞에 두면 안 바뀐다.
 3. 한 번에 한 가지만 고친다. v2 에서 받침대, v3 에서 홈 — 나눠야 둘 다 남는다.
+
+---
+
+# s37p01 5행 「H 글자로 읽히는 놋쇠 표」 (2026-09-11)
+블라인드 판정: 맨 왼쪽 표가 「가로대 둘짜리 사다리(=2)」였는데 채점자 둘이 **알파벳 H** 로 읽었다.
+H2A/H2B 갈림이 통째로 죽는 자리다.
+
+해결: 사다리를 버리고 **못 둘**로 바꿨다 — 셋째·넷째 표(못 셋·못 넷)와 같은 말로 세지게 된다.
+이제 왼쪽부터 2 · (배 둘 불룩한 막대=2B) · 3 · 4.
+
+v2 실패: 「exactly two round brass studs」라 했는데 **네 개(2×2)** 를 그렸다. 넷째 표와 똑같아져 버렸다.
+v3 채택: 숫자를 세게 시켰다 —
+  「Count them as you draw: one, two. No third stud. No fourth stud. No second row.」
+  「Check ... The first plate and the last plate must NOT look the same.」
+★ 개수는 「exactly N」보다 **세어 나가게 하고, 헷갈릴 짝을 명시적으로 배제**해야 맞는다.
