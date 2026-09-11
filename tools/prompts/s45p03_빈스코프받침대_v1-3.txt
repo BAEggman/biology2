@@ -1,0 +1,28 @@
+# s45p03 3행 「공간적 분리」 — 부재 후크를 「빈 자리」 물건으로 (2026-09-11)
+# 블라인드 판정: 소품이 「바깥 방에는 스코프가 없다」라 1단계 물건 목록에 오를 수가 없었다(seen=N).
+# 방법: 기존 그림을 올려 편집. 대화 https://gemini.google.com/app/b9cd5c8bd5c52390
+
+## v1 — 실패
+「add a small wooden wall bracket holding a velvet cushion … empty」로 보냈더니
+Gemini 가 **원본을 그대로 돌려줬다.** 추가가 하나도 안 됐다.
+교훈: 편집이 「keep everything as it is」로 시작하면 모델이 「아무것도 안 바꿔도 된다」로 읽는다.
+
+## v2 — 받침대는 생김
+첫 줄을 「You returned the picture unchanged. The addition is missing. Do it now.」로 바꾸고,
+붙일 자리를 못 박았다(「the bare left-hand wall of the outer room … at the man's shoulder height,
+large enough to be unmistakable」). 받침대와 쿠션이 생겼다.
+다만 쿠션이 **그냥 베개로 읽혀** 「무엇이 없어졌는지」가 안 보였다.
+
+## v3 — 채택
+쿠션 하나만 고치게 했다:
+「press a long straight groove into the top of that cushion, running left to right, deep and clearly
+shaded, exactly the shape and length of the brass spyglass … a wider round dip at one end for the
+eyepiece … The groove is empty … draw the dent dark and crisp with a soft shadow inside it, and let
+the cushion sag slightly along the groove.」
+→ 스코프 모양 홈이 또렷하게 파인 **빈** 받침대가 됐다.
+
+## 배운 것 (다른 부재 후크에도 그대로 쓴다)
+1. 부재는 **자리를 물건으로** 그린다 — 빈 홈·빈 걸이·눌린 자국. s32p01 의 「빈 볼트 구멍」이 유일하게
+   성공한 부재였던 까닭이 이것이다.
+2. 편집 프롬프트의 **첫 줄이 명령**이어야 한다. 「keep everything」을 앞에 두면 안 바뀐다.
+3. 한 번에 한 가지만 고친다. v2 에서 받침대, v3 에서 홈 — 나눠야 둘 다 남는다.
