@@ -1,0 +1,37 @@
+[정정 2026-09-11] 「v1이 실패했다」는 내 판정은 **틀렸다.** 실패한 것은 프롬프트가 아니라 **회수**다.
+  ~/Downloads 에 같은 이름(s31p02_v1.png)이 이미 있어서 크롬이 새 파일을 「s31p02_v1 (1).png」로
+  저장했고, 나는 **옛 파일을 스테이징해서 그것을 결과라고 읽었다.**
+  ★ 규칙 — 내려받는 이름에 **초 단위 시각을 붙인다**(예: s31p02_1758.png). 그리고 스테이징 결과의
+    **mtimeMs 가 방금인지 반드시 확인한다.** 「부정문이 소환장이다」라는 교훈은 근거가 없었다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and add the three things below to the right-hand
+side of the yard. Everything else stays identical, line for line.
+
+ADD 1 — At the foot of the right-hand brick wall, behind the man who holds the round bucket,
+cut a LOW ARCHED OPENING into the bottom of the brickwork: a single small arch about waist
+height, dark inside, like a drain mouth. Exactly one arch.
+
+ADD 2 — Turn that same man around so his back is toward us and he faces that arch. He is
+stooping, lowering the round bucket to the ground right in front of the arch, still holding
+its handle.
+
+ADD 3 — Beyond the wall at the top right, rising above the wall's grey stone coping and far
+away in the distance, a LARGE WOODEN MILL WHEEL stands turning, with a thin fall of water
+dropping onto its paddles. Draw it small because it is distant, weathered wood, in the same
+drawn style.
+
+KEEP IDENTICAL — copy line for line:
+- the uniformed guard standing in the dark doorway of the back wall
+- the metal turnstile and the curved arrow above it
+- both brick pyramids, same size, same place
+- the man on the left pushing a pyramid
+- the man with the scissors cutting the tip off the big pyramid, and the pale wisp of smoke
+- the man at the front holding the large paper tag
+- the cream-coloured ground, the grey stone coping along every wall, the plain off-white
+  sky in the top-left corner
+- the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+Every wall surface is bare brick from top to bottom, and nothing is mounted, hung or fixed
+on any wall.
+The picture contains no writing of any kind.
+Square image, same high three-quarter viewpoint down into the yard.

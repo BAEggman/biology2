@@ -1,0 +1,41 @@
+[s31p02 — 7행 다시 만들기 / 원본에서 단 한 번의 편집]
+사양(먼저 확정한 소품 칸):
+  ★ 양동이를 든 사람이 문 쪽이 아니라 담장 쪽으로 돌아서서 걸어가, 담 밑동에 뚫린
+    낮은 아치 앞에 양동이를 내려놓는다 · 담장이 저 끝에서 꺾이는 곳에 큰 물레방아가 걸려 돈다
+가르치는 것: 이 단계는 ATP를 만들지 않는다. 수확은 동전이 아니라 양동이(NADH)이고,
+  동전은 그 양동이가 담장(내막)에 닿아야 — 32-2의 물레방아에서 — 나온다.
+덱 약속: 양동이=NADH · 물레방아=ATP 합성효소/화학삼투 · 담장=미토콘드리아 내막.
+  (s32p01 사실표: 「담장 · 짐꾼이 걷는 안쪽 · 양동이가 물을 넘기는 바깥쪽」 = 내막·기질·막간공간)
+기하 검증: 마당 안 = 기질. 그러므로 양동이는 문(세포질 쪽)으로 나가면 안 되고 담장으로 가야 한다.
+--------------------------------------------------------------------------
+Edit this picture. Make exactly one change, described below. Everything else must stay pixel-identical.
+
+THE CHANGE — the man on the far right who holds the round bucket:
+1. Turn him around so his back is to us and he walks toward the brick wall behind him
+   (the right-hand wall). He is mid-stride, leaning toward the wall.
+2. He is lowering the round metal bucket to the ground with one hand. The bucket is almost
+   touching the ground, right in front of the wall. He still holds its handle.
+3. At the foot of that wall, directly in front of him, cut a LOW ARCHED OPENING into the
+   brickwork — a small arch about waist height, its inside dark. Exactly one arch. The rest of
+   the wall's base stays solid brick.
+4. Far away, beyond the wall where it turns at the top right corner, add a LARGE WOODEN
+   WATER WHEEL standing above the wall top, turning, with a thin ribbon of water falling onto
+   it from above. Draw it small because it is distant, in the same ink-and-wash style,
+   weathered wood, plainly a mill wheel.
+
+MUST NOT CHANGE — copy these exactly as they are:
+- the uniformed guard standing in the dark doorway in the back wall
+- the metal turnstile with the curved arrow over it
+- BOTH brick pyramids, at the same size and the same place
+- the man on the left pushing the small pyramid
+- the man with the scissors cutting the tip off the big pyramid, and the pale wisp of smoke
+- the man at the front holding the large paper tag
+- the cream-coloured ground, the grey stone coping on every wall, the plain off-white
+  background in the top-left corner outside the walls
+- the hand-drawn coloured-pencil illustration style, the same palette, the same line weight
+
+ABSOLUTE RULES:
+- There must be NO coins, NO coin slots, NO brass plaques, NO money of any kind anywhere.
+- NO text, NO letters, NO numbers, NO labels anywhere in the image.
+- Exactly ONE bucket in the whole picture. Exactly ONE water wheel. Exactly ONE low arch.
+- Square image, same framing, same viewpoint (high three-quarter view down into the yard).
