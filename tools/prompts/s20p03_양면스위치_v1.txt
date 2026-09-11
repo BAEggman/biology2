@@ -1,0 +1,19 @@
+# s20p03 「양면 스위치와 평형석」 — 전면 재생성 (2026-09-11)
+# 블라인드 판정: 이 판 최악. 램프 켜짐/꺼짐 대비가 0(천장 등 8개가 전부 같은 청회색),
+#   왼쪽 토글이 아래로 젖혀져 정답(왼쪽=켜짐)과 정반대로 읽힘, 660/730 을 나르는 소품 없음,
+#   뿌리 끝이 옥수수 자루처럼 그려져 「옥수수 알갱이=옥신」 약속과 충돌.
+
+## v1
+A hand-drawn ink illustration with soft muted watercolour washes on a warm off-white paper background, in the style of a vintage educational plate. Absolutely no writing anywhere: no letters, no numbers, no labels, no signage.
+
+The scene is the inside of a glasshouse, its tall glass panes visible behind everything.
+
+On the back wall, in the centre, there is exactly one large switch plate carrying a single long lever. The lever is lying flat over to the left, pushed as far left as it can go. A giant human hand comes down from the top right of the picture and its index finger rests on that lever, as if it has just shoved it leftwards.
+
+Reading the wall from left to right: first a lamp on a bracket that is blazing, its bulb glowing a deep warm red and throwing broad red light rays out across the left half of the room; then the switch plate with its lever thrown left; then a second lamp of exactly the same shape whose glass bulb is dead black, giving off no light at all, with only a few faint wavy lines of heat rising from it into the air above.
+
+Beneath the blazing red lamp stands a small seedling in a pot, upright and lively, its single flower wide open. Beneath the black lamp stands an identical seedling, drooping, its stem bowed over and its flower shut tight.
+
+Along the bottom of the picture lies a plant root tip, drawn in cutaway so the inside is visible. It must read as a root: a smooth rounded cap at the tip, fine root hairs further back, and a plain soft surface. It is not an ear of corn — give it no kernels, no scales, no grid of squares, no husk. Inside the root, near the tip, a small cluster of heavy dark round grains has sunk and settled along the lower wall, all of them resting at the bottom. The whole root tip curves downward, towards the floor.
+
+Check before you finish: exactly one lever and it points left; exactly two lamps, the left one glowing red with rays and the right one black with heat shimmer only; exactly one giant hand; two seedlings, the left upright with an open flower and the right drooping with a closed flower; one root tip, smooth and not corn-like, with its dark grains all lying at the bottom and its tip bending downward. No writing anywhere in the picture.

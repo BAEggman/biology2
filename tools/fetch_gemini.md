@@ -91,6 +91,28 @@
   ⚠ 보낸 뒤 확인은 **입력창이 비었는가**로 한다 — `innerText.length` 가 1이면 나간 것이다.
     「대답 생성 중지」 버튼의 유무로 판단하면 안 된다(앞 생성의 잔상일 수 있다).
 
+## ★★★ 2026-09-11 — 다운로드 버튼을 아예 안 쓰는 길 (blob 직접 내려받기)
+
+다운로드 버튼은 여전히 말썽이다 — 새 탭 + 이벤트 열 개를 다 해도 클릭이 씹히거나
+느리게 떨어지고, 「옵션 더보기」 메뉴를 여는 순간 **렌더러가 얼어붙었다**
+(그림 8장짜리 대화, `Runtime.evaluate timed out`).
+
+**버튼을 건드리지 말고 blob URL 을 직접 받으면 된다.** 한 번에 되고, 새 탭도 필요 없다.
+
+    const im=[...document.querySelectorAll('img')].filter(i=>i.naturalWidth>400).pop();
+    const a=document.createElement('a');
+    a.href=im.src;                 // blob:https://gemini.google.com/<uuid>
+    a.download='s20p03_v2.png';    // ★ 이름을 내가 정한다 — 회수가 쉬워진다
+    document.body.appendChild(a);
+    a.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,composed:true,view:window}));
+    a.remove();
+
+  → `$HOME/mnt/Downloads/s20p03_v2.png` 로 떨어진다. 이름을 내가 정하므로
+    `ls -t | head` 로 헤맬 일도 없고, device_stage_files 에 바로 그 이름을 준다.
+
+  ⚠ 그래도 **대화당 그림 8장**이 한계인 것은 그대로다. 8장을 넘기면 다음 프롬프트부터
+    새 대화를 판다.
+
 ## ① 다운로드 버튼을 누른다 (Chrome, javascript_tool)
 
     const im=[...document.querySelectorAll('img')].filter(i=>i.naturalWidth>400).pop();
