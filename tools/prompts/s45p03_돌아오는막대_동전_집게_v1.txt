@@ -1,0 +1,25 @@
+[s45p03 — 3행 기계 소품 + 45p05 7행 대조 (F1·F2·F3 · 2+장) / 원본에서 한 번의 편집(세 가지 추가)]
+사양(먼저 확정, 왼쪽 집 안에서만):
+  (a) 안쪽 방에서 방울을 떼어 낸 **짧은 맨 막대**가 같은 문으로 **되돌아 나와** 바깥 방 사람의 아래 손에 잡힌다(긴 막대 바로 아래).
+  (b) 바깥 방 사람 발치에 **틈 난 쇠 상자**, 그 틈 위에 **동전 하나**가 막 떨어진다(그림 전체에 동전은 하나).
+  (c) 안쪽 방 스코프의 앞 끝에 **작은 집게**가 달려 **어두운 방울 하나**를 물고 있다(45p05 의 스코프가 밝은 구슬을 문 것과 짝).
+가르치는 것: C4 는 돌고 도는 펌프(4탄소 보내고 3탄소 되받아 PEP 재생) · 그 값이 ATP(동전) · 이 방의 스코프는 어두운 것(CO2)을 집는다.
+고치는 이유: 1행 F1(짧은→긴 막대 변화 없음) · 3행 F2(동전 없음) · 45p05 7행 F3(앞 판 스코프가 아무것도 안 집음).
+⚠ 동전은 45-5 의 「반쯤 박힌 동전(헛돈)」과 헷갈릴 수 있다 — 여기 동전은 제값을 하는 값이다. 사실 칸에 그 대비를 쓴다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make three small additions, all inside the house on the LEFT half of the picture. Everything else stays identical, line for line.
+
+THE ADDITIONS:
+(a) A second pale wooden rod is coming back the other way through the same doorway in the partition wall, passing just BELOW the long rod that the man in the tan tunic is pushing through. This returning rod is clearly SHORTER — about two thirds the length of the long one — and plain and bare, with nothing on either end. Its near end has reached the man in the tan tunic, who has caught it with his lower hand.
+(b) On the floor beside that man's feet stands a small iron strongbox with a narrow slot in its lid. One round gold coin hangs in the air just above the slot, tipped on edge, about to drop in. There is exactly one coin in the whole picture.
+(c) The brass spyglass held by the man in the teal tunic in the inner room now ends, at its far end, in a small pair of tongs — and those tongs have caught ONE of the dark teardrops that fill the room. He still holds the spyglass to his eye.
+
+KEEP IDENTICAL — copy line for line:
+- the man in the tan tunic, his long pale rod, and the dark teardrop at the near end of that rod
+- the partition wall with its doorway, the house's outline and its pitched roof
+- the man in the teal tunic and the many dark teardrops filling the inner room
+- the thin vertical line that divides the picture in two
+- the ENTIRE right half of the picture: the two-storey house, the night window with the crescent moon, the man dropping teardrops into the round clay jar, the long bean shapes on both floors, the day window with the sun, the tipped jar pouring teardrops out, and the man with the brass spyglass below
+- the plain cream paper background, the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Square image, same viewpoint.
