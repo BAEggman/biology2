@@ -1,0 +1,31 @@
+[s03p03 — 2·3행 다시 만들기 (F3 · 5장 + F1 · 1장) / 원본에서 한 번의 편집]
+사양(먼저 확정): 가운데 흰 유령을 **망토를 벗어 발치에 떨군 알몸의 사람**으로 바꾼다.
+  두 손의 고리 밧줄·발치 화분은 그대로. 떨군 망토는 왼쪽 인물의 망토와 같은 것(청록 두건 망토).
+가르치는 것: 「하나씩 빼 나간다」 — 망토+두루마리(바이러스) → 망토를 벗음(비로이드, 고리 RNA·식물)
+  → 속이 텅 빈 유령(프리온, 핵산 0). 속 빈 유령은 이제 오른쪽 하나뿐이다.
+고치는 이유(Opus F3·F1): 흰 유령이 둘이라 「속 빈 유령」이 프리온 칸만의 표가 못 됐고,
+  2행의 「알몸」이 그림에 없었다(되레 천을 덮어쓴 꼴).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the MIDDLE figure.
+Everything else stays identical, line for line.
+
+THE CHANGE — the middle figure is now a white sheet-ghost holding a loop of rope. Replace it with
+a living person who has just taken his cloak off:
+- A bare-skinned man, plain skin colour, no shirt and no cloak, wearing only simple short trousers.
+  Same position, same height, same pose as the ghost: standing, facing front, holding the same
+  loop of rope in both hands at his chest.
+- His cloak — the same hooded teal-grey cloak the left figure wears — lies crumpled in a heap on
+  the floor beside his feet, next to the potted plant, so it is plain that he took it off.
+- The potted plant stays exactly where it is at his feet.
+He is an ordinary person, not a ghost: no sheet, not translucent, solid outline, simple friendly face.
+
+KEEP IDENTICAL — copy line for line:
+- the LEFT figure: the hooded teal-grey cloak, the rolled scroll held in its hands, and the red-and-
+  white capsule lying on the floor in front of it
+- the RIGHT figure: the pale translucent ghost with one arm reaching out, the burning torch and the
+  bottle bouncing off it with the little curved motion lines and splash
+- the man at the far right whose lower body is folding into paper, holding the folded paper boat
+- the room: the corner, the wall wash, the floor, the thin frame line around the picture
+- the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Square image, same viewpoint.
