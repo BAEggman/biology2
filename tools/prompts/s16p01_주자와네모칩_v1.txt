@@ -1,0 +1,35 @@
+[s16p01 — 3행 다시 만들기 (F3 · 15장) / 원본에서 한 번의 편집]
+사양(먼저 확정): 벽돌 창구에서 막 뛰쳐나온 주자가, 편 손 위에서 **네모 칩**(한 면 어둡고 한 면 밝음)을
+  공중에 뒤집으며 먼 기계까지 달린다. 칩은 첫 창구 손님의 **둥근 동전과 다르다.**
+가르치는 것: G단백질(주자)은 GPCR(벽돌 창구)에서 켜지고, GDP→GTP(칩이 뒤집힘)로 바뀌며,
+  막을 따라(같은 줄) 효소(기계)를 찾아간다.
+고치는 이유(Opus F3): 뒤집는 사람과 달리는 사람이 딴 사람이었고, 토큰이 1행 손님의 동전과 똑같이 생겨
+  「리간드」인지 「GDP/GTP」인지 안 갈렸다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change in the TOP ROW,
+between the brick-walled window and the grey machine. Everything else stays identical, line for line.
+
+THE CHANGE — there are two figures there now: a man standing still in front of the brick-walled
+window tossing a coin, and a running man with empty hands. Merge them into ONE figure:
+- Remove the standing man in front of the brick-walled window entirely.
+- Keep the running man, but move him closer to the brick-walled window, so he is plainly just
+  leaving that window and sprinting to the right toward the grey machine (same pose, same clothes,
+  same motion lines).
+- His right hand is raised, palm open, and a small SQUARE token is tumbling in the air just above
+  it, mid-flip, one face dark grey and one face pale, with a little curved arrow beside it showing
+  that it is turning over. Square with sharp corners — not round.
+- The man at the grey machine on the far right stays where he is, but his hand is now EMPTY and
+  open, waiting; he holds no coin.
+
+KEEP IDENTICAL — copy line for line:
+- the old man at the left window handing a round coin to the clerk, the open barred gate behind
+  the clerk, and the heap of small grey balls spilling down from it
+- the brick-walled window itself (bricks, frame)
+- the grey machine with its dials and the man standing at it
+- the ENTIRE bottom row: the three-part window with the two men stamping each other's backs,
+  the lone man standing with a stamp, the open door and the man in the tan jacket walking
+  through it toward the grey filing cabinet
+- the thin frame line around the picture, the pale wash of colour on the upper wall
+- the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Square image, same viewpoint.

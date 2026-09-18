@@ -782,3 +782,21 @@ i.style.cssText='position:fixed;left:12px;top:12px;width:240px;height:48px;'
 
 또 하나: 보낸 직후 `location.href` 가 `/app` 그대로여도 **안 보내진 것이 아니다.**
 컴포저 화면이 늦게 갱신될 뿐이다. **`busy`(응답 중지 버튼)와 URL 을 같이 본다.**
+
+## ★★★ 2026-09-18 — 송신이 안 먹던 진짜 원인과 되는 절차
+
+9/11 에 네 가지(좌표 클릭·ref 클릭·이벤트 열 개·Enter)가 전부 실패했던 것은
+**`execCommand('insertText')` 로 넣은 글을 Angular 모델이 못 본** 탓으로 보인다.
+버튼은 켜져 보이지만 모델은 빈 채라 클릭이 no-op 였다.
+
+    되는 절차 (2026-09-18 확인)
+    ① 업로드는 전과 같다 (업로드 버튼 burst → screenshot → input[type=file] 노출 → file_upload)
+    ② 글은 execCommand 가 아니라 **`computer type` (실제 키보드)** 로 넣는다.
+       줄바꿈은 빼고 한 문단으로 (Enter 가 송신이라 \n 이 위험하다)
+    ③ 송신은 **screenshot 을 찍어 파란 화살표의 좌표를 읽고 그 좌표를 left_click**.
+       (find→ref 클릭도, Enter 키도 이번엔 안 먹었다)
+    ④ 보낸 뒤 URL 이 /app/<id> 로 바뀌고 `busy` 가 true 면 간 것이다.
+
+⚠ 모델 알약: 「확장된 사고 모델」은 **토글**이라 밑에 깔린 모델(Flash-Lite 든 Pro 든)에 얹힌다.
+  Pro Extended 가 아니면 먼저 「3.1 Pro」를 고르고 나서 「확장된 사고」를 켠다.
+⚠ 크롬이 둘 연결돼 있으면 tabs_context 가 막힌다 — AskUserQuestion 으로 고르게 하고 select_browser.
