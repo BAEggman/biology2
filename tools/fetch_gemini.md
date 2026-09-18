@@ -800,3 +800,7 @@ i.style.cssText='position:fixed;left:12px;top:12px;width:240px;height:48px;'
 ⚠ 모델 알약: 「확장된 사고 모델」은 **토글**이라 밑에 깔린 모델(Flash-Lite 든 Pro 든)에 얹힌다.
   Pro Extended 가 아니면 먼저 「3.1 Pro」를 고르고 나서 「확장된 사고」를 켠다.
 ⚠ 크롬이 둘 연결돼 있으면 tabs_context 가 막힌다 — AskUserQuestion 으로 고르게 하고 select_browser.
+⚠ (2026-09-18 추가) 송신 뒤 **URL 이 /app 그대로이고 busy 도 false 여도 안 간 것이 아닐 수 있다.**
+  렌더러가 느려 location 을 늦게 갱신한다. 두 번째 판(s34p01)은 클릭 뒤 60초 넘게 /app 이었다가
+  tabs_context 에서 새 대화 id 가 보였다. **같은 판을 두 번 보내지 않도록** 판정 전에 tabs_context 로
+  탭 URL 을 한 번 더 본다. 그림이 8장 넘기 전에는 같은 대화라도 된다.
