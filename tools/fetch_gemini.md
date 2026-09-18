@@ -804,3 +804,11 @@ i.style.cssText='position:fixed;left:12px;top:12px;width:240px;height:48px;'
   렌더러가 느려 location 을 늦게 갱신한다. 두 번째 판(s34p01)은 클릭 뒤 60초 넘게 /app 이었다가
   tabs_context 에서 새 대화 id 가 보였다. **같은 판을 두 번 보내지 않도록** 판정 전에 tabs_context 로
   탭 URL 을 한 번 더 본다. 그림이 8장 넘기 전에는 같은 대화라도 된다.
+
+## ★ 2026-09-18(2) — 송신 판정은 **tabs_context 의 URL** 로만 한다
+s11p01 에서 헤맨 기록: 클릭·Return·burst 를 여러 번 했는데 페이지 JS(location.href)와 스크린샷이
+**몇 분씩 옛 상태를 보여 줬다.** 실제로는 첫 클릭들 중 하나에서 이미 가 있었고, 그걸 모르고
+같은 글을 다시 쳐 넣었다(다행히 두 번째 Return 은 안 나갔다).
+    규칙 — 보낸 뒤에는 **tabs_context_mcp 만** 믿는다. URL 이 /app/<id> 로 바뀌면 간 것.
+    30초 간격으로 두세 번 보고, 그동안 **컴포저를 절대 건드리지 않는다.**
+    「모델 깨우기」(execCommand 로 한 글자 넣었다 지우기 + burst) 뒤에 나간 정황이 있으나 확증은 아니다.
