@@ -1,0 +1,19 @@
+[s41p01 — 8·10행 다시 만들기 (F3 · 7장) / 원본에서 한 번의 편집]
+사양(먼저 확정): 이 그림에서 **X 모양을 모두 없앤다** — ① 셋째 빵에는 세모 단추와 둥근 단추 **두 가지만** 섞여 박힌다(X 단추 셋 → 세모·둥근으로 바꿈)
+  ② 둥근 단추 상자 앞면 표식 X → **둥근 단추 그림**(세모 상자 앞면이 세모인 것과 같은 식).
+가르치는 것: AB형 = A 단추(세모)와 B 단추(둥근)가 한 빵에 함께 — 새 모양이 되지 않는다(공동우성). 상자 셋 = 대립유전자 셋(세모·둥근·빈).
+고치는 이유(Opus F3): 셋째 빵에 세모·X·둥근 세 가지가 섞였고, 둥근 단추 상자의 겉표가 X라 B의 표시가 둘로 갈렸다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single kind of change: remove every X-shaped mark from the picture. Everything else stays identical, line for line.
+
+THE CHANGE:
+1. On the shelf, the THIRD bread from the left currently has three kinds of buttons pressed into it: triangles, round buttons and X-shaped ones. Replace each X-shaped button with either a triangle button or a round button, so that this bread carries ONLY triangle buttons and round buttons, mixed together (about half and half). Same number of buttons, same positions.
+2. On the small side table at the right there are three open boxes. The middle box (full of round buttons) has an X drawn on its front. Replace that X with a picture of one round button, in the same way the left box shows a triangle on its front. The box stays full of round buttons.
+
+KEEP IDENTICAL — copy line for line:
+- the first bread (triangle buttons only), the second bread (round buttons only), the fourth bread (no buttons at all), the shelf and its brackets
+- the left box full of triangle buttons with the triangle on its front, and the empty right box
+- the two work tables: the left one with the red can, the white can and the pan of evenly pink paint being stirred by the man with the stick; the right one with the red can, the white can and the pan with the unmixed red and white stripes, and the man standing beside it with his hands down
+- the wall, the floor, the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Same viewpoint, same proportions as the attached picture.

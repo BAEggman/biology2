@@ -1,0 +1,22 @@
+[s34p03 — 5행 다시 만들기 (F3 · 3장) / 원본에서 한 번의 편집]
+사양(먼저 확정): 청록 옷은 **난세포(붉은 옷과 손 맞잡은 여자) 하나만**. 조세포 둘(문 안쪽에서 팔 든 이·쓰러진 이)과
+  반족세포 셋(오른쪽 통나무의 셋)은 **회색 옷**으로. 붉은 옷 둘·겨자색 둘·바구니는 그대로.
+가르치는 것: 「청록 = 난세포」가 덱 약속이다. 이 방에 청록이 여섯이면 약속이 안 선다.
+고치는 이유(Opus F3): 같은 청록 옷이 이 방에 여섯(조세포 둘·반족 셋도 청록).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the COLOUR of the clothes on five of the figures. Everything else stays identical, line for line.
+
+THE CHANGE — right now six figures wear the same teal-green clothes. Only ONE of them keeps teal: the standing woman in the centre who holds both hands with the man in the red shirt. The other five change to plain light GREY clothes (grey top and grey trousers, same style, same poses):
+- the figure by the door on the left with one arm raised high,
+- the figure lying flat on the floor below her,
+- the three figures on the far right — two sitting on the log and one sitting on the floor.
+Skin, hair, faces and poses stay exactly the same; only the colour of their clothing becomes grey.
+
+KEEP IDENTICAL — copy line for line:
+- the big stone arch and its two rings of blocks, the floor line, the square opening in the left wall with the grey pipe entering through it, the pipe rising to the small dish at the top left with the round bumpy grain sitting in it
+- the man in the red shirt holding hands with the teal woman
+- the wicker basket with the three seated figures in it: two in mustard-yellow and one in red
+- the log on the right
+- the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Square image, same viewpoint.

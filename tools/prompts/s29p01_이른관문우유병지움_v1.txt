@@ -1,0 +1,21 @@
+[s29p01 — 1행 다시 만들기 (F3 · 3장) / 원본에서 한 번의 편집]
+사양(먼저 확정): 위 오른쪽 관문에서 붉은 옷 여자가 건네는 **우유병을 지운다** — 그 여자는 다른 관문의 노란 옷 여자들처럼 빈손을 들어 지나가라 손짓하고, 여행자의 내민 손도 빈손.
+  우유병은 **마지막(아래 오른쪽) 관문에서만** 나온다.
+가르치는 것: 관문 순서 = 획득 순서. 젖(우유병)은 맨 끝 포유류 관문의 것이다.
+고치는 이유(Opus F3): 이른 관문(위 오른쪽)에서 이미 우유병을 건네고 마지막 관문에 또 나와 순서가 무너졌다.
+남는 문제(따로): 4행 관절 보호대 셋(넷이어야) · 7행 옆길 없음 → 판째 재생성 후보로 남긴다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change at the gate in the TOP RIGHT corner (the tan arch where a walking traveller in a helmet reaches out to a grey-haired woman in a red coat). Everything else stays identical, line for line.
+
+THE CHANGE — remove the jar/bottle that is passing between them. Nothing is handed over at this gate: the woman in the red coat simply raises one open, empty hand in a friendly "go on through" gesture, exactly like the women in yellow at the other gates, and the traveller's outstretched hand is empty too. Both figures keep their positions, clothes and poses otherwise.
+
+KEEP IDENTICAL — copy line for line:
+- the winding road with its dashed centre line and every other gate along it
+- the top-left gate where a helmet and spine-armour vest are handed over
+- the middle-row gates (the woman in teal handing over the curved band, the woman in yellow waving), the two travellers walking in armour
+- the bottom-left gate with the woman in red waving and the traveller carrying the round egg box
+- the traveller with feathers on the side path
+- the LAST gate at the bottom right, where the woman in red hands the milk bottle to the traveller in the fur coat — this stays exactly as it is
+- the thin frame line around the picture, the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Square image, same viewpoint.

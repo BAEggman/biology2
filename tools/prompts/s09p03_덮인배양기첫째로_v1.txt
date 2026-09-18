@@ -1,0 +1,21 @@
+[s09p03 — 6행 다시 만들기 (F3 · 3장) / 원본에서 한 번의 편집]
+사양(먼저 확정): 천 덮인 배양기를 **첫째(두 가닥 사다리·아래 바늘 나침반 = DNA) 자리**로 옮긴다.
+  셋째 자리의 배양기는 앞의 둘처럼 **문이 열려 속 접시가 보이게** 쓰이는 채로.
+가르치는 것: DNA 지문(서던 자리)에는 세균 클로닝이 필요 없다(PCR로 충분) — 그 자리만 배양기를 안 쓴다.
+고치는 이유(Opus F3): 천이 셋째(Y자·서=웨스턴) 자리에 덮여 있어 「DNA 지문」 사실과 자리가 어긋났다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change in the TOP ROW of three workstations: swap which incubator cabinet is covered. Everything else stays identical, line for line.
+
+THE CHANGE:
+- FIRST workstation (far left, under the double-helix ladder and the compass whose needle points DOWN): its tall cabinet is now completely covered with the same draped white cloth that currently covers the third cabinet — cloth hanging over the top and down the sides, nothing of the cabinet's inside visible. The scientist at that desk stays exactly as he is.
+- THIRD workstation (far right, under the Y-shaped tool and the compass whose needle points LEFT): remove the cloth; its cabinet is now an open, in-use incubator exactly like the one at the second workstation — doors open, warm glow inside, shelves with petri dishes.
+- SECOND workstation (middle) stays exactly as it is: open glowing cabinet, scientist at the desk.
+
+KEEP IDENTICAL — copy line for line:
+- the three wooden beams with the hanging tools and compasses above each workstation
+- the two scientists, the desks, drawers and papers
+- the long electrophoresis tank with the dots drifting toward the red plus terminal on the right and the cable
+- the bricklayer at the bottom and the brick wall with its gap
+- the thin frame line around the picture, the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Square image, same viewpoint.

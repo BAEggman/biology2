@@ -1,0 +1,23 @@
+[s32p01 — 2·3·5행 다시 만들기 (F3 · 6장) / 두 라운드 — v1 지붕 맞바꿈, v2 아래 짐꾼 옮김]
+사양(먼저 확정): 담을 따라 선 펌프집 넷의 순서를 **I(팔) · II(팔 없음·볼트 구멍) · III(팔) · IV(팔)** 로.
+  v1: 둘째 집 지붕의 팔·양동이를 떼고 볼트 구멍 넷만 남긴다 / 넷째(맨 아래 오른쪽) 집 지붕에 팔·양동이를 얹고 담 너머로 물을 쏟게 한다.
+  v2: 아래(FADH2) 짐꾼이 **둘째 집 문**으로 들어가고, 첫째 집으로 가는 길은 **빗장 문**으로 막힌다. 넷째 집 앞의 짐꾼·빗장은 지운다.
+가르치는 것: 팔 없는 집(II)은 물을 못 넘긴다 · 아래로 들어오면(FADH2 → II) 첫 펌프집(I)을 못 쓴다.
+고치는 이유(Opus F3): 팔 없는 집이 줄의 넷째라 II가 아니라 IV로 읽혔고, 아래 짐꾼이 넷째 집으로 들어갔다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: swap the roofs of two of the four brick pump-houses along the wall. Everything else stays identical, line for line.
+
+THE CHANGE — counting the pump-houses along the wall from the top left: the FIRST, SECOND and THIRD each have a grey crane-arm on the roof lifting a bucket that pours water over the wall, and the FOURTH (bottom right) has a flat grey roof plate with four empty bolt holes and no arm.
+- SECOND house: remove its crane-arm, rope and bucket completely; its roof becomes the flat grey plate with four empty bolt holes, exactly like the fourth house has now. No water pours from it.
+- FOURTH house (bottom right): give it the crane-arm, rope and bucket, pouring water over the wall to the outer side, exactly like the first and third houses.
+So the order along the wall becomes: arm, no arm, arm, arm.
+
+KEEP IDENTICAL — copy line for line:
+- the first and third houses with their arms and buckets
+- the long brick wall, the doors of the houses, the winding path on the inner side
+- every worker: the one carrying a crate into the first house's door, the one lifting a bucket in the second house's doorway, the one pushing the cart, the one carrying a bucket in front of the third house, and the one carrying a crate into the fourth house's door at the bottom right
+- the rail on the inner brick wall with the two carts (round lumps, square boxes)
+- the wooden barred gate next to the fourth house
+- the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Square image, same viewpoint.

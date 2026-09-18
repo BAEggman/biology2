@@ -1,0 +1,25 @@
+[s35p02 — 5·6행 다시 만들기 (F3 · 3장) + 1행은 글로 / 원본에서 한 번의 편집]
+사양(먼저 확정): 가운데 갈래(병목·창시자)의 구슬만 손본다 —
+  ① 목을 지나 떨어지는 구슬은 **흰색**(아래 웅덩이에 쌓인 색과 같게)
+  ② 아래 웅덩이는 거의 흰 구슬, 그 사이에 **검은 구슬 서너 알**
+  ③ 국자 안에 **검은 구슬 두어 알**이 담겨 작은 웅덩이로 쏟아지고, 작은 웅덩이의 구슬은 검은 것뿐(지금처럼).
+가르치는 것: 병목 = 몇 알만 지나 색이 쏠린다 · 창시자 = 떠 온 몇 알이 원래 웅덩이를 안 닮는다.
+고치는 이유(Opus F3): 아래 웅덩이는 흰 구슬뿐인데 떨어지는 것은 죄다 검고, 퍼 올리는 웅덩이는 흰 구슬뿐인데 새 웅덩이는 검은 구슬 셋·국자는 맹물.
+1행(F3)은 글로 고쳤다 — 오른쪽 갈래의 위 짝은 「이미 다른 두 통」이 맞다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the marbles in the MIDDLE panel (the hourglass with the very narrow neck and the man with the ladle). The left panel and the right panel stay identical, line for line, and so does everything in the middle panel except the marbles described here.
+
+THE CHANGE, middle panel only:
+- the two or three marbles that are passing through the narrow neck right now are WHITE, not black;
+- the lower bulb of the hourglass is still nearly all white marbles, but three or four BLACK marbles sit among them;
+- the man's ladle holds two or three BLACK marbles, which are spilling out of it into the small separate puddle on the floor;
+- that small puddle contains only black marbles (three), as it does now.
+The upper bulb stays half black, half white, exactly as it is.
+
+KEEP IDENTICAL — copy line for line:
+- the LEFT panel: the hourglass with the half-and-half upper bulb, the round sieve lying across the passage with white marbles piled on it, the man holding the upright sieve, and the lower bulb full of black marbles
+- the RIGHT panel: the two jars with the closed board between them (black marbles left, white marbles right) above, and the two jars with the raised board and the marbles crossing both ways with the arrows below
+- the man in the middle panel, his pose, the ladle, the water, the glass shapes
+- the three panel frames, the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
