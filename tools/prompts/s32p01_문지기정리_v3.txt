@@ -1,0 +1,17 @@
+[s32p01 — v3 (v2 결과 위에 한 번의 편집)]
+v2 결과: 넷째 집 앞 짐꾼 지움 ✓ · 첫째-둘째 집 사이 빗장 문 ✓ · 넷째 집 옆 빗장 문이 그대로 남음 ✗ · 둘째 집으로 들어가는 짐꾼 없음 ✗
+v3 사양: ① 넷째 집 옆의 빗장 문을 지운다(빗장 문은 첫째-둘째 사이 하나만) ② 둘째 집 문간의 「양동이 든 사람」을 **궤짝 든 짐꾼이 문으로 들어서는 모습**으로 바꾼다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two small changes. Everything else stays identical, line for line.
+
+THE CHANGES — counting the four brick pump-houses along the wall from the top left (arm · flat plate · arm · arm):
+1. There are two wooden barred gates in the picture. Keep ONLY the one between the FIRST and SECOND houses. Remove the other gate, the one standing beside the FOURTH house at the bottom right; the wall and sand there are plain, nothing in its place.
+2. In the doorway of the SECOND house (the one with the flat roof plate and no arm) a worker is standing and lifting a bucket. Replace him with a worker carrying a wooden crate in both arms, stepping into that doorway — the same kind of crate the worker at the first house carries, same teal clothes, drawn from behind as he walks in.
+
+KEEP IDENTICAL — copy line for line:
+- all four houses, their roofs, the water pouring over the wall from the three arms, the long brick wall, the doors
+- the worker carrying a crate into the first house's door, the barred gate between the first and second houses, the worker pushing the cart, the worker carrying a bucket in front of the third house
+- the rail on the inner brick wall with the two carts (round lumps, square boxes)
+- the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Square image, same viewpoint.

@@ -1,0 +1,19 @@
+[s32p01 — v2 (5행 · 4행 일부) / v1 결과 위에 한 번의 편집]
+사양: 아래(FADH2) 짐꾼이 **둘째 집(팔 없는 집) 문**으로 들어가고, 둘째 집에서 첫째 집으로 가는 안쪽 길은 **빗장 문**으로 막힌다.
+  넷째 집 앞의 짐꾼과 빗장 문은 지운다.
+가르치는 것: FADH2 는 II 로 들어가 I 을 건너뛴다 — 아래로 들어오면 첫 펌프집을 못 쓴다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: move the crate-carrying worker at the BOTTOM RIGHT, together with the wooden barred gate beside him, to the SECOND pump-house. Everything else stays identical, line for line.
+
+THE CHANGE — counting the four brick pump-houses along the wall from the top left (arm, no arm, arm, arm):
+- Remove the worker carrying a crate who is walking into the doorway of the FOURTH house at the bottom right, and remove the wooden barred gate that stands beside that house. The fourth house keeps its door, its crane-arm and bucket; the ground there is now just empty sand.
+- At the SECOND house (the one with the flat roof plate and no arm): a worker carrying a crate walks up from the lower foreground, from the empty sand below the inner brick wall, straight into the second house's doorway. He is the same kind of worker in the same teal clothes.
+- The wooden barred gate, with its bolt, now stands across the inner path between the FIRST house and the SECOND house, closing the path, so that from the second house's door the way back toward the first house is shut.
+
+KEEP IDENTICAL — copy line for line:
+- all four houses, their roofs (arm · flat plate · arm · arm), the water pouring over the wall from the three arms, the long brick wall
+- the first worker carrying a crate into the first house's door, the worker lifting a bucket in the second house's doorway, the worker pushing the cart, the worker carrying a bucket in front of the third house
+- the rail on the inner brick wall with the two carts (round lumps, square boxes)
+- the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight
+
+The picture contains no writing of any kind. Square image, same viewpoint.
