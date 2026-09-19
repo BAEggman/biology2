@@ -1,0 +1,9 @@
+[s11p05 — v4 / v3(판째 재생성, 글자 전부 맞음) 위에 한 번의 편집: 민판자 폭을 제각각으로]
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single kind of change: the PLAIN planks (the ones with no letters) at the left end of each of the three tracks. Everything else stays identical, line for line.
+
+THE CHANGE — right now all the plain planks are the same width. Make them irregular: some wide, some narrow, some medium, in a varied pattern — like a row of boards of different widths. Use the SAME irregular pattern on all three tracks so the three tracks still match each other plank for plank on the left. Keep the same number of plain planks on each track as now, and keep them ending at the same place so the lettered planks do not move.
+
+KEEP IDENTICAL — copy line for line: every lettered plank and its letters on all three tracks, the two rails and bolts of each track, the crossed X boards where the middle track's rails stop, the workman in the flat cap laying the plank at the right end of the bottom track and the silver metal band over his shoulder joined to the rail, the cream paper background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+No writing anywhere except the letters already on the lettered planks. Square image, same viewpoint.
