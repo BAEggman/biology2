@@ -1,0 +1,10 @@
+[s08p04 — 4행 v3 / v2 결과 위에 한 번의 편집 (v2: 세 띠·회색 폭 같음까지 됐고 오른쪽 액자가 안 좁아졌다)]
+사양: 오른쪽 액자만 왼쪽의 절반 폭으로 — 회색 띠는 그대로, 청록은 가는 줄.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the RIGHT-HAND framed picture on the wall. Everything else stays identical, line for line.
+
+THE CHANGE — right now the two framed pictures are the same size, each with three equal vertical bands: teal, grey, teal. Make the RIGHT frame only HALF as wide as the left frame, keeping its full height: a tall narrow picture. Inside it, the GREY middle band keeps exactly the width it has now (the same as the grey band in the left frame), so the grey fills most of the narrow frame, and the two TEAL bands become just thin strips at its left and right edges. The left frame does not change at all. Both frames stay at the same height, tops aligned.
+
+KEEP IDENTICAL — copy line for line: the left framed picture, the huge coil spring, the wooden ruler with the pink neon tube, the trophy cup upside-down on the bottle, the woman holding the small ruler up under the pictures, the thin man in the red overalls and the big muscular man in the white overalls, the wall panelling and floor, the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Square image, same viewpoint.

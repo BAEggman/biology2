@@ -1,0 +1,10 @@
+[s08p04 — 4행 v2 / 원본에서 한 번의 편집 (v1 은 왼쪽까지 바뀌고 띠 수가 3·7이 돼 실패)]
+사양: 두 액자 모두 청록·회색·청록 세 띠. 오른쪽 액자는 좁은데 가운데 회색 띠 폭은 왼쪽과 똑같고 청록만 좁다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the TWO framed pictures on the wall. Everything else stays identical, line for line.
+
+THE CHANGE — both framed pictures now show exactly THREE straight vertical bands: TEAL on the left, GREY in the middle, TEAL on the right. No red band anywhere. The LEFT frame keeps its present size: its grey middle band is wide, about one third of the frame, with equally wide teal bands on each side. The RIGHT frame is the same height but clearly NARROWER: its grey middle band is EXACTLY as wide as the grey band of the left frame, while its two teal side bands are only thin strips. So the only thing that shrank is the teal at the edges; the grey stayed the same. Both frames hang at the same height, tops aligned.
+
+KEEP IDENTICAL — copy line for line: the huge coil spring, the wooden ruler with the pink neon tube, the trophy cup upside-down on the bottle, the woman holding the small ruler up under the pictures, the thin man in the red overalls and the big muscular man in the white overalls, the wall panelling and floor, the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Square image, same viewpoint.
