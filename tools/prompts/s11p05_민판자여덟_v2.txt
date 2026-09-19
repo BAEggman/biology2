@@ -1,0 +1,9 @@
+[s11p05 — 4행 v2 / 원본에서 한 번의 편집 — 한 가지만: 가운데 민판자 셋 추가 (v1 은 두 가지를 한 번에 시켜 둘 다 실패)]
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the MIDDLE railway track. The top track and the bottom track stay identical, line for line.
+
+THE CHANGE — the middle track currently has five plain wooden planks (no letters) on its left, then three lettered planks, then the two crossed boards where its rails stop. INSERT THREE MORE plain planks into the middle track, immediately to the left of its first lettered plank, so that the middle track has EIGHT plain planks on the left, spaced exactly like the eight plain planks of the top and bottom tracks and lined up with them plank for plank. The three lettered planks (T T A, G G G, T T A) and the two crossed boards move to the right to make room — they keep their look, order and spacing. The middle track's rails still stop at the crossed boards; the crossed boards now sit further right, roughly under the sixth lettered plank of the top track.
+
+KEEP IDENTICAL — copy line for line: the top track with its eight plain planks and seven lettered planks; the bottom track with its planks and letters exactly as they are, the man in the cap with the silver band over his shoulder laying a plank at its right end and the silver band joined to the rail; the rails, bolts, the crossed boards' look, the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+No writing anywhere except the letters already on the lettered planks. Square image, same viewpoint.
