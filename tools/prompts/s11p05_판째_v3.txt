@@ -1,0 +1,12 @@
+[s11p05 — 판째 재생성 v3 (편집 v1·v2 모두 가운데 선로 판자 수를 못 바꿈 → 참조 그림 없이 새로)]
+사양: 선로 셋 가로로. 위: 민판자 8 + 글자판 7(TTA·GGG 번갈아). 가운데: 민판자 8(위와 정렬) + 글자판 3(TTA·GGG·TTA) + X자 판자 둘, 레일 끊김. 아래: 민판자 8 + 글자판 6(TTA·GGG…) + 등에 은빛 쇠 띠 진 사람이 끝에 새 민판자 하나를 얹는 중, 쇠 띠가 레일 끝에 이어 붙음.
+--------------------------------------------------------------------------
+A hand-drawn coloured-pencil illustration on plain cream paper, square, no writing except the letters described. Three horizontal railway tracks stacked one above another, top, middle and bottom, all drawn in the same simple style: two thin dark rails with small bolts, and wooden planks (sleepers) standing upright across them, each plank a tall narrow rectangle.
+
+TOP track: from the left, EIGHT plain planks with nothing written on them, evenly spaced; then SEVEN lettered planks that continue at the same spacing, each with three large letters stacked top to bottom, strictly alternating: T T A, then G G G, then T T A, then G G G, then T T A, then G G G, then T T A. The rails run on past the last plank to the right edge of the picture.
+
+MIDDLE track: the same EIGHT plain planks, lined up exactly under the top track's eight plain planks; then only THREE lettered planks: T T A, G G G, T T A; and right after the third lettered plank the rails STOP, and two wooden boards nailed in a big X block the way. Nothing to the right of the X.
+
+BOTTOM track: the same EIGHT plain planks, lined up with the others; then SIX lettered planks alternating T T A, G G G, T T A, G G G, T T A, G G G; then, at the right end, a workman in a flat cap is bending down to lay one more PLAIN plank onto the track. Across his back, slung over one shoulder, he carries a curved band of shiny silver metal, and the end of that silver band is joined onto the end of the rail, so the rail continues as silver metal under the plank he is laying.
+
+Same line weight everywhere, soft coloured-pencil shading, light wood colour for the planks, the letters in dark brown. No other objects, no title, no labels.
