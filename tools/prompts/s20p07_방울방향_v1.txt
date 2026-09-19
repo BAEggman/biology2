@@ -1,0 +1,13 @@
+[s20p07 — 2·3행 (F1+F3 · 2장) / 원본에서 한 번의 편집]
+사양(왼쪽 칸만): 어두운 방울은 틈을 지나 아래로(방 안으로) 작은 아래 화살표와 함께, 밝은 방울은 위로(밖으로) 작은 위 화살표와 함께 · 왼쪽 방 바닥의 방울은 몇 알뿐(어두운 것 서너 알, 밝은 것 몇 알)으로 듬성듬성.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the traffic of droplets in the LEFT panel. The right panel stays identical, line for line, and so does everything in the left panel except the droplets.
+
+THE CHANGE, left panel:
+- The DARK droplets move DOWNWARD through the gap between the two swollen bean shapes into the room below — draw a small downward arrow beside the dark stream.
+- The PALE droplets move UPWARD out of the same gap into the open air — draw a small upward arrow beside the pale stream.
+- The floor of the room below is nearly EMPTY: only three or four dark droplets and a few pale ones lie scattered on it, with lots of bare floor between them — not a carpet of droplets.
+
+KEEP IDENTICAL — copy line for line: the two swollen green bean shapes with the blue glass beads, the blue beams of light, the pocket watch on its chain, the room walls; and the ENTIRE right panel (the two shrunken beans pressed together, the cracked dry ground and wind swirls, the room full of pale droplets with no dark ones, the brass spyglass with the red lens on its stand); the thin frame lines, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.

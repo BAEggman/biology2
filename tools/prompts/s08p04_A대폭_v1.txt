@@ -1,0 +1,11 @@
+[s08p04 — 4행 (F3 · 2장) / 원본에서 한 번의 편집]
+사양: 오른쪽 액자 = 왼쪽 액자와 같은 다섯 띠(청록·회색·붉은·회색·청록)인데, 가운데 회색·붉은·회색 묶음의 폭은 왼쪽과 똑같고 양끝 청록 띠만 좁다(액자 자체가 좁다).
+가르치는 것: 수축해도 A대(가운데 묶음)는 그대로, I대(양끝)만 준다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the RIGHT-HAND framed picture on the wall. Everything else stays identical, line for line.
+
+THE CHANGE — the left framed picture shows five straight vertical bands: teal, grey, red, grey, teal. Redraw the right framed picture so that it shows the SAME five straight vertical bands in the same order, with these rules: the three middle bands (grey, red, grey) are EXACTLY the same widths as in the left picture — measure them against the left picture — while the two teal bands at the outer edges are much narrower, so the right frame as a whole is narrower than the left frame. All bands are straight and vertical, no curves. The frame keeps its position on the wall, aligned at the top with the left frame.
+
+KEEP IDENTICAL — copy line for line: the huge coil spring, the wooden ruler with the pink neon tube, the trophy cup upside-down on the bottle, the left framed picture, the woman holding the small ruler up to the pictures, the thin man in the red overalls and the big muscular man in the white overalls, the wall panelling and floor, the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Square image, same viewpoint.

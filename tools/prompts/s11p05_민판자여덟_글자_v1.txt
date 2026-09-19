@@ -1,0 +1,12 @@
+[s11p05 — 1·3·4행 (F3+F1 · 2장) / 원본에서 한 번의 편집]
+사양: ① 가운데 선로의 왼쪽 민판자를 위·아래와 똑같이 여덟 장(같은 간격)으로 — 짧아진 것은 오른쪽 글자 판자뿐 ② 아래 선로 글자 판자를 왼쪽부터 TTA·GGG·TTA·GGG·TTA·GGG 로.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two changes. Everything else stays identical, line for line.
+
+THE CHANGES:
+1. MIDDLE track: right now it has only five plain (unlettered) planks on the left before the three lettered planks. Give it EIGHT plain planks on the left, at exactly the same spacing and positions as the eight plain planks of the top and bottom tracks, so that the three tracks line up plank for plank on the left. Then come its three lettered planks (T T A · G G G · T T A) and then the two crossed boards where the rails stop — all exactly as now, just shifted right to follow the eight plain planks. The middle track's rails still end at the crossed boards.
+2. BOTTOM track: its lettered planks must read, from left to right, strictly alternating: T T A, G G G, T T A, G G G, T T A, G G G — six lettered planks, letters stacked top to bottom on each plank exactly like the top track. Then the man laying the new plain plank at the right end, as now.
+
+KEEP IDENTICAL — copy line for line: the top track (eight plain planks, then T T A / G G G alternating), the man in the cap with the silver metal band over his shoulder laying a new plank at the end of the bottom track, the silver band joined onto the rail end, the rails and their bolts, the crossed boards on the middle track, the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+No writing anywhere except the letters T, A and G on the lettered planks. Square image, same viewpoint.

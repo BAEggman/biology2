@@ -1,0 +1,10 @@
+[s39p02 — 4·5행 (F1+F3 · 2장) / 원본에서 한 번의 편집]
+사양: 위 줄을 끝이 맞붙은 큰 고리(타원 링)로 — 거품 하나·쐐기 둘은 앞쪽 변에 그대로 · 두 쐐기 곁에 서로 반대(바깥)를 가리키는 작은 화살표. 아래 줄은 그대로(굵기 같음).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the TOP rope. The bottom rope stays identical, line for line.
+
+THE CHANGE — right now the top rope runs straight across the planks from edge to edge. Instead, the top rope is a single CLOSED LOOP: a large flat oval ring of the same rope, lying on the planks, its two ends joined so there are no loose ends. Its one bubble — the flat open oval where the two strands part — with the two wooden wedges at the bubble's ends sits on the near (lower) side of the ring, exactly as the bubble is drawn now. Beside each wedge add a small arrow along the rope pointing AWAY from the bubble's centre, so the two arrows point in opposite directions. The rope keeps the same thickness as the bottom rope.
+
+KEEP IDENTICAL — copy line for line: the bottom rope with its five bubbles and six wedges, the grey wooden planks with their grain, the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Square image, same viewpoint.

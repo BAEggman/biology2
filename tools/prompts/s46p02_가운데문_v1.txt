@@ -1,0 +1,10 @@
+[s46p02 — 1행 (F3 · 1장) / 원본에서 한 번의 편집]
+사양: 가운데 문(둘째-셋째 방 사이)이 다른 둘처럼 오른쪽(셋째 방 쪽)으로 열리고 받침대가 뒤를 막는다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the MIDDLE door of the three, the one in the wall between the second and third rooms. Everything else stays identical, line for line.
+
+THE CHANGE — right now that door swings open to the LEFT, into the second room. Redraw it swinging open to the RIGHT, into the third room, exactly like the first door and the third door, with the same small wooden doorstop behind it on the floor. All three doors now open the same way, to the right.
+
+KEEP IDENTICAL — copy line for line: the four rooms in a row and their walls (the fourth room's walls thickest), the first and third doors and their doorstops, the grey-blue pipe from the second room's roof up to the pair of pink lungs and the brick-red pipe from the lungs down to the third room's roof, the brick-red pipe from the fourth room to the human figure on the right, the grey-blue pipe from the figure running under the building back to the first room, the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Square image, same viewpoint.
