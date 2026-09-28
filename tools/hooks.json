@@ -2500,6 +2500,14 @@
    ],
    "형태": "④",
    "왜": "parvus = 작다 — 가장 작은 DNA 바이러스이고 전염성 홍반을 앓는 쪽도 작은 아이다. s01p02#6. 2026-09-28"
+  },
+  "PLC": {
+   "props": [
+    "C자",
+    "크랭크가 큰 C자"
+   ],
+   "형태": "②",
+   "왜": "글자사전 C(PKC 와 같은 모양) — s16p02b 에서 피자(PIP₂ = 인지질)를 통째로 삼키는 기계의 옆구리 크랭크가 큰 C자다. PL(인지질을 자르는 기계) + C. 2026-09-28 그림 감사 음차없음(12장)을 그림 고침으로 세움"
   }
  },
  "_글자모양사전": {
@@ -2946,7 +2954,6 @@
    "DCT": "Distal Convoluted Tubule — 원위곡세뇨관",
    "IMCD": "Inner Medullary Collecting Duct — 속수질 집합관",
    "RTK": "Receptor Tyrosine Kinase — 수용체 타이로신 인산화효소. s16p01 의 「둘이 나란히 서서 서로의 등에 도장」이 그 뜻(이합체 자가인산화)을 그린다",
-   "PLC": "PhosphoLipase C — 인지질분해효소 C",
    "CaM": "CalModulin — Ca(칼슘) + Modulin(조절). Ca 는 이미 KNOWN 이고 나머지가 뜻이다",
    "MLCK": "Myosin Light Chain Kinase — 미오신 경쇄 인산화효소. 네 글자가 그대로 이름이다",
    "MHC": "Major Histocompatibility Complex — 주조직적합성복합체. 글자가 곧 뜻이다. ⚠ 뒤의 I·II 는 자의적이라 s13p03 에 「작은 쟁반 / 큰 판」으로 따로 그려져 있다",
@@ -3617,7 +3624,6 @@
    "PCT": "Proximal Convoluted Tubule — 근위곡세뇨관, 글자가 곧 뜻이다",
    "DCT": "Distal Convoluted Tubule — 원위곡세뇨관",
    "RTK": "Receptor Tyrosine Kinase — 수용체 타이로신 인산화효소",
-   "PLC": "PhosphoLipase C — 인지질분해효소 C",
    "CaM": "CalModulin — Ca + Modulin, 글자가 곧 뜻이고 Ca 가 이미 칼슘이다",
    "MLCK": "Myosin Light Chain Kinase — 미오신 경쇄 인산화효소",
    "NER": "Nucleotide Excision Repair — 이미 _후크가 필요 없는 것 에 적어 둔 부류다",

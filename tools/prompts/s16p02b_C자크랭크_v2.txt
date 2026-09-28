@@ -1,0 +1,10 @@
+[s16p02b — 1행 음차 (PLC 의 C) / v1 결과 위 2라운드 — 크랭크는 생겼는데 J자 갈고리로 나왔다]
+사양: 크랭크를 가운데 사람이 든 C자 갈고리와 똑같은 모양으로 — 큰 글자 C(오른쪽이 트인 둥근 호).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the shape of the crank handle on the side of the grey-green machine at the far left. Everything else stays identical, line for line.
+
+THE CHANGE — right now that crank bends down like the letter J. Reshape it into a big clear letter C: a round arc open to the RIGHT, as tall as the machine's side, fixed to the machine's hub at the middle of the arc's back — an exact copy of the C-shaped iron hook that the man in the middle is holding up, same thickness and the same grey iron.
+
+KEEP IDENTICAL — copy line for line: the machine and the whole pizza going into its hopper, the two pieces of pizza on the table (one with three holes, one plain with the brown hen sitting on it), the man in the middle holding up the C-shaped hook, the man at the right fitting the three-hole piece into the vault door with the three studs, the gravel pouring out below the vault door, the table, the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
