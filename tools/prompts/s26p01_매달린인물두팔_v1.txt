@@ -1,0 +1,10 @@
+[s26p01 — 6행 (해부 A7) / 현재 그림에서 한 번의 편집]
+사양: S자 레일에 매달린 작은 인물 열둘 가운데 여럿이 팔 셋·넷(머리 뒤에서 나온 팔로 레일을 쥐고 두 손은 구슬), 셋은 정수리에서 나온 고리로 매달림. 모두 두 팔: 한 팔을 들어 레일을 쥐고, 다른 팔로 구슬을 안는다(아래쪽 인물은 그 손에서 구슬을 떨어뜨린다). 머리에서 나오는 것 없음.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the small round-headed figures hanging from the S-shaped rail (six along the top curve, six along the bottom curve). Everything else stays identical, line for line.
+
+THE CHANGE — right now several of them have three or four arms (arms coming up from behind the head to the rail while both hands also hold the ball), and some hang from the rail by a hook growing out of the top of the head. Every hanging figure must have exactly TWO arms and nothing growing from its head. Each one hangs by ONE raised arm whose hand grips the rail, and holds its ball in the crook of its OTHER arm against its chest. The figures along the top curve all still hold their balls. Along the bottom curve, the figures let go: the ball drops from the hand of the free arm and falls, as the balls are falling now. Keep every figure where it is now, the same size, the same clothes and colours.
+
+KEEP IDENTICAL — copy line for line: the S-shaped rail and its two wall brackets, the four workers pushing the rail to the right (the one with the bottle of sour liquid, the one with the spraying gas can, the one with the glowing coal in tongs, the one with the small powder bag), the child alone pushing the rail to the left with the egg and the persimmon in his shoulder bag, the rolled white cloth at his feet, the falling balls, the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
