@@ -5,6 +5,6 @@ Redraw the attached picture exactly as it is, and make one single change: the re
 
 THE CHANGE — right now the red door has ONE brass lion-head knocker. Give it TWO identical brass lion-head knockers, one above the other in the middle of the door, both clearly visible.
 
-KEEP IDENTICAL — copy line for line: the red door and its frame, the D-shaped handle on the green box sticking out of the left wall and the empty gap beside it, the dripping faucet and the small splash on the floor, the green duct along the ceiling, the framed window with the grey trapezoid line, the floor, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+KEEP IDENTICAL — copy line for line: the red door and its frame, the green switch box set through the left wall, with the D-shaped handle on its outer part outside the wall and the plain green plate on the inner face of the wall, nothing connecting that plate to the door, the dripping faucet and the small splash on the floor, the green duct along the ceiling, the framed window with the grey trapezoid line, the floor, the hand-drawn coloured-pencil style, the same palette, the same line weight.
 
 The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
