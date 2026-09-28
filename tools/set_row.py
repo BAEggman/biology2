@@ -48,6 +48,8 @@ for ed in edits:
     old=list(row)
     if 'prop' in ed: row[0]=ed['prop']
     if 'fact' in ed: row[1]=ed['fact']
+    if 'prop_append' in ed: row[0]=row[0]+ed['prop_append']
+    if 'fact_append' in ed: row[1]=row[1]+ed['fact_append']
     new=json.dumps(row,ensure_ascii=False,separators=(',',':'))
     s=s[:a]+new+s[b+1:]
     print('✔ %s %d행\n   전 [%s] → %s\n   후 [%s] → %s'%(pid,n,strip(old[0])[:70],strip(old[1])[:90],strip(row[0])[:70],strip(row[1])[:90]))
@@ -55,8 +57,7 @@ for ed in edits:
     if ent:
         rr=[r for r in ent[0]['rows'] if r['n']==n]
         if rr:
-            if 'prop' in ed: rr[0]['prop']=strip(ed['prop'])
-            if 'fact' in ed: rr[0]['fact']=strip(ed['fact'])
+            rr[0]['prop']=strip(row[0]); rr[0]['fact']=strip(row[1])
         else: print('   (manifest 에 %d행 없음)'%n)
     else: print('   (manifest 에 판 없음)')
 if CHECK: print('— 검사만, 저장 안 함'); sys.exit(0)
