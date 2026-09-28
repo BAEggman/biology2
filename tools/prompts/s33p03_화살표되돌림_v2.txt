@@ -1,0 +1,10 @@
+[s33p03 — 8행 (F3 · 0장) / 1라운드 결과(s33p03_v1_1790607325635.png) 위 한 번의 편집]
+사양: 1라운드에서 차단봉은 투구 건물 문 앞으로 옮겨졌고 사슬도 그 앞에 막혔으나, 굽은 화살표가 차단봉 쪽(=문 쪽)을 향해 올라간다 → 「사슬이 문으로 간다」로 읽힐 수 있다. 화살표를 뒤집어 차단봉에서 시작해 아래·바깥으로 되돌아 나오게.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the curved black arrow to the right of the long chain near the red-and-white barrier (in front of the grey domed building). Everything else stays identical, line for line.
+
+THE CHANGE — right now that arrow curves UP towards the barrier. Reverse it: the arrow now starts up at the barrier, right where the front end of the chain touches the barrier, and curves DOWN and away, its arrowhead at the lower end pointing down and to the right, away from the door — the chain has been turned back. Keep it the same size, the same black colour and the same thickness as now, on the plain ground to the right of the chain; it must not touch the railway track.
+
+KEEP IDENTICAL — copy line for line: the red-and-white striped barrier on its grey post, the long chain lying in front of it, the man pushing the cart of granules and the straight black arrow pointing into the doorway, the grey domed building, the canal and the two boats, the workers with hammers and the chain pieces, the man holding his nose, the crank wheel on the stone block, the empty wooden crate, the long brick wall with its two arches, the railway loop with its three small carts and the checked quilt, the plain ground at the bottom-right end of the wall, the cream ground, the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Square image, same viewpoint.
