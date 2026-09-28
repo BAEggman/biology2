@@ -1,0 +1,15 @@
+[s46p02 — 1행 (F3 · 1장) / 원본에서 한 번의 편집 — v1 실패: 가운데 문을 「오른쪽으로 열라」 했더니 문짝은 그대로 왼쪽으로 열리고 셋째 방에 문 없는 받침대만 생겼다 · 원본에 없던 테두리 선까지 그렸다(내 프롬프트 탓). 방향 말 대신 결과로: 잘 된 첫째 문을 그대로 베껴 놓는다]
+사양: 둘째·셋째·넷째 방마다 왼쪽 끝에 문 하나 — 셋 다 첫째 문(둘째 방 왼쪽 끝)과 똑같이 왼쪽 경첩, 문짝이 오른쪽으로 열림, 발치에 받침대. 둘째 방 오른쪽 끝 문 · 셋째 방 오른쪽 끝 문(칸막이의 손잡이 포함)은 지운다. 테두리 선 없음.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and change only the DOORS inside the building. Everything else stays identical, line for line.
+
+Right now there are three doors on the back walls: one at the LEFT end of the second room (hinged on its left side, its door leaf swung open to the right, a small wooden doorstop at its foot) — this one is correct — plus one at the RIGHT end of the second room and one at the RIGHT end of the third room.
+
+THE CHANGE —
+1. Erase the door at the right end of the second room and the door at the right end of the third room completely: their frames, door leaves, knobs and doorstops. Those spots become plain back wall. Also erase the small door knob on the wall between the third and fourth rooms.
+2. Add two new doors, each one an exact copy of the correct door at the left end of the second room — same size, same frame, hinged on its LEFT side, the door leaf swung open to the RIGHT, the same small wooden doorstop at its foot: one at the LEFT end of the third room's back wall, and one at the LEFT end of the fourth room's back wall.
+So the second, third and fourth rooms each have exactly one door, at their left end, and all three doors look the same and are open to the right in the same way. The first room has no door.
+
+KEEP IDENTICAL — copy line for line: the four rooms in a row and their walls (the fourth room's walls thickest and darkest), the grey-blue pipe from the second room's roof up to the pair of pink lungs and the brick-red pipe from the lungs down to the third room's roof, the brick-red pipe from the fourth room to the human figure on the right, the grey-blue pipe from the figure running under the building back to the first room, the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+No border or frame line around the picture. The picture contains no writing of any kind. Square image, same viewpoint.

@@ -1,0 +1,10 @@
+[s39p02 — 4·5행 (F1+F3 · 2장) / 원본에서 한 번의 편집 — v1 은 고리 가운데를 거품이 가로질러 θ 꼴(둘러싼 칸 셋)이 됐다. 이번엔 가운데가 빈 고리, 거품은 앞쪽 변에만]
+사양: 위 줄 = 양끝이 맞붙어 끝이 없는 큰 타원 고리 하나 · 고리의 앞쪽(보는 사람 쪽) 변의 짧은 한 구간만 두 가닥으로 벌어져 거품 하나 · 거품 양 끝 쐐기 둘 · 쐐기 곁에 고리를 따라 서로 바깥을 가리키는 작은 화살표 · 고리 안쪽은 빈 바닥. 아래 줄(끝이 트인 곧은 줄 · 거품 다섯 · 쐐기 여섯)은 그대로 · 두 줄 굵기 같음.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the TOP rope. The bottom rope stays identical, line for line.
+
+THE CHANGE — the top rope becomes ONE big closed ring: an oval loop lying flat on the wooden floor, its two ends joined so that it has no ends at all. All the way round, the ring is a single twisted rope, EXCEPT for one short stretch on its FRONT side (the lower part of the oval, nearest the viewer): there the rope splits into two strands that bow apart to form ONE small eye-shaped bubble, and a small wooden wedge sits at each end of that bubble, where the two strands join back into one rope. Beside each wedge, a small plain arrow points outward, away from the bubble, along the ring. The inside of the ring is empty wooden floor — no rope crosses the middle of the ring, and there is no other opening anywhere on the ring.
+
+KEEP IDENTICAL — copy line for line: the bottom rope — a straight rope with two loose ends, the same thickness as the ring, with five bubbles and six wooden wedges; the grey wooden floorboards; the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
