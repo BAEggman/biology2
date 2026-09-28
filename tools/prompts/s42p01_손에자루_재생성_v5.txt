@@ -1,0 +1,19 @@
+[s42p01 — 판째 다시 그림 (F1 · 11장) — 편집 둘 다 실패: v3(양 어깨) = 그대로 큰 자루 하나, v4(손에 둘째 자루) = 어른마다 하나·둘·셋 제각각. 제미나이는 스무 명 넘는 사람의 자루 수를 편집으로는 못 맞춘다 → 사람을 줄이고 규칙 하나로 새로 그린다]
+사양: 자루는 전부 손에 든다(등·어깨에 없음). 두 자루 = 두 손에 하나씩(두 손이 다 참), 한 자루 = 한 손에만(다른 손은 빔).
+ 왼쪽(지붕에 개): 어른 넷 전부 두 자루 · 문간 나무 상자에 아이 둘, 한 자루씩.
+ 가운데(지붕에 버섯): 작은 사람 다섯 한 자루씩 · 깔때기 안에 두 자루 남자 하나 · 주둥이 아래로 한 자루 둘이 따로 걸어 나감 · 왼쪽 울타리 곁에 한 자루 둘이 빈손끼리 맞잡음.
+ 오른쪽(지붕에 화분 나무): 위층 어른 셋 두 자루 · 아래층 작은 사람 넷 한 자루 · 사다리 하나(빈).
+--------------------------------------------------------------------------
+Use the attached picture as the model for the drawing style and the layout, and draw the scene again from scratch.
+
+KEEP from the attached picture: the three wooden houses in a row, each with a walled yard in front — the LEFT house with a dog sitting on its roof, the MIDDLE house with a big mushroom growing on its roof, the RIGHT house with a potted tree on its roof; the gate in the front wall of each yard; the wooden box at the left yard's gate; the metal funnel machine in the middle of the middle yard; the right yard divided into an upper level and a lower level joined by one wooden ladder; the cream background; the hand-drawn coloured-pencil style, palette and line weight.
+
+REDRAW ALL THE PEOPLE, following ONE strict rule about sacks, so that anyone can count the sacks at a glance: every person carries their sacks IN THEIR HANDS, hanging down at their sides — nobody has a sack on the back or on the shoulders. A TWO-SACK person holds one sack in EACH hand, so both hands are full. A ONE-SACK person holds a single sack in one hand, and the other hand is empty. All sacks are the same plain brown cloth sacks tied at the neck.
+
+LEFT yard: four grown-ups, every one of them a TWO-SACK person. In the wooden box at the gate: two small children, each a ONE-SACK person.
+
+MIDDLE yard: five small ONE-SACK people standing around the yard. Exactly one TWO-SACK man stands inside the funnel, holding his two sacks. Just below the funnel's spout, two small ONE-SACK people walk away from the spout in different directions. Near the left wall, two small ONE-SACK people hold each other's empty hand.
+
+RIGHT yard: on the upper level, three grown-ups, every one of them a TWO-SACK person. On the lower level, four small ONE-SACK people. Nobody is on the ladder.
+
+The picture contains no writing, letters or numbers of any kind. Same wide proportions and viewpoint as the attached picture.
