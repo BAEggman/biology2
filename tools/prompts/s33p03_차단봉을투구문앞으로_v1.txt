@@ -1,0 +1,12 @@
+[s33p03 — 8행 (F3 · 0장) / 원본에서 한 번의 편집]
+사양: 벽돌 담 끝의 차단봉·사슬·굽은 화살표를 지우고, 같은 차단봉을 투구 지붕 건물 문 앞 길에 — 길의 오른쪽 반만 막는다. 알갱이 수레는 열린 왼쪽 반으로 문에 들어가고(화살표 그대로), 같은 길로 끌려온 긴 사슬은 차단봉에 걸려 휘어 되돌아 나온다(굽은 화살표). 담(내막)에 달린 것이 아니다 = 혈뇌장벽.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: move the red-and-white striped barrier. Everything else stays identical, line for line.
+
+THE CHANGE —
+- Remove the red-and-white striped boom barrier on its post at the bottom-right end of the long brick wall, together with the long chain lying beneath it and the curved black arrow there. That corner becomes plain ground beside the end of the wall.
+- Put the same red-and-white striped boom barrier, lowered and horizontal on a short grey post, on the path right in front of the doorway of the grey domed building at the upper right. The boom is short: it blocks only the RIGHT half of the path. The man pushing the small cart of granules goes through the open LEFT half of the path into the doorway, exactly as now, with the black arrow pointing into the door. In the right half of the same path, one long dark chain has been dragged up to the boom, has hit it and is bent back; beside it, a curved black arrow turns back away from the door.
+
+KEEP IDENTICAL — copy line for line: the canal and the two boats (one full of chains, one empty and tied up), the workers breaking chains with hammers and the scattered chain pieces, the man holding his nose, the crank wheel on the stone block, the empty open wooden crate, the man pushing the cart of granules, the grey domed building, the long brick wall with its two arches, the railway loop with its three small carts and the checked quilt, the cream ground, the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Square image, same viewpoint.
