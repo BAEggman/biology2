@@ -1,0 +1,10 @@
+[s16p02b — 1행 음차 (PLC 의 C · 12장) / 원본에서 한 번의 편집]
+사양: 피자를 통째로 넣는 기계의 옆구리 크랭크 손잡이를 C자로 굽은 쇠 갈고리로 — 글자사전 C(오른쪽 사람이 든 PKC 갈고리와 같은 모양). PL(인지질=피자)을 자르는 C 기계 = PLC.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: add a crank handle to the machine on the left. Everything else stays identical, line for line.
+
+THE CHANGE — on the side of the grey-green machine at the far left (the one with the hopper that swallows the whole pizza), attach a crank handle that is a big iron hook bent into the shape of the letter C — exactly the same shape, size and grey iron as the C-shaped hook the man in the middle is holding up. It sticks out from the machine's side as its crank.
+
+KEEP IDENTICAL — copy line for line: the machine and the whole pizza going into its hopper, the two pieces of pizza on the table (one with three holes, one plain with the brown hen sitting on it), the man in the middle holding up the C-shaped hook, the man at the right fitting the three-hole piece into the vault door with the three studs, the gravel pouring out below the vault door, the table, the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
