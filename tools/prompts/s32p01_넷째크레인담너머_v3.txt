@@ -1,0 +1,10 @@
+[s32p01 — 2행 / v2 결과 위 2라운드 — 첫째·셋째 크레인은 뒷담 너머로 붓는데, 넷째 크레인 홈통은 뒷담 앞(안쪽)에 매달려 물이 짐꾼 쪽으로 떨어진다]
+사양: 넷째 크레인의 팔을 뒷담 쪽으로 더 기울여 홈통이 뒷담 꼭대기 너머에 매달리고, 물줄기가 뒷담 너머 먼 모래밭으로 떨어진다(첫째·셋째와 같이). 나머지 그대로.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the crane on the FOURTH brick tower (the front-right tower). Everything else stays identical, line for line.
+
+THE CHANGE — right now its wooden trough hangs in front of the long back wall, so its water falls on the near side, where the porters walk. Swing that crane's arm further back so that the trough hangs ABOVE and BEYOND the top of the long back wall, exactly like the troughs of the first and third cranes, and its stream of water pours down on the FAR side of the back wall, onto the far sand. No water falls on the near side of the back wall.
+
+KEEP IDENTICAL — copy line for line: the four brick towers and all the walls, the first and third cranes with their troughs and water, the second tower's flat roof with its four empty bolt holes, the wooden gate, all the porters and their crates, the two small carts on the rail, the sandy ground, the thin frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Square image, same viewpoint.
