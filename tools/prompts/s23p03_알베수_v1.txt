@@ -1,0 +1,15 @@
+[s23p03 — 1행 F2 (α/β 와 1/2 · 3장) / 원본에서 한 번의 편집]
+사양(글자사전 그대로): 네 칸마다 벽 못에 걸린 작은 흰 물건으로 이름을 센다 — 왼쪽 두 칸은 흰 알(α = 알), 오른쪽 두 칸은 개어 둔 흰 베(β = 베) · 윗줄은 하나(1), 아랫줄은 둘(2). 좌상 알 하나(α1) · 좌하 알 둘(α2) · 우상 베 하나(β1) · 우하 베 둘(β2).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and add one small thing to each of the four panels. Everything else stays identical, line for line.
+
+On the back wall of each panel, near its top corner, put a small wooden wall shelf holding small white objects:
+- TOP-LEFT panel (the man tightening a strap around the big pipe): ONE white egg on the shelf.
+- BOTTOM-LEFT panel (the man covering his own mouth): TWO white eggs on the shelf.
+- TOP-RIGHT panel (the man cranking the pendulum): ONE folded white cloth on the shelf.
+- BOTTOM-RIGHT panel (the man spreading the folded tube with the spreader): TWO folded white cloths on the shelf.
+The eggs and cloths must be clearly countable.
+
+KEEP IDENTICAL — copy line for line: the four panels and their frames, the same man in grey-green overalls in all four, the strap and ratchet on the pipe, the pendulum and crank, the megaphone lying on the floor, the red cabinet, the tool boards, the folded tube and the spreader tool, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
