@@ -1,0 +1,13 @@
+[s32p02 — 5행 F2 (최종 전자수용체 = 산소 · 6장) + 개념 논리 m(4·5행) / 현재 그림에서 한 번의 편집 · v2]
+사양: ① 앞쪽에서 짐을 받아 든 사람 손목에 밝은 물방울 모양 풍선(덱 약속: 밝은 방울 = O₂) — 짐을 마지막으로 받는 이가 산소(v1 그대로).
+② m(logic_0929 s32p02): 복합체 IV(문간 안쪽 사람) 뒤에 받는 이가 둘(문 밖으로 나온 사람 → 앞쪽 사람) → a₃ 가 산소에 바로 넘긴다: 문 밖으로 나온 조끼 입은 사람을 지우고, 문간 안쪽 사람이 빈손을 앞쪽 사람 쪽으로 내민 채(방금 건넨 몸짓).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two changes. Everything else stays identical, line for line.
+
+1. The man at the front right who holds the bundle: tie a large pale, almost white, droplet-shaped balloon to his wrist with a thin string, floating just above his head. It is the only balloon in the picture. His two hands still hold the bundle, the two small water drops still float above his open palm, and the corked bottle still stands at his feet.
+
+2. At the doorway in the brick wall: remove the second man who stands outside the doorway in the vest. Only the man inside the doorway remains; his hands are now empty and stretched out towards the front man, as if he has just handed him the bundle.
+
+KEEP IDENTICAL — copy line for line: the brick wall with the high water behind it, the arch with the water wheel and the water pouring out, the doorway itself, the corked bottle, the sandy ground, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
