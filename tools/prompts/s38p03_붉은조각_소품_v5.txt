@@ -1,0 +1,5 @@
+[s38p03 — 3행 · v5 = 소품만 따로 그려 손으로 붙이기]
+v2–v4: 오른쪽 저울 붉은 조각의 갈고리를 셋으로 못 셈(둘 · 넷 · 뒤엉킴). 왼쪽 저울(초록 한 장 · 갈고리 둘)은 v2 가 맞음.
+→ v2 를 바탕으로, 붉은 조각 둘(장마다 갈고리 셋)만 글 → 그림으로 받아 오른쪽 저울 두 접시에 붙인다(tools/retouch/s38p03_red_tiles.py).
+--------------------------------------------------------------------------
+Draw one small object on a plain, flat, light cream background, centered, with a lot of empty space around it: two identical upright rust-red rectangular tiles standing side by side with a small gap between them, like two thin books standing on end, seen straight from the front. Each tile is taller than it is wide. On the top edge of EACH tile stand exactly THREE small curly metal hooks shaped like question marks, evenly spaced across that tile's top edge — three hooks on the left tile and three hooks on the right tile, six hooks in all. Style: hand-drawn coloured-pencil illustration with thin dark ink outlines and soft pencil shading, warm muted palette, like a children's storybook. No shadow on the background, no table, no people, no writing, no labels, no numbers.
