@@ -1,0 +1,8 @@
+[s16p01b — 4행 개념 논리 M(logic_0929 s16p01b 4) / 현재 그림에서 한 번의 편집 · v1]
+문제: 쥐 탈 주자(Ras)가 공중에 뒤집는 것이 둥근 구리 동전 — 동전 = ATP 예약. Ras 는 GTP 를 쥐는 작은 G단백질이고, 앞 판 s16p01 의 큰 주자(G단백질)는 「짙은 회색 네모 칩」을 뒤집는다 → 같은 물건으로.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only one small thing.
+
+The little runner in the mouse mask in the middle is flipping a small round copper coin in the air above his raised hand. Replace that round coin with a small, thick, dark-grey SQUARE tile — like a little square block with four clear corners — tumbling in the air in exactly the same place, with the same small curved motion mark. It must not be round and must not look like a coin.
+
+Keep identical: all the people and where they stand, the stamps and the round coin marks on their backs, the dish of coins on the floor at the left, the crouching man, the three-way fork in the path, the long wooden plank with three men wearing maps, the man with the eraser, the cream background, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.
