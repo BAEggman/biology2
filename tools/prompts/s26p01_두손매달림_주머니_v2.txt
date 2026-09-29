@@ -1,0 +1,11 @@
+[s26p01 — 6행 (해부 A7) / 현재 그림에서 한 번의 편집 — v1 실패(여전히 팔 셋 · 정수리 고리 · 아래 둘은 레일에서 떨어져 떠 있음 · 아래 떨어지는 구슬 사라짐)]
+교훈(s42p01): 인물 열둘에 저마다 다른 자세를 시키면 셈이 무너진다 → 모두 같은 한 가지 자세로. 두 손 다 레일, 구슬은 배에 매단 작은 천 주머니 — 팔이 셋일 틈이 없다.
+사양: 위 곡선 여섯은 주머니에 구슬이 들어 있음 · 아래 곡선 여섯은 주머니가 뒤집혀 구슬이 떨어짐(지금 떨어지는 구슬 자리 그대로) · 머리에서 나오는 것 없음.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the twelve small round-headed figures hanging from the S-shaped rail (six along the top curve, six along the bottom curve). Everything else stays identical, line for line.
+
+THE CHANGE — give all twelve the SAME simple pose: each figure hangs from the rail by BOTH raised arms, both hands gripping the rail, legs dangling. Nothing grows from any head. None of them holds anything in the hands. Instead, each figure has a small cloth pouch tied at its belly. The six figures along the top curve each have one ball sitting in the pouch. The six figures along the bottom curve have pouches tipped open and their balls are falling out and dropping down, where the balls are falling now. Keep every figure where it is now, the same size, the same clothes and colours.
+
+KEEP IDENTICAL — copy line for line: the S-shaped rail and its two wall brackets, the four workers pushing the rail to the right (the one with the bottle of sour liquid, the one with the spraying gas can, the one with the glowing coal in tongs, the one with the small powder bag), the child alone pushing the rail to the left with the egg and the persimmon in his shoulder bag, the rolled white cloth at his feet, the plain cream background with no speckles, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
