@@ -1,0 +1,8 @@
+[s04p04 — 6행 개념 논리 M(logic_0929 s04p04 6) / 현재 그림에서 한 번의 편집 · v1]
+문제: 말피기관(황동빛 관 다발 + 얕은 붉은 웅덩이)이 협각 갑옷에만 「이 칸에만 있다」 — 말피기관의 대표는 곤충이고(다지류도 있다), 없는 것은 갑각류다 → 곤충 갑옷(오른쪽 위)에도 똑같은 관 다발 + 붉은 웅덩이. 갑각(왼쪽 위 · 물통)에는 없음 그대로.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the TOP-RIGHT panel (the armour with two antennae standing on the bare floor).
+
+Give that armour the same thing the bottom-left armour has: from its waist hangs a bundle of thin brass-coloured tubes flowing down like a horse's tail, and their ends rest in a shallow red puddle on the floor under it, exactly like the bottom-left panel. The armour itself, its two antennae, its pose and its place stay the same.
+
+The top-left panel (the armour with four antennae standing in the wooden water tub) stays exactly as it is, with NO tubes and NO red puddle. Keep identical: all four panels and frames, the bottom-left armour with its tubes and red puddle, the millipede and the centipede in the bottom-right panel, the cream background, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.
