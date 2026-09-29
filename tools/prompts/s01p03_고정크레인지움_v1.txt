@@ -1,0 +1,8 @@
+[s01p03 — 2행 개념 논리 M(logic_0929 s01p03 2) / 현재 그림에서 한 번의 편집 · v1]
+문제: 부두에 붙박이 큰 회색 크레인(= 숙주가 가진 크레인으로 읽힘). 이 판의 뜻은 「숙주에는 RNA 를 읽을 연장이 없어 III군이 제 크레인을 메고 온다」 → 붙박이 크레인을 지우고, 선장이 어깨에 멘 작은 나무 크레인만 남긴다.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and remove only one thing: the big grey fixed crane standing on the stone quay at the top left, with its round pillar, its cab with the red box, its long jib, its cables and its hook. Take it away completely, including its round base on the quay, and fill that space with the plain stone quay and the plain cream sky, drawn just like the rest of the quay and sky.
+
+The bearded captain in the dark uniform who carries a small wooden crane on his shoulder stays exactly as he is, with his small crane, walking along the quay. After this edit, his small crane is the ONLY crane in the whole picture.
+
+Keep identical: the big ship with the double-twisted hose coil, the wheel, the megaphone and the barrels, the small boats, the golden crown, the yellow flag, the warehouse and the people carrying boxes, the bollard, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.

@@ -1,0 +1,12 @@
+[s11p03 — 7행 개념 논리 M(logic_0929 s11p03 5–7) / 현재 그림에서 한 번의 편집 · v1]
+문제: 가운데 벽(NER) — 녹아 붙은 그을린 두 벽돌(티민 이량체)은 벽에 그대로 있고, 톱은 그 오른쪽을 벽 전 높이로(두 가닥) 세로로 자름 · 옆에 기댄 잘린 판에도 그을음(손상이 둘). NER 은 손상이 든 가닥 한쪽만 여러 개째 잘라낸다 → 손상 둘레의 윗줄 몇 켜만 긴 띠로 도려낸 홈 · 잘려 나온 띠(그을린 두 벽돌 포함)가 옆에 기댐 · 아랫줄은 온전.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the middle brick wall, the one with the scorched, fused bricks and the worker with the saw.
+
+In that middle wall, the long strip of bricks around the two fused, scorched bricks has now been cut OUT of the wall: a long, low rectangular notch, about seven bricks long and only the top two rows deep, is empty where the scorched bricks used to be, and you can see the cream background through it. Below the notch, the lower rows of that wall are complete and unbroken — nothing is cut below the notch.
+
+The removed strip — two rows high and seven bricks long, with the two fused, scorched bricks and the dark soot mark in its middle — now leans against the wall at the right, next to the worker, in place of the slab that leans there now. There is no other scorched brick anywhere: the scorch mark exists only on that removed strip.
+
+The worker in the yellow hard hat stands where he is now and holds his saw level along the bottom edge of the notch, as if he has just finished a horizontal cut. There is no vertical cut through the whole wall.
+
+Keep identical: the top wall with the silver brick, the chisel, the trowel worker and the worker with the hammer and welding sparks; the bottom wall with the flower-stamped bricks, the magnifying glass, the chain and the cutter and its three workers; the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.

@@ -1,0 +1,8 @@
+[s48p02 — 4·5행 개념 논리 M(logic_0929 s48p02 4–5) + m(5행 수레) / 현재 그림에서 한 번의 편집 · v1]
+문제: 오른쪽 방(식물) — 널빤지가 양쪽 벽 쪽에 깔리고 틈이 가운데(= 벽에서 가운데로) · 수레 둘이 벽 밖에서 들어옴. 세포판은 가운데에서 바깥으로 넓어지고 소낭은 안의 골지에서 온다 → 가운데에 깔린 널빤지 한 판 · 틈은 양쪽 벽 곁 · 초록 그물 울타리는 가운데 판의 양 끝(자라는 가장자리) · 수레는 방 안 가운데 판 곁.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the floor inside the RIGHT room.
+
+Right now the wooden planks are laid next to the two side walls, with the empty gap in the middle, and two carts with planks come in from outside the walls. Change it so the building starts in the MIDDLE: one patch of wooden planks is laid across the CENTER of the floor, and the empty gaps are next to the two side walls, where the floor is not yet covered. The two green net fences stand at the two open edges of that central patch — one on its left edge and one on its right edge — facing the walls. The two small carts loaded with planks are INSIDE the room, parked on the central patch next to each fence, as if bringing planks from the middle outward. No cart and no planks are outside the room.
+
+Keep identical: the left room with the soft cloth walls pinched in at the waist by the rope and the three people pulling on the rope; the right room's stiff straight walls and its two doorways; the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.

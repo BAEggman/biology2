@@ -1,0 +1,10 @@
+[s28p02 — 2행 개념 논리 M(logic_0929 s28p02 2·3) / 현재 그림에서 한 번의 편집 · v1]
+문제: 왼쪽 아래 방(화학독립영양) 사람이 난로에 통나무 장작(= 유기물)을 넣음. 화학독립영양은 무기물(H₂S · NH₃ · Fe²⁺)을 산화해 에너지를 얻는다 → 방 안의 그 회색 원석 덩이를 난로에 넣는다. 오른쪽 아래(화학종속영양)는 가구 나무를 땜 — 그대로.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only what the kneeling man in the BOTTOM-LEFT room is putting into his stove.
+
+Right now he is pushing an armful of wooden logs into the stove. Instead, he is pushing lumps of the same grey stone that fills the crates in his room — two or three rough grey rocks held in his hands, going into the stove — and inside the stove the fire burns on top of grey rocks, not on logs. There is no wood anywhere in that bottom-left room.
+
+The BOTTOM-RIGHT room stays exactly as it is: its man keeps feeding broken wooden chair pieces into his stove, with the pile of wooden planks and the safe with the sleeping person.
+
+Keep identical: all four rooms, the two lamps in the top rooms, the stone crates, the blocks and the chisel and hammer, the chairs and the table, the stove pipes, the red frame, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.
