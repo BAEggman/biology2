@@ -1,0 +1,13 @@
+[s45p02 — 3·4행 (F2 재생 단계에도 ATP · 3장) + 개념 논리 M(짧은 다섯 → 긴 하나) / 현재 그림에서 한 번의 편집 · v2]
+사양: ① M(logic_0929 s45p02 3·5행): 짧은 막대(3탄소) 다섯이 긴 막대(RuBP 5탄소) 하나로 → 셈이 안 맞는다. 5 × 3C = 15C = 3 × 5C → 쟁반 오른쪽 너머의 긴 막대가 셋(똑같이).
+② F2(v1 그대로): 바닥에 따로 놓인 동전 → 긴 막대에 반쯤 박힌 동전 — 재생에도 ATP. 긴 막대가 셋이니 막대마다 동전 하나(RuBP 하나에 ATP 하나 · 한 바퀴 재생 = 3 ATP).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two changes on the right side and the floor. Everything else stays identical, line for line.
+
+1. At the right of the tray there are now THREE identical long upright sticks standing side by side, close together, instead of one — each exactly like the long stick now.
+
+2. The gold coin no longer lies on the floor. Instead, each of the three long sticks has ONE gold coin, just like the coin now, pressed half-way into its upper end like a coin pushed into a slot — three sticks, three coins. No coin lies on the floor.
+
+KEEP IDENTICAL — copy line for line: the shallow wooden tray with six compartments, the empty leftmost compartment, the short stick sliding down the little chute at the left, the five short sticks in the other compartments, the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
