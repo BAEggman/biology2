@@ -1,0 +1,13 @@
+[s33p02 — 7행 (F1 · 3장) + 개념 논리 m(3·7행) / 현재 그림(tools/blind/png/s33p02.png)에서 한 번의 편집 · v2]
+사양: ① 오른쪽 두 인부가 꿰는 사슬의 고리를 전부 오각형(다섯 변) 납작 고리로 — 바닥에 흩어진 것도 육각 너트가 아니라 오각 고리. 리보스 = 오각(v1 그대로).
+② m(logic_0929 s33p02): 활송 둘이 모두 방패를 내보냄 → 본문 「나오는 것이 두 가지뿐이다. 활송이 둘인 것이 그 뜻이다」와 어긋남 · 오각 고리(리보스-5-P)는 공장 밖으로 안 나옴 → 오른쪽(문 쪽) 활송에서는 방패 대신 같은 오각 고리가 미끄러져 나온다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two changes. Everything else stays identical, line for line.
+
+1. The chain being assembled by the two workers at the right: every link of their chain becomes a flat FIVE-SIDED (pentagon-shaped) ring, clearly with five straight sides. The loose pieces lying on the ground at their feet are also pentagon rings with five sides — not six-sided nuts, not oval links.
+
+2. The two metal chutes on the side wall of the shed: the LEFT chute keeps sliding out a round shield, exactly as now. The RIGHT chute no longer slides out a shield — instead a few of the same flat five-sided pentagon rings slide out of it and drop onto the ground. So the shed sends out two different things: shields from one chute, pentagon rings from the other.
+
+KEEP IDENTICAL — copy line for line: the wooden shed with the single doorway and the uniformed gatekeeper in it, the worker holding up a shield, the worker blocking sparks with a shield, the bearded worker with a shield and a smoking flask above the crate with an apple, a cucumber and a ball (in that order from left to right), the stacked white blocks, the cracked red disc and the gatekeeper lying beside it without a shield, the two chain workers themselves, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
