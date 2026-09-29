@@ -1,0 +1,12 @@
+[s23p03 — 1행 F2 (α/β 와 1/2 · 3장) / 현재 그림에서 한 번의 편집 · v2]
+v1 은 「I'm having a hard time fulfilling」 거절 — 사람의 동작(띠로 조임 · 제 입을 막음)을 적은 것이 걸렸을 수 있다 → 칸을 자리로만 부르고 사람 이야기는 뺀다.
+사양은 v1 그대로(글자사전): 왼쪽 두 칸 = 흰 알(α = 알) · 오른쪽 두 칸 = 개어 둔 흰 베(β = 베) · 윗줄 하나(1) · 아랫줄 둘(2).
+--------------------------------------------------------------------------
+Edit the attached four-panel drawing. Keep everything exactly as it is, line for line, and add only one small wooden wall shelf high up on the back wall of each panel, in an empty spot where it covers nothing:
+
+- top-left panel: the shelf holds ONE white egg.
+- bottom-left panel: the shelf holds TWO white eggs.
+- top-right panel: the shelf holds ONE small folded white cloth.
+- bottom-right panel: the shelf holds TWO small folded white cloths.
+
+The eggs and cloths are small but clearly countable. Keep identical: the four panels and their frames, the man in grey-green work clothes in each panel, the pipe and strap, the pendulum and crank, the megaphone on the floor, the red cabinet, the tool boards, the folded tube and the spreader tool, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.
