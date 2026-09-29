@@ -1,0 +1,13 @@
+[s45p04 — 4·5행 (F1 · 3장) + 개념 논리 m(4–5행) / 현재 그림(tools/blind/png/s45p04.png)에서 한 번의 편집 · v2]
+사양: ① 오른쪽 위에서 하얗게 이글거리는 굵은 빛살 하나(가장 센 빛)가 깔때기로 오다가 — 주황 양산이 그 앞으로 기울어 그 빛살을 받아 막는다(v1 그대로).
+② m(logic_0929 s45p04): 되튀는 초록 빛살이 들어온 보라 빛살의 연장(보라가 꺾이며 초록이 됨 = 「빛이 부딪혀 색이 바뀐다」로 읽힘) → 보라 빛살은 다른 빛살처럼 깔때기 입구에서 끝나고, 초록은 따로 들어와 초록 그대로 되튄다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two changes. Everything else stays identical, line for line.
+
+1. The VIOLET beam from the upper left now ends at the funnels with its own arrowhead, exactly like the red, orange and blue beams — it goes INTO a funnel. Right now it turns into the green beam at the bend; that must not happen. Instead, add a separate GREEN beam that comes in from the upper left, parallel to the other coloured beams; it hits the rim of the top funnel and bounces back up to the upper right, as the green beam does now, with its arrowhead. Both the incoming part and the bouncing part of this beam are GREEN. So: red, orange, blue and violet go in; only green bounces off.
+
+2. Add ONE extra-thick, glaring white-yellow beam of light coming from the upper RIGHT toward the cluster of funnels, clearly thicker and brighter than all the coloured beams. The orange parasol on the right is tilted a little toward the funnels so that this glaring beam hits the top of the parasol's canopy and stops there — it does not reach the funnels. The parasol keeps its colour, size and its pole in the ground.
+
+KEEP IDENTICAL — copy line for line: the small coloured funnels tipping into the big grey funnel, the two identical green leaves under it, the small ball jumping into the shallow bowl on its stand, the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
