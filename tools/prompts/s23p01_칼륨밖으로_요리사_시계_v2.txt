@@ -1,0 +1,12 @@
+[s23p01 — 2·5행 (개념 논리 F) + 대기열 47(요리사 칼 · 시계) / 현재 그림에서 한 번의 편집 — v1 을 대신한다]
+결함: Na⁺ 무리(둘째 문)와 K⁺ 무리(둥근 아치)가 **같은 방향**(벽 너머 → 보는 쪽)으로 온다. 셋째 문 불활성 막대가 보는 쪽에 있으니 보는 쪽 = 세포 안 → K⁺ 가 들어오는 그림. K⁺ 는 **나가야** 한다.
+사양: 아치 문의 무리를 흰 요리사 옷·높은 모자에 부엌칼(끝을 아래로)을 든 요리사들로 바꾸고 · **뒷모습으로, 보는 쪽에서 아치를 지나 벽 너머로 걸어 나간다** · 둘째 문 위 둥근 벽시계 12:00, 아치 위 같은 시계 12:10. 둘째 문 무리는 그대로(들어온다).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two changes. Everything else stays identical, line for line.
+
+1. The crowd at the round arched double door at the far right: they are now cooks in white chef jackets and tall white chef hats, each holding a big kitchen knife calmly point-down at his side. And they walk the OTHER way: we see them FROM BEHIND, walking away from us, leaving our side of the wall and passing through the round arched double door into the space beyond the wall. The last cooks are just stepping through the arch; nobody comes towards us through that arch.
+2. Hang a round wall clock on the wall above the SECOND door (the one where the crowd rushes towards us) showing exactly twelve o'clock, and an identical round wall clock above the round arched double door showing ten past twelve.
+
+KEEP IDENTICAL — copy line for line: the long teal wall, the first door shut tight, the crowd rushing towards us through the second door exactly as now, the third door standing open with the hinged metal bar across its opening on our side and the man in the yellow tunic pushing against it in vain, the round arched double door itself, the floor, the frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+No writing other than the numerals on the two clocks. Same proportions and viewpoint as the attached picture.

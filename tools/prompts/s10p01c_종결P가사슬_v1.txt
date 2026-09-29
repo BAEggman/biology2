@@ -1,0 +1,11 @@
+[s10p01c — 3행 (개념 논리 F) / 현재 그림에서 한 번의 편집]
+결함: 셋째 칸(종결)에서 왼쪽(P) 사람이 빈손이고 사슬이 오른쪽(A) 칸 판자 밑에서 떨어진다. 실제: 둘째 칸 뒤 자리옮김으로 사슬을 든 tRNA 가 P 로 오고, 종결 때 사슬은 **P 의 tRNA 에** 달려 있다 — 방출 인자(판자)가 A 에 앉으면 **P 의 사슬이 풀려 떨어진다**.
+사양: 셋째 칸 왼쪽 사람이 구슬 사슬 전체를 두 손에 쥐고 있고, 그 사슬 끝이 손에서 흘러내려 칸 앞턱 너머로 떨어져 바닥까지 늘어진다 · 오른쪽 칸의 나무 판자는 그대로, 판자 밑에서 나오는 사슬은 없음. 첫째·둘째 칸 그대로.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change in the THIRD scene (the one on the right). Everything else stays identical, line for line.
+
+THE CHANGE — in the third scene, the man in the LEFT slot now holds the whole bead chain in his two hands, the same long chain of beads that is handed over in the middle scene. The chain is slipping out of his hands: its end pours down over the front edge of the left slot and trails down onto the ground below the block. The flat wooden plank still lies in the RIGHT slot exactly as now, and NO chain comes out from under the plank any more.
+
+KEEP IDENTICAL — copy line for line: the first scene (the man coming straight down into the left slot with one bead, the empty right slot), the middle scene (the man in the left slot handing the whole chain to the man in the right slot), the grey stone blocks with their two slots, the railway tracks under each scene, the frame lines between the scenes, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
