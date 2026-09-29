@@ -1,0 +1,11 @@
+[s47p01 — 3·7행 개념 논리 M(logic_0929 s47p01 3 · 7) / 현재 그림에서 한 번의 편집 · v1]
+문제: ① 둘째 칸(접합기) — 두 가닥이 지퍼 손잡이 한 점에서만 만나 X 자로 엇갈림(= 키아스마로 읽힘). 접합기는 나란히 선 두 가닥을 지퍼가 위에서부터 잠가 내려오는 때 → 두 가닥 나란히 · 위 절반은 이가 맞물려 잠김 · 손잡이는 가운데 · 아래 절반은 아직 벌어졌지만 나란함.
+② 다섯째 칸(이동기) — 짙은 타래와 옅은 타래가 서로 떨어짐. 2가 염색체는 후기 I 까지 키아스마로 붙어 있다 → 둘이 나란히 맞붙고 한 자리에서 X 자로 걸려 있다.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the SECOND and the FIFTH compartments of the wooden tray (counting from the left).
+
+SECOND compartment: the dark navy thread and the pale blue thread run straight down side by side, parallel and close together, never crossing. A zipper joins them: along the TOP half the two threads are zipped tightly together with visible interlocking teeth, the zipper pull sits in the middle of the compartment, and below the pull the two threads are still apart but parallel, not yet zipped. They do not form an X anywhere.
+
+FIFTH compartment (the one with the broken frame): the short, thick dark navy bundle and the short, thick pale blue bundle are no longer separate. They lie side by side, touching along their length, and at one point they cross over each other in a small X, so the two stay joined to each other. They stay short and thick and stay near the outer edge of the compartment. The broken frame and the flying splinters stay exactly as they are.
+
+Keep identical: the first compartment with the two thin wavy threads, the third compartment with the braided rope and the scissors, the fourth compartment with the two threads crossing in two X's, the tray, the cream background, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.

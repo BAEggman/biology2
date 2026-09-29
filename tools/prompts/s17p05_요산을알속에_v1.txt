@@ -1,0 +1,8 @@
+[s17p05 — 5행 개념 논리 M(logic_0929 s17p05 5) / 현재 그림에서 한 번의 편집 · v1]
+문제: 오른쪽 칸 — 흰 요(요산)가 알 **밖** 곁에 산처럼 쌓임. 5행 「알 속에서는 밖으로 버릴 수가 없어 그 자리에 쌓아 둔다」와 어긋남 → 접은 흰 요 더미를 알 **안**(병아리 곁 · 알 아래쪽)에 · 알 밖 더미는 지움. 동전 더미는 그대로.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the RIGHT compartment.
+
+The big pile of folded white quilted cloths that now stands OUTSIDE the egg, to the right of it, is removed; that space shows the plain back wall of the compartment. Instead, the same folded white quilted cloths — a small neat stack of three or four, folded and heaped like a little mountain — are now INSIDE the egg, piled at the bottom of the egg next to the chick's feet, clearly visible through the egg's broken-open window. The chick stays where it is.
+
+Keep identical: the egg itself and its window, the chick, the pile of dark coins on the shelf in front of the egg, the little cup at the bottom right, the left compartment with the fish tank, the barrel and the flowing liquid, the middle compartment with the frog, the tub with the folded yellow cloth, the three coins and the metal bucket, the wooden roof and shelves, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.

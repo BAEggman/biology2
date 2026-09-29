@@ -1,0 +1,12 @@
+[s38p03 — 2·3·4행 개념 논리 M(logic_0929 s38p03 2–3) / 현재 그림에서 한 번의 편집 · v1]
+문제: 왼쪽 저울(A-T) 초록 조각의 갈고리가 조각마다 ≈1(접시에 둘뿐) · 오른쪽 저울(G-C) 붉은 조각은 조각마다 ≈1.5 — s38p01 문법(A-T = 수소결합 2 · G-C = 3)과 어긋남 → 조각마다 갈고리 수를 또렷이: 초록 조각 하나에 갈고리 둘 · 붉은 조각 하나에 갈고리 셋. 셀 수 있게 조각 수를 줄인다 — 왼쪽 접시마다 초록 하나 · 오른쪽 접시마다 붉은 둘(두 저울의 개수가 다른 것은 그대로 · 4행).
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the tiles lying on the four pans of the two balance scales.
+
+LEFT scale: each of its two pans now holds exactly ONE flat olive-green tile, and that tile has exactly TWO small curly metal hooks standing up on its top edge, well apart from each other so they are easy to count.
+
+RIGHT scale: each of its two pans now holds exactly TWO rust-red tiles standing upright side by side like two books, and EACH red tile has exactly THREE small curly metal hooks standing up on its top edge, evenly spaced and easy to count.
+
+Both scale beams stay perfectly level. The hooks are the same small curly hooks as now, only their number changes.
+
+Keep identical: the two brass scales themselves, the mechanical pencil hanging on the wall, the two pentagon boards with their rings (the left one with a ring at every corner, the right one with one corner bare), the kite and its string, the black card with the X pattern on the table, the wooden table, the cream wall, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.
