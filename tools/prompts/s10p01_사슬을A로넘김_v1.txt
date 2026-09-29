@@ -1,0 +1,11 @@
+[s10p01 — 3·5행 (개념 논리 M) / 현재 그림에서 한 번의 편집]
+결함: 오른쪽(A) 사람이 구슬 하나를 가운데(P) 사람 쪽으로 내밀고, P 사람이 그것을 제 사슬 끝에 꿰는 그림 → 「새 아미노산이 P 의 사슬로 온다」 = 시험 함정(s10p01c 2행과 정반대). 실제: P 의 사슬 전체가 A 의 아미노산으로 옮겨 간다.
+사양: A 사람은 제 구슬을 한 손에 쥔 채 가만히 들고 · P 사람이 사슬 끝을 A 사람 쪽으로 넘겨 그 구슬에 이어 붙이는 중(사슬이 오른쪽으로 건너가는 순간) · P 사람의 다른 손엔 구슬 없음. 나머지 그대로.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the hands of the two men in the middle and right slots of the block. Everything else stays identical, line for line.
+
+THE CHANGE — right now the man arriving in the RIGHT slot holds out his single bead to the man in the MIDDLE slot, who threads it onto the end of his bead chain. Reverse who hands over what: the man in the RIGHT slot now just holds his own single bead still in one hand, close to himself. The man in the MIDDLE slot reaches across and passes the END of his whole bead chain over to the right, hooking the chain's end onto the bead that the right-hand man is holding — the chain is crossing from the middle slot into the right slot. The middle man holds no loose bead of his own. The rest of the chain still hangs down from the middle slot to the floor as now.
+
+KEEP IDENTICAL — copy line for line: the grey-green block with its three slots, the man walking out empty-handed on the left, the right-hand man's backpack with the side pocket and the two split coins falling from it, the long bead chain lying on the floor, the brass padlock with the three different keys in its keyhole, the rails running through the block, the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.

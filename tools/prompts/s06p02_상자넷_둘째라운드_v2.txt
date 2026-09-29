@@ -1,0 +1,10 @@
+[s06p02 — 4행 / 1라운드(s06p02_v3_1790671216742.png) 위 한 번의 편집]
+1라운드: 상자 셋(궤짝·둘째·셋째, 뚜껑 셋 열림)까지 됐다 · 호두는 궤짝 뚜껑 안쪽 귀퉁이에. → 가장 작은 상자 안에 상자 하나 더(넷째) · 호두는 둘째 상자 안 바닥(셋째 상자 곁)으로.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make one single change: the nested wooden boxes in the open crate on the left. Everything else stays identical, line for line.
+
+THE CHANGE — inside the smallest open box, add ONE more, even smaller wooden box with its lid open, so that there are FOUR nested boxes in all (the crate, the second box, the third box and this new fourth box), each one clearly visible inside the one before. Move the small shrivelled walnut: it is no longer stuck in the corner of the crate's lid; it now lies on the floor of the SECOND box, in the gap just beside the third box.
+
+KEEP IDENTICAL — copy line for line: the crate and its open lid, the second and third boxes and their open lids, the red jar with the seaweed and the shells, the green jar with the reeds, the cattails and the lily pad, the glass display case and the bristly straw, the wall chart with the tally marks, the blue wall, the counter, the frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
