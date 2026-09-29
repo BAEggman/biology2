@@ -1,0 +1,14 @@
+[s14p02 — 1행 (F1 · 4장) + 개념 논리 m / 현재 그림(tools/blind/png/s14p02.png)에서 한 번의 편집]
+사양: 굵은 하늘색 기둥이 속 빈 관임이 보이게 — 바닥 가까이 앞쪽 옆구리에 사람이 기어들 만한 둥근 구멍, 안쪽이 어둡고 안벽이 보인다.
++ m(logic_0929): 갠 흰 베가 가운데 밧줄(중간섬유) 발치까지 뻗어 「베(β)가 밧줄에도」로 읽힘 → 베를 절반 폭으로 줄여 기둥 발치에만 붙이고, 베와 밧줄 사이에 맨 바닥.
+v1 과 다른 점: 올릴 그림이 원본이 아니라 현재 그림(키높이 신발·다이아몬드가 이미 들어간 것) · 베 폭 줄이기를 더함.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two changes. Everything else stays identical, line for line.
+
+1. The thick pale-blue column on the left is a HOLLOW TUBE, and we must see it: near its bottom, just above the floor on the side facing us, cut a round opening big enough for a person to crawl into; through it we see the dark hollow inside and the curved inner wall of the tube. The column keeps its size, colour and position.
+
+2. The folded white cloth at the foot of the column becomes about HALF as wide: it lies snugly against the right side of the column's foot and ends well before the twisted rope, so there is bare wooden floor between the cloth and the rope. Nothing lies at the foot of the rope except its dust and cobwebs.
+
+KEEP IDENTICAL — copy line for line: the climber going up the column in absurdly thick platform boots, the climber coming down the column head-first with the sparkling diamond falling from his hand, the big white egg at the foot of the column, the medium twisted rope with dust and cobwebs and nobody on it, the thin pinkish twisted cord with the man climbing it, the wooden beams, the window and the small table with books, the wooden floor, the frame line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
