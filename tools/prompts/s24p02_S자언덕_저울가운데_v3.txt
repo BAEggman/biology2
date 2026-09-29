@@ -1,0 +1,13 @@
+[s24p02 — 4행 음차 (힐 계수 · 3장) + 개념 논리 m(2행) / 현재 그림에서 한 번의 편집 · v3]
+v2 결과: 언덕은 섰으나 문이 넷 → 다섯 · 둘째부터 문이 닫힌 채 사람이 곁으로 걸어감(「첫 문만 뻑뻑, 나머지는 쉽게 열림」이 사라짐) · 검사관 손이 계량컵 접시 줄을 쥠(더 나빠짐) → 버림.
+v3: 문은 정확히 넷(헤모글로빈 소단위 넷) · 첫 문은 평지에서 거의 닫힘 · 둘째·셋째는 가파른 비탈에서 활짝 · 넷째는 꼭대기 평지에서 활짝 — S자 곡선의 세 구간과 문 넷을 맞춤. 검사관은 손가락 끝으로 가운데 기둥 꼭대기의 축을 가리킴(쥐지 않음).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two changes. Everything else stays identical, line for line.
+
+1. The ground under the row of doors at the lower right becomes a grassy HILL whose outline is a clear S-shaped curve, and there are exactly FOUR doors, each standing on it: door 1 — the one the man strains to push, still almost shut — stands on the flat low ground at the bottom; door 2 and door 3 stand WIDE OPEN on the steep middle part of the slope, and people walk up the slope through them; door 4 stands WIDE OPEN on the flat top of the hill, with people walking through it. Exactly four doors, no more.
+
+2. The man in the mustard jacket no longer points at the pan with the jug. With his arm raised higher, his pointing finger now points at the round pivot at the very top of the balance scale's central post — the middle of the beam, between the two pans. He does not touch the pans or their strings.
+
+KEEP IDENTICAL — copy line for line: the straining man pushing the first door, the crowd walking through the open doors, the big red machine with the spinning dial, the overflowing hopper of cogs and nuts, the tray, the balance scale with the clock on one pan and the jug on the other, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.

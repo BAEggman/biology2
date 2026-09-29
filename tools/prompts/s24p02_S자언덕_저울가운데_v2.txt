@@ -1,0 +1,13 @@
+[s24p02 — 4행 음차 (힐 계수 · 3장) + 개념 논리 m(2행) / 현재 그림(tools/blind/png/s24p02.png)에서 한 번의 편집]
+사양: ① 오른쪽 문 줄이 S자 언덕(hill)을 따라 선다 — 첫 문은 평지(끙끙 미는 사람), 둘째부터 가파르게 올라가다 꼭대기에서 평평해진다. 「힐 = 언덕」과 S자 곡선이 한 물건(v1 그대로).
+② m(logic_0929 s24p02 2행): 검사관 손끝이 Km 접시(계량컵)만 가리킴 → 요약·2행은 「저울 전체를 짚는다 · 둘을 함께 단다(kcat/Km)」 → 손을 저울 가운데 기둥 꼭대기, 저울대가 도는 축 위에 얹는다.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make two changes. Everything else stays identical, line for line.
+
+1. The row of doors at the lower right now stands along a grassy HILL whose outline is a clear S-shaped curve: the first door (the one the man strains to push open) stands on flat low ground; from the second door onward the ground rises steeply; at the last doors it levels off again at the top. Each door and its frame stands on this rising ground, and the people walking through the open doors walk up the slope.
+
+2. The man in the mustard jacket no longer points at the pan with the jug. He steps a little closer and rests his outstretched hand on the very top of the balance scale's central post, right on the pivot where the beam turns — judging the whole balance, both pans together.
+
+KEEP IDENTICAL — copy line for line: the straining man pushing the first door, the open doors and the crowd walking through them, the big red machine with the spinning dial, the overflowing hopper of cogs and nuts, the tray, the balance scale with the clock on one pan and the jug on the other, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
