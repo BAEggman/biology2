@@ -1,0 +1,15 @@
+[s21p01 — 2·3행 (F1 · 4장) + 개념 논리 m(예약 충돌) / 현재 그림(tools/blind/png/s21p01.png)에서 한 번의 편집]
+사양: ① 가운데 올가미 안 노란 옷 아이도 청록 비늘 망토(안쪽 전원 비늘) ② 올가미 밖 깃털 단 아이도 같은 비늘 망토 + 그 위에 큰 깃털 — 같은 조상의 후손인데 올가미가 그만 뺐다(측계통) — v1 그대로.
+③ m(logic_0929 「s21p01 · s34p05 뾰족 모자」): 오른쪽 올가미 두 아이의 뾰족 주황 모자 = 덱 예약 충돌(삼각 모자 = δ 전용 「다른 판에서 고깔·삼각 모자를 그리지 마라」 · 모자 = 5′ 캡 전용) → 모자를 벗기고, 둘 다 똑같은 파란 오리발(물갈퀴)을 맨땅에서 신음 — 조상이 다른 둘이 「겉모습」(지느러미)만 같다 = 고래와 물고기(다계통).
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make three changes. Everything else stays identical, line for line.
+
+1. MIDDLE LOOP: the child in the middle wearing plain yellow clothes now also wears the same teal scaly cloak as the other cloaked children inside that loop — every child inside the middle loop wears the scaly cloak.
+
+2. The boy standing OUTSIDE the middle loop at the bottom (the one with the feather): he now wears the same teal scaly cloak as the children inside the loop, and the large white feather is pinned on it. He stays outside the rope, in the same place and pose, looking at the group.
+
+3. RIGHT LOOP: the two children no longer wear the pointed orange hats — they are bare-headed, showing their own hair. Instead, both of them wear the very same pair of big bright-blue swimming flippers on their feet, although they stand on dry ground. Everything else about them stays the same.
+
+KEEP IDENTICAL — copy line for line: the three rope loops, the left family in red and ochre clothes with the old man in the teal robe, the ancestor in the teal robe at the top of the middle loop, the two children in the right loop (their clothes, faces and poses), the two grey ghostly old men outside the right loop, the judge in the black robe with the gavel pointing at the left group, the floor line, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
