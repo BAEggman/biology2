@@ -1,0 +1,18 @@
+[s02p04 — 3행 F1 + 음차(CD · 1장) + 개념 논리 M / 현재 그림에서 한 번의 편집 · v2]
+사양: ① 왼쪽 저울 — 단추 한 줄 넷 꼬리표(CD4) 쪽 접시가 무거워 아래로 기운다(정상 CD4:CD8 = 2:1) ② 오른쪽 저울 두 접시에도 같은 꼬리표 — 가벼운 접시에 한 줄 넷, 무거운 접시에 두 줄(역전)(v1 그대로).
+③ M(logic_0929 s02p04): 오른쪽 저울의 무거운(CD8) 접시 사슬이 끊겨 달랑임 → 「CD8 이 깨진다」로 읽힘 — 사슬 모두 온전히.
+④ 덱 예약 충돌(내가 찾음): 접시의 추가 동전(= ATP 예약) → 쌓는 잿빛 쇠 추 원반으로.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make four small changes, all on the two hanging balance scales. Everything else stays identical, line for line.
+
+1. Every coin on both scales becomes a plain round grey cast-iron balance weight — flat stackable iron discs — stacked or heaped exactly as the coins are now. No coins anywhere in the picture.
+
+2. The LEFT balance scale: its beam now tilts so that the left pan (the one with two stacks of weights and the wooden tag with ONE row of four buttons) hangs clearly LOWER than the right pan (one stack of weights and the tag with TWO rows of four buttons).
+
+3. The RIGHT balance scale (already tilted, with one single weight on its raised left pan and a heap of weights on its lowered right pan): hang the same kind of wooden tags under its pans — the tag with ONE row of four buttons under the raised pan with the single weight, and the tag with TWO rows of four buttons under the lowered pan with the heap.
+
+4. All the chains of the right scale are whole and intact — no broken or dangling chain anywhere.
+
+KEEP IDENTICAL — copy line for line: the hooks and beams, the man cutting the paper strip with the big scissors and the gold padlock on the scissors, the two white paper figures, the white figure climbing out of the window with the grey cloak, the curtain, the counter with the printing machine and the paper strips, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The picture contains no writing of any kind. Same proportions and viewpoint as the attached picture.
