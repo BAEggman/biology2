@@ -1,0 +1,16 @@
+[s19p01 — 6행 (F1 · 4장) + 개념 논리 m 둘(3·8행) / 현재 그림(tools/blind/png/s19p01.png)에서 한 번의 편집]
+사양: ① 오른쪽 위·아래 두 장면의 같은 자전거 앞(핸들 아래)에 검은 쇠 글자 B 판 — 사이클린 B(v2 그대로).
+② m(logic_0929 s19p01 3행): 아래 왼쪽 덩치 허리춤의 도장 → 지움. 도장을 찍는 것은 Rb 자신이 아니라 G1-Cdk 다(어깨의 붉은 도장 자국은 그대로).
+③ m(logic_0929 s19p01 8행): Cdc25 가 칼로 자물쇠를 끊음 — 칼 = K⁺ 예약 · 탈인산화효소의 덱 기호는 지우개(s16p01b) → 큰 분홍 지우개로 자물쇠를 문질러 지운다(반쯤 사라짐 · 지우개 가루) · 바닥의 부러진 자물쇠 조각 지움.
+--------------------------------------------------------------------------
+Redraw the attached picture exactly as it is, and make three changes. Everything else stays identical, line for line.
+
+1. The bicycle standing beside the vault door appears in BOTH right-hand scenes, the upper right and the lower right. On that bicycle, in both scenes, fix one dark cast-iron letter B, about the size of a hand, on the front of the bicycle just below the handlebars, above the front wheel, like a small plate. The two B plates look the same.
+
+2. Lower left scene: the big bald bearded man no longer has a stamp tucked in his belt — his belt is plain. The red stamp mark on his shoulder stays exactly as it is.
+
+3. Lower right scene: the man holding the fan of several records no longer holds a knife. Instead he holds a big pink rubber eraser and rubs it hard against the black padlock on the lever: the padlock is being ERASED — half of it has already faded away like a pencil drawing rubbed out, and eraser crumbs fall below it. Remove the broken padlock pieces from the floor. The lever and the open vault door stay exactly as now.
+
+KEEP IDENTICAL — copy line for line: the four scenes and the lines between them; the stone arches; the big bald bearded man with the huge red ruby on his chest holding the runner back by the collar (upper left), and the same man with hands spread open while the runner runs off (lower left); the runner's vest with the number 2 and his pole bent into an F at the top; the vault door with the long iron lever across it, the amplifier box on the floor under the lever, the single silver record fitted on the lever, the man with the mustard sash locking the lever with a black iron padlock (upper right); the man with the fan of records and the open vault door (lower right); the bicycles themselves; the cream background, the hand-drawn coloured-pencil style, the same palette, the same line weight.
+
+The only letters or numbers in the picture are the number 2 on the vest, the F-shaped pole and the two iron letters B. Same proportions and viewpoint as the attached picture.
