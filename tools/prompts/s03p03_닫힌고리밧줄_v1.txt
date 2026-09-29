@@ -1,0 +1,8 @@
+[s03p03 — 2행 개념 논리 m(logic_0929 s03p03 2) / 현재 그림에서 한 번의 편집 · v1]
+문제: 비로이드 사람이 든 고리 밧줄 — 왼손 아래로 긴 풀린 끝이 늘어짐. 덱 약속: 풀린 끝 있는 끈 = 선형 · 닫힌 고리 = 환형. 비로이드는 닫힌 환형 RNA → 풀린 끝을 없애고 이음매 없는 닫힌 고리로.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the rope in the hands of the bare-chested man in the middle.
+
+The rope becomes one single CLOSED loop of rope — a complete ring with no ends at all, like a rubber band made of rope, held up in front of his chest by both fists exactly as now. Remove the loose rope end that now hangs down from his left fist over his belly and shorts; where it was, show his bare belly and his grey shorts, drawn just like the rest of them.
+
+Keep identical: the man, his face, his pose and his hands, his shorts, the plant pot at his feet, the crumpled teal cloak on the floor, the hooded figure with the scroll and the pill capsule, the ghost, the boy with the paper boat, the torch and the bottle, the room, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.

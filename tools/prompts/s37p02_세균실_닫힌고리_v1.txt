@@ -1,0 +1,8 @@
+[s37p02 — 7행 개념 논리 m(logic_0929 s37p02 7) / 현재 그림에서 한 번의 편집 · v1]
+문제: 옆 탁자 왼쪽의 「세균」 맨 실 한 타래 — 한 끝이 풀려 삐져나옴. 덱 약속: 풀린 끝 = 선형 · 세균 염색체는 닫힌 고리 → 끝 없는 닫힌 고리 하나로(실패 없는 맨 실은 그대로).
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the loose blue cord lying on the left part of the small grey table.
+
+That blue cord becomes one single CLOSED ring of the same blue cord — a smooth loop with no ends at all, like a rubber band, lying flat on the table in the same place and at the same size. Remove the loose end that now sticks out from the loop. It still has no spools on it.
+
+Keep identical: the spool-threaded cord at the right end of the table with its thread running off it, the table itself, the two big wound baskets, the white flags, the two people, the flags scattered on the floor, the wooden floor and the wall, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.
