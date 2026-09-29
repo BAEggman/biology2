@@ -1,0 +1,11 @@
+[s09p03 — 6·7행 개념 논리 M(logic_0929 s09p03 6 · 7) / 현재 그림에서 한 번의 편집 · v1]
+문제: ① 노던·웨스턴 자리 배양기가 열려 「쓰는 중」 = RNA·단백질 블롯에 세균 배양이 필요한 것으로 읽힘(거짓) → 세 자리 배양기 모두 천을 덮음.
+② 아래 벽 — 벽 쌓기가 멈춘 틈 오른쪽에서 위 두 켜가 다시 이어짐 = ddNTP 뒤에 사슬이 다시 자라는 것으로 읽힘 → 틈 오른쪽의 위 두 켜를 지워 거기서 끝나게 · 아래 켜(주형)는 끝까지 그대로.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and make two changes.
+
+1. The two tall wooden cabinets at the middle and right workbenches, which now stand open showing shelves inside, are now closed and covered with the same white cloth as the cabinet at the left workbench, draped over them in the same way. All three cabinets are covered; none is open.
+
+2. The brick wall at the bottom: in its TOP TWO ROWS, the bricks to the RIGHT of the empty gap are removed, so those two top rows simply END at the gap and there is only cream background above the lower rows to the right of it. The lower rows of the wall below stay complete and unbroken across the whole width. The bricklayer and everything to the left of the gap stay exactly the same.
+
+Keep identical: the three hanging symbols above the workbenches (the double-twisted ladder, the single wavy line, the Y-shaped fork), the three compasses, the two people with clipboards, the long gel tray with its dots and the red plus terminal, the bricklayer, the cream background, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.
