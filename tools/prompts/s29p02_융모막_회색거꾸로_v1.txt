@@ -1,0 +1,10 @@
+[s29p02 — 2행 개념 논리 M(logic_0929 s29p02 2) / 현재 그림에서 한 번의 편집 · v1]
+문제: 융모막(그물 벽) 칸 — 밝은 주황 구름(O₂)도 어두운 회색 구름(CO₂)도 모두 바깥(왼쪽) → 안쪽(오른쪽 · 배아 쪽)으로 들어감. 기체교환이면 O₂ 는 들어오고 CO₂ 는 나가야 한다(덱: 밝은 방울 = O₂ · 어두운 방울 = CO₂) → 회색 구름과 화살만 거꾸로.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the grey clouds and their arrows in the lower-left section, the one with the tall mesh wall.
+
+The pale orange clouds and their orange arrows stay exactly as they are now: they come from the far left, pass through the mesh and continue to the right, toward the baby in the centre.
+
+The GREY clouds must go the OTHER way. They start on the right side of the mesh, the side toward the baby, and every grey arrow points to the LEFT: through the mesh and out on the far left side, where the grey clouds drift away toward the outer rim of the circle. No grey arrow points to the right or toward the baby.
+
+Keep identical: the mesh wall, the orange clouds and arrows, the big circle divided into sections, the water cushion with the hammer, the two bins, the sacks with the tube to the baby, the baby in the centre, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.

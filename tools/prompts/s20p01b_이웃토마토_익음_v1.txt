@@ -1,0 +1,8 @@
+[s20p01b — 2행 개념 논리 M(logic_0929 s20p01b 2) / 현재 그림에서 한 번의 편집 · v1]
+문제: 가스 구름 가장자리에 걸린 곁의 토마토가 초록 그대로 — 2행 소품 「가스 맞은 열매만 빨갛게」와 사실 「기체라서 옆 열매까지 익힌다」가 어긋남. → 구름이 곁의 토마토까지 또렷이 감싸고 그것도 붉게 익어 가는 중 · 구름 밖 맨 아래 것만 초록.
+--------------------------------------------------------------------------
+Edit the attached drawing. Keep everything exactly as it is, line for line, and change only the tomatoes on the plant being sprayed in the middle.
+
+The grey gas cloud from the hose spreads a little further to the right, so that it clearly surrounds BOTH the big red tomato and the upper green tomato just beside it. That upper tomato beside it is now ripening too: it has turned orange-red, nearly as red as the first one. The lowest tomato, further down and well outside the cloud, stays completely green.
+
+Keep identical: the man in red overalls with the hose and the spray, the plant's stem and leaves, the positions and sizes of the three tomatoes, the giant leaf with the roller shutter and the man pulling it down, the man tying the thick splinted stem, the bristle block on the ground, the seedlings, the greenhouse frame, the hand-drawn coloured-pencil style, the palette and the line weight. No writing anywhere.
