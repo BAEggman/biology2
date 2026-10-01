@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """crop_paste.py — **키운 조각**을 제미나이에 보낸 경우의 되옮기기(s21p02 · s18p02 방식의 일반판).
 제미나이 출력(조각을 키운 크기)을 조각 상자 크기로 줄여 원본 크기의 V 를 만들고(상자 밖은 원본),
-어긋남을 ±4px 에서 잰 뒤(바뀌지 않은 곳의 제곱차 최소), paste_boxes 와 같은 방식으로 **준 상자들 안의 바뀐 곳만** 옮긴다.
+어긋남을 ±4px 에서 잰 뒤(바뀌지 않은 곳의 제곱차 최소), 바뀌지 않은 화소로 잰 톤 차를 σ20 로 번져 맞추고, paste_boxes 와 같은 방식으로 **준 상자들 안의 바뀐 곳만** 옮긴다.
 사용: python3 crop_paste.py ORIG.png GEM.png OUT.png CROP=x0,y0,x1,y1 THR x0,y0,x1,y1 [...]   (뒤 상자들은 원본 좌표)"""
 import sys
 import numpy as np
@@ -34,6 +34,12 @@ Gc = np.roll(np.roll(Gc, dy, axis=0), dx, axis=1)
 V = O.copy()
 V[cy0:cy1, cx0:cx1] = Gc
 d = ndi.gaussian_filter(np.abs(O - V).mean(axis=2), 2.0)
+# 톤 맞춤: 바뀌지 않은 화소(σ2 차 < 6)에서 (원본 − 제미나이)를 σ20 정규화 합성곱으로 번져 더함 — 지운 자리의 바탕이 원본 크림과 같은 빛이 되게
+calm = np.zeros((H, W), bool); calm[cy0:cy1, cx0:cx1] = True
+calm &= d < 6
+den = ndi.gaussian_filter(calm.astype(float), 20)
+for k in range(3):
+    V[..., k] = V[..., k] + ndi.gaussian_filter((O[..., k] - V[..., k]) * calm, 20) / np.maximum(den, 1e-3) * (den > 1e-3)
 m = np.zeros((H, W), bool)
 for (x0, y0, x1, y1) in boxes:
     b = np.zeros((H, W), bool)
