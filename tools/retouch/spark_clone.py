@@ -9,7 +9,7 @@
    덮을 곳+고리와 겹치지 않는 것, 그림 안) — 비용 = 고리 RGB 제곱평균근 차(cv2.matchTemplate 가면 TM_SQDIFF) + 0.5 × |옮겨 올 자리 안의 기울기 평균 − 고리 기울기 평균|
    (평평한 바탕에 물건 조각을 끌어오지 않게) + 0.7 × |옮겨 올 자리 안 평균 색 − 고리 평균 색|(그 자리만의 그늘을 끌어오지 않게).
 붙이기: 고리 위 (원본 − 옮겨 온 것) 차를 σ3 로 고르게 해 덮을 곳 안을 라플라스 막으로 이어 더함(국소 그늘까지) · σ1.5 섞음(안은 다 바꿈).
-사용: python3 spark_clone.py OUTDIR pid[:dx,dy] ...   (입력 tools/blind/png/<pid>.png — 무손실 설치본; :dx,dy 로 어긋남을 박을 수 있다)
+사용: python3 spark_clone.py OUTDIR pid[:dx,dy][@cx,cy,R] ...   (입력 tools/blind/png/<pid>.png — 무손실 설치본; :dx,dy 로 어긋남을 박을 수 있다)
       --search N (기본 140) · --src DIR · --at CX,CY,R (기본 자리 말고 다른 자리 별 — 넓은 판 · 다른 출력 크기에서 온 별; ±2 · R ±1 다시 맞춤)"""
 import sys, os
 import numpy as np
@@ -88,12 +88,16 @@ def membrane(B, Om):
 
 
 def process(spec, outdir, srcdir, SEARCH):
+    at = AT
+    if '@' in spec:
+        spec, a_ = spec.split('@')
+        at = tuple(float(v) for v in a_.split(','))
     pid, fixed = (spec.split(':') + [None])[:2]
     full = np.asarray(Image.open(os.path.join(srcdir, pid + '.png')).convert('RGB')).astype(np.float64)
     H, W = full.shape[:2]
     L = full.mean(axis=2)
-    if AT:
-        c, R, cx, cy = fit_geometry(L, AT[2], AT[0], AT[1], span=2.0)
+    if at:
+        c, R, cx, cy = fit_geometry(L, at[2], at[0], at[1], span=2.0)
     else:
         assert (H, W) == (1024, 1024), (pid, full.shape)
         c, R, cx, cy = fit_geometry(L)
@@ -165,8 +169,10 @@ def process(spec, outdir, srcdir, SEARCH):
     out = full * (1 - w[..., None]) + src * w[..., None]
     out = np.clip(out + 0.5, 0, 255).astype(np.uint8)
     Image.fromarray(out).save(os.path.join(outdir, pid + '.png'))
-    a_img = Image.fromarray(full.astype(np.uint8)).crop((840, 840, 970, 970)).resize((300, 300), Image.LANCZOS)
-    b_img = Image.fromarray(out).crop((840, 840, 970, 970)).resize((300, 300), Image.LANCZOS)
+    hb = int(R * 2.6)
+    bx = (int(cx) - hb, int(cy) - hb, int(cx) + hb, int(cy) + hb)
+    a_img = Image.fromarray(full.astype(np.uint8)).crop(bx).resize((300, 300), Image.LANCZOS)
+    b_img = Image.fromarray(out).crop(bx).resize((300, 300), Image.LANCZOS)
     cmp_ = Image.new('RGB', (610, 300), 'white'); cmp_.paste(a_img, (0, 0)); cmp_.paste(b_img, (310, 0))
     cmp_.save(os.path.join(outdir, pid + '_cmp.png'))
     print('%-8s R %.2f c (%.1f, %.1f) contrast %.1f  offset (%d, %d)  cost %.1f  tone %s' % (pid, R, cx, cy, c, dx, dy, e, off.round(1)))
