@@ -21,3 +21,13 @@ Keep the cream background, the hand-drawn coloured-pencil style, the same palett
 ## 후속 v4 (같은 대화)
 
 The second door opens the wrong way. Right now its doorway is on the right wall of the third room and its door leaf is inside the third room. Move this door: put the doorway on the LEFT wall of the FOURTH room, with the door leaf swung wide open INTO the fourth room (towards the right) and the small wooden block on the floor of the fourth room right behind the open leaf — exactly mirroring the first door, which sits on the left wall of the second room and opens into the second room. No door leaf, no doorway and no block inside the third room. Keep everything else exactly as it is — the first door, the solid wall between the second and third rooms, the dark thick walls of the fourth room, the lungs, the four pipes, the human figure, the colors and the style. No text.
+
+## v4 결과 — 둘째 문짝이 넷째 방 안으로 ✓ · 그러나 문짝 아래가 바닥 앞 끝 밖으로 삐져나오고 받침대가 방 오른쪽 끝에 멀리 떨어짐
+## 후속 v5 (같은 대화)
+
+Good, the second door now opens into the fourth room. Two small fixes to that door only: its open door leaf must stand fully inside the fourth room, with its bottom edge resting on the fourth room's floor (right now it sticks out below the front edge of the floor) and the same size as the first door; and move the small wooden block so it sits on the fourth room's floor right behind that open leaf, touching it — just like the block behind the first door. Keep everything else exactly as it is in this version. No text.
+
+## v5 결과 — 둘째 문짝을 넷째 방 뒷벽에 **닫힌 문**처럼 정면으로 그림(칸막이 경첩에서 열린 문으로 안 읽힘) · 버림
+## v6 (새 대화 · **v4 출력을 입력으로**)
+
+Edit the attached illustration. In the fourth room (the dark one on the right), the open wooden door leaf hinged on the left partition is too tall and its bottom hangs down below the front edge of the room's floor. Make that open door leaf exactly the same size as the open door leaf in the second room, standing on the fourth room's floor, still hinged on the left partition and swung open into the fourth room. Move the small wooden block on the fourth room's floor so it sits right behind that open leaf, touching it, just like the block behind the door in the second room. Keep everything else exactly as it is — all four rooms, the solid wall between the second and third rooms, the door in the second room, the lungs, the four pipes, the human figure, the colors and the style. No text.
