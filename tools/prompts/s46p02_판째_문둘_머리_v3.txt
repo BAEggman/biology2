@@ -16,3 +16,8 @@ The fourth room has the thickest, darkest walls of all.
 PIPES — above the building, a pair of pink lungs. A grey-blue pipe rises from the roof of the second room up into the lungs, and a brick-red pipe comes down from the lungs into the roof of the third room. A brick-red pipe leaves the right outer wall of the fourth room and goes to a pale outline of a whole human figure standing on the right — head, body, arms and legs. A grey-blue pipe comes out of that figure, runs down and back under the whole building, and enters the first room from below. Nothing else connects the rooms.
 
 Keep the cream background, the hand-drawn coloured-pencil style, the same palette and line weight. No border or frame line around the picture. The picture contains no writing, letters, numbers or arrows of any kind. Square image.
+
+## 10/1 결과 — 새 대화(현재 그림을 본보기로) v3: 문 둘 · 2|3 통벽 · 머리 있는 사람 · 넷째 방 가장 어두움 ✓ — 그러나 3|4 문짝이 **셋째 방 안으로**(왼쪽으로) 열림 = 넷째 → 셋째 역류 ✗
+## 후속 v4 (같은 대화)
+
+The second door opens the wrong way. Right now its doorway is on the right wall of the third room and its door leaf is inside the third room. Move this door: put the doorway on the LEFT wall of the FOURTH room, with the door leaf swung wide open INTO the fourth room (towards the right) and the small wooden block on the floor of the fourth room right behind the open leaf — exactly mirroring the first door, which sits on the left wall of the second room and opens into the second room. No door leaf, no doorway and no block inside the third room. Keep everything else exactly as it is — the first door, the solid wall between the second and third rooms, the dark thick walls of the fourth room, the lungs, the four pipes, the human figure, the colors and the style. No text.
