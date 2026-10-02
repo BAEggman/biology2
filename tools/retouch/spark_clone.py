@@ -10,7 +10,8 @@
    (평평한 바탕에 물건 조각을 끌어오지 않게) + 0.7 × |옮겨 올 자리 안 평균 색 − 고리 평균 색|(그 자리만의 그늘을 끌어오지 않게).
 붙이기: 고리 위 (원본 − 옮겨 온 것) 차를 σ3 로 고르게 해 덮을 곳 안을 라플라스 막으로 이어 더함(국소 그늘까지) · σ1.5 섞음(안은 다 바꿈).
 사용: python3 spark_clone.py OUTDIR pid[:dx,dy][@cx,cy,R] ...   (입력 tools/blind/png/<pid>.png — 무손실 설치본; :dx,dy 로 어긋남을 박을 수 있다)
-      --search N (기본 140) · --src DIR · --at CX,CY,R (기본 자리 말고 다른 자리 별 — 넓은 판 · 다른 출력 크기에서 온 별; ±2 · R ±1 다시 맞춤)"""
+      --search N (기본 140) · --src DIR · --at CX,CY,R (기본 자리 말고 다른 자리 별 — 넓은 판 · 다른 출력 크기에서 온 별; ±2 · R ±1 다시 맞춤)
+      --nofit: @cx,cy,R 를 다시 맞추지 않고 그대로(spark_inv 가 맞춘 자리를 넘길 때 — 맞추기가 판마다 20초 넘게 걸린다)"""
 import sys, os
 import numpy as np
 from PIL import Image
@@ -20,6 +21,7 @@ P0, R0, CX0, CY0 = 0.69, 25.4, 903.5, 903.5
 S = 8
 DIL = 3
 AT = None
+NOFIT = False
 
 
 def star_mask_full(R, cx, cy, H=1024, W=1024, p=P0):
@@ -96,7 +98,9 @@ def process(spec, outdir, srcdir, SEARCH):
     full = np.asarray(Image.open(os.path.join(srcdir, pid + '.png')).convert('RGB')).astype(np.float64)
     H, W = full.shape[:2]
     L = full.mean(axis=2)
-    if at:
+    if at and NOFIT:
+        c, R, cx, cy = float('nan'), at[2], at[0], at[1]
+    elif at:
         c, R, cx, cy = fit_geometry(L, at[2], at[0], at[1], span=2.0)
     else:
         assert (H, W) == (1024, 1024), (pid, full.shape)
@@ -190,6 +194,8 @@ if __name__ == '__main__':
             DIL = int(args[1]); args = args[2:]
         elif args[0] == '--at':
             AT = tuple(float(v) for v in args[1].split(',')); args = args[2:]
+        elif args[0] == '--nofit':
+            NOFIT = True; args = args[1:]
     outdir = args[0]
     os.makedirs(outdir, exist_ok=True)
     for spec in args[1:]:

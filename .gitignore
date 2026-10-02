@@ -6,3 +6,4 @@ outputs/*
 !outputs/그릴것_*.md
 tools/__pycache__/
 Gemini_Generated_Image_*.png
+tools/retouch/__pycache__/
