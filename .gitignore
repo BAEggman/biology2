@@ -4,6 +4,7 @@ test/.tmp/
 outputs/*
 !outputs/need_picture.md
 !outputs/그릴것_*.md
+!outputs/블라인드테스트_*.md
 tools/__pycache__/
 Gemini_Generated_Image_*.png
 tools/retouch/__pycache__/
