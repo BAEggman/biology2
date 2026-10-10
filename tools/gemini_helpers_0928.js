@@ -2,7 +2,7 @@ window.__fire=function(b){const r=b.getBoundingClientRect(),cx=r.x+r.width/2,cy=
 window.__pillEl=()=>[...document.querySelectorAll('button')].find(x=>/모드 선택 도구/.test(x.getAttribute('aria-label')||''));
 window.__setPro=async()=>{const w=ms=>new Promise(r=>setTimeout(r,ms));let p=window.__pillEl();if(!p)return 'no pill';
  if(!/Pro/.test(p.innerText)){window.__fire(p);await w(900);const it=[...document.querySelectorAll('gem-menu-item,[role="menuitem"]')].find(x=>/^3\.1 Pro/.test((x.innerText||'').trim()));if(it)window.__fire(it);await w(900);}
- p=window.__pillEl(); if(!/Extended/.test(p.innerText)){window.__fire(p);await w(900);const it=[...document.querySelectorAll('gem-menu-item,[role="menuitem"]')].find(x=>/^확장된 사고 모델/.test((x.innerText||'').trim()));if(it)window.__fire(it);await w(900);}
+ p=window.__pillEl(); if(!/Extended|최고가/.test(p.innerText)){window.__fire(p);await w(900);const it=[...document.querySelectorAll('gem-menu-item,[role="menuitem"]')].find(x=>/^확장된 사고 모델|^최고가/.test((x.innerText||'').trim()));if(it)window.__fire(it);await w(900);}
  return window.__pillEl().innerText.replace(/\n/g,' ');};
 window.__openUpload=()=>{const b=[...document.querySelectorAll('button,[role="button"]')].find(x=>(x.getAttribute('aria-label')||'').trim()==='업로드 및 도구');window.__fire(b);return !!b;};
 window.__expose=()=>{const f=[...document.querySelectorAll('input[type=file]')];const i=f.find(x=>(x.accept||'')==='image/*');if(i){document.body.appendChild(i);i.id='__imgup';i.setAttribute('aria-label','내가 노출시킨 이미지 업로드 입력');i.style.cssText='position:fixed;left:12px;top:12px;width:240px;height:48px;opacity:1;z-index:2147483647;display:block;visibility:visible';}return {n:f.length,moved:!!i};};
