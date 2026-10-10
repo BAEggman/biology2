@@ -291,7 +291,9 @@
 
 > **[2026-10-10] 메뉴가 바뀌었다** — 모델 줄은 `3.5 Flash-Lite` · `3.8 Flash` · `3.1 Pro` 이고, 「확장된 사고 모델」 대신 생각 깊이 세 줄 `최저가 / 보통 / 최고가(매우 철저함)` 이 뜬다. 쓰는 것은 **Pro + 최고가** — 알약 글자가 「Pro / 최고가」, aria-label 이 「현재 Pro 최고가 모드 사용 중」이면 된다. `__setPro` 는 둘 다(Extended 또는 최고가) 받게 고쳤다(gemini_helpers_0928.js 5행).
 
-## ⑦ 생성이 5~7분 걸릴 수 있다 (Pro + 확장된 사고)
+## ⑥-b [2026-10-10 저녁] **Trusted Types**: 페이지가 `require-trusted-types-for 'script'` 를 켜면 `eval(sessionStorage.getItem('__h'))` 이 「Evaluating a string as JavaScript violates…」로 막힌다 → 먼저 `window.trustedTypes.createPolicy('default',{createScript:s=>s,createHTML:s=>s,createScriptURL:s=>s})` 를 만든 뒤 eval. **창 가려짐**: `visibilityState==='hidden'` 은 다른 창(Claude 앱)이 크롬 창을 통째로 덮을 때다 — 사용자에게 두 창을 **나란히** 두라고 한다. 보이는 순간 자동으로 보내는 `__autosend()`(visibilitychange → 「메시지 보내기」 단추 `__fire`)를 붙여 두면 폴링 없이 된다(가려진 동안은 합성 click 도 안 먹는다).
+
+⑦ 생성이 5~7분 걸릴 수 있다 (Pro + 확장된 사고)
 
 `Creating your image` 가 6분 넘게 떠 있어도 정상이다. `img[src^="blob:"]` 가 **하나 생겼는데
 `naturalWidth` 가 0**이면 디코드 중이다 — **대화 URL 로 새로고침**하면 1024 로 잡힌다.
