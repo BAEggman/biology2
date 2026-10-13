@@ -101,7 +101,7 @@ for (const n of HNAMES) LONGER[n] = HNAMES.filter(m => m !== n && m.includes(n))
  *   ★ 「트로포닌·트로포미오신과 같은 계열이라」    ← 계열을 짚는 말
  * 이런 자리는 그 물건이 이 판에 없어도 잘못이 아니다. 오히려 있어서는 안 된다.
  */
-const REFMARK = /(s\d+p\d+[a-z]*|d\d+p\d+[a-z]*|갈린다|갈라|갈랐|와 다르|과 다르|와 달리|과 달리|아니다|아닌|같은 계열|계열이라|예약|앞 판|뒤 판|다른 판|곁판)/;
+const REFMARK = /(s\d+[pu]\d+[a-z]*|d\d+p\d+[a-z]*|갈린다|갈라|갈랐|와 다르|과 다르|와 달리|과 달리|아니다|아닌|같은 계열|계열이라|예약|앞 판|뒤 판|다른 판|곁판)/;
 function present(facts, name) {
   const longer = LONGER[name] || [];
   let own = false, ref = false;

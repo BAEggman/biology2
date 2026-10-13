@@ -4,7 +4,7 @@ const fs=require('fs'), path=require('path');
 const man=JSON.parse(fs.readFileSync(path.join(__dirname,'manifest.json'),'utf8'));
 const M=Object.fromEntries(man.map(m=>[m.pid,m]));
 const outDir=path.join(__dirname,'out');
-const files=fs.readdirSync(outDir).filter(f=>/^s\d+p\d+\w*\.json$/.test(f));
+const files=fs.readdirSync(outDir).filter(f=>/^s\d+[pu]\d+\w*\.json$/.test(f));
 const R=[];
 for(const f of files){ const d=JSON.parse(fs.readFileSync(path.join(outDir,f),'utf8')); if(d&&d.rows) R.push(d); }
 const tot={rows:0,seenN:0,coldY:0,coldP:0,cuedY:0,cuedP:0,cuedN:0,cards:0,cardsSeenN:0,cardsCuedN:0};

@@ -113,7 +113,7 @@ function candidates(card){
 
   const byScene={};
   for(const p of pool){
-    const sid=p.pid.replace(/p\d+[ab]?$/,'');
+    const sid=p.pid.replace(/[pu]\d+[ab]?$/,'');
     const hit=[...new Set(PTERM.get(p.pid))].filter(w=>text.includes(w));
     const sc=hit.reduce((a,w)=>a+weight(w),0);
     const S=byScene[sid]=byScene[sid]||{sid, scene:p.title.split(' · ')[0], best:0, panels:[], hits:new Set()};

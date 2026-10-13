@@ -55,7 +55,7 @@ const SIBG={};
 for(const cid in PMAP){
   const arr=Array.isArray(PMAP[cid])?PMAP[cid]:[PMAP[cid]];
   const g=(CARDS.find(c=>c.id===cid)||{}).g; if(!g) continue;
-  arr.forEach(pid=>{ const sid=pid.replace(/p\d+[ab]?$/,''); (SIBG[sid]=SIBG[sid]||new Set()).add(g); });
+  arr.forEach(pid=>{ const sid=pid.replace(/[pu]\d+[ab]?$/,''); (SIBG[sid]=SIBG[sid]||new Set()).add(g); });
 }
 function pool(p){
   const byCh=CARDS.filter(c=>chNum(c.ch).some(n=>p.ch.includes(n)));

@@ -22,7 +22,8 @@ T('pc 보유 패널은 줄지 않는다', ()=>ge((sk.match(/,pc:\[/g)||[]).lengt
    이관이 무손실이었나는 구조로 본다 — pc를 걷어냈을 때 구조가 v12와 같은가. */
 T('pc를 걷어내면 구조가 v12와 같다', ()=>{
   const strip=t=>t.replace(/(\{id:'[sd]\d+p\d+[ab]?')\,pc:\[[^\]]*\]\,/g,'$1,');
-  const shape=t=>(t.match(/\{id:'[sd]\d+p?\d*[ab]?'/g)||[]).join('|');
+  /* [보탬 2026-10-13] 단원 통합판 id 는 'u' 를 쓴다(s08u01) — 모양 잣대가 그것도 읽어야 통합이 보인다 */
+  const shape=t=>(t.match(/\{id:'[sd]\d+(?:p|u)?\d*[ab]?'/g)||[]).join('|');
   const orig=fs.readFileSync(FX.BASESK,'utf8');
   /* [정정] 완전 일치는 패널을 추가하면 깨진다 — 추가가 이 프로젝트의 목적이다.
      불변식은 「v12의 장면·패널이 하나도 사라지지 않았고 순서도 그대로다」이다. */
@@ -32,12 +33,24 @@ T('pc를 걷어내면 구조가 v12와 같다', ()=>{
      무시하게 된다. pmapMoved와 같은 방식으로 baseline.panelSplit에 적어 둔 분할만 통과시킨다 —
      적지 않고 사라지면 여전히 잡힌다. */
   const SPLIT=BL.panelSplit||{};
+  /* [보탬 2026-10-13] 단원 통합 — 분할의 반대다. 한 단원에 흩어진 판 여럿을 통합판 하나로 다시 그렸다
+     (사용자: 그림 장수가 많아 연결된 개념이 흩어지는 것을 막는다 — 추가가 아니라 다시 그리기).
+     baseline.panelMerge[통합판] = {from:[옛 판…], why} 에 적은 것만 통과시킨다 — 적지 않고 사라지면 여전히 잡힌다.
+     옛 판들은 v12 순서대로 연달아 있어야 하고, 통합판은 그 첫 판 자리에 와야 한다. */
+  const MERGE=BL.panelMerge||{}, INTO={};
+  for(const [to,m] of Object.entries(MERGE)) (m.from||[]).forEach(f=>{ INTO[f]=to; });
   const key=id=>"{id:'"+id+"'";
-  let i=0; const gone=[], split=[];
+  let i=0, lastInto=null; const gone=[], split=[], merged=[];
   for(const k of was){
     const j=now.indexOf(k,i);
-    if(j>=0){ i=j+1; continue; }
+    if(j>=0){ i=j+1; lastInto=null; continue; }
     const id=(k.match(/'([^']+)'/)||[])[1];
+    const into=INTO[id];
+    if(into && MERGE[into].why){
+      if(lastInto===into){ merged.push(id); continue; }          /* 같은 통합판의 둘째·셋째 옛 판 */
+      const jj=now.indexOf(key(into),i);
+      if(jj>=0){ i=jj+1; lastInto=into; merged.push(id); continue; }
+    }
     const kids=(SPLIT[id]||{}).to||[];
     let p=i, ok=kids.length>0;
     for(const c of kids){ const jj=now.indexOf(key(c),p); if(jj<0){ ok=false; break; } p=jj+1; }
@@ -46,11 +59,12 @@ T('pc를 걷어내면 구조가 v12와 같다', ()=>{
   }
   eq(gone.join(','),'', 'v12에서 사라진 것');
   if(split.length) console.log('      ↔ 기록된 분할: '+split.join(' · '));
+  if(merged.length) console.log('      ⇉ 기록된 통합: '+Object.keys(MERGE).map(t=>MERGE[t].from.join('+')+'→'+t).join(' · '));
   const added=now.filter(k=>!was.includes(k));
   if(added.length) console.log('      + 추가: '+added.join(' '));
   const nf=t=>(t.match(/,f:\[/g)||[]).length;
   ge(nf(sk), nf(orig), '사실표 보유 패널 수');
-  return '소실 0 · 추가 '+added.length+(split.length?' · 분할 '+split.length:'');
+  return '소실 0 · 추가 '+added.length+(split.length?' · 분할 '+split.length:'')+(merged.length?' · 통합 '+merged.length+'→'+Object.keys(MERGE).length:'');
 });
 T('pc 값이 전부 유효한 카드 ID', ()=>{
   const CARDS=new Set(JSON.parse(read('index.html')
@@ -96,9 +110,11 @@ T('PMAP 값이 안 바뀜 (기록된 이동만 허용)', ()=>{
 T('PTIT·PBR 키 집합 동일 · PFACT는 소스와 일치', ()=>{
   /* [정정] 「키 집합이 동일」은 패널을 추가하면 깨진다 — 추가는 이 프로젝트의 목적이다.
      불변식은 「이전 키가 하나도 사라지지 않았다」이다. */
+  /* [보탬 2026-10-13] 단원 통합(baseline.panelMerge)으로 합쳐진 옛 판은 통합판이 있으면 사라져도 된다 */
+  const INTO={}; for(const [to,m] of Object.entries(BL.panelMerge||{})) if(m.why) (m.from||[]).forEach(f=>{ INTO[f]=to; });
   ['PTIT','PBR'].forEach(n=>{
     const before=Object.keys(J(prev,n)), after=new Set(Object.keys(J(now,n)));
-    const gone=before.filter(k=>!after.has(k));
+    const gone=before.filter(k=>!after.has(k) && !(INTO[k] && after.has(INTO[k])));
     eq(gone.join(','),'',n+' 소실');
   });
   const rows=o=>Object.values(o).reduce((a,b)=>a+b.length,0);
