@@ -1,0 +1,899 @@
+{
+ "설명": "2026-10-13 제미나이(3.1 Pro 최고가) 한 번 생성 소품 수 시험. 채점 2/1/0. hard = 덱 같은 소품(H1~H16) — s 는 바로잡은 최종 점수, verifier 는 그림 이름을 섞은 대조 채점(일치 118/124).",
+ "pool_easy": [
+  "A stone well with a RED bucket hanging from its rope.",
+  "A baker in a white apron pulling exactly THREE round loaves out of a brick oven with a long wooden paddle.",
+  "A white goat tied by a rope to a wooden post.",
+  "A blue umbrella lying UPSIDE DOWN on the ground, filled with water like a bowl.",
+  "A ladder leaning against a house wall with a black cat sitting on its TOP rung.",
+  "Two glass bottles side by side — the LEFT one completely full of green liquid, the RIGHT one completely empty.",
+  "A woman cutting a long yellow rope in half with big scissors.",
+  "A wooden barrel with a lit fuse sparking on top.",
+  "A wheelbarrow carrying a folded checkered blanket.",
+  "A round wooden shield leaning on a fence, with a yellow star painted in its center.",
+  "A boy aiming a slingshot at a brass bell hanging from a beam.",
+  "Four clay flower pots in a row on a bench — only the THIRD pot from the left has a red flower; the other three show bare soil.",
+  "A brown dog asleep INSIDE a woven basket.",
+  "A golden key stuck halfway into the trunk of a small tree.",
+  "A fisherman holding up a net with exactly TWO fish caught in it.",
+  "A red-and-white diamond-shaped kite tangled in the branches of the same small tree."
+ ],
+ "pool_hard": [
+  "A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder.",
+  "A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only.",
+  "One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows.",
+  "Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots.",
+  "A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box.",
+  "A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall.",
+  "A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars.",
+  "A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels.",
+  "A tool lying on a shelf, made of three parts in a row: a round wooden knob handle, a coiled metal spring in the middle, and a flat metal blade at the end.",
+  "A boy holding up a glass jar that is completely empty except for exactly TWO tiny grains at the very bottom.",
+  "Exactly FOUR flower pots in a row: the FIRST and THIRD have red flowers, the SECOND and FOURTH show only bare soil.",
+  "A ladder with exactly FIVE rungs leaning against a tree, with a black cat sitting on the SECOND rung from the bottom.",
+  "A round clock on a tower wall whose face has no marks at all and only ONE hand, pointing straight DOWN. (상태 · 방향)",
+  "A woman holding a tray with exactly THREE cups in a row; only the MIDDLE cup is upside down. (개수 3 · 가운데만 · 상태)",
+  "A brown dog asleep INSIDE a wooden barrel that lies on its side. (안 · 상태)",
+  "A birdcage hanging from a hook with its door wide OPEN and nothing inside; a yellow bird sits on TOP of the cage. (빔 · 위)"
+ ],
+ "prompts": {
+  "flat6": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter.\n\nA small village square. A stone well with a RED bucket hanging from its rope. A baker in a white apron pulling exactly THREE round loaves out of a brick oven with a long wooden paddle. A white goat tied by a rope to a wooden post. A blue umbrella lying UPSIDE DOWN on the ground, filled with water like a bowl. A ladder leaning against a house wall with a black cat sitting on its TOP rung. Two glass bottles side by side — the LEFT one completely full of green liquid, the RIGHT one completely empty.\n\nThe composition fills the entire frame from edge to edge.",
+  "flat8": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter.\n\nA small village square. A stone well with a RED bucket hanging from its rope. A baker in a white apron pulling exactly THREE round loaves out of a brick oven with a long wooden paddle. A white goat tied by a rope to a wooden post. A blue umbrella lying UPSIDE DOWN on the ground, filled with water like a bowl. A ladder leaning against a house wall with a black cat sitting on its TOP rung. Two glass bottles side by side — the LEFT one completely full of green liquid, the RIGHT one completely empty. A woman cutting a long yellow rope in half with big scissors. A wooden barrel with a lit fuse sparking on top.\n\nThe composition fills the entire frame from edge to edge.",
+  "flat10": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter.\n\nA small village square. A stone well with a RED bucket hanging from its rope. A baker in a white apron pulling exactly THREE round loaves out of a brick oven with a long wooden paddle. A white goat tied by a rope to a wooden post. A blue umbrella lying UPSIDE DOWN on the ground, filled with water like a bowl. A ladder leaning against a house wall with a black cat sitting on its TOP rung. Two glass bottles side by side — the LEFT one completely full of green liquid, the RIGHT one completely empty. A woman cutting a long yellow rope in half with big scissors. A wooden barrel with a lit fuse sparking on top. A wheelbarrow carrying a folded checkered blanket. A round wooden shield leaning on a fence, with a yellow star painted in its center.\n\nThe composition fills the entire frame from edge to edge.",
+  "flat12": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter.\n\nA small village square. A stone well with a RED bucket hanging from its rope. A baker in a white apron pulling exactly THREE round loaves out of a brick oven with a long wooden paddle. A white goat tied by a rope to a wooden post. A blue umbrella lying UPSIDE DOWN on the ground, filled with water like a bowl. A ladder leaning against a house wall with a black cat sitting on its TOP rung. Two glass bottles side by side — the LEFT one completely full of green liquid, the RIGHT one completely empty. A woman cutting a long yellow rope in half with big scissors. A wooden barrel with a lit fuse sparking on top. A wheelbarrow carrying a folded checkered blanket. A round wooden shield leaning on a fence, with a yellow star painted in its center. A boy aiming a slingshot at a brass bell hanging from a beam. Four clay flower pots in a row on a bench — only the THIRD pot from the left has a red flower; the other three show bare soil.\n\nThe composition fills the entire frame from edge to edge.",
+  "flat16": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter.\n\nA small village square. A stone well with a RED bucket hanging from its rope. A baker in a white apron pulling exactly THREE round loaves out of a brick oven with a long wooden paddle. A white goat tied by a rope to a wooden post. A blue umbrella lying UPSIDE DOWN on the ground, filled with water like a bowl. A ladder leaning against a house wall with a black cat sitting on its TOP rung. Two glass bottles side by side — the LEFT one completely full of green liquid, the RIGHT one completely empty. A woman cutting a long yellow rope in half with big scissors. A wooden barrel with a lit fuse sparking on top. A wheelbarrow carrying a folded checkered blanket. A round wooden shield leaning on a fence, with a yellow star painted in its center. A boy aiming a slingshot at a brass bell hanging from a beam. Four clay flower pots in a row on a bench — only the THIRD pot from the left has a red flower; the other three show bare soil. A brown dog asleep INSIDE a woven basket. A golden key stuck halfway into the trunk of a small tree. A fisherman holding up a net with exactly TWO fish caught in it. A red-and-white diamond-shaped kite tangled in the branches of the same small tree.\n\nThe composition fills the entire frame from edge to edge.",
+  "flat10r": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter.\n\nA small village square. A round wooden shield leaning on a fence, with a yellow star painted in its center. A wheelbarrow carrying a folded checkered blanket. A wooden barrel with a lit fuse sparking on top. A woman cutting a long yellow rope in half with big scissors. Two glass bottles side by side — the LEFT one completely full of green liquid, the RIGHT one completely empty. A ladder leaning against a house wall with a black cat sitting on its TOP rung. A blue umbrella lying UPSIDE DOWN on the ground, filled with water like a bowl. A white goat tied by a rope to a wooden post. A baker in a white apron pulling exactly THREE round loaves out of a brick oven with a long wooden paddle. A stone well with a RED bucket hanging from its rope.\n\nThe composition fills the entire frame from edge to edge.",
+  "zoned12": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter.\n\nA small village square seen from the front, with three areas from left to right. LEFT AREA: A stone well with a RED bucket hanging from its rope. A baker in a white apron pulling exactly THREE round loaves out of a brick oven with a long wooden paddle. A white goat tied by a rope to a wooden post. A blue umbrella lying UPSIDE DOWN on the ground, filled with water like a bowl. CENTER AREA: A ladder leaning against a house wall with a black cat sitting on its TOP rung. Two glass bottles side by side — the LEFT one completely full of green liquid, the RIGHT one completely empty. A woman cutting a long yellow rope in half with big scissors. A wooden barrel with a lit fuse sparking on top. RIGHT AREA: A wheelbarrow carrying a folded checkered blanket. A round wooden shield leaning on a fence, with a yellow star painted in its center. A boy aiming a slingshot at a brass bell hanging from a beam. Four clay flower pots in a row on a bench — only the THIRD pot from the left has a red flower; the other three show bare soil. Nothing from one area appears in another area.\n\nThe composition fills the entire frame from edge to edge.",
+  "zoned16": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter.\n\nA small village square seen from the front, with three areas from left to right. LEFT AREA: A stone well with a RED bucket hanging from its rope. A baker in a white apron pulling exactly THREE round loaves out of a brick oven with a long wooden paddle. A white goat tied by a rope to a wooden post. A blue umbrella lying UPSIDE DOWN on the ground, filled with water like a bowl. A ladder leaning against a house wall with a black cat sitting on its TOP rung. CENTER AREA: Two glass bottles side by side — the LEFT one completely full of green liquid, the RIGHT one completely empty. A woman cutting a long yellow rope in half with big scissors. A wooden barrel with a lit fuse sparking on top. A wheelbarrow carrying a folded checkered blanket. A round wooden shield leaning on a fence, with a yellow star painted in its center. A boy aiming a slingshot at a brass bell hanging from a beam. RIGHT AREA: Four clay flower pots in a row on a bench — only the THIRD pot from the left has a red flower; the other three show bare soil. A brown dog asleep INSIDE a woven basket. A golden key stuck halfway into the trunk of a small tree. A fisherman holding up a net with exactly TWO fish caught in it. A red-and-white diamond-shaped kite tangled in the branches of the same small tree. Nothing from one area appears in another area.\n\nThe composition fills the entire frame from edge to edge.",
+  "hard4": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square. A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. The composition fills the entire frame from edge to edge.",
+  "hard6": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square. A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. The composition fills the entire frame from edge to edge.",
+  "hard8": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square. A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars. A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels. The composition fills the entire frame from edge to edge.",
+  "hard12": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square. A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars. A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels. A tool lying on a shelf, made of three parts in a row: a round wooden knob handle, a coiled metal spring in the middle, and a flat metal blade at the end. A boy holding up a glass jar that is completely empty except for exactly TWO tiny grains at the very bottom. Exactly FOUR flower pots in a row: the FIRST and THIRD have red flowers, the SECOND and FOURTH show only bare soil. A ladder with exactly FIVE rungs leaning against a tree, with a black cat sitting on the SECOND rung from the bottom. The composition fills the entire frame from edge to edge.",
+  "hard6b": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square. A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. The composition fills the entire frame from edge to edge.",
+  "hard8b": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square. A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars. A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels. The composition fills the entire frame from edge to edge.",
+  "hard12b": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square. A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars. A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels. A tool lying on a shelf, made of three parts in a row: a round wooden knob handle, a coiled metal spring in the middle, and a flat metal blade at the end. A boy holding up a glass jar that is completely empty except for exactly TWO tiny grains at the very bottom. Exactly FOUR flower pots in a row: the FIRST and THIRD have red flowers, the SECOND and FOURTH show only bare soil. A ladder with exactly FIVE rungs leaning against a tree, with a black cat sitting on the SECOND rung from the bottom. The composition fills the entire frame from edge to edge.",
+  "hardz12": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square seen from the front, with three areas from left to right. LEFT AREA: A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. CENTER AREA: A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars. A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels. RIGHT AREA: A tool lying on a shelf, made of three parts in a row: a round wooden knob handle, a coiled metal spring in the middle, and a flat metal blade at the end. A boy holding up a glass jar that is completely empty except for exactly TWO tiny grains at the very bottom. Exactly FOUR flower pots in a row: the FIRST and THIRD have red flowers, the SECOND and FOURTH show only bare soil. A ladder with exactly FIVE rungs leaning against a tree, with a black cat sitting on the SECOND rung from the bottom. Nothing from one area appears in another area. The composition fills the entire frame from edge to edge.",
+  "hard16": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square. A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars. A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels. A tool lying on a shelf, made of three parts in a row: a round wooden knob handle, a coiled metal spring in the middle, and a flat metal blade at the end. A boy holding up a glass jar that is completely empty except for exactly TWO tiny grains at the very bottom. Exactly FOUR flower pots in a row: the FIRST and THIRD have red flowers, the SECOND and FOURTH show only bare soil. A ladder with exactly FIVE rungs leaning against a tree, with a black cat sitting on the SECOND rung from the bottom. A round clock on a tower wall whose face has no marks at all and only ONE hand, pointing straight DOWN. A woman holding a tray with exactly THREE cups in a row; only the MIDDLE cup is upside down. A brown dog asleep INSIDE a wooden barrel that lies on its side. A birdcage hanging from a hook with its door wide OPEN and nothing inside; a yellow bird sits on TOP of the cage. The composition fills the entire frame from edge to edge.",
+  "hardz12b": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square seen from the front, with three areas from left to right. LEFT AREA: A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. CENTER AREA: A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars. A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels. RIGHT AREA: A tool lying on a shelf, made of three parts in a row: a round wooden knob handle, a coiled metal spring in the middle, and a flat metal blade at the end. A boy holding up a glass jar that is completely empty except for exactly TWO tiny grains at the very bottom. Exactly FOUR flower pots in a row: the FIRST and THIRD have red flowers, the SECOND and FOURTH show only bare soil. A ladder with exactly FIVE rungs leaning against a tree, with a black cat sitting on the SECOND rung from the bottom. Nothing from one area appears in another area. The composition fills the entire frame from edge to edge.",
+  "hardz12c": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square seen from the front, with three areas from left to right. LEFT AREA: A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. CENTER AREA: A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars. A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels. RIGHT AREA: A tool lying on a shelf, made of three parts in a row: a round wooden knob handle, a coiled metal spring in the middle, and a flat metal blade at the end. A boy holding up a glass jar that is completely empty except for exactly TWO tiny grains at the very bottom. Exactly FOUR flower pots in a row: the FIRST and THIRD have red flowers, the SECOND and FOURTH show only bare soil. A ladder with exactly FIVE rungs leaning against a tree, with a black cat sitting on the SECOND rung from the bottom. Nothing from one area appears in another area. The composition fills the entire frame from edge to edge.",
+  "hardz16": "Hand-drawn educational mnemonic illustration. Ink linework with soft watercolor washes. Muted earthy palette — dusty teal, warm ochre, brick red, grey. Flat even lighting. Slightly cartoonish figures with clear silhouettes. Every object distinctly separated and readable. Wide landscape panel, about twice as wide as it is tall. No text, no letters, no numbers anywhere in the image. No extra props, no unrelated tools, no decorative clutter. A small village square seen from the front, with four areas from left to right. FAR LEFT AREA: A fisherman holding up a net with exactly FIVE fish in it, while a seagull sits on his LEFT shoulder. A stone wall with exactly THREE round holes; water spurts out of the MIDDLE hole only. One tall pole carrying two lanterns: a RED lantern in front almost completely hides a WHITE lantern hanging directly behind it — only a thin white crescent edge shows. Two identical small wooden boards side by side: the LEFT board has exactly FIVE black dots, the RIGHT board has exactly THREE black dots. CENTER-LEFT AREA: A brass padlock with exactly FOUR keyholes arranged like the four pips of a die, hanging on a teal box. A man seen from behind pours water from a metal bucket into a low arched opening at the bottom of a brick wall. A white goat behind iron window bars, with a brown burlap sack full of white salt standing beside it, also behind the bars. A seedling in a pot whose stem is cut open lengthwise: the LEFT half of the stem shows many tiny square cells, the RIGHT half shows a few long cells packed with yellow corn kernels. CENTER-RIGHT AREA: A tool lying on a shelf, made of three parts in a row: a round wooden knob handle, a coiled metal spring in the middle, and a flat metal blade at the end. A boy holding up a glass jar that is completely empty except for exactly TWO tiny grains at the very bottom. Exactly FOUR flower pots in a row: the FIRST and THIRD have red flowers, the SECOND and FOURTH show only bare soil. A ladder with exactly FIVE rungs leaning against a tree, with a black cat sitting on the SECOND rung from the bottom. FAR RIGHT AREA: A round clock on a tower wall whose face has no marks at all and only ONE hand, pointing straight DOWN. A woman holding a tray with exactly THREE cups in a row; only the MIDDLE cup is upside down. A brown dog asleep INSIDE a wooden barrel that lies on its side. A birdcage hanging from a hook with its door wide OPEN and nothing inside; a yellow bird sits on TOP of the cage. Nothing from one area appears in another area. The composition fills the entire frame from edge to edge."
+ },
+ "easy": {
+  "flat6": {
+   "N": 6,
+   "score": 12,
+   "max": 12
+  },
+  "flat8": {
+   "N": 8,
+   "score": 15,
+   "max": 16
+  },
+  "flat10": {
+   "N": 10,
+   "score": 19,
+   "max": 20
+  },
+  "flat10r": {
+   "N": 10,
+   "score": 19,
+   "max": 20
+  },
+  "flat12": {
+   "N": 12,
+   "score": 24,
+   "max": 24
+  },
+  "flat16": {
+   "N": 16,
+   "score": 31,
+   "max": 32
+  },
+  "zoned12": {
+   "N": 12,
+   "score": 24,
+   "max": 24
+  },
+  "zoned16": {
+   "N": 16,
+   "score": 30,
+   "max": 32
+  }
+ },
+ "hard": {
+  "hard4": {
+   "N": 4,
+   "mode": "flat",
+   "s": [
+    1,
+    2,
+    1,
+    2
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽(그의 오른쪽 어깨) · 물고기 ≈5(겹침)",
+    "H3": "흰 초롱 ≈45% 보임"
+   }
+  },
+  "hard6": {
+   "N": 6,
+   "mode": "flat",
+   "s": [
+    1,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽 · 물고기 5 ✓"
+   }
+  },
+  "hard6b": {
+   "N": 6,
+   "mode": "flat",
+   "s": [
+    2,
+    2,
+    1,
+    2,
+    2,
+    2
+   ],
+   "note": {
+    "H3": "흰 초롱 ≈90% 보임(겹침 조금)"
+   }
+  },
+  "hard8": {
+   "N": 8,
+   "mode": "flat",
+   "s": [
+    1,
+    2,
+    1,
+    2,
+    1,
+    2,
+    2,
+    2
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽",
+    "H3": "흰 초롱 ≈60% 보임",
+    "H5": "점 넷 + 열쇠구멍 하나(흔한 자물쇠)",
+    "H8": "긴 칸 둘 ✓(대조 채점에서 바로잡음)"
+   }
+  },
+  "hard8b": {
+   "N": 8,
+   "mode": "flat",
+   "s": [
+    1,
+    2,
+    2,
+    2,
+    1,
+    2,
+    2,
+    2
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽",
+    "H5": "점 넷 + 열쇠구멍 하나"
+   }
+  },
+  "hard12": {
+   "N": 12,
+   "mode": "flat",
+   "s": [
+    1,
+    2,
+    1,
+    2,
+    1,
+    1,
+    2,
+    1,
+    2,
+    2,
+    2,
+    1
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽",
+    "H3": "장대 건너편에 나란히(안 가림)",
+    "H5": "점 넷 + 열쇠구멍 하나",
+    "H6": "물이 아치가 아니라 그 앞 양동이로(대조 채점)",
+    "H8": "긴 칸 하나",
+    "H12": "가로대 6 · 고양이 아래서 둘째 ✓"
+   }
+  },
+  "hard12b": {
+   "N": 12,
+   "mode": "flat",
+   "s": [
+    1,
+    1,
+    2,
+    2,
+    1,
+    2,
+    2,
+    1,
+    2,
+    2,
+    2,
+    1
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽",
+    "H2": "오른쪽 구멍에서도 물줄기(대조 채점)",
+    "H3": "초승달 ≈29~31% — 경계(대조 채점은 1)",
+    "H5": "점 넷 + 열쇠구멍 하나",
+    "H8": "긴 칸 하나",
+    "H12": "가로대 7 · 고양이 아래서 넷째"
+   }
+  },
+  "hardz12": {
+   "N": 12,
+   "mode": "zoned3",
+   "s": [
+    1,
+    2,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽",
+    "H3": "장대 건너편에 나란히"
+   }
+  },
+  "hardz12b": {
+   "N": 12,
+   "mode": "zoned3",
+   "s": [
+    1,
+    2,
+    1,
+    2,
+    2,
+    2,
+    1,
+    1,
+    2,
+    2,
+    2,
+    1
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽",
+    "H3": "흰 초롱 ≈70% 보임",
+    "H7": "소금 자루가 창살 앞(밖)",
+    "H8": "칸을 화분에 그림(줄기 아님)",
+    "H12": "가로대 6 · 고양이 아래서 둘째 ✓"
+   }
+  },
+  "hardz12c": {
+   "N": 12,
+   "mode": "zoned3",
+   "s": [
+    1,
+    2,
+    1,
+    1,
+    2,
+    2,
+    1,
+    1,
+    2,
+    2,
+    2,
+    1
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽",
+    "H3": "흰 초롱 ≈절반 보임",
+    "H4": "왼쪽 판 점 6(주사위 6)",
+    "H7": "소금 자루가 창 밑 땅바닥",
+    "H8": "칸을 화분에 그림",
+    "H12": "가로대 6 · 고양이 아래서 둘째 ✓"
+   }
+  },
+  "hard16": {
+   "N": 16,
+   "mode": "flat",
+   "s": [
+    1,
+    2,
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    2,
+    2,
+    1
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽",
+    "H3": "장대 건너편에 나란히",
+    "H5": "구멍 둘 + 리벳 넷",
+    "H8": "칸을 화분에 그림",
+    "H9": "선반 아닌 탁자 위",
+    "H10": "바닥에 낟알 한 켜",
+    "H12": "가로대 6 · 고양이 아래서 셋째",
+    "H13": "바늘이 위(12시) · 눈금 있음",
+    "H16": "새장이 고리에 안 걸리고 떠 있음(대조 채점)"
+   }
+  },
+  "hardz16": {
+   "N": 16,
+   "mode": "zoned4",
+   "s": [
+    1,
+    2,
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    2,
+    1,
+    2,
+    1,
+    1,
+    2,
+    2,
+    1
+   ],
+   "note": {
+    "H1": "갈매기 그림 왼쪽",
+    "H3": "흰 초롱 ≈45% 보임",
+    "H5": "리벳 넷 + 열쇠구멍 하나",
+    "H8": "긴 칸 하나",
+    "H10": "알갱이 3~4 뭉침",
+    "H12": "가로대 7 이상",
+    "H13": "바늘이 위(12시) · 눈금 있음",
+    "H16": "새가 새장 지붕이 아니라 걸이 위(대조 채점)"
+   }
+  }
+ },
+ "verifier": {
+  "hardz12c": {
+   "H1": {
+    "score": 1,
+    "note": "gull on picture-LEFT shoulder (his right) -> fails; ~5 fish (left long, centre, right vertical, right diagonal, bottom), heavy net overlap"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water spurts only from middle hole"
+   },
+   "H3": {
+    "score": 1,
+    "note": "red lantern in front, white lantern hung from its own ring ~17px to the right; visible white globe ~14-15px of ~43px width (~1/3) -> not a thin sliver"
+   },
+   "H4": {
+    "score": 1,
+    "note": "LEFT board has SIX dots (2-2-2 rows; blob count 6), right board 3 dots"
+   },
+   "H5": {
+    "score": 2,
+    "note": "brass padlock hanging on teal box; 4 keyhole shapes in 2x2"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man in 3/4 rear view pours from metal bucket into low brick arched opening at wall base"
+   },
+   "H7": {
+    "score": 1,
+    "note": "goat behind bars OK, but salt sack sits OUTSIDE in front of bars/below sill; bars do not pass in front of it"
+   },
+   "H8": {
+    "score": 1,
+    "note": "the POT is cut open with cells drawn inside it (left square cells, right 2 long kernel cells); stem itself intact"
+   },
+   "H9": {
+    "score": 2,
+    "note": "wall shelf with brackets; knob + coiled spring + flat blade in a row"
+   },
+   "H10": {
+    "score": 2,
+    "note": "boy holds jar up in one hand; exactly 2 grains at bottom"
+   },
+   "H11": {
+    "score": 2,
+    "note": "4 pots: red / bare soil / red / bare soil"
+   },
+   "H12": {
+    "score": 1,
+    "note": "SIX rungs (y~155,197,243,288,332,375); cat on 2nd from bottom OK, count wrong"
+   }
+  },
+  "hard12": {
+   "H1": {
+    "score": 1,
+    "note": "gull on picture-LEFT shoulder (his right) -> fails; ~5 fish heavily overlapping (back-left, left diagonal, centre, right, bottom)"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water arcs only from middle hole"
+   },
+   "H3": {
+    "score": 1,
+    "note": "red lantern hangs on arm LEFT of pole; white lantern hangs on the RIGHT side of the pole beside it (not behind the red one), large white portion visible"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two board panels side by side in one frame on a post: left 5 dots (die-5), right 3 dots (diagonal); blob count 5/3"
+   },
+   "H5": {
+    "score": 1,
+    "note": "brass padlock has only ONE keyhole plus 4 round rivets in 2x2; it hangs from a teal plate on the wall above the teal box, not on the box"
+   },
+   "H6": {
+    "score": 1,
+    "note": "man from behind pours from metal bucket, but the water goes into a SECOND bucket standing in front of the arched opening, not into the opening"
+   },
+   "H7": {
+    "score": 2,
+    "note": "white goat behind bars; burlap sack heaped with white salt beside it, bars clearly pass in front of the sack"
+   },
+   "H8": {
+    "score": 1,
+    "note": "stem split into two halves above pot; left half many small square cells OK, but right half is a single corn-cob-shaped compartment of kernels, not a few long cells"
+   },
+   "H9": {
+    "score": 2,
+    "note": "on a wall shelf with brackets: round wooden knob, coiled spring, flat blade in a row"
+   },
+   "H10": {
+    "score": 2,
+    "note": "boy holds glass jar up in both hands; exactly two small yellowish grains at the bottom, otherwise empty"
+   },
+   "H11": {
+    "score": 2,
+    "note": "4 pots in a row: red flowers / bare soil / red flowers / bare soil"
+   },
+   "H12": {
+    "score": 1,
+    "note": "SIX rungs (y~146,195,244,299 behind cat,360,417); cat on 2nd from bottom OK, but count wrong"
+   }
+  },
+  "hard16": {
+   "H1": {
+    "score": 1,
+    "note": "gull on picture-LEFT shoulder (his right) -> fails; 5 fish (right one sketchy/partly hidden)"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water spurts only from middle hole"
+   },
+   "H3": {
+    "score": 1,
+    "note": "red lantern on hook LEFT of pole, white lantern on a separate hook on the RIGHT side of the pole (beside, not behind); ~half of white lantern visible"
+   },
+   "H4": {
+    "score": 2,
+    "note": "signboard on post with two panels side by side: left 5 dots (die-5), right 3 dots (diagonal)"
+   },
+   "H5": {
+    "score": 1,
+    "note": "padlock on teal box has only TWO keyholes (stacked vertically) + 4 round rivets in 2x2"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man in 3/4 rear view pours from metal bucket into low arched opening at base of brick wall"
+   },
+   "H7": {
+    "score": 2,
+    "note": "white goat behind bars; burlap sack of white salt beside it, bars pass in front of sack"
+   },
+   "H8": {
+    "score": 1,
+    "note": "the POT is cut open with cells drawn inside it; stem intact; right side is one grid of kernels"
+   },
+   "H9": {
+    "score": 1,
+    "note": "knob + spring + blade tool correct but lying on a TABLE, not a shelf"
+   },
+   "H10": {
+    "score": 1,
+    "note": "boy holds jar up, but bottom has a whole layer of many grains, not exactly two"
+   },
+   "H11": {
+    "score": 2,
+    "note": "4 pots: red / bare soil (grey pot) / red / bare soil"
+   },
+   "H12": {
+    "score": 1,
+    "note": "SIX rungs (y~154,183,214,259,294,327); cat sits on 3rd rung from bottom"
+   },
+   "H13": {
+    "score": 1,
+    "note": "clock face has 12 tick marks and the single hand points straight UP, not down"
+   },
+   "H14": {
+    "score": 2,
+    "note": "woman holds tray with 3 mugs in a row; middle mug inverted (narrow end up, closed base with soft line, no dark open rim), outer two upright"
+   },
+   "H15": {
+    "score": 2,
+    "note": "brown dog asleep (eyes closed) inside wooden barrel lying on its side"
+   },
+   "H16": {
+    "score": 1,
+    "note": "door wide open, cage empty, yellow bird on top ring; but cage is not attached to the wall-bracket hook (floats below it, no chain)"
+   }
+  },
+  "hard6": {
+   "H1": {
+    "score": 1,
+    "note": "exactly 5 fish (3 top, 2 bottom) clearly separated; but gull sits on the picture-LEFT shoulder (his right) -> fails"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water spurts only from middle hole"
+   },
+   "H3": {
+    "score": 2,
+    "note": "white globe directly behind the red lantern; only a crescent shows on the right (~17px of a ~64px-wide globe, ~0.27) (borderline but passes)"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two boards side by side on a post: left 5 dots (die-5), right 3 dots diagonal; blob count 5/3"
+   },
+   "H5": {
+    "score": 2,
+    "note": "brass padlock hanging from hasp on teal box; 4 keyhole shapes in 2x2"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man seen from behind pours from metal bucket into low arched opening at base of brick wall"
+   }
+  },
+  "hard8": {
+   "H1": {
+    "score": 1,
+    "note": "gull on the picture-LEFT shoulder (his right) -> fails; fish count uncertain (5 clear fish + extra tail/dark body behind, heavy overlap)"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water spurts only from middle hole"
+   },
+   "H3": {
+    "score": 1,
+    "note": "red and white lanterns on two separate S-hooks; white lantern hangs beside/behind to the right with about half its width visible"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two separate boards side by side: left 5 dots (die-5), right 3 dots diagonal; blob count 5/3"
+   },
+   "H5": {
+    "score": 1,
+    "note": "brass padlock hangs on teal chest, but shows 4 round dots/rivets in 2x2, no keyhole shapes"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man in 3/4 rear view pours from metal bucket into low arched opening in brick wall"
+   },
+   "H7": {
+    "score": 2,
+    "note": "white goat behind bars; burlap sack of white salt beside it, bars pass in front of the sack"
+   },
+   "H8": {
+    "score": 2,
+    "note": "stem has an enlarged lengthwise cut section: left half grid of small square cells, right half TWO long cells packed with yellow kernels; pot intact"
+   }
+  },
+  "hardz12b": {
+   "H1": {
+    "score": 1,
+    "note": "gull on the picture-LEFT shoulder (his right) -> fails; 5 fish total (3 in raised net, 2 in net on ground)"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water spurts only from middle hole (lantern pole stands in front of wall, does not hide holes)"
+   },
+   "H3": {
+    "score": 1,
+    "note": "white lantern on its own hook offset right of the red one; ~17px of ~40px width visible (~0.4) -> not a thin sliver"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two boards side by side on a small bench: left 5 dots (die-5), right 3 diagonal; blob count 5/3"
+   },
+   "H5": {
+    "score": 2,
+    "note": "brass padlock on teal chest, 4 keyhole shapes in 2x2"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man seen from behind pours from metal bucket into low brick arched opening at wall base"
+   },
+   "H7": {
+    "score": 1,
+    "note": "goat behind bars OK, but salt sack sits on the sill IN FRONT of the bars (bars end at sack top, not passing in front)"
+   },
+   "H8": {
+    "score": 1,
+    "note": "the POT is cut open with cells drawn inside it (left square cells, right 2 kernel cells); stem intact"
+   },
+   "H9": {
+    "score": 2,
+    "note": "wall shelf; wooden knob + coiled spring + flat blade in a row"
+   },
+   "H10": {
+    "score": 2,
+    "note": "boy holds jar up; exactly 2 grains at bottom, otherwise empty"
+   },
+   "H11": {
+    "score": 2,
+    "note": "4 pots: red / bare soil / red / bare soil"
+   },
+   "H12": {
+    "score": 1,
+    "note": "SIX rungs (y~138,179,222,267 behind cat,311,354); cat on 2nd from bottom OK, count wrong"
+   }
+  },
+  "hardz16": {
+   "H1": {
+    "score": 1,
+    "note": "gull on the picture-LEFT shoulder (his right) -> fails; 5 fish (4 heads with eyes + lower-right fish showing tail), overlapping"
+   },
+   "H2": {
+    "score": 2,
+    "note": "stone wall with 3 round holes (vertical column); water spurts only from middle hole"
+   },
+   "H3": {
+    "score": 1,
+    "note": "white lantern on its own hook ~14px right of red one; visible white part ~15-22px of ~41px width (>1/3) -> not a thin sliver"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two boards side by side on ground: left 5 dots (die-5), right 3 diagonal; blob count 5/3"
+   },
+   "H5": {
+    "score": 1,
+    "note": "brass padlock on teal box has ONE keyhole + 4 round rivets; no 2x2 keyholes"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man seen from behind pours from metal bucket into low brick arched opening"
+   },
+   "H7": {
+    "score": 2,
+    "note": "white goat behind bars; burlap sack of white salt beside it, bars pass in front of sack"
+   },
+   "H8": {
+    "score": 1,
+    "note": "two husk-like halves flank an intact stem: left tiny square cells, right a SINGLE corn-cob compartment of kernels (not a few long cells)"
+   },
+   "H9": {
+    "score": 2,
+    "note": "wall shelf with brackets; wooden knob + coiled spring + flat blade in a row"
+   },
+   "H10": {
+    "score": 1,
+    "note": "boy holds jar up, but the grains at the bottom form a clump of ~3 tiny outlined grains (left grain + two stacked on the right), not clearly exactly two"
+   },
+   "H11": {
+    "score": 2,
+    "note": "4 pots: red / bare soil / red / bare soil"
+   },
+   "H12": {
+    "score": 1,
+    "note": "SIX rungs (y~148,175,204,255 behind cat head,312,364); cat on 2nd from bottom OK, but count wrong"
+   },
+   "H13": {
+    "score": 1,
+    "note": "clock face has 12 tick marks and single hand points UP, not down"
+   },
+   "H14": {
+    "score": 2,
+    "note": "woman holds tray with 3 cups in a row; middle one upside down, outer two upright"
+   },
+   "H15": {
+    "score": 2,
+    "note": "brown dog asleep (eyes closed) inside barrel lying on its side"
+   },
+   "H16": {
+    "score": 1,
+    "note": "cage hangs from bracket hook, door open, empty; but yellow bird sits on the bracket/hook ABOVE the cage, not on the cage top"
+   }
+  },
+  "hard12b": {
+   "H1": {
+    "score": 1,
+    "note": "gull on the picture-LEFT shoulder (his right) -> fails; count uncertain (5-6 heavily overlapping fish)"
+   },
+   "H2": {
+    "score": 1,
+    "note": "3 round holes, main jet from middle hole, but a light-blue trickle of water also runs down from the RIGHT hole"
+   },
+   "H3": {
+    "score": 1,
+    "note": "white globe lantern is behind the red one, but the visible crescent is ~15px of a ~48px-wide globe (~0.31, about 1/3) -> more than a thin sliver (borderline)"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two boards side by side on wall: left 5 dots (die-5), right 3 diagonal (small hollow nail holes not counted); blob count 5/3"
+   },
+   "H5": {
+    "score": 1,
+    "note": "brass padlock on teal chest has ONE keyhole + 4 round rivets in 2x2"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man in 3/4 rear view pours from metal bucket into low brick arched opening at wall base"
+   },
+   "H7": {
+    "score": 2,
+    "note": "white goat behind bars; burlap sack of white salt beside it, bars pass in front of sack"
+   },
+   "H8": {
+    "score": 1,
+    "note": "stem section cut lengthwise (pot intact), left many square cells OK, but right half is a SINGLE corn-cob compartment of kernels"
+   },
+   "H9": {
+    "score": 2,
+    "note": "wall shelf with brackets; wooden knob + coiled spring + flat blade in a row"
+   },
+   "H10": {
+    "score": 2,
+    "note": "boy holds jar up in both hands; exactly 2 grains at bottom"
+   },
+   "H11": {
+    "score": 2,
+    "note": "4 pots: red / bare soil (grey pot) / red / bare soil"
+   },
+   "H12": {
+    "score": 1,
+    "note": "SEVEN rungs (y~169,205,240,296,332,367,403); cat on 4th from bottom"
+   }
+  },
+  "hard4": {
+   "H1": {
+    "score": 1,
+    "note": "gull on the picture-LEFT shoulder (his right) -> fails; fish count uncertain (5-6, overlapping at bottom of net)"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water spurts only from middle hole"
+   },
+   "H3": {
+    "score": 1,
+    "note": "white lantern hangs from same hook but offset right: ~19px of ~50px width visible (~0.38) plus its whole bail -> not a thin sliver"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two boards on posts side by side: left 5 dots (die-5), right 3 diagonal (hollow nail heads not counted); blob count 5/3"
+   }
+  },
+  "hard6b": {
+   "H1": {
+    "score": 2,
+    "note": "fisherman holds net up with both hands; exactly 5 separate fish; gull on picture-RIGHT shoulder (his left) - correct"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water spurts only from middle hole"
+   },
+   "H3": {
+    "score": 1,
+    "note": "white lantern hangs offset well to the right of the red one; ~25px of ~42px width visible (>1/2) plus its bail -> not a thin sliver"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two boards on posts side by side: left 5 dots (die-5), right 3 diagonal; blob count 5/3"
+   },
+   "H5": {
+    "score": 2,
+    "note": "brass padlock hanging on teal box, 4 keyhole shapes in 2x2"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man seen from behind pours from metal bucket into low brick arched opening at wall base"
+   }
+  },
+  "hard8b": {
+   "H1": {
+    "score": 1,
+    "note": "gull on the picture-LEFT shoulder (his right) -> fails; 5 fish in net (one partly behind the big lower fish)"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water spurts only from middle hole"
+   },
+   "H3": {
+    "score": 2,
+    "note": "white globe directly behind the red lantern; only a thin D-shaped sliver shows on the right (~14px of a ~54px-wide globe, ~0.26)"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two boards side by side on ground: left 5 dots (die-5), right 3 diagonal; blob count 5/3"
+   },
+   "H5": {
+    "score": 1,
+    "note": "brass padlock on teal box has ONE keyhole + 4 round rivets"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man seen from behind pours from metal bucket into low brick arched opening at wall base"
+   },
+   "H7": {
+    "score": 2,
+    "note": "white goat behind bars; burlap sack of white salt beside it, bars pass in front of sack"
+   },
+   "H8": {
+    "score": 2,
+    "note": "stem shown cut open lengthwise (pot intact): left half grid of small square cells, right half TWO long cells packed with yellow kernels"
+   }
+  },
+  "hardz12": {
+   "H1": {
+    "score": 1,
+    "note": "gull on the picture-LEFT shoulder (his right) -> fails; fish count uncertain (2 clear + several overlapping/faint, ~5-7)"
+   },
+   "H2": {
+    "score": 2,
+    "note": "3 round holes, water spurts only from middle hole (only a faint bluish wet stain under the right hole, no water coming out)"
+   },
+   "H3": {
+    "score": 1,
+    "note": "red lantern on hook LEFT of pole, white lantern on its own hook on the RIGHT side of the pole (beside, not behind); about half visible"
+   },
+   "H4": {
+    "score": 2,
+    "note": "two boards side by side on ground: left 5 dots (die-5), right 3 diagonal; blob count 5/3"
+   },
+   "H5": {
+    "score": 2,
+    "note": "brass padlock hanging on teal (wall-mounted) box, 4 keyhole shapes in 2x2 (+4 tiny corner rivets)"
+   },
+   "H6": {
+    "score": 2,
+    "note": "man in 3/4 rear view pours from metal bucket into low brick arched opening at wall base"
+   },
+   "H7": {
+    "score": 2,
+    "note": "white goat behind bars; burlap sack of white salt beside it, bars pass in front of sack"
+   },
+   "H8": {
+    "score": 2,
+    "note": "stem opened into two halves (pot cut away only to show roots, no cells in pot): left small square cells, right TWO long kernel-packed cells"
+   },
+   "H9": {
+    "score": 2,
+    "note": "wall shelf with brackets; wooden knob + coiled spring + flat blade in a row"
+   },
+   "H10": {
+    "score": 2,
+    "note": "boy holds jar up; exactly 2 grains at bottom"
+   },
+   "H11": {
+    "score": 2,
+    "note": "4 pots: red / bare soil / red / bare soil"
+   },
+   "H12": {
+    "score": 2,
+    "note": "exactly 5 rungs (y~152,208,268 partly behind cat head,340,387); cat sits on the 2nd rung from the bottom"
+   }
+  }
+ }
+}
