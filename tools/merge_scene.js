@@ -14,7 +14,8 @@
  *   "title": "담장과 펌프집 · 물레방아 · 방해자 셋",   // 통합판 제목
  *   "from": ["s32p01","s32p02","s32p03"], // 합칠 낱장(순서대로) — 장면의 panels 전부여야 한다(일부 통합은 아직 지원 안 함)
  *   "br": "...", "bx": "<p>...</p>",      // 통합판 다리 · 본문(옛 bx 를 옮겨 쓰려면 bx_from: true → 옛 bx 를 순서대로 이어 붙인다)
- *   "frame": ["소품", "사실"],             // 틀 행(카드 없음) — 첫 행
+ *   "frame": ["소품", "사실"],             // 틀 행 — 첫 행
+ *   "frame_from": ["s32p01#0","s32p02#6"], // (선택) 틀 행에 흡수하는 옛 행 — 그 카드가 틀 행에 걸린다(무대 행 · 판을 넘는 ★ 행)
  *   "rows": [                             // 그 뒤 행들 — 옛 행에서 카드를 가져온다
  *     {"from": "s32p01#1", "prop": "새 소품 글", "fact": null},   // fact null = 옛 사실 그대로 · 문자열 = 바꿈
  *     {"from": ["s32p01#0","s32p02#6"], "prop": "...", "fact": "..."},  // 둘을 한 행으로(카드 합침)
@@ -61,7 +62,8 @@ const used = new Set(); const map = {};
 const parseRef = ref => { const m = /^(s\d+p\d+[a-z]?)#(\d+)$/.exec(ref); if (!m || !old[m[1]] || !old[m[1]].f[+m[2]]) die('없는 옛 행 ' + ref); return [m[1], +m[2]]; };
 const newRows = [];
 if (!S.frame || S.frame.length !== 2) die('frame 은 [소품, 사실]');
-newRows.push([S.frame[0], S.frame[1]]);
+{ const fc = []; (S.frame_from || []).forEach(ref => { const [pid, k] = parseRef(ref); if (used.has(ref)) die('옛 행을 두 번 썼다 ' + ref); used.add(ref); map[ref] = S.uid + '#0'; fc.push(...(old[pid].f[k][2] || [])); });
+  const u = [...new Set(fc)]; newRows.push(u.length ? [S.frame[0], S.frame[1], u] : [S.frame[0], S.frame[1]]); }
 S.rows.forEach((r, i) => {
   const refs = r.from == null ? [] : (Array.isArray(r.from) ? r.from : [r.from]);
   let cards = [], fact = r.fact;
