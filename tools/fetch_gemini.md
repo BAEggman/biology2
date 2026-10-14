@@ -291,6 +291,8 @@
 
 > **[2026-10-10] 메뉴가 바뀌었다** — 모델 줄은 `3.5 Flash-Lite` · `3.8 Flash` · `3.1 Pro` 이고, 「확장된 사고 모델」 대신 생각 깊이 세 줄 `최저가 / 보통 / 최고가(매우 철저함)` 이 뜬다. 쓰는 것은 **Pro + 최고가** — 알약 글자가 「Pro / 최고가」, aria-label 이 「현재 Pro 최고가 모드 사용 중」이면 된다. `__setPro` 는 둘 다(Extended 또는 최고가) 받게 고쳤다(gemini_helpers_0928.js 5행).
 
+> **[2026-10-14] 4 Argon** — 3.1 Pro 가 서버 쪽에서 죽어(Debug Info: 4토큰 생성 뒤 중단 · Flash 도 멈춤) 사용자 지시로 모델 줄의 **`4 Argon` + 최고가**를 쓴다(알약 「Argon 최고가」). `__setPro` 가 Argon 을 고르게 고쳤다. **Argon 은 편집 지시를 글로 답해 버리는 버릇**이 있어 프롬프트를 반드시 `Edit the attached image and give me back the edited image (image editing, not a description).` 로 시작한다 — 이 접두가 없으면 그림 대신 설명이 온다. 출력은 572×1024(조각 644×1144 를 올려도). **창이 가려진(hidden) 동안**은 `computer.type` 도 Return 도 `sb.click()` 도 안 먹는다 — 글은 `execCommand('insertText')` 로 넣어 두고(한 줄이면 전부 들어간다) `__autosend()` 를 걸어 두면 창이 보이는 순간 보낸다. 업로드 메뉴도 hidden 이면 `__openUpload()` 로 안 열린다 → 「+」를 computer 로 클릭한 뒤 `__expose()`.
+
 ## ⑥-b [2026-10-10 저녁] **Trusted Types**: 페이지가 `require-trusted-types-for 'script'` 를 켜면 `eval(sessionStorage.getItem('__h'))` 이 「Evaluating a string as JavaScript violates…」로 막힌다 → 먼저 `window.trustedTypes.createPolicy('default',{createScript:s=>s,createHTML:s=>s,createScriptURL:s=>s})` 를 만든 뒤 eval. **창 가려짐**: `visibilityState==='hidden'` 은 다른 창(Claude 앱)이 크롬 창을 통째로 덮을 때다 — 사용자에게 두 창을 **나란히** 두라고 한다. 보이는 순간 자동으로 보내는 `__autosend()`(visibilitychange → 「메시지 보내기」 단추 `__fire`)를 붙여 두면 폴링 없이 된다(가려진 동안은 합성 click 도 안 먹는다).
 
 ⑦ 생성이 5~7분 걸릴 수 있다 (Pro + 확장된 사고)
