@@ -91,8 +91,10 @@ T('패널 수는 줄지 않는다 · PTIT과 자기일관', ()=>{
 });
 T('누락 0', ()=>eq(ALL.filter(p=>!PTIT[p]).length,0));
 T('유령 0 (s20p01·s12p02 제거)', ()=>eq(Object.keys(PTIT).filter(p=>!ALL.includes(p)).length,0));
+/* [보탬 2026-10-15] 단원 통합(baseline.panelMerge)으로 합쳐진 판은 통합판의 제목으로 확인한다 — s32p01 → s32u01 */
+const INTO_T={}; for(const [to,m] of Object.entries(BL.panelMerge||{})) if(m.why) (m.from||[]).forEach(f=>{ INTO_T[f]=to; });
 T('s31·s32·s33 제목 생김', ()=>['s31p01','s32p01','s33p03'].map(p=>{
-  if(!PTIT[p]) throw new Error(p+' 없음'); return p; }).length+'개 확인');
+  const q=INTO_T[p]||p; if(!PTIT[q]) throw new Error(q+' 없음'); return q; }).join('·'));
 
 console.log('\n── 커버리지 ──');
 T('커버 패널은 줄지 않는다', ()=>ge(new Set(Object.values(PMAP).flatMap(flat)).size,BL.cover,'커버')+'장');
