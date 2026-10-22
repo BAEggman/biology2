@@ -22,7 +22,10 @@
  *     {"from": null, "prop": "...", "fact": "...", "cards": []}         // 새 행(카드 없음)
  *   ],
  *   "why": "baseline.panelMerge 에 적을 까닭",
- *   "text_fixes": [["옛 글", "새 글"]]     // sketchy.html 전체에서 꼭 1번씩 맞아야 하는 치환(다른 판의 교차 참조 등)
+ *   "text_fixes": [["옛 글", "새 글"]],    // sketchy.html 전체에서 꼭 1번씩 맞아야 하는 치환(다른 판의 교차 참조 등)
+ *   "take_rows": {                        // (2026-10-22) 판은 남기고 행만 가져오기 — 그 판의 지정 행을 뽑아 통합판 rows 의 from 으로 쓴다
+ *     "s20p03": {"rows": [4,5], "title": "양면 스위치", "br": "...", "bx_cut": ["<p>…단락 머리", …]}   // title/br 은 바꿀 때만 · bx_cut 은 그 판 bx 에서 통째로 지울 단락(정확히 1번 맞아야 하고 통합판 bx 뒤에 붙는다)
+ *   }
  * }
  *
  * 하는 일: ① 옛 행 전부가 rows/frame 에 쓰였는지(빠진 카드 0) ② sketchy.html 장면 치환 ③ img/<옛>.webp → img/retired/ (git mv)
@@ -56,6 +59,8 @@ const old = Object.fromEntries(sc.panels.map(p => [p.id, p]));
 const allIds = sc.panels.map(p => p.id);
 const ids = S.from.slice();
 ids.forEach(id => { if (!allIds.includes(id)) die('from 에 장면에 없는 판: ' + id); });
+const TAKE = S.take_rows || {};   /* 2026-10-22 판은 남기고 행만 */
+Object.keys(TAKE).forEach(id => { if (!allIds.includes(id)) die('take_rows 에 장면에 없는 판: ' + id); if (ids.includes(id)) die('take_rows 와 from 에 같이 있다: ' + id); });
 const PARTIAL = ids.length !== allIds.length;   /* 2026-10-22 일부 통합 */
 const merged = sc.panels.filter(p => ids.includes(p.id));
 if (PARTIAL) console.log(`일부 통합: ${sc.id} 의 ${allIds.length}판 가운데 ${ids.join('·')} → ${S.uid} (나머지 ${allIds.length - ids.length}판은 그대로)`);
@@ -81,10 +86,14 @@ S.rows.forEach((r, i) => {
 });
 const missing = [];
 for (const p of merged) p.f.forEach((row, k) => { const ref = p.id + '#' + k; if (!used.has(ref)) missing.push(ref + (row[2] && row[2].length ? ' [카드 ' + row[2].length + ']' : '')); });
-const oldCards = merged.flatMap(p => p.f.flatMap(r => r[2] || []));
+/* take_rows: 지정 행이 전부 쓰였는지 · 지정 안 한 행이 쓰이지 않았는지 */
+for (const [id, t] of Object.entries(TAKE)) { const want = new Set((t.rows || []).map(String));
+  old[id].f.forEach((row, k) => { const ref = id + '#' + k; if (want.has(String(k)) && !used.has(ref)) missing.push(ref + ' [take_rows 인데 안 씀]'); if (!want.has(String(k)) && used.has(ref)) die('take_rows 에 없는 행을 썼다 ' + ref); }); }
+const takenRows = Object.entries(TAKE).flatMap(([id, t]) => (t.rows || []).map(k => old[id].f[k]));
+const oldCards = merged.flatMap(p => p.f.flatMap(r => r[2] || [])).concat(takenRows.flatMap(r => r[2] || []));
 const newCards = newRows.flatMap(r => r[2] || []);
 const lost = oldCards.filter(c => !newCards.includes(c));
-console.log(`옛 행 ${merged.reduce((a, p) => a + p.f.length, 0)} → 새 행 ${newRows.length}(틀 1) · 카드 ${new Set(oldCards).size} → ${new Set(newCards).size}`);
+console.log(`옛 행 ${merged.reduce((a, p) => a + p.f.length, 0) + takenRows.length}${takenRows.length ? '(남는 판에서 ' + takenRows.length + '행 포함)' : ''} → 새 행 ${newRows.length}(틀 1) · 카드 ${new Set(oldCards).size} → ${new Set(newCards).size}`);
 if (missing.length) console.log('  ⚠ 안 쓴 옛 행: ' + missing.join(' · ') + '  (카드가 있으면 안 된다 — 틀 행에 흡수하려면 from 에 넣어라)');
 if (lost.length) die('빠진 카드 ' + lost.length + ': ' + lost.join(' '));
 if (CHECK) { console.log('✅ --check 통과 (아무것도 안 썼다)'); process.exit(0); }
@@ -94,6 +103,17 @@ const sq = s => { if (/['\\\n]/.test(s)) die('홑따옴표 문자열에 못 넣�
 const jsRow = r => '[' + r.map(x => JSON.stringify(x)).join(',') + ']';
 let bx = S.bx;
 if (S.bx_from) bx = merged.map(p => p.bx || '').join('') + (S.bx || '');
+const bxCuts = {};   /* take_rows 판에서 떼어 통합판 bx 뒤에 붙일 단락 */
+for (const [id, t] of Object.entries(TAKE)) { const pb = old[id].bx || ''; let rest = pb; const cut = [];
+  const dcut = [];
+  (t.bx_cut || []).forEach(h => { const i = rest.indexOf(h); if (i < 0 || rest.indexOf(h, i + 1) >= 0) die('bx_cut 「' + h.slice(0, 30) + '」 가 ' + id + ' bx 에 정확히 1번 있지 않다');
+    const isD = /^<details/.test(h); const close = isD ? '</details>' : '</p>';
+    const j = rest.indexOf(close, i); if (j < 0) die('bx_cut 끝(' + close + ')을 못 찾음'); const piece = rest.slice(i, j + close.length); (isD ? dcut : cut).push(piece); rest = rest.slice(0, i) + rest.slice(j + close.length); });
+  bxCuts[id] = { rest, cut: cut.concat(dcut) }; bx = (bx || '') + cut.join('');
+  if (dcut.length) { /* <details> 는 통합판 bx 의 마지막 qx 상자 안에 넣고, 없으면 새 상자를 연다 */
+    const qi = (bx || '').lastIndexOf("<div class='qx'>");
+    if (qi >= 0) { const end = bx.lastIndexOf('</div>'); bx = bx.slice(0, end) + dcut.join('') + bx.slice(end); }
+    else bx = (bx || '') + "<div class='qx'><div class='qh'>여기서 갈리는 문제</div>" + dcut.join('') + '</div>'; } }
 if (/`|\$\{/.test(bx || '')) die('bx 에 ` 또는 ${ 가 있다');
 const traps = sc.traps ? "\n traps:[\n  " + sc.traps.map(sq).join(',\n  ') + ']' : '';
 const nums = sc.nums ? ",\n nums:[\n  " + sc.nums.map(sq).join(',\n  ') + ']' : '';
@@ -114,7 +134,12 @@ if (!PARTIAL) {
   while (k < inner.length) { const o = inner.indexOf('{', k); if (o < 0) break; const [a, b] = balanced(inner, o, '{', '}'); const m = /^\{id:'([^']+)'/.exec(inner.slice(a, b)); spans.push({ id: m ? m[1] : null, a, b }); k = b; }
   const firstIdx = spans.findIndex(sp => ids.includes(sp.id)); if (firstIdx < 0) die('첫 낱장 자리를 못 찾음');
   const parts = [];
-  spans.forEach((sp, i) => { if (!ids.includes(sp.id)) parts.push(inner.slice(sp.a, sp.b)); else if (i === firstIdx) parts.push(panel); });
+  const rewriteTake = (id, src) => { const t = TAKE[id]; const p = old[id]; const keep = p.f.filter((_, k) => !(t.rows || []).map(String).includes(String(k)));
+    const pb = bxCuts[id] ? bxCuts[id].rest : (p.bx || '');
+    if (/`|\$\{/.test(pb)) die('bx 에 ` 또는 ${ 가 있다: ' + id);
+    const extra = Object.keys(p).filter(k => !['id', 't', 'wide', 'br', 'bx', 'f'].includes(k)); if (extra.length) die(id + ' 에 다루지 않는 칸: ' + extra.join(','));
+    return ` {id:'${id}',t:${sq(t.title || p.t)},${p.wide ? 'wide:1,' : ''}br:${sq(t.br || p.br || '')},bx:\`${pb}\`,f:[` + keep.map(jsRow).join(',\n  ') + ']}'; };
+  spans.forEach((sp, i) => { if (TAKE[sp.id]) parts.push(rewriteTake(sp.id, inner.slice(sp.a, sp.b))); else if (!ids.includes(sp.id)) parts.push(inner.slice(sp.a, sp.b)); else if (i === firstIdx) parts.push(panel); });
   const newInner = '\n' + parts.join(',\n') + '\n';
   const newSc = scSrc.slice(0, pst + 1) + newInner + scSrc.slice(pend - 1);
   sk = sk.slice(0, ost) + newSc + sk.slice(oend);
@@ -132,8 +157,10 @@ if (!fs.existsSync(path.join(R, 'img', S.uid + '.webp'))) console.log('  ⚠ img
 /* ── ④ 옛 장면 보관 ── */
 const today = new Date().toISOString().slice(0, 10);
 fs.mkdirSync(path.join(R, 'tools/retired'), { recursive: true });
-fs.writeFileSync(path.join(R, 'tools/retired', `${sc.id}_${strip(sc.t).replace(/\s+/g, '')}_${today}.json`),
-  JSON.stringify({ _왜: `${today} 단원 통합 — ${sc.id} 「${sc.t}」 ${PARTIAL ? ids.join('·') + ' (' + allIds.length + '판 가운데 ' + ids.length + '판)' : ids.length + '판'}을 통합판 ${S.uid} 한 장으로 다시 그렸다. ` + (S.why || ''), merged_into: S.uid, merged: ids, 옛행_새행: map, scene: PARTIAL ? { id: sc.id, t: sc.t, unit: sc.unit, panels: merged } : sc }, null, 1));
+let retPath = path.join(R, 'tools/retired', `${sc.id}_${strip(sc.t).replace(/\s+/g, '')}_${today}.json`);
+if (fs.existsSync(retPath)) retPath = retPath.replace(/\.json$/, '_' + S.uid.replace(/^s\d+/, '') + '.json');   /* 같은 날 같은 장면을 두 번 통합하면 덮어쓰지 않는다(2026-10-22 교훈) */
+fs.writeFileSync(retPath,
+  JSON.stringify({ _왜: `${today} 단원 통합 — ${sc.id} 「${sc.t}」 ${PARTIAL ? ids.join('·') + ' (' + allIds.length + '판 가운데 ' + ids.length + '판)' : ids.length + '판'}을 통합판 ${S.uid} 한 장으로 다시 그렸다. ` + (S.why || ''), merged_into: S.uid, merged: ids, take_rows: Object.fromEntries(Object.entries(TAKE).map(([id, t]) => [id, (t.rows || []).map(k => ({ n: k, row: old[id].f[k] }))])), 옛행_새행: map, scene: PARTIAL ? { id: sc.id, t: sc.t, unit: sc.unit, panels: merged } : sc }, null, 1));
 
 /* ── ⑤ baseline ── */
 const blPath = path.join(R, 'test/baseline.json');
@@ -146,7 +173,7 @@ const norm = v => (Array.isArray(v) ? v : [v]).slice().sort().join('|');
 const P0 = J(prev, 'PMAP');
 /* 새 PMAP 값은 build 가 정하므로 여기서 미리 센다: 카드 → 걸린 판 집합(통합판 포함) */
 const cur = {};
-for (const s2 of DATA) for (const p of s2.panels) { if (ids.includes(p.id)) continue; for (const r of (p.f || [])) for (const c of (r[2] || [])) (cur[c] = cur[c] || new Set()).add(p.id); }
+for (const s2 of DATA) for (const p of s2.panels) { if (ids.includes(p.id)) continue; (p.f || []).forEach((r, k) => { if (TAKE[p.id] && (TAKE[p.id].rows || []).map(String).includes(String(k))) return; for (const c of (r[2] || [])) (cur[c] = cur[c] || new Set()).add(p.id); }); }
 for (const r of newRows) for (const c of (r[2] || [])) (cur[c] = cur[c] || new Set()).add(S.uid);
 BL.pmapMoved = BL.pmapMoved || {};
 let moved = 0;
@@ -167,6 +194,8 @@ const label = f => { const t = strip(f).replace(/^★\s*/, ''); const m = /^(.{4
 const entry = { pid: S.uid, img: 'img/' + S.uid + '.webp', scene: S.scene_title || sc.t, unit: sc.unit, title: S.title,
   rows: newRows.map((r, i) => ({ n: i + 1, prop: strip(r[0]), fact: strip(r[1]), label: (S.labels && S.labels[i]) || label(r[1]), cards: (r[2] || []).length })) };
 const out = man.filter(m => !ids.includes(m.pid)); out.splice(i0 < 0 ? out.length : i0, 0, entry);
+for (const [id, t] of Object.entries(TAKE)) { const e = out.find(m => m.pid === id); if (!e) continue; const p = old[id]; const keep = p.f.filter((_, k) => !(t.rows || []).map(String).includes(String(k)));
+  if (t.title) e.title = t.title; e.rows = keep.map((r, i) => ({ n: i + 1, prop: strip(r[0]), fact: strip(r[1]), label: label(r[1]), cards: (r[2] || []).length })); }
 fs.writeFileSync(manPath, JSON.stringify(out, null, 1));
 console.log(`manifest ${man.length} → ${out.length} (label 은 사실 첫 마디 — spec.labels 로 바꿀 수 있다)`);
 
