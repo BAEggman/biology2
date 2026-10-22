@@ -12,7 +12,7 @@
  *   "uid": "s32u01",                      // 통합판 id
  *   "scene_title": "물레방아 담장",        // 장면 제목(바꾸지 않으면 생략)
  *   "title": "담장과 펌프집 · 물레방아 · 방해자 셋",   // 통합판 제목
- *   "from": ["s32p01","s32p02","s32p03"], // 합칠 낱장(순서대로) — 장면의 panels 전부여야 한다(일부 통합은 아직 지원 안 함)
+ *   "from": ["s32p01","s32p02","s32p03"], // 합칠 낱장(순서대로) — 장면의 panels 전부, 또는 일부(2026-10-22: 일부 통합 지원 — 나머지 판은 그 자리에 그대로 두고 통합판은 첫 낱장 자리에 들어간다)
  *   "br": "...", "bx": "<p>...</p>",      // 통합판 다리 · 본문(옛 bx 를 옮겨 쓰려면 bx_from: true → 옛 bx 를 순서대로 이어 붙인다)
  *   "frame": ["소품", "사실"],             // 틀 행 — 첫 행
  *   "frame_from": ["s32p01#0","s32p02#6"], // (선택) 틀 행에 흡수하는 옛 행 — 그 카드가 틀 행에 걸린다(무대 행 · 판을 넘는 ★ 행)
@@ -53,8 +53,12 @@ const [dst, dend] = balanced(sk, sk.indexOf('const DATA'), '[', ']');
 const DATA = eval('(' + sk.slice(dst, dend) + ')');
 const sc = DATA.find(s => s.id === S.scene); if (!sc) die('장면 없음 ' + S.scene);
 const old = Object.fromEntries(sc.panels.map(p => [p.id, p]));
-const ids = sc.panels.map(p => p.id);
-if (JSON.stringify(ids) !== JSON.stringify(S.from)) die('from 이 장면의 panels 와 다르다: ' + ids.join(',') + ' vs ' + S.from.join(','));
+const allIds = sc.panels.map(p => p.id);
+const ids = S.from.slice();
+ids.forEach(id => { if (!allIds.includes(id)) die('from 에 장면에 없는 판: ' + id); });
+const PARTIAL = ids.length !== allIds.length;   /* 2026-10-22 일부 통합 */
+const merged = sc.panels.filter(p => ids.includes(p.id));
+if (PARTIAL) console.log(`일부 통합: ${sc.id} 의 ${allIds.length}판 가운데 ${ids.join('·')} → ${S.uid} (나머지 ${allIds.length - ids.length}판은 그대로)`);
 const strip = x => String(x == null ? '' : x).replace(/<[^>]+>/g, '');
 
 /* ── ① 행 대조 ── */
@@ -76,11 +80,11 @@ S.rows.forEach((r, i) => {
   newRows.push(cards.length ? [r.prop, fact, cards] : [r.prop, fact]);
 });
 const missing = [];
-for (const p of sc.panels) p.f.forEach((row, k) => { const ref = p.id + '#' + k; if (!used.has(ref)) missing.push(ref + (row[2] && row[2].length ? ' [카드 ' + row[2].length + ']' : '')); });
-const oldCards = sc.panels.flatMap(p => p.f.flatMap(r => r[2] || []));
+for (const p of merged) p.f.forEach((row, k) => { const ref = p.id + '#' + k; if (!used.has(ref)) missing.push(ref + (row[2] && row[2].length ? ' [카드 ' + row[2].length + ']' : '')); });
+const oldCards = merged.flatMap(p => p.f.flatMap(r => r[2] || []));
 const newCards = newRows.flatMap(r => r[2] || []);
 const lost = oldCards.filter(c => !newCards.includes(c));
-console.log(`옛 행 ${sc.panels.reduce((a, p) => a + p.f.length, 0)} → 새 행 ${newRows.length}(틀 1) · 카드 ${new Set(oldCards).size} → ${new Set(newCards).size}`);
+console.log(`옛 행 ${merged.reduce((a, p) => a + p.f.length, 0)} → 새 행 ${newRows.length}(틀 1) · 카드 ${new Set(oldCards).size} → ${new Set(newCards).size}`);
 if (missing.length) console.log('  ⚠ 안 쓴 옛 행: ' + missing.join(' · ') + '  (카드가 있으면 안 된다 — 틀 행에 흡수하려면 from 에 넣어라)');
 if (lost.length) die('빠진 카드 ' + lost.length + ': ' + lost.join(' '));
 if (CHECK) { console.log('✅ --check 통과 (아무것도 안 썼다)'); process.exit(0); }
@@ -89,16 +93,32 @@ if (CHECK) { console.log('✅ --check 통과 (아무것도 안 썼다)'); proces
 const sq = s => { if (/['\\\n]/.test(s)) die('홑따옴표 문자열에 못 넣는 글자: ' + s.slice(0, 40)); return "'" + s + "'"; };
 const jsRow = r => '[' + r.map(x => JSON.stringify(x)).join(',') + ']';
 let bx = S.bx;
-if (S.bx_from) bx = sc.panels.map(p => p.bx || '').join('') + (S.bx || '');
+if (S.bx_from) bx = merged.map(p => p.bx || '').join('') + (S.bx || '');
 if (/`|\$\{/.test(bx || '')) die('bx 에 ` 또는 ${ 가 있다');
 const traps = sc.traps ? "\n traps:[\n  " + sc.traps.map(sq).join(',\n  ') + ']' : '';
 const nums = sc.nums ? ",\n nums:[\n  " + sc.nums.map(sq).join(',\n  ') + ']' : '';
 const head = `{id:'${sc.id}',t:${sq(S.scene_title || sc.t)},gate:'${sc.gate}',unit:${sq(sc.unit)},panels:[\n`;
-const panel = ` {id:'${S.uid}',t:${sq(S.title)},wide:1,br:${sq(S.br)},bx:\`${bx}\`,f:[` + newRows.map(jsRow).join(',\n  ') + ']}]';
-const src = head + panel + (sc.traps ? ',' : '') + traps + nums + '}';
+const panel = ` {id:'${S.uid}',t:${sq(S.title)},wide:1,br:${sq(S.br)},bx:\`${bx}\`,f:[` + newRows.map(jsRow).join(',\n  ') + ']}';
 const st = sk.indexOf(`{id:'${sc.id}',`); if (st < 0 || sk.indexOf(`{id:'${sc.id}',`, st + 5) >= 0) die('장면 머리를 하나로 못 찾았다');
 const [ost, oend] = balanced(sk, st, '{', '}');
-sk = sk.slice(0, ost) + src + sk.slice(oend);
+if (!PARTIAL) {
+  const src = head + panel + ']' + (sc.traps ? ',' : '') + traps + nums + '}';
+  sk = sk.slice(0, ost) + src + sk.slice(oend);
+} else {
+  /* 일부 통합: 장면 글은 그대로 두고 panels 배열 안에서만 — 합칠 낱장들의 원문을 지우고, 첫 낱장 자리에 통합판을 넣는다 */
+  const scSrc = sk.slice(ost, oend);
+  const pi = scSrc.indexOf('panels:['); if (pi < 0) die('panels 못 찾음');
+  const [pst, pend] = balanced(scSrc, pi + 7, '[', ']');
+  let inner = scSrc.slice(pst + 1, pend - 1);
+  const spans = []; let k = 0;
+  while (k < inner.length) { const o = inner.indexOf('{', k); if (o < 0) break; const [a, b] = balanced(inner, o, '{', '}'); const m = /^\{id:'([^']+)'/.exec(inner.slice(a, b)); spans.push({ id: m ? m[1] : null, a, b }); k = b; }
+  const firstIdx = spans.findIndex(sp => ids.includes(sp.id)); if (firstIdx < 0) die('첫 낱장 자리를 못 찾음');
+  const parts = [];
+  spans.forEach((sp, i) => { if (!ids.includes(sp.id)) parts.push(inner.slice(sp.a, sp.b)); else if (i === firstIdx) parts.push(panel); });
+  const newInner = '\n' + parts.join(',\n') + '\n';
+  const newSc = scSrc.slice(0, pst + 1) + newInner + scSrc.slice(pend - 1);
+  sk = sk.slice(0, ost) + newSc + sk.slice(oend);
+}
 (S.text_fixes || []).forEach(([a, b]) => { const n = sk.split(a).length - 1; if (n !== 1) die(`text_fixes 「${a.slice(0, 40)}」 ${n}번 맞음`); sk = sk.replace(a, b); });
 const left = ids.filter(id => sk.includes(id));
 if (left.length) console.log('  ⚠ sketchy.html 에 옛 id 가 아직 남아 있다(교차 참조 — text_fixes 로 고쳐라): ' + left.join(' '));
@@ -113,7 +133,7 @@ if (!fs.existsSync(path.join(R, 'img', S.uid + '.webp'))) console.log('  ⚠ img
 const today = new Date().toISOString().slice(0, 10);
 fs.mkdirSync(path.join(R, 'tools/retired'), { recursive: true });
 fs.writeFileSync(path.join(R, 'tools/retired', `${sc.id}_${strip(sc.t).replace(/\s+/g, '')}_${today}.json`),
-  JSON.stringify({ _왜: `${today} 단원 통합 — ${sc.id} 「${sc.t}」 ${ids.length}판을 통합판 ${S.uid} 한 장으로 다시 그렸다. ` + (S.why || ''), merged_into: S.uid, 옛행_새행: map, scene: sc }, null, 1));
+  JSON.stringify({ _왜: `${today} 단원 통합 — ${sc.id} 「${sc.t}」 ${PARTIAL ? ids.join('·') + ' (' + allIds.length + '판 가운데 ' + ids.length + '판)' : ids.length + '판'}을 통합판 ${S.uid} 한 장으로 다시 그렸다. ` + (S.why || ''), merged_into: S.uid, merged: ids, 옛행_새행: map, scene: PARTIAL ? { id: sc.id, t: sc.t, unit: sc.unit, panels: merged } : sc }, null, 1));
 
 /* ── ⑤ baseline ── */
 const blPath = path.join(R, 'test/baseline.json');
@@ -126,7 +146,7 @@ const norm = v => (Array.isArray(v) ? v : [v]).slice().sort().join('|');
 const P0 = J(prev, 'PMAP');
 /* 새 PMAP 값은 build 가 정하므로 여기서 미리 센다: 카드 → 걸린 판 집합(통합판 포함) */
 const cur = {};
-for (const s2 of DATA) for (const p of (s2.id === sc.id ? [] : s2.panels)) for (const r of (p.f || [])) for (const c of (r[2] || [])) (cur[c] = cur[c] || new Set()).add(p.id);
+for (const s2 of DATA) for (const p of s2.panels) { if (ids.includes(p.id)) continue; for (const r of (p.f || [])) for (const c of (r[2] || [])) (cur[c] = cur[c] || new Set()).add(p.id); }
 for (const r of newRows) for (const c of (r[2] || [])) (cur[c] = cur[c] || new Set()).add(S.uid);
 BL.pmapMoved = BL.pmapMoved || {};
 let moved = 0;
@@ -152,6 +172,6 @@ console.log(`manifest ${man.length} → ${out.length} (label 은 사실 첫 마�
 
 /* ── ⑦ hooks.json 언급 목록 ── */
 const H = fs.readFileSync(path.join(R, 'tools/hooks.json'), 'utf8');
-const mentions = ids.filter(id => H.includes(id)).map(id => id + '×' + H.split(id).length - 1);
+const mentions = ids.filter(id => H.includes(id)).map(id => id + '×' + (H.split(id).length - 1));
 if (mentions.length) console.log('  ⚠ tools/hooks.json 이 옛 id 를 말한다 — 「왜」·예약 설명을 새 판으로 고쳐라: ' + mentions.join(' '));
 console.log('\n다음: python3 tools/install_img.py ' + S.uid + ' <2배 png>(안 했으면) → node build.js && node test/all.js');

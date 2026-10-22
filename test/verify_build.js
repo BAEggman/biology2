@@ -52,8 +52,18 @@ T('pc를 걷어내면 구조가 v12와 같다', ()=>{
       if(jj>=0){ i=jj+1; lastInto=into; merged.push(id); continue; }
     }
     const kids=(SPLIT[id]||{}).to||[];
-    let p=i, ok=kids.length>0;
-    for(const c of kids){ const jj=now.indexOf(key(c),p); if(jj<0){ ok=false; break; } p=jj+1; }
+    /* [보탬 2026-10-22] 분할된 판이 뒤에 통합판으로 합쳐질 수 있다 — s20p01 → s20p01a+b (분할) → s20u01 (통합).
+       분할 자식이 panelMerge 의 from 이면 통합판 자리를 자식 자리로 친다. */
+    let p=i, ok=kids.length>0, li=null;
+    for(const c of kids){
+      const into=INTO[c];
+      if(into && MERGE[into].why){
+        if(li===into){ merged.push(c); continue; }
+        const jj=now.indexOf(key(into),p); if(jj<0){ ok=false; break; }
+        p=jj+1; li=into; merged.push(c); continue;
+      }
+      const jj=now.indexOf(key(c),p); if(jj<0){ ok=false; break; } p=jj+1; li=null;
+    }
     if(ok){ i=p; split.push(id+'→'+kids.join('+')); continue; }
     gone.push(k);
   }
