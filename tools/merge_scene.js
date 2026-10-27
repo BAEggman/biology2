@@ -20,6 +20,7 @@
  *     {"from": "s32p01#1", "prop": "새 소품 글", "fact": null},   // fact null = 옛 사실 그대로 · 문자열 = 바꿈
  *     {"from": ["s32p01#0","s32p02#6"], "prop": "...", "fact": "..."},  // 둘을 한 행으로(카드 합침)
  *     {"from": null, "prop": "...", "fact": "...", "cards": []}         // 새 행(카드 없음)
+ *     {"from": "s45p02#3", "prop": "...", "fact": null, "cards_add": ["C0-167"]}  // (2026-10-27) 옛 행 카드 + 덧붙이는 카드 · 틀 행은 "frame_cards_add" 
  *   ],
  *   "why": "baseline.panelMerge 에 적을 까닭",
  *   "text_fixes": [["옛 글", "새 글"]],    // sketchy.html 전체에서 꼭 1번씩 맞아야 하는 치환(다른 판의 교차 참조 등)
@@ -72,6 +73,7 @@ const parseRef = ref => { const m = /^(s\d+p\d+[a-z]?)#(\d+)$/.exec(ref); if (!m
 const newRows = [];
 if (!S.frame || S.frame.length !== 2) die('frame 은 [소품, 사실]');
 { const fc = []; (S.frame_from || []).forEach(ref => { const [pid, k] = parseRef(ref); if (used.has(ref)) die('옛 행을 두 번 썼다 ' + ref); used.add(ref); map[ref] = S.uid + '#0'; fc.push(...(old[pid].f[k][2] || [])); });
+  fc.push(...(S.frame_cards_add || []));   /* 2026-10-27: 틀 행에 덧붙이는 카드(어디에도 안 걸린 카드) */
   const u = [...new Set(fc)]; newRows.push(u.length ? [S.frame[0], S.frame[1], u] : [S.frame[0], S.frame[1]]); }
 S.rows.forEach((r, i) => {
   const refs = r.from == null ? [] : (Array.isArray(r.from) ? r.from : [r.from]);
@@ -79,6 +81,7 @@ S.rows.forEach((r, i) => {
   refs.forEach(ref => { const [pid, k] = parseRef(ref); if (used.has(ref)) die('옛 행을 두 번 썼다 ' + ref); used.add(ref);
     map[ref] = S.uid + '#' + (i + 1); const o = old[pid].f[k]; if (o[2]) cards.push(...o[2]); if (fact == null) fact = o[1]; });
   if (refs.length === 0 && r.cards) cards = r.cards.slice();
+  if (r.cards_add) cards.push(...r.cards_add);   /* 2026-10-27: 옛 행 카드에 덧붙이는 카드(그림이 이미 나르는데 어디에도 안 걸린 카드) */
   if (fact == null) die('사실 칸이 비었다 — 행 ' + (i + 1));
   if (!r.prop) die('소품 칸이 비었다 — 행 ' + (i + 1));
   cards = [...new Set(cards)];
