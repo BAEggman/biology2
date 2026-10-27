@@ -9,3 +9,4 @@ outputs/*
 tools/__pycache__/
 Gemini_Generated_Image_*.png
 tools/retouch/__pycache__/
+__pycache__/
