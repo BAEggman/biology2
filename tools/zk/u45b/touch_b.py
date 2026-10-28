@@ -54,13 +54,12 @@ lay = layer()
 beam(lay, (1163, 40), (1101, 414), 9, 10, (150, 96, 206), 40, 160)
 beam(lay, (1173, 40), (1110, 414), 9, 10, (64, 170, 182), 40, 160)
 img = comp(img, lay, 1.2)
-# 흰 눈부심 → 망토(넓어지는 쐐기 — 위에선 옅고 망토 앞에서 짙다 · 망토에 흰 빛 얼룩)
+# 흰 눈부심 → 망토(v2 — 자매 머리와 당근 잎 사이로 곧게 내려와 망토 바깥면에 부딪혀 그 자리가 하얗게 탄다)
 lay = layer()
-beam(lay, (836, 40), (950, 540), 14, 34, (255, 252, 236), 55, 150, 30)
-beam(lay, (928, 444), (950, 540), 28, 36, (255, 252, 236), 120, 235, 10)
+beam(lay, (1078, 40), (1031, 528), 16, 30, (255, 252, 236), 120, 245, 30)
 d = ImageDraw.Draw(lay)
-d.ellipse([S(926, 508), S(982, 560)], fill=(255, 250, 232, 160))
-img = comp(img, lay, 2.0)
+d.polygon([S(1004, 526), S(1022, 512), S(1046, 514), S(1062, 530), S(1050, 552), S(1020, 556)], fill=(255, 250, 232, 150))   # 망토 주름을 따라 번진 빛(공 꼴 아님)
+img = comp(img, lay, 4.0)
 
 # ── ③ 금빛 물결(머리 → 쌍둥이)
 def wave(d, p0, p1, amp=3.0, lam=13.0, col=(214, 160, 30, 235), wdt=1.6, phase=0.0):
@@ -105,6 +104,10 @@ def twig(d, cx, top, h, spread):
         d.line([S(cx, split), S(tx, ty)], fill=BR, width=int(SS * 2.0))
     d.line([S(cx, bot), S(cx, split)], fill=BR, width=int(SS * 2.5))
     d.line([S(cx - 0.4, bot - 1), S(cx - 0.4, split + 1)], fill=BRL, width=int(SS * 0.8))
+    rH, rC = max(1.5, h * 0.075), max(1.3, h * 0.065)      # 갈래 끝마다 흰 알(H 셋) · 갈라지는 마디는 검은 알(C)
+    for (tx, ty) in tips:
+        d.ellipse([S(tx - rH, ty - rH), S(tx + rH, ty + rH)], fill=(252, 252, 250, 255), outline=INK, width=int(SS * 0.8))
+    d.ellipse([S(cx - rC, split - rC), S(cx + rC, split + rC)], fill=(46, 40, 34, 255), outline=INK, width=int(SS * 0.6))
 def fork(d, cx, top, h, wdt):
     """갈퀴 넷 포크 — 자루(아래) · 갈퀴 넷(위)"""
     base = top + h * 0.40; bot = top + h
@@ -125,17 +128,12 @@ twig(d, 1195, 513, 19, 6.5)     # 쌍둥이 왼(a)
 twig(d, 1268, 515, 19, 6.5)     # 쌍둥이 오른(a)
 img = comp(img, lay)
 
-# ── ⑤ 노란 공(맞잡은 손 → 옆으로 짧은 호 → 빈 사발)
+# ── ⑤ 노란 공(v2 — 쌍둥이가 사발을 맞잡은 손 바로 밑에 대고 있다 · 공이 손에서 곧장 사발로 떨어진다)
 lay = layer(); d = ImageDraw.Draw(lay)
-arc = []
-for k in range(21):
-    t = k / 20
-    x = (1 - t) ** 2 * 1228 + 2 * (1 - t) * t * 1206 + t ** 2 * 1207
-    y = (1 - t) ** 2 * 556 + 2 * (1 - t) * t * 552 + t ** 2 * 579
-    arc.append(S(x, y))
-d.line(arc, fill=(96, 96, 96, 210), width=int(SS * 1.2), joint='curve')
-cx, cy, r = 1207.0, 587.0, 5.6
-d.ellipse([S(cx - r, cy - r), S(cx + r, cy + r)], fill=(246, 206, 56, 255), outline=INK, width=int(SS * 1.1))
+for (xa, ya, xb, yb) in [(1236.5, 545.5, 1238.5, 549.0), (1242.0, 545.0, 1243.5, 548.5)]:
+    d.line([S(xa, ya), S(xb, yb)], fill=(90, 90, 90, 200), width=int(SS * 0.9))
+cx, cy, r = 1240.5, 553.5, 4.4
+d.ellipse([S(cx - r, cy - r), S(cx + r, cy + r)], fill=(246, 206, 56, 255), outline=INK, width=int(SS * 1.0))
 d.ellipse([S(cx - r * 0.55, cy - r * 0.6), S(cx - r * 0.05, cy - r * 0.15)], fill=(255, 240, 170, 255))
 img = comp(img, lay)
 
@@ -188,16 +186,30 @@ for c in ['V', 'B', 'T', 'G', 'Y', 'O', 'R']:
         d.line([S(cx - 1, y0 - 0.5), S(cx + 8, y0 - 12)], fill=GR, width=int(SS * 2.0))
 img = comp(img, lay)
 
-# 주황 자리 실 위 헤엄이 둘(몇 마리만 — 빨강 · 보라 무리보다 훨씬 적다)
-lay = layer(); d = ImageDraw.Draw(lay)
+# 걸상(v2) — 실 높이 띠 한가운데: 청록 · 주황엔 헤엄이 셋과 작은 방울 둘씩 · 빨강 띠엔 무더기를 보태 보라 · 파랑 무더기만큼
+import random
+random.seed(45)
+tyT = lambda x: 611 + (x - 1560) * 0.117 + 2.5
 OL, OLD = (128, 118, 52, 255), (52, 46, 18, 255)
-for (bx, by, ang) in [(1846, 640.5, -0.35), (1866, 643.5, 0.25)]:
+def bact(d, bx, by, ang, k=1.0):
     ca, sa = math.cos(ang), math.sin(ang)
     P = lambda u, v: S(bx + u * ca - v * sa, by + u * sa + v * ca)
-    body = [P(4.2 * math.cos(t), 1.9 * math.sin(t)) for t in np.linspace(0, 2 * math.pi, 40)]
+    body = [P(4.4 * k * math.cos(t), 1.9 * k * math.sin(t)) for t in np.linspace(0, 2 * math.pi, 40)]
     d.polygon(body, fill=OL, outline=OLD)
-    tail = [P(-4.2 - k * 0.9, 1.1 * math.sin(k * 1.1)) for k in range(9)]
-    d.line(tail, fill=OLD, width=int(SS * 0.7))
+    d.line([P(-4.4 * k - j * 0.9, 1.1 * math.sin(j * 1.1)) for j in range(9)], fill=OLD, width=int(SS * 0.7))
+def bub2(d, cx, cy, r):
+    d.ellipse([S(cx - r, cy - r), S(cx + r, cy + r)], fill=(250, 251, 253, 255), outline=(116, 128, 146, 255), width=int(SS * 0.9))
+    d.ellipse([S(cx - r * 0.5, cy - r * 0.55), S(cx - r * 0.05, cy - r * 0.1)], fill=(255, 255, 255, 255))
+lay = layer(); d = ImageDraw.Draw(lay)
+for xc in (1706, 1900):                                   # 청록 · 주황
+    for (dx, dy, ang) in [(-8, -3.5, -0.4), (1, -4.5, 0.3), (9, -3.0, -0.1)]:
+        bact(d, xc + dx, tyT(xc + dx) + dy, ang)
+    bub2(d, xc - 2, tyT(xc) - 14, 3.0); bub2(d, xc + 3, tyT(xc) - 25, 2.4)
+for k in range(30):                                        # 빨강 띠 무더기 보태기
+    x = random.uniform(1938, 1986); y = tyT(x) + random.uniform(-9, 6)
+    bact(d, x, y, random.uniform(-1.4, 1.4), random.uniform(0.85, 1.05))
+for (x, dy, r) in [(1946, -16, 3.2), (1958, -27, 2.6), (1968, -15, 3.0), (1952, -38, 2.4), (1975, -30, 2.8), (1962, -48, 2.2)]:
+    bub2(d, x, tyT(x) + dy, r)
 img = comp(img, lay)
 img.save('cur8.png')
 for (b, nm, k) in [((880, 290, 1460, 640), 'v8_stage.png', 2), ((1560, 480, 1880, 680), 'v8_rail.png', 3), ((420, 160, 920, 760), 'v8_zoomlines.png', 1)]:

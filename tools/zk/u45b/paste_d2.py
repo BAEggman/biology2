@@ -19,6 +19,10 @@ dark = (L < 75) & (diff > 25)
 tails = dark & binary_dilation(olive, iterations=5)
 white = (L > 212) & (sat < 45) & (diff > 25)
 zone = np.zeros((H, W), bool); zone[0:205, 60:520] = True
+# v2(b131 뒤): 무더기는 보라 · 파랑 띠(실 높이 x ≤ 1690)와 빨강 띠(x ≥ 1930)에만 — 주황 · 노랑에 번진 무더기를 뺀다
+# (청록 · 주황의 몇 마리 · 작은 방울은 touch_b 가 띠 한가운데에 따로 그린다)
+xs = np.arange(W)[None, :] + bx0
+zone &= (xs <= 1690) | (xs >= 1930)
 M = (binary_dilation(olive, iterations=1) | binary_dilation(tails, iterations=1) | binary_dilation(white, iterations=2)) & zone
 Mf = np.clip(gaussian_filter(M.astype(float), 0.7) * 1.5, 0, 1)[..., None]
 out = cur.copy(); out[by0:by1, bx0:bx1] = C * (1 - Mf) + F * Mf

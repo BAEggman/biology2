@@ -60,7 +60,7 @@ img = Image.fromarray(A)
 def bub(d, cx, cy, r):
     d.ellipse([S(cx - r, cy - r), S(cx + r, cy + r)], fill=(250, 251, 253, 255), outline=(120, 132, 150, 255), width=int(SS * 0.9))
     d.ellipse([S(cx - r * 0.5, cy - r * 0.55), S(cx - r * 0.05, cy - r * 0.1)], fill=(255, 255, 255, 255))
-img = overlay(img, lambda d: (bub(d, 1858.0, 618.0, 2.6), bub(d, 1862.0, 606.0, 2.0)))
+# (주황 자리 작은 방울은 touch_b 가 띠 한가운데에 — v2)
 img.save('cur7.png')
 for (b, nm, kk) in [((590, 600, 820, 720), 'v7_stroma.png', 4), ((1660, 580, 1900, 670), 'v7_bench.png', 4)]:
     img.crop(b).resize(((b[2] - b[0]) * kk, (b[3] - b[1]) * kk), Image.LANCZOS).save(nm)
