@@ -9,7 +9,9 @@
  ⑦ 이은 흔적 — 흰 빔 오른쪽 하늘의 빛무리를 왼쪽과 같은 폭으로(A 「흰 빔 양옆 하늘빛이 갈림」)"""
 import sys, os, math, random, numpy as np
 from PIL import Image, ImageDraw, ImageFilter
-os.chdir(sys.argv[1] if len(sys.argv) > 1 else '.')
+V5 = '--v5' in sys.argv            # v5(b134 뒤): ② 무더기 머리 · 낱장 머리는 touch_f 가 겹마다 셋으로 다시 그린다
+args = [a for a in sys.argv[1:] if not a.startswith('--')]
+os.chdir(args[0] if args else '.')
 img = Image.open('cur13.png').convert('RGB'); W, H = img.size
 P10 = np.asarray(Image.open('cur10.png').convert('RGB'))
 SS = 4
@@ -45,11 +47,11 @@ LONE = (697.0, 765.0, 695.4)    # (왼 x, 오른 x, 앞면 가운데 y) — G2 �
 STACK_FILL = [(752.5, 608.6), (774.0, 608.4), (759.5, 650.2), (782.0, 650.6), (756.0, 660.8), (779.5, 661.2), (761.5, 669.0), (783.5, 669.4)]
 PUR, PURD = (156, 108, 196, 255), (70, 44, 96, 255)
 lay = layer(); d = ImageDraw.Draw(lay); s = 4.4
-for (x, yc) in STACK_FILL:
+for (x, yc) in ([] if V5 else STACK_FILL):
     d.rectangle([S(x - s / 2, yc - s / 2), S(x + s / 2, yc + s / 2)], fill=PUR, outline=PURD, width=int(SS * 0.8))
     d.rectangle([S(x - s * 0.18, yc - s * 0.18), S(x + s * 0.18, yc + s * 0.18)], fill=(250, 250, 248, 255))
 img = comp(img, lay)
-if LONE:
+if LONE and not V5:
     xl, xr, yc = LONE
     lay = layer(); d = ImageDraw.Draw(lay); s = 4.6
     for k, j in enumerate((-0.04, 0.03, -0.02)):

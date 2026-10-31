@@ -6,7 +6,8 @@
  ④ 행 17 — 진홍 안개 속 둘에 자매와 같은 꼬리 · 진홍 빛살이 액자로 든다"""
 import sys, os, math, colorsys, itertools, numpy as np
 from PIL import Image, ImageDraw, ImageFilter
-V4 = '--v4' in sys.argv            # v4(b133 뒤): ② 희미한 공 · ④ 진홍 빛살 둘을 뺀다(③ 은 크게) — 「에머슨의 두 빛」으로 읽혔다 · 공은 touch_e/G1 이 다시
+V5 = '--v5' in sys.argv            # v5(b134 뒤): ① 무더기 머리 · ③ 난간 당근 · b 도 뺀다 — touch_f 가 겹마다 셋 · 걸상 앞판 머리 줄로 다시 그린다
+V4 = '--v4' in sys.argv or V5      # v4(b133 뒤): ② 희미한 공 · ④ 진홍 빛살 둘을 뺀다(③ 은 크게) — 「에머슨의 두 빛」으로 읽혔다 · 공은 touch_e/G1 이 다시
 args = [a for a in sys.argv[1:] if not a.startswith('--')]
 os.chdir(args[0] if args else '.')
 img = Image.open('cur9.png').convert('RGB'); W, H = img.size
@@ -47,7 +48,7 @@ PUR, PURD = (156, 108, 196, 255), (70, 44, 96, 255)
 cnt = 0
 import random
 random.seed(7)
-for j, (yc, xl, xr, n, gap) in enumerate(faces):
+for j, (yc, xl, xr, n, gap) in enumerate([] if V5 else faces):
     s = min(5.0, max(3.6, gap * 0.62))
     off = ((j % 3) - 1) * 0.28 / (n + 1)          # 겹마다 자리를 비껴 놓아 단추 줄(누빔)처럼 서지 않게
     for k in range(n):
@@ -102,7 +103,7 @@ lay = layer(); d = ImageDraw.Draw(lay)
 # 청록: 빈 머리 위에 걸터앉은 작은 당근 + 청록 빛 무리
 tb = rail_top(cT) - s                              # 머리 윗변
 d.ellipse([S(cT - 11 * K, tb - 26 * K), S(cT + 11 * K, tb - 2)], fill=(80, 190, 196, 120))
-img = comp(img, lay, 2.5)
+if not V5: img = comp(img, lay, 2.5)
 lay = layer(); d = ImageDraw.Draw(lay)
 car = [S(cT - 5.0 * K, tb - 18 * K), S(cT + 5.0 * K, tb - 18 * K), S(cT + 1.0 * K, tb - 1.0), S(cT - 1.0 * K, tb - 1.0)]
 d.polygon(car, fill=(236, 126, 40, 255), outline=INK)
@@ -111,7 +112,7 @@ for k in range(3):
     d.line([S(cT - 3.6 * K + k * 0.9 * K, yy), S(cT - 1.0 * K + k * 0.6 * K, yy + 0.6)], fill=(170, 80, 20, 255), width=int(SS * 0.7))
 for (dx, dy) in [(-3.5, -6), (0, -8), (3.5, -6)]:
     d.line([S(cT, tb - 18 * K), S(cT + dx * K, tb - 18 * K + dy * K)], fill=(60, 140, 50, 255), width=int(SS * 1.6))
-img = comp(img, lay)
+if not V5: img = comp(img, lay)
 # 주황: 빈 머리 위에 작은 b 머리(주황으로 찬 액자 · 포크 브로치)
 lay = layer(); d = ImageDraw.Draw(lay)
 ob = rail_top(cO) - s
@@ -154,7 +155,7 @@ else:
         d.line([S(x, hy0 + hs + 1.2), S(x, hy0 + hs + 4.6)], fill=(200, 204, 210, 255), width=int(SS * 0.8))
     d.line([S(fx[0], hy0 + hs + 4.6), S(fx[-1], hy0 + hs + 4.6)], fill=(200, 204, 210, 255), width=int(SS * 0.9))
     d.line([S(cO, hy0 + hs + 4.6), S(cO, hy0 + hs + 7.5)], fill=(200, 204, 210, 255), width=int(SS * 1.0))
-img = comp(img, lay)
+if not V5: img = comp(img, lay)
 
 # ── ④ 안개 속 둘: 진홍 빛살(v3 만 — v4 는 뺀다: 나란한 두 빛줄기가 「에머슨의 두 빛」으로 읽혔다)
 if not V4:
