@@ -6,7 +6,9 @@
  ④ 행 17 — 진홍 안개 속 둘에 자매와 같은 꼬리 · 진홍 빛살이 액자로 든다"""
 import sys, os, math, colorsys, itertools, numpy as np
 from PIL import Image, ImageDraw, ImageFilter
-os.chdir(sys.argv[1] if len(sys.argv) > 1 else '.')
+V4 = '--v4' in sys.argv            # v4(b133 뒤): ② 희미한 공 · ④ 진홍 빛살 둘을 뺀다(③ 은 크게) — 「에머슨의 두 빛」으로 읽혔다 · 공은 touch_e/G1 이 다시
+args = [a for a in sys.argv[1:] if not a.startswith('--')]
+os.chdir(args[0] if args else '.')
 img = Image.open('cur9.png').convert('RGB'); W, H = img.size
 SS = 4
 S = lambda x, y: (x * SS, y * SS)
@@ -56,16 +58,17 @@ for j, (yc, xl, xr, n, gap) in enumerate(faces):
 img = comp(img, lay)
 print('faces', len(faces), 'heads', cnt)
 
-# ── ② 사발을 비켜 떨어져 사그라드는 노란 공
-lay = layer(); d = ImageDraw.Draw(lay)
-cx, cy = 1230.0, 595.0
-for (rr, a) in [(12, 40), (9, 70), (6.5, 110)]:
-    d.ellipse([S(cx - rr, cy - rr * 0.8), S(cx + rr, cy + rr * 0.8)], fill=(255, 244, 170, a))
-img = comp(img, lay, 2.2)
-lay = layer(); d = ImageDraw.Draw(lay)
-r = 3.6
-d.ellipse([S(cx - r, cy - r), S(cx + r, cy + r)], fill=(232, 214, 140, 255), outline=(120, 108, 70, 255), width=int(SS * 0.9))
-img = comp(img, lay)
+# ── ② 사발을 비켜 떨어져 사그라드는 노란 공(v3 만 — v4 는 G1 조각)
+if not V4:
+    lay = layer(); d = ImageDraw.Draw(lay)
+    cx, cy = 1230.0, 595.0
+    for (rr, a) in [(12, 40), (9, 70), (6.5, 110)]:
+        d.ellipse([S(cx - rr, cy - rr * 0.8), S(cx + rr, cy + rr * 0.8)], fill=(255, 244, 170, a))
+    img = comp(img, lay, 2.2)
+    lay = layer(); d = ImageDraw.Draw(lay)
+    r = 3.6
+    d.ellipse([S(cx - r, cy - r), S(cx + r, cy + r)], fill=(232, 214, 140, 255), outline=(120, 108, 70, 255), width=int(SS * 0.9))
+    img = comp(img, lay)
 
 # ── ③ 난간의 보조 색소(청록 = 당근 · 주황 = b 머리)
 Af = np.asarray(img).astype(float) / 255
@@ -94,42 +97,71 @@ for c, g in itertools.groupby(seq):
 cT = (runs['T'][0] + runs['T'][1]) / 2; cO = (runs['O'][0] + runs['O'][1]) / 2
 print('teal head x', cT, 'orange head x', cO)
 s = 19.0
+K = 1.35 if V4 else 1.0                            # v4: 당근 · b 머리를 키운다(B 「작은 주황 상자의 쌓임 — 모름」)
 lay = layer(); d = ImageDraw.Draw(lay)
 # 청록: 빈 머리 위에 걸터앉은 작은 당근 + 청록 빛 무리
 tb = rail_top(cT) - s                              # 머리 윗변
-d.ellipse([S(cT - 11, tb - 26), S(cT + 11, tb - 2)], fill=(80, 190, 196, 120))
+d.ellipse([S(cT - 11 * K, tb - 26 * K), S(cT + 11 * K, tb - 2)], fill=(80, 190, 196, 120))
 img = comp(img, lay, 2.5)
 lay = layer(); d = ImageDraw.Draw(lay)
-car = [S(cT - 5.0, tb - 18), S(cT + 5.0, tb - 18), S(cT + 1.0, tb - 1.0), S(cT - 1.0, tb - 1.0)]
+car = [S(cT - 5.0 * K, tb - 18 * K), S(cT + 5.0 * K, tb - 18 * K), S(cT + 1.0 * K, tb - 1.0), S(cT - 1.0 * K, tb - 1.0)]
 d.polygon(car, fill=(236, 126, 40, 255), outline=INK)
 for k in range(3):
-    yy = tb - 15 + k * 4.0
-    d.line([S(cT - 3.6 + k * 0.9, yy), S(cT - 1.0 + k * 0.6, yy + 0.6)], fill=(170, 80, 20, 255), width=int(SS * 0.7))
+    yy = tb - 15 * K + k * 4.0 * K
+    d.line([S(cT - 3.6 * K + k * 0.9 * K, yy), S(cT - 1.0 * K + k * 0.6 * K, yy + 0.6)], fill=(170, 80, 20, 255), width=int(SS * 0.7))
 for (dx, dy) in [(-3.5, -6), (0, -8), (3.5, -6)]:
-    d.line([S(cT, tb - 18), S(cT + dx, tb - 18 + dy)], fill=(60, 140, 50, 255), width=int(SS * 1.6))
+    d.line([S(cT, tb - 18 * K), S(cT + dx * K, tb - 18 * K + dy * K)], fill=(60, 140, 50, 255), width=int(SS * 1.6))
 img = comp(img, lay)
 # 주황: 빈 머리 위에 작은 b 머리(주황으로 찬 액자 · 포크 브로치)
 lay = layer(); d = ImageDraw.Draw(lay)
 ob = rail_top(cO) - s
-hs = 13.0; hx0, hy0 = cO - hs / 2, ob - hs - 9
-d.rectangle([S(hx0, hy0), S(hx0 + hs, hy0 + hs)], fill=(168, 128, 196, 255), outline=INK, width=int(SS * 1.0))
-d.rectangle([S(hx0 + 2.8, hy0 + 2.8), S(hx0 + hs - 2.8, hy0 + hs - 2.8)], fill=(238, 136, 44, 255), outline=(118, 82, 150, 255), width=int(SS * 0.7))
-bx, byy = cO, hy0 + hs / 2
-d.ellipse([S(bx - 1.8, byy - 1.8), S(bx + 1.8, byy + 1.8)], fill=(200, 202, 208, 255), outline=INK, width=int(SS * 0.5))
-# 목 + 포크 브로치(갈퀴 넷)
-d.line([S(cO, hy0 + hs), S(cO, ob - 0.5)], fill=(150, 120, 90, 255), width=int(SS * 2.2))
-fx = [cO - 3.0 + 2.0 * k for k in range(4)]
-for x in fx:
-    d.line([S(x, hy0 + hs + 1.2), S(x, hy0 + hs + 4.6)], fill=(200, 204, 210, 255), width=int(SS * 0.8))
-d.line([S(fx[0], hy0 + hs + 4.6), S(fx[-1], hy0 + hs + 4.6)], fill=(200, 204, 210, 255), width=int(SS * 0.9))
-d.line([S(cO, hy0 + hs + 4.6), S(cO, hy0 + hs + 7.5)], fill=(200, 204, 210, 255), width=int(SS * 1.0))
+def mini_b(d, cx, foot):
+    """v4: 빈 주황 머리 위에 선 작은 b 사람 — 자주빛 액자 머리(주황으로 참 · 은빛 구슬) · 베이지 몸 · 가슴에 갈퀴 넷 포크(무대 오른 자매와 같은 사람)"""
+    SKIN, SKIND = (222, 204, 178, 255), (120, 100, 78, 255)
+    hip, sh = foot - 9.5, foot - 20.0
+    for dx in (-1.9, 1.9):                                          # 다리
+        d.line([S(cx + dx * 0.8, hip), S(cx + dx, foot)], fill=INK, width=int(SS * 2.6))
+        d.line([S(cx + dx * 0.8, hip), S(cx + dx, foot - 0.4)], fill=SKIN, width=int(SS * 1.4))
+    body = [S(cx - 4.6, sh), S(cx + 4.6, sh), S(cx + 3.6, hip + 1), S(cx - 3.6, hip + 1)]
+    d.polygon(body, fill=SKIN, outline=INK)
+    for dx in (-1, 1):                                              # 팔(몸 곁에 늘어뜨림)
+        d.line([S(cx + dx * 4.6, sh + 0.6), S(cx + dx * 5.6, hip - 0.5)], fill=INK, width=int(SS * 2.2))
+        d.line([S(cx + dx * 4.6, sh + 0.6), S(cx + dx * 5.6, hip - 0.8)], fill=SKIN, width=int(SS * 1.0))
+    d.line([S(cx, sh - 2.4), S(cx, sh + 0.4)], fill=INK, width=int(SS * 2.4))      # 목
+    hs = 15.0; hx0, hy0 = cx - hs / 2, sh - 2.2 - hs
+    d.rectangle([S(hx0, hy0), S(hx0 + hs, hy0 + hs)], fill=(168, 128, 196, 255), outline=INK, width=int(SS * 1.0))
+    t2 = 3.3
+    d.rectangle([S(hx0 + t2, hy0 + t2), S(hx0 + hs - t2, hy0 + hs - t2)], fill=(238, 136, 44, 255), outline=(118, 82, 150, 255), width=int(SS * 0.7))
+    d.ellipse([S(cx - 2.2, hy0 + hs / 2 - 2.2), S(cx + 2.2, hy0 + hs / 2 + 2.2)], fill=(200, 202, 208, 255), outline=INK, width=int(SS * 0.5))
+    fx = [cx - 2.4 + 1.6 * k for k in range(4)]                      # 가슴 포크(갈퀴 넷 — 잉크 테 위에 은빛)
+    for (col, wk) in ((INK, 1.0), ((214, 218, 224, 255), 0.0)):
+        for x in fx:
+            d.line([S(x, sh + 1.4), S(x, sh + 4.4)], fill=col, width=int(SS * (0.75 + wk)))
+        d.line([S(fx[0], sh + 4.4), S(fx[-1], sh + 4.4)], fill=col, width=int(SS * (0.9 + wk)))
+        d.line([S(cx, sh + 4.4), S(cx, sh + 8.2)], fill=col, width=int(SS * (1.0 + wk)))
+if V4:
+    mini_b(d, cO, ob - 0.6)
+else:
+    hs = 13.0; hx0, hy0 = cO - hs / 2, ob - hs - 9
+    d.rectangle([S(hx0, hy0), S(hx0 + hs, hy0 + hs)], fill=(168, 128, 196, 255), outline=INK, width=int(SS * 1.0))
+    d.rectangle([S(hx0 + 2.8, hy0 + 2.8), S(hx0 + hs - 2.8, hy0 + hs - 2.8)], fill=(238, 136, 44, 255), outline=(118, 82, 150, 255), width=int(SS * 0.7))
+    bx, byy = cO, hy0 + hs / 2
+    d.ellipse([S(bx - 1.8, byy - 1.8), S(bx + 1.8, byy + 1.8)], fill=(200, 202, 208, 255), outline=INK, width=int(SS * 0.5))
+    # 목 + 포크 브로치(갈퀴 넷)
+    d.line([S(cO, hy0 + hs), S(cO, ob - 0.5)], fill=(150, 120, 90, 255), width=int(SS * 2.2))
+    fx = [cO - 3.0 + 2.0 * k for k in range(4)]
+    for x in fx:
+        d.line([S(x, hy0 + hs + 1.2), S(x, hy0 + hs + 4.6)], fill=(200, 204, 210, 255), width=int(SS * 0.8))
+    d.line([S(fx[0], hy0 + hs + 4.6), S(fx[-1], hy0 + hs + 4.6)], fill=(200, 204, 210, 255), width=int(SS * 0.9))
+    d.line([S(cO, hy0 + hs + 4.6), S(cO, hy0 + hs + 7.5)], fill=(200, 204, 210, 255), width=int(SS * 1.0))
 img = comp(img, lay)
 
-# ── ④ 안개 속 둘: 꼬리 · 진홍 빛살
-lay = layer(); d = ImageDraw.Draw(lay)
-for (hx, hy) in [(1828.0, 453.0), (1912.0, 467.0)]:
-    d.polygon([S(hx - 6, 40), S(hx + 6, 40), S(hx + 9, hy - 32), S(hx - 9, hy - 32)], fill=(214, 24, 44, 120))
-img = comp(img, lay, 1.5)
+# ── ④ 안개 속 둘: 진홍 빛살(v3 만 — v4 는 뺀다: 나란한 두 빛줄기가 「에머슨의 두 빛」으로 읽혔다)
+if not V4:
+    lay = layer(); d = ImageDraw.Draw(lay)
+    for (hx, hy) in [(1828.0, 453.0), (1912.0, 467.0)]:
+        d.polygon([S(hx - 6, 40), S(hx + 6, 40), S(hx + 9, hy - 32), S(hx - 9, hy - 32)], fill=(214, 24, 44, 120))
+    img = comp(img, lay, 1.5)
 img.save('cur10.png')
 for (b, nm, k) in [((560, 280, 820, 660), 'v10_stacks.png', 2), ((1180, 520, 1290, 620), 'v10_bowl.png', 4), ((1580, 480, 1800, 600), 'v10_rail.png', 4), ((1790, 380, 1990, 620), 'v10_df.png', 2)]:
     img.crop(b).resize(((b[2] - b[0]) * k, (b[3] - b[1]) * k), Image.LANCZOS).save(nm)
