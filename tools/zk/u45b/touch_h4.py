@@ -8,7 +8,7 @@
 사용: touch_h4.py in.png cur13.png out.png"""
 import sys, math, numpy as np
 from PIL import Image, ImageDraw, ImageFilter
-src, c13, dst = sys.argv[1:4]
+src, c13, dst = [a for a in sys.argv[1:] if not a.startswith('--')][:3]
 img = Image.open(src).convert('RGB'); W, H = img.size
 C13 = np.asarray(Image.open(c13).convert('RGB')).astype(float)
 SS = 4; S = lambda x, y: (x * SS, y * SS)
@@ -23,8 +23,10 @@ def bezpts(P0, C, P1, n=2000):
     return (1 - t) ** 2 * np.array(P0) + 2 * (1 - t) * t * np.array(C) + t ** 2 * np.array(P1)
 
 # ── ① 옛 점선 걷기(touch_e 의 호 · t ≤ 0.86 — 타는 공의 빛무리는 건드리지 않음) → 새 호
+#    v7b: b138 에서 새 호가 「몸을 따라 곧장 내려가 이어짐」으로 읽혀 B 도 놓쳤다(v6 호는 B 가 읽었다) → 기본은 v6 호 그대로(--arc 일 때만)
+ARC = '--arc' in sys.argv
 A = np.asarray(img).astype(float)
-old = bezpts((1238.0, 543.0), (1266.0, 512.0), (1272.0, 634.0))
+old = bezpts((1238.0, 543.0), (1266.0, 512.0), (1272.0, 634.0)) if ARC else np.zeros((0, 2))
 old = old[: int(len(old) * 0.86)]
 M = np.zeros((H, W), bool)
 for (x, y) in old[::4]:
@@ -40,11 +42,11 @@ for p in pts[1:]:
     acc += math.hypot(p[0] - last[0], p[1] - last[1]); last = p
     if acc >= 3.1: dots.append(tuple(p)); acc = 0.0
 lay = layer(); d = ImageDraw.Draw(lay)
-for (x, y) in dots:
+for (x, y) in (dots if ARC else []):
     if math.hypot(x - P1[0], y - P1[1]) < 4.0: continue
     d.ellipse([S(x - 0.95, y - 0.95), S(x + 0.95, y + 0.95)], fill=(52, 44, 36, 240))
 # 사발 속 공 밑 그늘 반달
-d.ellipse([S(1236.6, 556.4), S(1245.0, 559.0)], fill=(70, 46, 26, 120))
+if ARC: d.ellipse([S(1236.6, 556.4), S(1245.0, 559.0)], fill=(70, 46, 26, 120))
 img = comp(img, lay)
 print('점선', len(dots), '옛 점 걷음', int(M.sum()))
 

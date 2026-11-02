@@ -22,21 +22,30 @@ def corridor(p0, p1, hw, ytop, ybot):
 OLD = [((1050, 40), (994, 318), 16, 322), ((1031, 19), (972, 321), 14, 322),          # a 파랑 · 빨강
        ((1438, 40), (1380, 314), 16, 318), ((1406, 40), (1349, 312), 13, 318),        # b 청록 · 초록
        ((1425, 19), (1364, 316), 12, 318)]                                          # b 주황
-M = np.zeros((H, W), bool)
+# v7b: 문턱 없이 통로 전체를 cur7 로 — 가장자리 8 px 은 천천히(b138 채점 「빛살 양옆의 희미한 윤곽선」 = 문턱 6 의 등고선이었다)
+def cwt(p0, p1, hw, ytop, ybot, fe=8.0):
+    (x0, y0), (x1, y1) = p0, p1
+    k = (x1 - x0) / (y1 - y0)
+    xc = x0 + k * (yy - y0)
+    w = np.clip((hw + fe - np.abs(xx - xc)) / fe, 0, 1)
+    w[(yy < ytop) | (yy > ybot)] = 0
+    return w
+Wt = np.zeros((H, W))
 for (p0, p1, hw, yb) in OLD:
-    M |= corridor(p0, p1, hw, 8, yb)
-# 초록 되튐(1349,312) → (1288,128)
-M |= corridor((1288, 128), (1349, 312), 13, 110, 318)
-M &= np.abs(A - C7).max(axis=2) > 6
-A[M] = C7[M]
-print('옛 빛살 걷음', int(M.sum()))
+    Wt = np.maximum(Wt, cwt(p0, p1, hw - 3, 8, yb))
+Wt = np.maximum(Wt, cwt((1288, 128), (1349, 312), 10, 110, 318))
+# 흰 눈부심 · 당근 빛살 통로는 건드리지 않는다
+keepw = corridor((1078, 40), (1031, 528), 20, 0, 600) | corridor((1163, 40), (1101, 414), 14, 0, 600) | corridor((1173, 40), (1110, 414), 14, 0, 600)
+Wt[keepw] = 0
+A = A * (1 - Wt[..., None]) + C7 * Wt[..., None]
+print('옛 빛살 걷음(가중)', round(float(Wt.sum()), 1))
 img = Image.fromarray(np.clip(A, 0, 255).astype('uint8'))
 
 # ── 2. 일곱 줄 빛띠
 COL = [(150, 96, 206), (92, 140, 228), (64, 170, 182), (86, 178, 80), (236, 206, 64), (240, 140, 40), (214, 58, 48)]
 SIS = {  # 창 x 범위 · 액자 바깥 윗변 y · 창 윗변 y · 창 아랫변 y · 구슬(가운데 · 반지름) · 드는 줄
-    'a': dict(wx=(962.0, 1008.0), yft=313.0, ywt=326.0, ywb=382.0, bead=(987.0, 353.0, 15.8), lit={0, 1, 6}),
-    'b': dict(wx=(1336.0, 1382.0), yft=309.0, ywt=325.0, ywb=380.0, bead=(1357.0, 352.0, 15.8), lit={1, 2, 5}),
+    'a': dict(wx=(962.0, 1008.0), yft=313.0, ywt=326.0, ywb=384.5, bead=(987.0, 353.0, 15.8), lit={0, 1, 6}),
+    'b': dict(wx=(1336.0, 1382.0), yft=309.0, ywt=325.0, ywb=382.5, bead=(1357.0, 352.0, 15.8), lit={1, 2, 5}),
 }
 SS = 4; S = lambda x, y: (x * SS, y * SS)
 SLOPE = 0.2           # 위로 갈수록 오른쪽(옛 빛살 · 흰 눈부심과 같은 기울기)
@@ -85,10 +94,13 @@ A = np.asarray(img).astype(float)
 for nm, sis in SIS.items():
     (x0, x1) = sis['wx']; bx, by, br = sis['bead']
     reg = (xx >= x0) & (xx < x1) & (yy >= sis['ywt']) & (yy <= sis['ywb'])
-    reg &= (xx - bx) ** 2 + (yy - by) ** 2 > br ** 2
+    rr2 = (xx - bx) ** 2 + (yy - by) ** 2
+    reg &= rr2 > 11.5 ** 2                                              # 쇠구슬 몸 · 검은 테는 손대지 않음
     sub = A[reg]
-    lum = sub.mean(axis=1)
-    win = lum > 120                                                     # 창의 칠(밝은 화소) — 테두리 그림자 · 선은 남김
+    lum = sub.mean(axis=1); sat = sub.max(axis=1) - sub.min(axis=1)
+    # v7b: 흰 테(구슬 둘레의 무채색 밝은 고리)는 남기되, 옛 반쪽 칠(채도 높음)이 남은 곳은 구슬 바로 곁까지 다 새 칸으로
+    # (b138 「은구슬 둘레의 파란 테」 = 옛 칠이 흰 테 바깥 가장자리에 남은 것)
+    win = (lum > 120) & ((rr2[reg] > br ** 2) | (sat > 28))
     k = np.clip(((xx[reg] - x0) / ((x1 - x0) / 7.0)).astype(int), 0, 6)
     new = np.zeros_like(sub)
     for j in range(7):
