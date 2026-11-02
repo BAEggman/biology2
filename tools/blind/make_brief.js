@@ -78,7 +78,7 @@ let s3=`# 블라인드 테스트 3단계 — 채점 (묶음 ${tag})
 `;
 for(const id of ids){ const m=M[id];
   s3+=`## ${m.pid} 「${m.title}」 (${m.unit})\n- 그림: ${path.join(__dirname,'png',m.pid+'.png')}\n- 1단계 답: ${path.join(outDir,m.pid+'.s1.json')}\n- 2단계 답: ${path.join(outDir,m.pid+'.s2.json')}\n- 정답표:\n`;
-  for(const r of m.rows) s3+=`  ${r.n}. 소품: ${r.prop}\n     사실: ${r.fact.slice(0,220)}\n`;
+  for(const r of m.rows) s3+=`  ${r.n}. 소품: ${r.prop}\n     사실: ${r.fact}\n`;
   s3+='\n'; }
 fs.writeFileSync(path.join(__dirname,'brief',tag+'_truth.md'), s3);
 console.log(tag, ids.join(' '));
