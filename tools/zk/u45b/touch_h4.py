@@ -13,9 +13,17 @@ img = Image.open(src).convert('RGB'); W, H = img.size
 C13 = np.asarray(Image.open(c13).convert('RGB')).astype(float)
 SS = 4; S = lambda x, y: (x * SS, y * SS)
 def layer(): return Image.new('RGBA', (W * SS, H * SS), (0, 0, 0, 0))
+def pm_blur(im, sig):
+    """RGBA 흐림을 미리 곱한 알파로 — PIL 의 RGBA 흐림은 투명 화소의 검은 RGB 를 가장자리에 섞어 테를 어둡게 한다(v9 에서 찾음 · 흰 눈부심의 회색 테)."""
+    import numpy as _np
+    from scipy.ndimage import gaussian_filter as _gf
+    a = _np.asarray(im).astype(float); al = a[..., 3:4] / 255.0
+    pm = _gf(a[..., :3] * al, (sig, sig, 0)); ab = _gf(al, (sig, sig, 0))
+    rgb = pm / _np.maximum(ab, 1e-6)
+    return Image.fromarray(_np.clip(_np.concatenate([rgb, ab * 255.0], axis=2), 0, 255).astype('uint8'), 'RGBA')
 def comp(img, lay, blur=0):
     small = lay.resize((W, H), Image.LANCZOS)
-    if blur: small = small.filter(ImageFilter.GaussianBlur(blur))
+    if blur: small = pm_blur(small, blur)
     im2 = img.convert('RGBA'); im2.alpha_composite(small); return im2.convert('RGB')
 yy, xx = np.mgrid[0:H, 0:W]
 def bezpts(P0, C, P1, n=2000):

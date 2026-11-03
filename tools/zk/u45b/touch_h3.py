@@ -48,6 +48,14 @@ SIS = {  # 창 x 범위 · 액자 바깥 윗변 y · 창 윗변 y · 창 아랫�
     'b': dict(wx=(1336.0, 1382.0), yft=309.0, ywt=325.0, ywb=382.5, bead=(1357.0, 352.0, 15.8), lit={1, 2, 5}),
 }
 SS = 4; S = lambda x, y: (x * SS, y * SS)
+def pm_blur(im, sig):
+    """RGBA 흐림을 미리 곱한 알파로 — PIL 의 RGBA 흐림은 투명 화소의 검은 RGB 를 가장자리에 섞어 테를 어둡게 한다(v9 에서 찾음 · 흰 눈부심의 회색 테)."""
+    import numpy as _np
+    from scipy.ndimage import gaussian_filter as _gf
+    a = _np.asarray(im).astype(float); al = a[..., 3:4] / 255.0
+    pm = _gf(a[..., :3] * al, (sig, sig, 0)); ab = _gf(al, (sig, sig, 0))
+    rgb = pm / _np.maximum(ab, 1e-6)
+    return Image.fromarray(_np.clip(_np.concatenate([rgb, ab * 255.0], axis=2), 0, 255).astype('uint8'), 'RGBA')
 SLOPE = 0.2           # 위로 갈수록 오른쪽(옛 빛살 · 흰 눈부심과 같은 기울기)
 TOPW = 32.0; YTOP = 19.0
 lay = Image.new('RGBA', (W * SS, H * SS), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
@@ -86,7 +94,7 @@ for nm, sis in SIS.items():
         c0 = ((xh0 + xh1) / 2 - SLOPE * s0, yft - s0); c1 = ((xh0 + xh1) / 2 - SLOPE * s1, yft - s1)
         al = int(160 * (1 - 0.85 * i / 30))
         d.polygon([S(c0[0] - w0 / 2, c0[1]), S(c0[0] + w0 / 2, c0[1]), S(c1[0] + w1 / 2, c1[1]), S(c1[0] - w1 / 2, c1[1])], fill=COL[3] + (al,))
-small = lay.resize((W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(0.6))
+small = pm_blur(lay.resize((W, H), Image.LANCZOS), 0.6)
 im2 = img.convert('RGBA'); im2.alpha_composite(small); img = im2.convert('RGB')
 
 # ── 3. 창을 일곱 칸으로(든 칸 = 짙게 · 안 든 칸 = 아주 옅게) — 구슬 · 테두리는 그대로

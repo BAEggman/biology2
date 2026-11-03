@@ -5,7 +5,7 @@
 사용: touch_h2.py in.png out.png"""
 import sys, numpy as np
 from PIL import Image, ImageDraw
-src, dst = sys.argv[1:3]
+src, dst = [a for a in sys.argv[1:] if not a.startswith('--')][:2]
 img = Image.open(src).convert('RGB'); W, H = img.size
 SS = 4
 S = lambda x, y: (x * SS, y * SS)
@@ -17,6 +17,9 @@ STK = {  # 이름: (왼 x, 오른 x, [겹 앞면 가운데 y …]) — touch_f �
     'LL': (582.0, 674.0, [547.5, 555.5, 562.0, 569.0, 577.5, 588.5, 598.5]),
     'LR': (740.0, 798.0, [608.5, 617.0, 627.0, 638.0, 650.5, 661.5, 669.5]),
 }
+if '--v9' in sys.argv:   # v9: 가운데 MR 는 원래 여섯 겹 · 맨 아래 LR 가 두 겹 난쟁이(paste_j1 — Gemini J1)
+    STK['MR'] = (742.0, 806.0, [502.0, 513.0, 523.0, 532.0, 542.0, 550.0])
+    STK['LR'] = (740.0, 798.0, [618.0, 627.5])
 P2, P2D = (156, 108, 196, 255), (70, 44, 96, 255)
 lay = Image.new('RGBA', (W * SS, H * SS), (0, 0, 0, 0)); d = ImageDraw.Draw(lay); s = 6.0
 def dot(x, y):

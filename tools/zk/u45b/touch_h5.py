@@ -18,8 +18,17 @@ tyT = lambda x: ty(x) + 2.5
 abot = lambda x: 655 + (x - 1600) * 0.122            # 앞판 아랫선(잼: 1600 → 655 · 1800 → 680 · 1945 → 699)
 rtop = lambda x: abot(x) + 9.0                      # 가로대 윗선
 RH = 20.0                                           # b 칸을 a 칸과 같은 16 px 로(같은 자로 견준다 — v4 교훈)
-XL, XR = 1574.0, 1953.0                             # 앞다리 안쪽(왼 1573 · 오른 1954)
+XL, XR = 1574.0, 1982.0                             # 왼 앞다리 안쪽(1573) ~ 오른 앞다리 바깥(1987) — v9: 오른 다리 앞을 지나 빨강 칸까지(b139 「b 줄 일곱째가 다리 위에 떠 있다」)
 yy, xx = np.mgrid[0:H, 0:W]
+
+def pm_blur(im, sig):
+    """RGBA 흐림을 미리 곱한 알파로 — PIL 의 RGBA 흐림은 투명 화소의 검은 RGB 를 가장자리에 섞어 테를 어둡게 한다(v9 에서 찾음 · 흰 눈부심의 회색 테)."""
+    import numpy as _np
+    from scipy.ndimage import gaussian_filter as _gf
+    a = _np.asarray(im).astype(float); al = a[..., 3:4] / 255.0
+    pm = _gf(a[..., :3] * al, (sig, sig, 0)); ab = _gf(al, (sig, sig, 0))
+    rgb = pm / _np.maximum(ab, 1e-6)
+    return Image.fromarray(_np.clip(_np.concatenate([rgb, ab * 255.0], axis=2), 0, 255).astype('uint8'), 'RGBA')
 
 # ── 1. 옛 b 꼬리표 둘 걷기(cur14 = 머리를 박기 전 앞판) — 가장자리 2 px 은 천천히
 M = np.zeros((H, W))
@@ -66,7 +75,7 @@ for xc in (1705.5, 1897.5):
         ya = ytop + (ybot - ytop) * k / 30; yb = ytop + (ybot - ytop) * (k + 1) / 30
         dc.rectangle([S(xc - 2.5, ya), S(xc + 2.5, yb)], fill=col + (int(150 - 30 * k / 30),))
     dc.ellipse([S(xc - 7, ytop - 5), S(xc + 7, ytop + 3)], fill=col + (80,))
-cs = colay.resize((W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(0.8))
+cs = pm_blur(colay.resize((W, H), Image.LANCZOS), 0.8)
 ca = np.asarray(cs).astype(float)
 for xc in (1705.5, 1897.5):                                    # 앞판 a 머리(16 px) 자리는 기둥을 지움 — 머리 뒤로 지나감
     top = ty(xc) + 22.6
@@ -97,4 +106,13 @@ twig(d, 1585.0, ty(1585.0) + 31.0)
 fork(d, 1585.0, rtop(1585.0) + RH / 2)
 small = lay.resize((W, H), Image.LANCZOS)
 im2 = img.convert('RGBA'); im2.alpha_composite(small); img = im2.convert('RGB')
+# v9: a 줄 보라 칸 — 속이 액자 테(자주)와 같은 빛이라 찬 칸으로 안 읽혔다(b139) → 짙은 보라로 · 테와 사이에 흰 실선
+A = np.asarray(img).astype(float)
+xc = 1603.0; top = ty(xc) + 22.6; s_ = 16.0; t_ = s_ * 0.2
+x0, x1, y0, y1 = xc - s_ / 2 + t_ + 0.6, xc + s_ / 2 - t_ - 0.6, top + t_ + 0.6, top + s_ - t_ - 0.6
+reg = (xx >= x0) & (xx <= x1) & (yy >= y0) & (yy <= y1) & ((xx - xc) ** 2 + (yy - (top + s_ / 2)) ** 2 > 3.2 ** 2)
+A[reg] = np.array([104, 44, 188], float)
+rim = (xx >= x0 - 1) & (xx <= x1 + 1) & (yy >= y0 - 1) & (yy <= y1 + 1) & ~((xx >= x0) & (xx <= x1) & (yy >= y0) & (yy <= y1))
+A[rim] = A[rim] * 0.4 + 255 * 0.6
+img = Image.fromarray(np.clip(A, 0, 255).astype('uint8'))
 img.save(dst); print('ok', dst)
