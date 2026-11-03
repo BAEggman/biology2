@@ -84,16 +84,19 @@ img = Image.fromarray(np.clip(A, 0, 255).astype('uint8'))
 
 # ── ④ 빛기둥(꼬리표 → 바로 위 작은 무리)
 lay = layer(); d = ImageDraw.Draw(lay)
-for (xc, ybot, ytop, col) in [(1689.5, ty(1689.5) + 22.5, tyT(1689.5) - 5.0, (70, 186, 196)),      # 청록 b
-                              (1721.0, ty(1721.0) + 21.0, tyT(1721.0) - 5.0, (90, 196, 200)),      # 당근(청록 빛)
-                              (1881.0, ty(1881.0) + 22.5, tyT(1881.0) - 5.0, (246, 150, 56))]:    # 주황 b
+# v8: b 꼬리표는 touch_h5 가 걸상 아래 b 줄로 옮긴다 — 여기서는 당근 빛기둥만(--v7 이면 옛 셋)
+V7 = '--v7' in sys.argv
+COLS = [(1721.0, ty(1721.0) + 21.0, tyT(1721.0) - 5.0, (90, 196, 200))]
+if V7:
+    COLS = [(1689.5, ty(1689.5) + 22.5, tyT(1689.5) - 5.0, (70, 186, 196))] + COLS + [(1881.0, ty(1881.0) + 22.5, tyT(1881.0) - 5.0, (246, 150, 56))]
+for (xc, ybot, ytop, col) in COLS:
     for k in range(24):
         ya = ytop + (ybot - ytop) * k / 24; yb_ = ytop + (ybot - ytop) * (k + 1) / 24
         al = int(150 - 40 * k / 24)
         d.rectangle([S(xc - 2.5, ya), S(xc + 2.5, yb_)], fill=col + (al,))
 img = comp(img, lay, 0.8)
 lay = layer(); d = ImageDraw.Draw(lay)
-for (xc, col) in [(1689.5, (70, 186, 196)), (1721.0, (90, 196, 200)), (1881.0, (246, 150, 56))]:
+for (xc, col) in ([(1689.5, (70, 186, 196)), (1721.0, (90, 196, 200)), (1881.0, (246, 150, 56))] if V7 else [(1721.0, (90, 196, 200))]):
     yc = tyT(xc) - 6.0
     d.ellipse([S(xc - 7, yc - 4), S(xc + 7, yc + 4)], fill=col + (90,))
 img = comp(img, lay, 2.0)
