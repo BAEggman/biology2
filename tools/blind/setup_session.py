@@ -9,7 +9,12 @@
     지금까지는 까닭을 묻지 않아 독자가 물건만 늘어놓았고, 채점은 정답표의 ★(까닭)을 「말하지 않음」으로 깎았다(s45u02 b131 ~ b136).
   2026-11-03(b139 부터): 1단계에 「조각 스무 개 이상」 꼼꼼함 줄 — 처음 띄운 b139 독자 둘이 도구 6 ~ 7 번(앞 판들은 59 ~ 82 번)만 쓰고 얕게 답해 그 판을 버렸다.
   2026-11-03(b139 부터): 이름 고리 ★ 는 2단계 어디서든 인정 — 사용자 선택 「이름 고리 ★는 2단계 어디서든 인정 (권장)」.
-    b138 에서 이름 고리 ★(porphyra · granum · 당근 · 외막/내막 · 관다발 = 묶음)를 물건 풀이에서 맞히고도 까닭 줄에 옮기지 않아 P 가 된 행이 다섯이었다."""
+    b138 에서 이름 고리 ★(porphyra · granum · 당근 · 외막/내막 · 관다발 = 묶음)를 물건 풀이에서 맞히고도 까닭 줄에 옮기지 않아 P 가 된 행이 다섯이었다.
+  2026-11-04: 잣대 바꿈 — 사용자 선택 「닻 판 대조로 바꿈 (권장)」 · 「단원 줄기가 서면 Y (권장)」.
+    잣대 보정 실험(b141)에서 이미 채택한 s45u01 이 지금 절차로 13 · 15 /21(b130 19 · 20) — 채점자의 엄격함이 판 점수를 움직였다.
+    --anchor <닻 폴더>: 채택판의 판독(학생 답)을 같은 채점자가 같은 잣대로 함께 매겨, 이 판의 warm 평균이 닻 평균보다 2 행 넘게 낮지 않으면 통과.
+    --trunk "<단원 줄기>": 판 표제어는 1순위가 단원 줄기를 세우면 Y(갈래는 구역 표제어가 따로 잰다).
+    --memo <파일>: 이 판만의 채점 메모(한 줄에 하나). 표준 채점 메모(틀 행 · 구역 쪼개기 · ★ · ⚠ · 정답표 전체 · 손질 자국)는 도구가 넣는다."""
 import sys, os, json, random, shutil, argparse
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -17,6 +22,9 @@ ap = argparse.ArgumentParser()
 ap.add_argument('pid'); ap.add_argument('batch'); ap.add_argument('work')
 ap.add_argument('--topic', default=''); ap.add_argument('--zones', default='')
 ap.add_argument('--unified', action='store_true', help='단원 통합판이라고 알려 준다(b73 과 같은 조건)')
+ap.add_argument('--trunk', default='', help='판 표제어의 단원 줄기(2026-11-04 — 줄기가 서면 Y)')
+ap.add_argument('--anchor', default='', help='닻 폴더(tools/blind/anchor/<pid>_<batch>) — 채택판 판독을 같은 채점자가 함께 매긴다')
+ap.add_argument('--memo', default='', help='이 판만의 채점 메모 파일(한 줄에 하나)')
 a = ap.parse_args()
 W = os.path.abspath(a.work)
 man = json.load(open(os.path.join(ROOT, 'tools/blind/manifest.json'), encoding='utf-8'))
@@ -76,8 +84,60 @@ def s3(X):
 나에게는 「3단계 끝 — 못 찾음 <k>개」만 돌려라."""
 
 n = len(m['rows'])
+frame = [1] if a.unified else []
+nf = n - len(frame)
+topic_full = a.topic or (m['unit'] + ' — ' + m['title'])
+trunk = a.trunk or topic_full
 zone_part = (f"""- 구역 표제어: {a.zones} — 몇이 맞았나(1단계 · 2단계).
 """ if a.zones else '')
+
+# 표준 채점 메모 — b140 · b141 에서 손으로 붙이던 줄을 도구로 옮김(2026-11-04)
+memo = []
+if frame:
+    memo.append(f"틀 행은 행 1 하나뿐이다. ★ 표시가 붙은 행도 사실 행이다 — 사실 행은 2~{n} 의 {nf} 행, 분모는 {nf}.")
+if a.zones:
+    memo.append("구역: 학생이 정답 구역 하나를 더 잘게 쪼개 읽어도 쪼갠 조각이 모두 그 정답 구역의 식구이고 표제어가 맞으면 그 정답 구역은 맞음으로 센다. 다른 정답 구역의 식구를 섞어 한 구역으로 묶었거나 표제어가 틀리면 틀림. 학생이 「추정」이라고 단서를 달았어도 표제어가 맞으면 맞음.")
+memo.append(f"판 표제어(사용자 결정 2026-11-04 「단원 줄기가 서면 Y」): 1순위가 이 판의 단원 줄기(「{trunk}」)를 세우면 Y — 판 정답 「{topic_full}」의 하위 갈래는 구역 표제어가 따로 재므로 1순위 한 줄에 다 서지 않아도 깎지 않는다. 줄기가 다른 단원이나 같은 단원의 다른 쪽으로 가면 P, 전혀 다르면 N.")
+memo.append("행이 여러 사실을 나르면(예: 「두 걸음」 · 「이름 + 성질」), 정답표 사실 칸의 ★ · ⚠ 핵심까지 읽혀야 Y 다. 핵심 하나가 빠지면 P.")
+memo.append("정답표는 사실 칸이 끝까지 다 적혀 있다. 사실 칸의 ★ 는 모두 같은 무게로 본다.")
+memo.append("그림에 「이어 붙인 흔적」 · 어색한 손질 자국이 보인다고 학생이 적으면, 그것이 실제로 그림에 있는지 확인해 고칠자리에 자리(대략 x · y)와 함께 적어라.")
+if a.memo:
+    memo += [l.strip().lstrip('-').strip() for l in open(a.memo, encoding='utf-8') if l.strip()]
+memo_txt = '\n'.join('- ' + l for l in memo)
+
+# 닻 판 — 사용자 선택 「닻 판 대조로 바꿈 (권장)」(2026-11-04)
+anc = None; anchor_part = ''; anchor_out = ''; anchor_json = ''; anchor_sum = ''
+pass_line = "- 통과 기준: 판 표제어(단원 줄기) Y — 1 · 2단계 둘 다 · (구역이 있으면) 구역 표제어 전부 · 사실 warm ≥ 90% — cued 기준도 함께 보고하라."
+if a.anchor:
+    AD = a.anchor if os.path.isabs(a.anchor) else os.path.join(ROOT, a.anchor)
+    anc = json.load(open(os.path.join(AD, 'meta.json'), encoding='utf-8'))
+    AW = os.path.join(W, 'anchor')
+    src = os.path.join(ROOT, anc['readings'])
+    for X in ('A', 'B'):
+        os.makedirs(os.path.join(AW, X), exist_ok=True)
+        for f in ('stage1.md', 'stage2.md', 'stage3.json'):
+            shutil.copy(os.path.join(src, f'{X}_{f}'), os.path.join(AW, X, f))
+    apng = os.path.join(AW, anc['pid'] + '.png'); shutil.copy(os.path.join(AD, anc['png']), apng)
+    atruth = os.path.join(AW, '정답표.md'); shutil.copy(os.path.join(AD, anc['truth']), atruth)
+    shutil.copy(os.path.join(AD, anc['reservations']), os.path.join(AW, '약속표.md'))
+    aw_, ah_ = Image.open(apng).size
+    anf = anc['facts']
+    margin = '2 행' if anf == nf else f"{round(200 / anf, 1)}%p(닻의 2 행 ÷ {anf})"
+    pass_line = f"""- 통과 기준(사용자 결정 2026-11-04 「닻 판 대조로 바꿈」): 판 표제어(단원 줄기) Y — 1 · 2단계 둘 다 · (구역이 있으면) 구역 표제어 전부 · **사실 warm — 이 판 두 학생의 warm Y 비율 평균이 닻 판 두 학생의 평균보다 {margin} 넘게 낮지 않으면 통과**(아래 「닻 판」). 90% 는 참고로만 적는다 — cued 도 함께 보고하라."""
+    anchor_part = f"""
+닻 판 — 같은 잣대로 함께 채점한다(사용자 결정 2026-11-04 「닻 판 대조로 바꿈 (권장)」. 채점자마다 엄하고 순한 정도가 달라 판의 점수가 채점자를 따라 움직인다 — 이미 채택한 판을 같은 채점자가 같은 잣대로 함께 매겨, 그 차로 판정한다).
+- 닻 판: {anc['pid']}({anc['title']}) — 이미 채택한 판. 학생 둘(닻 A · 닻 B)이 위와 같은 세 단계 · 같은 물음으로 판독한 것({anc['batch']})을 그대로 다시 채점한다. 학생 답은 새로 받지 않는다.
+- 파일: 그림 {apng} ({aw_}×{ah_}) · 정답표 {atruth}({anc['rows']}행 · 사실 행 {anf}) · 그 학생들이 받은 약속표 {AW}/약속표.md · 닻 A {AW}/A/stage1.md · stage2.md · stage3.json · 닻 B {AW}/B/ 같은 세 파일. 작은 부분은 잘라 키워 {W}/grader/ 에 저장해 봐도 된다.
+- 닻 판의 판 표제어 단원 줄기: 「{anc['trunk']}」(판 정답 「{anc['topic']}」) · 구역 표제어: {anc['zones']}
+- 닻 판만의 채점 메모: {' / '.join(anc.get('memo', [])) or '없음'}
+- 위 채점 1 · 2 와 채점 메모를 닻 판에도 **같은 엄격함으로** 적용한다. 차례: 이 판({a.pid})을 먼저 다 채점해 1) ~ 3) 을 쓴 뒤 닻 판을 채점하라. 한 판의 점수를 보고 다른 판의 판정을 맞추지 마라 — 두 판 모두 그 판의 정답표와 학생 답만으로 매긴다.
+"""
+    anchor_out = f"""4) 닻 판: {W}/grader/닻_{anc['pid']}.json · {W}/grader/닻_{anc['pid']}.B.json — 1) · 2) 와 같은 꼴("pid":"{anc['pid']}","batch":"{anc['batch']}").
+"""
+    anchor_json = f""","닻":{{"pid":"{anc['pid']}","batch":"{anc['batch']}","A":{{"판1_s2_맞음":"Y/P/N","구역_s2":"k/z","warm":"x/{anf}","cued":"x/{anf}"}},"B":{{…같은 꼴}}}},"닻대조":{{"이판_warm_평균":"x.x/{nf} (p%)","닻_warm_평균":"y.y/{anf} (q%)","차":"±r 행 (±s%p)","통과":"Y/N"}}"""
+    anchor_sum = """
+닻: A warm x/m · B warm x/m · 평균 차 ±r 행 → warm 통과 Y/N"""
+
 grader = f"""당신은 채점자다. 생물학 암기 그림책(Sketchy 식 — 그림 속 물건 하나가 사실 하나를 나르는 무대 그림)의 판 {a.pid} 를, 사전 정보 없는 학생 둘(A · B)이 세 단계로 판독했다. 정답표와 대조해 엄격하게 채점하라. 후하게 주지 마라 — 「약속표 덕」「이름 목록이 흘린 것」「배경지식으로 맞힌 것(그림에서 읽지 않은 것)」은 note 에 반드시 밝힌다.
 
 파일 (모두 Read 로 연다):
@@ -96,20 +156,25 @@ grader = f"""당신은 채점자다. 생물학 암기 그림책(Sketchy 식 — 
 - note: 한 줄 — 특히 N·P 인 까닭(안 보임 / 너무 작음 / 다른 것으로 읽힘 / 이름이 안 섬 / 약속표 덕 / 이름 목록이 흘림).
 
 채점 2 — 판 전체, 학생마다:
-- 판 표제어 1순위가 「{a.topic or m['unit'] + ' — ' + m['title']}」로 맞는가(Y/P/N) — 1단계 · 2단계 각각.
+- 판 표제어 1순위가 이 판의 단원 줄기(「{trunk}」)를 세우는가(Y/P/N) — 1단계 · 2단계 각각(판 정답 「{topic_full}」 · 아래 채점 메모).
 {zone_part}- 사실 복원율 — 틀 행을 뺀 사실 행에서: cold=Y · warm=Y · cued=Y 비율 (P 는 따로 센다).
-- 통과 기준: 판 표제어 1순위 맞음 · (구역이 있으면) 구역 표제어 전부 · 사실 warm ≥ 90% — cued 기준도 함께 보고하라.
+{pass_line}
 
-결과를 세 파일로 Write 하라:
+채점 메모(이 덱의 다른 통합판들과 같은 자 — warm 의 ★ 판정은 위 warm 줄을 따른다):
+{memo_txt}
+{anchor_part}
+결과를 Write 하라(이미 있는 같은 이름 파일은 앞 세션 것이니 읽지 말고 덮어써라):
 1) {ROOT}/tools/blind/out/{a.pid}.json — 학생 A 의 표준 꼴(cold = 1단계 기준, cued = 3단계 기준):
 {{"pid":"{a.pid}","reader":"A","batch":"{a.batch}","rows":[{{"n":1,"seen":"Y","cold":"N","warm":"Y","cued":"Y","note":"…"}}, …{n}행],"panel_note":"한 줄"}}
 2) {ROOT}/tools/blind/out/{a.pid}.B.json — 학생 B 같은 꼴("reader":"B").
 3) {ROOT}/tools/blind/out/{a.pid}.통합판독.json —
-{{"batch":"{a.batch}","A":{{"판1_s1":"…","판1_s1_맞음":"Y/P/N","판1_s2":"…","판1_s2_맞음":"Y/P/N","구역_s1":"k/z","구역_s2":"k/z","복원":{{"cold":"x/m","warm":"x/m","cued":"x/m","P":{{"cold":k,"warm":k,"cued":k}}}},"통과_warm":"Y/N","통과_cued":"Y/N"}},"B":{{…같은 꼴}},"두사람다_못한행":[n…],"고칠자리":["행 n — 무엇을 어떻게(그림 고침 / 글 고침)"],"총평":"세 줄"}}
-마지막 답으로는 아래 요약만 돌려라:
+{{"batch":"{a.batch}","A":{{"판1_s1":"…","판1_s1_맞음":"Y/P/N","판1_s2":"…","판1_s2_맞음":"Y/P/N","구역_s1":"k/z","구역_s2":"k/z","복원":{{"cold":"x/m","warm":"x/m","cued":"x/m","P":{{"cold":k,"warm":k,"cued":k}}}},"warm_90":"Y/N(참고)","통과_cued":"Y/N"}},"B":{{…같은 꼴}},"두사람다_못한행":[n…],"고칠자리":["행 n — 무엇을 어떻게(그림 고침 / 글 고침)"],"까닭_효과":"한두 줄 — 지어낸 까닭 · 배경지식만으로 댄 까닭 · 이름 고리 ★ 를 물건 풀이 줄에서 세운 행"{anchor_json},"판정":{{"판표제어":"Y/N","구역":"Y/N","warm":"Y/N","통과":"Y/N"}},"총평":"세 줄"}}
+{anchor_out}마지막 답으로는 아래 요약만 돌려라:
 A: 판1 s1 <Y/P/N> s2 <Y/P/N> · 구역 s1 k/z s2 k/z · 복원 cold x/m warm x/m cued x/m
-B: (같은 꼴)
+B: (같은 꼴){anchor_sum}
+판정: 통과 Y/N
 둘 다 못한 행: …
+까닭 효과: …
 고칠 자리: …"""
 
 for X, other in (('A', 'B'), ('B', 'A')):
