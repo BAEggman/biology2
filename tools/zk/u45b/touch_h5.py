@@ -4,7 +4,7 @@ b 의 흡수 칸 일곱을 a 줄과 같은 x 에 맞춰 박는다 — b 는 파�
 · 줄 머리에 a = 세 갈래 잔가지 · b = 포크(약속 #165 · #166) · 옛 b 꼬리표 둘(빈 a 머리 곁)은 걷고(cur14 앞판으로)
 · b 줄의 청록 · 주황 칸에서 바로 위 실의 작은 무리까지 빛기둥(빈 a 머리 뒤로 지나감).
 (b138: 빛띠로 a · b 의 빛깔은 정확히 읽혔지만 「한 칸씩 = 조금」을 말하지 않았다 — 위아래로 맞선 두 줄이면 「바로 곁 칸」이 자리로 선다 · 독립 검토 2순위)
-사용: touch_h5.py in.png cur14.png out.png"""
+사용: touch_h5.py in.png cur14.png out.png [--v10]"""
 import sys, math, numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 from scipy.ndimage import gaussian_filter
@@ -19,6 +19,8 @@ abot = lambda x: 655 + (x - 1600) * 0.122            # 앞판 아랫선(잼: 160
 rtop = lambda x: abot(x) + 9.0                      # 가로대 윗선
 RH = 20.0                                           # b 칸을 a 칸과 같은 16 px 로(같은 자로 견준다 — v4 교훈)
 XL, XR = 1574.0, 1982.0                             # 왼 앞다리 안쪽(1573) ~ 오른 앞다리 바깥(1987) — v9: 오른 다리 앞을 지나 빨강 칸까지(b139 「b 줄 일곱째가 다리 위에 떠 있다」)
+if '--v10' in sys.argv:                              # v10(b140 닻대조 「가로대 왼끝이 왼 앞다리에 안 닿고 허공에서 끊김」): 왼 앞다리 바른 테(1567)까지
+    XL = 1567.0
 yy, xx = np.mgrid[0:H, 0:W]
 
 def pm_blur(im, sig):
