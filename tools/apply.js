@@ -85,7 +85,9 @@ for(const raw of lines){
     /* [수정 2026-08-08] 접미 a/b 를 받아 준다.
        s20p01a·s20p01b·s12p02a·s12p02b 는 DATA 에 실재하는 패널인데 이 정규식이 막고 있어
        지금까지 한 번도 주입할 수 없었다(2차 훑기에서 P1-12 계열 5장이 걸려 발견). */
-    const t=tok.match(/^([a-z]\d{2}p\d{2}[ab]?)(?:#(\d+))?$/);
+    /* [수정 2026-11-06] 단원 통합판(sNNuNN — s08u01 · s17u01 · s32u01 · s45u01 · s31u01 …)과 접미 c(s16p01c)도 받아 준다.
+       통합판이 생긴 뒤로 이 정규식이 막아 통합판에는 한 번도 주입할 수 없었다(s31p01 이 물러나 verify_apply 가 s31u01 로 옮기며 발견). */
+    const t=tok.match(/^([a-z]\d{2}[pu]\d{2}[a-z]?)(?:#(\d+))?$/);
     if(!t){ bad.push(ln+'   ← 알 수 없는 패널 표기: '+tok); continue; }
     picks.push({cid, pid:t[1], row:t[2]===undefined?null:parseInt(t[2],10)});
   }
