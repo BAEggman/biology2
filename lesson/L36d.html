@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두 밭 — 단자엽과 진정쌍자엽</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L36d","scene":"s36","part":"d","title":"두 밭 — 단자엽과 진정쌍자엽","sub":"같은 밭 둘 · 다른 곳 넷: 평행맥 vs 그물맥 · 수염뿌리 vs 곧은뿌리 · 단면 점 산재 vs 고리 · 꽃잎 셋 vs 다섯 · (자엽 수는 씨앗 공방 종자 창고에)","img":"img/L36d.webp","w":2048,"h":1144,"stops":[{"obj":"밭 둘이 나란히 · 같은 크기 같은 화풍 — 다른 곳은 넷뿐","fact":"왼쪽 단자엽 · 오른쪽 진정쌍자엽 — 네 형질이 전부 정반대라 하나만 알면 나머지가 따라온다","hook":"같은 밭 · 다른 넷","say":"밭 둘이 나란히 있다. 같은 크기, 같은 화풍. 다른 곳은 넷뿐, 잎맥, 뿌리, 줄기 단면, 꽃잎 수. 왼쪽이 단자엽, 오른쪽이 진정쌍자엽. 넷이 전부 정반대라 하나만 알면 나머지가 따라온다.","box":null,"src":["s36p04#0"],"cards":["X-PL-13"]},{"obj":"왼쪽 잎 — 줄이 밑에서 끝까지 나란히 가고 서로 만나지 않는다","fact":"평행맥 — 벼 · 옥수수 · 난초의 잎","hook":"나란한 줄 = 평행맥","say":"왼쪽 잎. 줄이 밑에서 끝까지 나란히 가고 서로 만나지 않는다. 평행맥. 벼, 옥수수, 난초의 잎.","box":[20,470,430,220],"src":["s36p04#1"],"cards":["M1-24#1"]},{"obj":"오른쪽 잎 — 줄이 갈라지고 서로 이어져 그물을 이룬다","fact":"그물맥 — 참나무 · 장미의 잎","hook":"갈라져 이어진 줄 = 그물맥","say":"오른쪽 잎. 줄이 갈라지고 서로 이어져 그물을 이룬다. 그물맥. 참나무, 장미의 잎.","box":[1640,320,408,370],"src":["s36p04#2"],"cards":["M1-24#2","M1-24"]},{"obj":"왼쪽 땅속 — 굵은 것이 하나도 없고 굵기가 고른 가는 실이 뭉텅이로 퍼진다","fact":"수염뿌리 — 요점은 주근이 없다는 것","hook":"굵은 뿌리 없음 = 수염뿌리","say":"왼쪽 땅속. 굵은 것이 하나도 없고 굵기가 고른 가는 실이 뭉텅이로 퍼진다. 수염뿌리. 요점은 주근이 없다는 것.","box":[500,700,440,320],"src":["s36p04#3"],"cards":["M1-26#1","O0-3#2"]},{"obj":"오른쪽 땅속 — 굵은 뿌리 하나가 곧게 내려가고 거기서 잔뿌리가 난다","fact":"곧은뿌리(주근)","hook":"굵은 하나 곧게 = 곧은뿌리","say":"오른쪽 땅속. 굵은 뿌리 하나가 곧게 내려가고 거기서 잔뿌리가 난다. 곧은뿌리, 주근.","box":[1160,700,360,420],"src":["s36p04#4"],"cards":["M1-26#2","M1-26","O0-3#1"]},{"obj":"왼쪽 줄기 토막의 자른 면 — 점이 면 전체에 흩어져 있고 가운데에도 있다","fact":"관속의 산재","hook":"점 흩어짐 = 산재","say":"왼쪽 줄기 토막의 자른 면. 점이 면 전체에 흩어져 있고 가운데에도 있다. 관속의 산재.","box":[450,470,160,200],"src":["s36p04#5"],"cards":["M1-27#1"]},{"obj":"오른쪽 줄기 토막의 자른 면 — 점이 가장자리를 따라 한 고리로 늘어서고 가운데는 비었다","fact":"관속의 고리 배열 — 「흩어졌나 줄을 섰나」가 그대로 답","hook":"점 고리 · 가운데 빔 = 고리 배열","say":"오른쪽 줄기 토막의 자른 면. 점이 가장자리를 따라 한 고리로 늘어서고 가운데는 비었다. 관속의 고리 배열. 흩어졌나 줄을 섰나가 그대로 답.","box":[1460,470,170,200],"src":["s36p04#6"],"cards":["M1-27#2","M1-27"]},{"obj":"왼쪽 꽃잎은 셋 · 오른쪽 꽃잎은 다섯","fact":"꽃 기관 수 — 단자엽은 3의 배수 · 진정쌍자엽은 4 · 5의 배수","hook":"셋 vs 다섯","say":"왼쪽 꽃잎은 셋, 오른쪽 꽃잎은 다섯. 꽃 기관 수. 단자엽은 삼의 배수, 진정쌍자엽은 사와 오의 배수.","box":[[560,60,340,320],[1150,70,350,320]],"src":["s36p04#7"],"cards":["M1-28","M1-28#1","M1-28#2"]},{"obj":"이 그림에 없는 것 — 자엽(떡잎) 수","fact":"단자엽 1 / 진정쌍자엽 2 — 그 그림은 씨앗 공방 종자 창고에(떡 한 장 + 자루 셋 · 떡 두 장)","hook":"떡잎 수는 종자 창고로","say":"이 그림에 없는 것이 하나 있다. 자엽, 떡잎 수. 단자엽 하나, 진정쌍자엽 둘. 그 그림은 씨앗 공방 종자 창고에 이미 있다. 얇은 떡 한 장에 배젖 자루가 남은 쪽이 단자엽, 두꺼운 떡 두 장이 배젖을 흡수한 쪽이 쌍자엽이었다.","box":null,"src":["s36p04#8"],"cards":[]},{"obj":"두 밭을 다시 — 넷이 정반대","fact":"평행/그물 · 수염/곧은 · 산재/고리 · 3/5","hook":"넷을 한 줄로","say":"두 밭을 다시 본다. 평행맥과 그물맥, 수염뿌리와 곧은뿌리, 산재와 고리, 셋과 다섯. 넷이 정반대.","box":null,"src":["s36p04#0"],"cards":["X-PL-13"]}]};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
