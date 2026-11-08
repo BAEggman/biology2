@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>판자 길의 세 인부 — 중합효소 계보</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L11b","scene":"s11","part":"b","title":"판자 길의 세 인부 — 중합효소 계보","sub":"쇠못(RNA 프라이머) vs 나무못(DNA) · 가슴 막대 셋의 큰 인부(Pol III · 망치 · 집게로 뒤의 못 = 3′→5′ 교정) · 막대 하나의 앞선 인부(Pol I · 노루발에 쇠못 = 5′→3′ 프라이머 제거 · 나무못 다발 = 닉 트랜슬레이션) · 곁길의 맨손(Pol II 수복)","img":"img/L11b.webp","w":2048,"h":1144,"stops":[{"obj":"띠 위의 판자 길 · 인부 셋 — 가슴 막대 셋 · 가슴 막대 하나 · 곁길의 등에 막대 둘","fact":"원핵 중합효소 셋 — 도구가 향하는 쪽이 다르다 · 하나는 본선 밖","hook":"막대 수 = 로마 숫자 · 도구 방향 = 활성","say":"띠 위에 판자가 끝과 끝을 맞대고 이어지는 판자 길이다. 인부 셋. 가슴에 세로 막대 셋인 큰 인부, 막대 하나인 앞선 인부, 그리고 곁길에 등에 막대 둘인 맨손 인부. 막대 수가 로마 숫자, 도구가 향하는 쪽이 활성. 한 사람은 본선을 아예 벗어나 있다.","box":null,"src":["s11p02#3"],"cards":["E1-71"]},{"obj":"띠 위에 끝과 끝을 맞대고 이어져 나가는 나무 판자","fact":"새로 만들어지는 DNA 가닥 — 분기점 과의 판자 그대로","hook":"판자 = 새 가닥","say":"띠 위에 나무 판자가 끝과 끝을 맞대고 이어져 나간다. 새로 만들어지는 디엔에이 가닥. 분기점 과의 판자 그대로다.","box":[0,440,2048,280],"src":["s11p02#0"],"cards":[]},{"obj":"오른쪽 구간에만 박힌 은빛 쇠못","fact":"RNA 프라이머 — 재질이 다르다 = DNA가 아니다 → 걷어내야 한다","hook":"쇠 = RNA","say":"오른쪽 구간에만 은빛 쇠못이 박혀 있다. 아르엔에이 프라이머. 요리사가 프라이팬에서 꺼내 준 그 쇠못. 판자와 재질이 다른 것이 디엔에이가 아니라는 뜻이고, 그래서 걷어내야 한다.","box":[1620,440,428,260],"src":["s11p02#1"],"cards":[]},{"obj":"왼쪽 구간의 나무못","fact":"프라이머가 걷힌 자리를 메운 DNA — 같은 나무 = 이제 DNA","hook":"나무 = DNA","say":"왼쪽 구간은 나무못이다. 프라이머가 걷힌 자리를 메운 디엔에이. 판자와 같은 나무인 것이 이제 디엔에이라는 뜻. 두 구간의 경계에 선 사람이 그 교체를 하는 중.","box":[0,440,560,260],"src":["s11p02#2"],"cards":[]},{"obj":"가장 크고 무거운 인부 — 가슴에 세로 막대 셋 — 노루발 없는 쇠망치를 들고 앞으로 나아간다","fact":"Pol III — 원핵의 주 복제 효소 · 프라이머 3′ 말단부터 5′→3′ · 앞을 뜯지는 못한다","hook":"막대 셋 = III · 노루발 없음 = 못 뜯음","say":"가장 크고 무거운 인부, 가슴에 세로 막대 셋. 노루발 없는 쇠망치를 들고 앞의 판자를 박으러 오른쪽으로 나아간다. 폴 쓰리. 원핵의 주 복제 효소. 프라이머의 삼 프라임 말단부터 오에서 삼으로 길게 붙인다. 노루발이 없으니 앞의 것을 뜯으며 가지는 못한다. 가슴의 막대 셋이 로마 숫자 삼.","box":[560,100,560,520],"src":["s11p02#3"],"cards":["E1-71"]},{"obj":"그가 집게를 뒤로 뻗어 바로 뒤의 삐뚜름한 나무못 하나를 뽑는다","fact":"3′→5′ 교정(proofreading) — 방금 잘못 끼운 것을 뒤에서 떼어낸다 · 복제 중 즉시","hook":"뒤를 무는 집게 = 교정","say":"그 큰 인부가 집게를 뒤로 뻗어 바로 뒤의 삐뚜름한 나무못 하나를 뽑는다. 삼에서 오 교정, 프루프리딩. 방금 잘못 끼운 것을 뒤에서 떼어내고 다시 넣는 일이라 복제 중에 즉시 일어난다. 앞을 뜯는 것이 아니다. 폴 쓰리에도 이 활성이 있다. 정확도의 첫째 축이 이 집게, 둘째는 다 끝난 뒤 도는 수선.","box":[480,300,220,300],"src":["s11p02#4"],"cards":["E1-78","E1-79#1","X-BT-4","I1-44#2","E1-77"]},{"obj":"앞선 인부 — 가슴에 세로 막대 하나 — 치켜든 장도리의 노루발에 방금 뽑은 쇠못이 걸려 있다","fact":"Pol I의 5′→3′ 외부절단 — RNA 프라이머 제거(교정이 아니다)","hook":"막대 하나 = I · 앞의 쇠못을 무는 노루발","say":"앞선 인부, 가슴에 세로 막대 하나. 치켜든 장도리의 노루발 갈래에 방금 뽑은 쇠못이 걸려 있다. 폴 원의 오에서 삼 외부절단, 아르엔에이 프라이머 제거. 폴 원은 오에서 삼 엑소가 있어 교정 능력이 있다는 건 틀린 말. 교정은 어디까지나 삼에서 오이고, 이쪽은 앞을 뜯는 일. 가슴의 막대 하나가 일.","box":[1300,140,340,500],"src":["s11p02#5"],"cards":["E1-72","E1-73","E1-63#1","E1-66"]},{"obj":"그가 지나온 뒤쪽 구멍마다 나무못이 새로 박혀 있다 · 다른 손에 나무못 한 다발","fact":"뜯은 자리를 곧바로 DNA로 채운다 — 닉 트랜슬레이션(같은 효소가 둘 다)","hook":"뜯기와 채우기가 한 도구의 두 끝","say":"그가 지나온 뒤쪽 구멍마다 나무못이 새로 박혀 있고, 다른 손에 나무못 한 다발을 들었다. 뜯은 자리를 곧바로 디엔에이로 채운다, 닉 트랜슬레이션. 뜯기와 채우기가 한 도구의 두 끝인 것이 같은 효소가 둘 다 한다는 뜻. 오카자키 절편을 하나로 만드는 첫 걸음이 이 대체이고, 그 다음에야 용접이 의미가 있다.","box":[[1560,440,180,220],[1090,440,240,240]],"src":["s11p02#6"],"cards":["E1-63","E1-63#2","X-BT-5","I1-44#1"]},{"obj":"두 도구가 서로 반대쪽 것을 물었다 — 노루발은 앞에서 뽑은 쇠못 · 집게는 뒤의 나무못","fact":"5′→3′(앞 제거 · 채움) vs 3′→5′(뒤 오류 떼기 · 교정) — 방향도 목적도 반대","hook":"앞을 무느냐 뒤를 무느냐","say":"두 도구가 서로 반대쪽 것을 물었다. 노루발은 앞에서 뽑은 쇠못, 집게는 뒤의 나무못. 두 외부절단의 방향도 목적도 반대. 오에서 삼은 앞쪽을 제거하며 채우는 일, 프라이머 제거와 닉 트랜슬레이션. 삼에서 오는 뒤쪽의 오류를 떼어내는 일, 교정. 폴 원이 프라이머를 제거할 수 있는 이유에 삼에서 오를 고르면 틀린다.","box":[[480,300,220,300],[1300,140,340,300]],"src":["s11p02#7"],"cards":["S-BT-12","I1-44","S-BT-11"]},{"obj":"그의 발치 앞 길가에 흩어져 쌓인 뽑힌 쇠못 더미","fact":"걷어낸 RNA 프라이머 — 쇠못만 쌓이고 판자는 하나도 안 쌓인다","hook":"쇠못 더미 = 뜯긴 프라이머","say":"앞선 인부의 발치 앞 길가에 뽑힌 쇠못이 흩어져 쌓였다. 걷어낸 아르엔에이 프라이머. 쇠못만 쌓이고 나무 판자는 하나도 안 쌓인 것이 요점. 뜯긴 것은 프라이머다.","box":[1420,680,320,140],"src":["s11p02#8"],"cards":[]},{"obj":"본선을 벗어난 곁길 — 맨손으로 갈라진 판자 한 장을 성한 것으로 갈아 끼우는 사람 · 등에 세로 막대 둘","fact":"Pol II — 복제 라인에 없다 · 손상 복구 담당","hook":"곁길 + 맨손 + 등의 막대 둘 = II 는 수선","say":"본선을 벗어난 곁길에서 맨손으로 갈라진 판자 한 장을 성한 것으로 갈아 끼우는 사람. 등에 세로 막대 둘. 폴 투는 복제 라인에 없다. 손상 복구 담당. 망치도 노루발도 집게도 없고 못을 아예 안 건드린다. 폴 원 투 쓰리 모두 복제에 관여한다는 선지가 틀린 이유가 이 자리.","box":[860,700,700,444],"src":["s11p02#9"],"cards":[]}]};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
