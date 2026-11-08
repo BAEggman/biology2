@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>해 뜨는 당구장 — 해당과정</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L31a","title":"해 뜨는 당구장 — 해당과정","sub":"Sketchy 식 한 과(lesson) 시험판 v1 · 물건 하나 = 사실 하나 · 순서대로 밝히며 들려준 뒤에는 그림만 본다","img":"img/L31a.webp","w":2048,"h":1144,"stops":[{"obj":"해 뜨는 당구장","fact":"해당과정은 세포질에서 일어난다","hook":"해 + 당구 = 해당 · 당구장 바닥(이 방 전체) = 세포질","say":"해 뜨는 당구장. 해 더하기 당구, 해당과정이다. 이 당구장 바닥, 그러니까 이 방 전체가 세포질이다. 해당과정은 세포질에서 일어난다.","box":null,"src":["s31u01#0"],"cards":["B1-5","B1-200#1"]},{"obj":"입구 문지기의 육각 도장","fact":"헥소키나아제가 포도당에 인산을 붙여 포도당 6-인산으로 — 인산이 붙은 당은 세포 밖으로 못 나간다","hook":"육각 = 헥사 = 헥소키나아제 · 입장 도장이 찍히면 못 나간다","say":"입구에서 문지기가 손님의 붉은 블록에 육각 도장을 찍는다. 육각, 헥사, 헥소키나아제. 포도당에 인산을 하나 붙여 포도당 육 인산으로 만든다. 도장이 찍힌 블록은 이 당구장 밖으로 못 나간다. 인산이 붙은 당은 세포 밖으로 못 나간다.","box":[240,580,450,564],"src":[],"cards":[]},{"obj":"당구대 옆구리 동전 투입구 — 동전 둘","fact":"투자기: ATP 2를 먼저 쓴다","hook":"동전 = ATP · 넣는 쪽","say":"당구대 옆구리, 동전 투입구에 동전 둘. 동전은 에이티피. 해당과정은 먼저 에이티피 둘을 넣는다. 투자기다.","box":[1080,800,160,200],"src":["s31u01#2"],"cards":["B1-34"]},{"obj":"카운터 주인 — 과일과 열쇠","fact":"PFK(포스포프럭토키나아제)가 속도를 정한다(율속) — ATP 많으면 억제 · AMP면 활성","hook":"과일당 프럭토 + 열쇠 키나아제 = PFK · 큐를 주는 유일한 자리 = 율속 · 동전 더미 손님 거절 = ATP 억제 · 빈 주머니 손님에게 큐 = AMP 활성","say":"카운터 주인. 손에는 과일, 허리에는 열쇠. 과일당 프럭토, 열쇠 키나아제, 포스포프럭토키나아제, 피에프케이다. 큐를 내주는 유일한 자리라서 이 사람이 속도를 정한다. 율속 단계. 동전 더미를 내미는 손님은 거절한다. 에이티피가 많으면 억제. 주머니가 빈 손님에겐 큐를 준다. 에이엠피가 많으면 활성.","box":[270,190,560,580],"src":[],"cards":[]},{"obj":"붉은 블록을 치자 각뿔 둘","fact":"포도당(탄소 6) → 3탄소 조각 둘 → 피루브산 2","hook":"블록 = 6탄 · 각뿔(피라미드) = 3탄 ≈ 피루브산","say":"당구대 위 붉은 블록을 치자 각뿔 둘로 갈라진다. 탄소 여섯 포도당이 탄소 셋짜리 둘로. 각뿔은 피라미드, 피루브산이 될 조각이다.","box":[840,400,960,440],"src":["s31u01#1"],"cards":["B1-29","B1-30","B1-60","B1-31","B1-74"]},{"obj":"꼬마의 맨손 붉은 도장","fact":"G3P → 1,3-비스포스포글리세르산: 무기인산이 붙는다, ATP 없이","hook":"붉은 도장 = 인산화 · 맨손 = 동전(ATP) 없이","say":"꼬마가 각뿔 옆면에 맨손으로 붉은 도장을 찍는다. 붉은 도장은 인산화. 맨손이니 동전 없이, 에이티피 없이 무기인산이 붙는다. 지쓰리피가 일 삼 비스포스포글리세르산이 되는 자리다.","box":[1680,620,330,330],"src":["s31u01#5"],"cards":["B1-51"]},{"obj":"도장 자리에서 솟는 물 — 양동이 둘 가득","fact":"NADH 2 — 해당과정의 NADH는 이 한 자리에서만","hook":"가득 찬 양동이 = NADH · 각뿔마다 하나 = 둘","say":"그 도장 자리에서 물이 솟아 양동이 둘을 가득 채운다. 가득 찬 양동이는 엔에이디에이치. 각뿔마다 하나, 그래서 둘. 해당과정의 엔에이디에이치는 여기 한 자리에서만 나온다.","box":[1660,740,320,404],"src":["s31u01#6"],"cards":["B1-50","B1-51"]},{"obj":"각뿔 면에 박힌 동전을 뜯는다","fact":"기질수준 인산화 — 각뿔 하나에 두 번(1,3-BPG→3PG · PEP→피루브산)","hook":"기질(각뿔 몸)에서 바로 떼는 동전 = 기질수준 인산화 · 각뿔마다 둘","say":"각뿔 면에 비늘처럼 박힌 동전 둘을 손으로 뜯는다. 기질, 그러니까 각뿔의 몸에서 바로 떼어 내는 동전이 기질수준 인산화다. 각뿔 하나에 두 번. 일 삼 비스포스포글리세르산에서 한 번, 포스포에놀피루브산에서 한 번.","box":[1330,600,360,544],"src":["s31u01#4"],"cards":["B1-52","B1-52#1","B1-52#2","B1-53","B1-57","B1-193#1","B1-193#2","B1-59"]},{"obj":"반환구 아래 동전 넷","fact":"ATP 4 회수 − 넣은 2 = 순 2","hook":"넣은 둘 · 나온 넷 · 남는 둘","say":"당구대 모서리 반환구에 동전 넷. 각뿔 둘에서 둘씩, 넷을 회수한다. 넣은 둘을 빼면 남는 건 둘. 에이티피 순 이익 둘.","box":[655,700,170,300],"src":["s31u01#3"],"cards":["B1-35","B1-196"]},{"obj":"창의 흰 방울 — 널빤지 가위표","fact":"산소가 필요 없다 — 혐기 조건에서도 돈다","hook":"흰 방울 = 산소 · 가위표 = 안 쓴다","say":"창에 흰 방울이 널빤지 가위표로 막혀 있다. 흰 방울은 산소. 가위표는 안 쓴다는 뜻. 해당과정은 산소가 필요 없다. 산소가 없어도 돈다.","box":[1040,110,360,310],"src":[],"cards":[]},{"obj":"뒷벽 주름 커튼 방","fact":"피루브산은 산소가 있을 때 미토콘드리아로 — 해당과정은 그 밖(세포질)에서 끝난다","hook":"주름 커튼 = 미토콘드리아(주름 = 크리스타)","say":"각뿔 둘은 뒷벽 주름 커튼 방으로 간다. 주름 커튼은 미토콘드리아. 피루브산은 산소가 있을 때 미토콘드리아로 들어간다. 해당과정 자체는 커튼 밖, 세포질에서 끝난다.","box":[1510,60,350,560],"src":["s31u01#7"],"cards":["B1-69","B1-200#2"]}],"scene":"s31","part":"a"};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls) { const [x, y, w, h] = b; return `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"/>`; }
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot').replace('/>', ` data-k="${k}"/>`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
