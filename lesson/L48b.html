@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>별 뜨는 풍선집 · 별 없는 창고 — 방추체와 세포질분열</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L48b","scene":"s48","part":"b","title":"별 뜨는 풍선집 · 별 없는 창고 — 방추체와 세포질분열","sub":"풍선집(동물) — 별(성상체) · 직각 원통 둘(중심체) · 걸쇠 대롱(방추사) · 겹친 긴 대롱(극성 · 후기 B) · 허리 안쪽 꼰 줄 + 등반가(수축환 · 액틴 + 마이오신) / 창고(식물) — 별 없이 맨 벽 대롱 · 가운데부터 칸막이(세포판) · 초록 그물 비계 + 손수레(프라그모플라스트)","img":"img/L48b.webp","w":2048,"h":1144,"stops":[{"obj":"볕 드는 뒷마당 — 왼쪽은 허리가 땅콩처럼 잘록한 분홍 풍선집 · 오른쪽은 벽이 꼿꼿한 나무 창고 · 둘 다 앞을 잘라 속을 보인다","fact":"동물 vs 식물의 분열 기계 — 별(중심체)이 있나 없나 · 조여 가르나 가운데부터 쌓나","hook":"무른 풍선집 = 동물 · 꼿꼿한 창고 = 식물","say":"볕 드는 뒷마당에 집이 둘. 왼쪽은 분홍 풍선집, 벽이 물렁해서 허리가 땅콩처럼 잘록하게 조여졌다. 오른쪽은 나무 창고, 벽이 꼿꼿해서 하나도 안 조여졌다. 풍선집은 막뿐인 동물세포, 창고는 세포벽이 있는 식물세포. 둘 다 지금 둘로 갈라지는 중이다. 동물은 별이 있고 허리를 조여 가르고, 식물은 별이 없고 가운데부터 새 벽을 쌓는다.","box":null,"src":["s48p02#0"],"cards":[]},{"obj":"풍선집 양 끝에 하나씩 뜬 빛나는 노란 별 — 가운데 꼭지에서 속 빈 대나무 대롱이 사방으로","fact":"성상체(별모양체) — 동물세포가 분열할 때 나타나고 식물세포엔 없다","hook":"별 모양 = 성상체(星狀)","say":"풍선집 양 끝에 노란 별이 하나씩 떠서 빛난다. 가운데 꼭지에서 속 빈 대나무 대롱이 사방으로 뻗었다. 성상체, 별 모양이라 별모양체다. 동물세포가 분열할 때 나타나고 식물세포에는 없다. 이 대롱이 미세소관이다. 헛간에서 본 밧줄을 가까이서 보면 속이 빈 관이다. 두 별이 두 극이 된다.","box":[[190,490,160,170],[760,490,160,170]],"src":["s48p04#0"],"cards":["C1-76"]},{"obj":"별 꼭지마다 냅킨 고리 같은 속 빈 원통 둘 — 하나는 눕고 하나는 서서 직각으로 붙었다","fact":"중심체 = 중심립 2개 · 둘은 서로 직각으로 놓인다","hook":"원통 둘 · 직각","say":"별 꼭지를 들여다보면 속 빈 원통이 둘 있다. 하나는 누웠고 하나는 섰다. 둘이 직각으로 붙었다. 중심체는 중심립 두 개로 이루어지고, 둘은 서로 직각이다. 기출은 둘이라는 것과 직각이라는 것을 따로 묻는다.","box":[[220,536,110,84],[776,540,104,80]],"src":["s48p04#1"],"cards":["A0-129","C1-72"]},{"obj":"별에서 뻗은 대롱 끝 걸쇠에 짚이 걸렸다 — 별마다 위에 금빛 · 아래에 초록","fact":"중심체가 방추사(미세소관)를 만들어 염색체를 잡아당긴다","hook":"별의 대롱이 짚을 건다","say":"별에서 뻗은 대롱 몇 개는 끝에 걸쇠가 달려 짚을 걸었다. 별마다 위에 금빛 하나, 아래에 초록 하나. 중심체가 미세소관으로 방추사를 만들어 염색체를 잡아당긴다. 헛간 넷째 칸에서 양쪽 벽으로 끌려가던 그 짚들이 바로 이 걸쇠에 걸린 것이다.","box":[[280,290,100,120],[240,780,120,90],[730,290,90,120],[720,780,120,100]],"src":["s48p04#2"],"cards":["A0-131"]},{"obj":"두 별에서 나온 긴 대롱들이 한가운데에서 서로 엇갈려 겹친다 — 걸쇠도 없고 아무것도 걸지 않았다","fact":"극성 미세소관 — 염색체에 붙지 않고 세포를 길게 늘린다","hook":"걸지 않고 겹친다 = 극성","say":"두 별에서 긴 대롱들이 한가운데까지 뻗어 서로 엇갈려 겹쳤다. 이 대롱들은 걸쇠도 없고 아무것도 걸지 않았다. 극성 미세소관, 염색체에 붙지 않고 세포를 길게 늘린다. 방추사를 한 덩어리로 외우면 이 문항이 안 갈린다.","box":[400,410,310,310],"src":["s48p04#3"],"cards":["C1-71"]},{"obj":"겹친 대롱 위 흰 화살표는 왼쪽은 왼쪽 · 오른쪽은 오른쪽 · 별 뒤에 움직임 선 — 두 별이 벌어진다","fact":"후기 B — 극성 미세소관이 미끄러져 양극 사이가 멀어진다","hook":"B = 벌어진다(극이)","say":"겹친 대롱 위의 흰 화살표가 왼쪽 것은 왼쪽으로, 오른쪽 것은 오른쪽으로 향한다. 별 뒤에는 움직임 선. 겹친 자리가 미끄러지며 두 별이 서로 벌어진다. 후기 B, 극성 미세소관이 양극 사이를 벌린다. 후기 A는 염색체가 극으로 끌려가는 것, 후기 B는 극 자체가 벌어지는 것. B는 벌어짐이다.","box":[[400,420,320,300],[110,540,90,90],[900,540,80,90]],"src":["s48p04#4"],"cards":["C1-110"]},{"obj":"창고 안 — 별도 빛도 없이 대롱이 맨 벽에서 곧장 나와 짚을 건다(벽마다 위 금빛 · 아래 초록)","fact":"식물세포엔 중심체 · 성상체가 없다 — 방추사는 별 없이 만든다","hook":"별 없는 창고","say":"창고 안에는 별이 없다. 빛나는 것도 없다. 그런데 대롱은 있다. 맨 벽에서 곧장 나와 짚을 걸었다. 모든 진핵세포가 중심체를 갖는 것은 아니다. 식물세포에는 중심체도 성상체도 없다. 방추사는 만들되 별 없이 만든다.","box":[[1140,350,160,560],[1800,350,170,560]],"src":["s48p04#5"],"cards":["A0-132"]},{"obj":"풍선집 허리 — 가는 살구색 꼰 줄이 위아래 벽 안쪽에 묶여 벽을 끌어당긴다 · 집 밖에는 줄이 없다","fact":"동물 세포질분열 — 수축환이 세포막을 안쪽에서 조여 함입시킨다","hook":"안에서 조인다 = 함입","say":"풍선집 허리. 가는 살구색 꼰 줄 하나가 위 벽과 아래 벽의 안쪽 면에 묶여 벽을 안으로 끌어당긴다. 그래서 허리가 잘록하다. 집 밖에는 줄이 없다. 허리를 한 바퀴 두른 고리를 옆에서 본 것이다. 동물세포의 세포질분열은 수축환이 세포막 바로 안쪽에서 조여 막이 함입되는 방식이다. 새로 쌓는 것이 아니라 있던 막을 조여 가른다.","box":[520,260,80,670],"src":["s48p02#1"],"cards":["C1-28"]},{"obj":"그 줄에 매달려 손을 바꿔 가며 당기는 빨간 멜빵 등반가들","fact":"수축환의 주성분 = 액틴(가는 꼰 줄)과 마이오신(당기는 쪽)","hook":"가는 꼰 줄 = 액틴 · 등반가 = 마이오신","say":"그 줄에 빨간 멜빵을 입은 등반가들이 매달려 손을 바꿔 가며 당긴다. 가는 꼰 줄이 액틴 미세섬유, 줄을 당기는 사람이 마이오신. 줄만 있으면 조여지지 않는다. 당기는 쪽이 있어야 힘이 난다. 수축환은 액틴과 마이오신 둘로 이루어진다.","box":[490,350,130,500],"src":["s48p02#2"],"cards":["C1-29"]},{"obj":"창고 — 벽은 꼿꼿 · 한가운데에 새 널빤지 칸막이가 공중에 떠 있다 · 지붕 · 바닥까지는 아직 틈","fact":"식물 세포질분열 — 세포판이 가운데에서 바깥으로 자라 옛 벽에 닿는다","hook":"가운데부터 쌓는다","say":"창고 벽은 꼿꼿해서 하나도 조여지지 않는다. 대신 한가운데에 새 널빤지 칸막이가 생기는 중이다. 가운데 토막만 섰고 지붕과 바닥까지는 아직 틈이 있다. 식물세포의 세포질분열은 세포판을 만드는 방식, 가운데에서 바깥으로 자라 마지막에 옛 벽에 닿는다. 조일 수 없으니 쌓는다.","box":[1490,400,110,450],"src":["s48p02#3"],"cards":["C1-30"]},{"obj":"칸막이 양옆의 초록 플라스틱 그물 비계 · 그 선반과 바닥에 널빤지를 실은 손수레들","fact":"프라그모플라스트 — 세포판 만들 소낭(골지에서 옴)을 실어 나르는 틀","hook":"플라스틱 그물 = 플라스트 · 울타리 = 프라그모","say":"칸막이 양옆에 초록 플라스틱 그물을 두른 공사장 비계가 섰고, 선반과 바닥에 널빤지를 실은 손수레들이 칸막이 쪽으로 간다. 프라그모플라스트, 플라스틱 그물이 플라스트, 울타리가 프라그모다. 세포판을 지을 재료를 담은 소낭을 실어 나르는 틀이다. 손수레가 소낭, 창고 안의 골지에서 온다. 세포판 자체가 아니라 판을 짓게 하는 틀이라는 것이 함정이다.","box":[[1300,260,190,740],[1610,260,200,740]],"src":["s48p02#4"],"cards":["C1-31"]}]};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
