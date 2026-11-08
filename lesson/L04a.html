@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>세 겹 반죽과 난할의 두 길 — 낭배 · 배엽 · 선구와 후구</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L04a","scene":"s04","part":"a","title":"세 겹 반죽과 난할의 두 길 — 낭배 · 배엽 · 선구와 후구","sub":"접합자 → 난할 → 포배 → 낭배(조리법 카드) · 엄지로 누른 굴 = 원장 · 파랑 · 빨강 · 노랑 세 겹 = 외 · 중 · 내배엽과 그 산물 · 2배엽 · 나선/방사 · 결정/부정 · 분열체강/장체강","img":"img/L04a.webp","w":2048,"h":1144,"stops":[{"obj":"빵집 작업대 — 왼쪽 큰 반죽 공 · 위 조리법 카드 · 아래 두 쟁반","fact":"동물 발생 — 낭배와 세 배엽 · 선구 vs 후구의 세 짝","hook":"반죽 = 배아 · 빵집 한 자리에 다 있다","say":"빵집 작업대다. 왼쪽에 엄지로 눌러 굴을 낸 큰 반죽 공이 잘려 있고, 오른쪽 위 벽에 네 걸음짜리 조리법 카드가 붙었고, 오른쪽 아래에는 쟁반 둘이 나란하다. 반죽이 배아. 낭배와 세 배엽, 그리고 선구와 후구를 가르는 세 짝이 이 한 자리에 다 있다.","box":null,"src":["s04p08#7"],"cards":["S-AN-3","X-AN-3","N0-19"]},{"obj":"벽의 조리법 카드 — 덩이 → 넷으로 금 → 빈 껍질 → 눌러 굴 · 넷이 다 같은 크기","fact":"접합자 → 난할 → 포배 → 낭배 · 난할은 쪼개질 뿐 커지지 않는다","hook":"조리법 네 걸음 · 공이 안 커진다","say":"벽에 붙은 조리법 카드. 화살표로 이어진 네 걸음. 덩이 하나, 금이 그어져 넷으로 갈린 덩이, 속이 빈 껍질, 그리고 한쪽을 눌러 굴이 난 것. 접합자, 난할, 포배, 낭배. 넷이 내내 같은 크기다. 난할은 쪼개지기만 하고 자라지 않는다.","box":[1290,110,730,400],"src":["s04p08#0"],"cards":["N0-5","N0-5#1","N0-5#2","N0-5#3","N0-5#4","N0-5#5"]},{"obj":"큰 반죽 공의 오른 옆구리 — 거대한 손가락이 눌러 깊이 난 굴과 둥근 입구","fact":"낭배형성 — 포배 한쪽이 안으로 밀려 굴(원장)이 되고 입구가 원구","hook":"손가락으로 누른 굴 = 원장 · 입구 = 원구","say":"큰 반죽 공의 오른쪽 옆구리를 거대한 손가락이 눌러 안으로 깊은 굴이 났다. 바깥에 둥근 입구가 뚫려 있고 손가락이 그 입구를 가리킨다. 낭배형성. 속 빈 공, 포배의 한쪽이 안으로 밀려 들어가 낭배가 된다. 생긴 굴이 원장, 앞으로 소화관이 될 자리. 그 입구가 원구.","box":[700,290,520,360],"src":["s04p07#0"],"cards":["N0-5#4","N0-5#5","N0-6"]},{"obj":"잘린 면의 겹 셋 — 바깥 파랑 · 가운데 빨강 · 안 노랑","fact":"세 배엽 — 바깥 외 · 가운데 중 · 안 내 · 겹의 자리가 곧 이름","hook":"외 · 중 · 내 = 바깥 · 가운데 · 안","say":"잘린 면에 겹이 셋. 바깥부터 파랑, 빨강, 노랑이 고르게 둘러 있다. 바깥이 외배엽, 가운데가 중배엽, 안이 내배엽. 이름의 외 중 내가 곧 겹의 자리라 이름은 외울 것이 없다. 외울 것은 겹마다 무엇이 나오는가뿐. 좌우대칭동물은 모두 셋이다.","box":[350,300,240,560],"src":["s04p07#1"],"cards":["N0-7","N0-12#2"]},{"obj":"파란 겹에서 나온 파란 끈 → 위 선반의 가죽 조각과 양끝 뚫린 대롱(한끝에 둥근 혹)","fact":"외배엽 = 외피 · 중추신경(신경관 · 뇌) — 겉 겹이 접혀 관이 된다","hook":"가죽 = 겉껍질 · 혹 달린 대롱 = 신경관과 뇌","say":"맨 바깥 파란 겹에서 파란 끈이 나와 위 선반으로 올라간다. 선반에는 가죽 조각과 양끝이 뚫린 대롱, 대롱 한쪽 끝에 작은 혹이 달렸다. 외배엽은 외피와 중추신경. 가죽이 겉껍질, 속이 뚫린 대롱이 신경관, 혹이 뇌. 겉 겹의 한 자락이 안으로 접혀 관이 된 것이라 뇌와 척수가 피부와 같은 겹에서 나온다. 시험이 여기를 노린다.","box":[200,50,690,350],"src":["s04p07#2"],"cards":["N0-7#1"]},{"obj":"빨간 겹에서 나온 빨간 끈 → 작업대에서 불끈 솟은 팔뚝과 연장이 쏟아지는 상자","fact":"중배엽 = 근육 · 대부분의 기관(뼈 · 심장 · 콩팥 · 생식샘)","hook":"팔뚝 = 근육 · 상자째 = 대부분","say":"가운데 빨간 겹에서 빨간 끈이 나와 오른쪽 작업대로 간다. 거기 작업대에서 팔뚝 하나가 불끈 솟아 알통을 세웠고, 그 곁 상자에서 연장이 쏟아진다. 중배엽은 근육과 대부분의 기관. 팔뚝이 근육이고, 물건 하나가 아니라 상자째인 것이 대부분이라는 뜻. 뼈, 심장, 콩팥, 생식샘, 진피가 다 여기서 나온다.","box":[470,560,760,410],"src":["s04p07#3"],"cards":["N0-7#3"]},{"obj":"노란 겹에서 나온 노란 끈 — 선반으로 안 가고 굴 쪽으로 되돌아 굴 안의 잎사귀와 처진 자루에 닿는다","fact":"내배엽 = 소화관 내벽 · 폐 · 간 — 굴 벽에서 부푼 곁주머니","hook":"잎사귀 = 폐 · 처진 자루 = 간 · 벽에서 부푼 것","say":"맨 안 노란 겹에서 나온 노란 끈은 선반으로 안 가고 굴 쪽으로 되돌아 들어가, 굴 안에 매달린 잎사귀와 묵직하게 처진 자루에 닿는다. 내배엽은 소화관 내벽과 폐와 간. 굴 안벽이 곧 소화관 안벽이고, 폐와 간은 그 벽에서 곁주머니처럼 부풀어 나온 것이라 내배엽이다. 잎사귀가 폐, 처진 자루가 간. 기관이니까 중배엽, 이게 대표 오답.","box":[570,440,290,400],"src":["s04p07#4"],"cards":["N0-7#2"]},{"obj":"맨 왼쪽 의자 위에 뚝 떨어진 작은 공 — 겹이 둘뿐 · 빨강이 없다","fact":"2배엽(자포 · 유즐) — 중배엽이 없어 진짜 근육 · 기관이 없다","hook":"빨강 없음 = 가운데 겹 없음","say":"맨 왼쪽 의자 위에 뚝 떨어진 작은 공 하나. 잘린 면에 겹이 둘뿐, 파랑과 노랑만 있고 빨간 겹이 아예 없다. 이배엽. 외배엽과 내배엽뿐인 자포동물과 유즐동물. 삼배엽은 외 중 내, 좌우대칭동물은 전부 그쪽. 가운데 겹이 없으면 진짜 근육도 진짜 기관도 못 만든다.","box":[10,630,170,220],"src":["s04p07#5"],"cards":["N0-12","N0-12#1"]},{"obj":"두 쟁반의 공 무더기 — 왼쪽은 어긋나게 쌓임 · 오른쪽은 똑바로 쌓임","fact":"나선난할(선구 · 어긋남) vs 방사난할(후구 · 곧음)","hook":"어긋남 = 나선 · 곧음 = 방사","say":"아래 두 쟁반. 왼쪽 쟁반의 공 무더기는 어긋나게 쌓여 위 공이 아래 두 공 사이 홈에 앉았다. 오른쪽 쟁반은 똑바로 쌓여 위 공이 아래 공 바로 위에 앉아 줄이 곧다. 층이 비스듬히 어긋나는 것이 나선난할, 선구동물. 위아래가 곧게 줄 서는 것이 방사난할, 후구동물.","box":[[1310,660,280,210],[1690,630,260,240]],"src":["s04p08#1","s04p08#2"],"cards":[]},{"obj":"두 접시 — 왼쪽은 덜 된 덩어리 · 오른쪽은 작지만 온전한 공","fact":"결정난할(선구 · 덜 된 덩어리) vs 부정난할(후구 · 온전 → 쌍둥이)","hook":"덜 됨 = 결정 · 온전 = 부정 · 쌍둥이","say":"쟁반마다 접시가 하나씩. 왼쪽 접시에 떼어 놓은 것은 공이 되다 만 덜 된 덩어리. 오른쪽 접시의 것은 작지만 온전한 공이다. 결정난할은 할구의 운명이 일찍 정해져 혼자서는 온전해지지 못한다, 선구동물. 부정난할은 할구가 아직 전능성을 가져 떼어 내도 완전한 개체가 된다, 후구동물. 일란성 쌍둥이가 후구동물에서 가능한 까닭.","box":[[1270,840,170,130],[1670,850,150,120]],"src":["s04p08#3","s04p08#4"],"cards":["N0-17","N0-18","N0-22","X-AN-5"]},{"obj":"왼쪽 쟁반 아래 — 속이 찬 붉은 덩이 하나에 금이 가 틈이 났다","fact":"분열체강(선구) — 중배엽 덩이가 쪼개져(스키조) 체강이 된다","hook":"한 덩이에 난 금 = 쪼개진 체강","say":"왼쪽 쟁반 아래, 속이 찬 붉은 덩이 하나의 가운데가 갈라져 그 사이에 빈 틈이 났다. 두 덩이가 아니라 한 덩이에 난 금. 분열체강, 선구동물. 중배엽 덩어리가 쪼개져 체강이 된다. 스키조가 쪼갠다는 뜻.","box":[1430,860,180,160],"src":["s04p08#5"],"cards":["N0-19#1"]},{"obj":"오른쪽 쟁반 아래 — 반죽 벽에서 둥근 주머니 셋이 목이 조여 부풀어 나오고 맨 오른쪽 것은 잘라 속이 비었다","fact":"장체강(후구) — 원장(엔테로) 벽에서 주머니가 떨어져 나와 체강","hook":"벽에서 떨어진 주머니 = 창자에서 난 체강","say":"오른쪽 쟁반 아래, 반죽 벽에서 둥근 주머니 셋이 목이 조여 부풀어 나온다. 맨 오른쪽 주머니는 잘라 보여 속이 비었다. 장체강, 후구동물. 원장 벽에서 주머니가 떨어져 나와 체강이 된다. 엔테로가 창자.","box":[1800,830,210,190],"src":["s04p08#6"],"cards":["N0-19#2"]},{"obj":"왼쪽 쟁반 귀퉁이의 달팽이 · 오른쪽 쟁반 귀퉁이의 불가사리 — 쟁반이 통째로 한 편","fact":"선구 = 나선 · 결정 · 분열체강 / 후구 = 방사 · 부정 · 장체강","hook":"달팽이 쟁반 = 선구 · 불가사리 쟁반 = 후구","say":"왼쪽 쟁반 귀퉁이에 달팽이가, 오른쪽 쟁반 귀퉁이에 불가사리가 앉았다. 왼쪽 쟁반이 통째로 선구, 오른쪽 쟁반이 통째로 후구. 달팽이 같은 연체가 선구, 불가사리 같은 극피가 후구. 선구는 나선, 결정, 분열체강. 후구는 방사, 부정, 장체강. 여기에 원구가 입이냐 항문이냐를 더하면 넷이 되는데, 그건 다음 과 부두의 가게들에 있다. 왼쪽부터 읽으니 먼저가 왼쪽, 선구다.","box":[[1210,630,400,420],[1640,620,400,430]],"src":["s04p08#7"],"cards":["S-AN-3","X-AN-3","N0-19"]}]};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
