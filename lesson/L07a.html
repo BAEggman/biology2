@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>호르몬 본사 빌딩 — 시상하부 · 전엽과 후엽</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L07a","scene":"s07","part":"a","title":"호르몬 본사 빌딩 — 시상하부 · 전엽과 후엽","sub":"옥상 관제탑(시상하부) · 물 파이프(문맥 → 전엽) · 검은 전선(축삭 → 후엽) · 빈방에 매달린 탱크(후엽은 저장만) · 수도꼭지 탱크(ADH) · 요람 탱크 + 옥가락지(옥시토신) · 위층 작업대(전엽은 스스로 만든다)","img":"img/L07a.webp","w":2048,"h":1144,"stops":[{"obj":"앞벽을 잘라 낸 호르몬 본사 빌딩 — 옥상 관제탑 · 위층 작업대 · 아래층 매달린 탱크 둘","fact":"시상하부(옥상)가 뇌하수체 전엽(위층) · 후엽(아래층)을 서로 다른 길로 부린다","hook":"옥상이 아래 두 층을 부린다","say":"앞벽을 잘라 낸 호르몬 본사 빌딩이다. 옥상엔 관제탑, 그 아래 위층과 아래층. 옥상이 시상하부, 위층이 뇌하수체 전엽, 아래층이 후엽. 옥상이 두 층을 부리는데 길이 다르다. 위층엔 물 파이프로, 아래층엔 전선으로.","box":null,"src":["s07p01#0"],"cards":["G0-146"]},{"obj":"옥상 관제탑 — 헤드셋 쓴 관제사가 마이크에 대고 지시를 외친다","fact":"시상하부 — 뇌하수체와 여러 내분비 축의 상위 조절자","hook":"관제탑 = 시상하부","say":"옥상 관제탑, 헤드셋 쓴 관제사가 마이크에 대고 지시를 외친다. 시상하부. 뇌하수체와 여러 내분비 축의 맨 위 조절자. 방출호르몬만 내는 게 아니라, 아래층 탱크에 담길 호르몬도 여기서 만든다.","box":[740,20,540,370],"src":["s07p01#0"],"cards":["G0-146"]},{"obj":"관제탑에서 나온 굵은 파란 물 파이프가 위층으로 들어가 일꾼의 병 입구까지","fact":"문맥 → 전엽 — 시상하부 방출호르몬이 피를 타고 전엽에 직접 간다","hook":"물 파이프 = 문맥 = 피","say":"관제탑에서 나온 굵은 파란 물 파이프가 위층으로 들어가 일꾼이 든 병 입구까지 이어진다. 문맥. 시상하부의 방출호르몬이 피를 타고 전엽으로 바로 간다. 문맥으로 직접 조절이 문제에 나오면 이 파이프. 이 덱에서 물 파이프와 호스는 피, 호르몬이 오는 길.","box":[560,320,420,380],"src":["s07p01#1"],"cards":["G0-157"]},{"obj":"옥상 모서리에서 내려온 검은 전선 다발 — 위층은 바깥으로 그냥 지나쳐 아래층으로 들어가 천장을 따라 탱크까지","fact":"축삭 → 후엽 — ADH · 옥시토신은 시상하부에서 만들어 축삭으로 내려보낸다","hook":"검은 전선 = 신경 축삭","say":"옥상 모서리에서 검은 전선 다발이 내려오는데, 위층은 바깥으로 그냥 지나쳐 아래층으로 들어가 천장을 따라 탱크까지 이어진다. 축삭. 시상하부 신경세포의 축삭이 후엽까지 뻗었다. ADH와 옥시토신은 시상하부에서 만들어져 이 전선을 타고 내려간다. 이 덱에서 검은 전선은 신경.","box":[[400,370,200,580],[580,760,880,60]],"src":["s07p01#2"],"cards":["G0-152"]},{"obj":"아래층 — 작업대도 일꾼도 없는 빈방에 탱크 둘이 전선 끝에 허공에 매달렸다","fact":"후엽은 만들지 않고 저장 · 방출만 한다(시상하부 신경조직의 연장)","hook":"빈방에 매달린 탱크 = 저장만","say":"아래층은 작업대도 일꾼도 없는 빈방, 탱크 둘이 전선 끝에 허공에 매달렸다. 후엽은 만들지 않는다. 시상하부 신경조직의 연장이라 받아서 저장하고 내보내기만 한다. 후엽 호르몬은 둘, ADH와 옥시토신.","box":[640,740,1060,380],"src":["s07p01#3"],"cards":["G0-148","Q0-18#1","G0-151","G0-153","Q0-19"]},{"obj":"왼쪽 탱크 — 바닥의 수도꼭지에서 물이 뚝뚝 떨어진다","fact":"ADH(바소프레신) — 신장 집합관에서 물 재흡수 ↑ → 혈장 삼투압 유지","hook":"수도꼭지 = 물을 붙잡는 ADH","say":"왼쪽 탱크, 바닥의 수도꼭지에서 물이 뚝뚝 떨어진다. ADH, 항이뇨호르몬, 바소프레신. 신장 집합관에서 물을 도로 빨아들여 혈장 삼투압을 지킨다. 물을 다루는 탱크라 수도꼭지.","box":[740,780,250,340],"src":["s07p01#4"],"cards":["Q0-20","G0-192"]},{"obj":"오른쪽 탱크 — 꼭지 없이 아기 요람 위에 매달렸고 · 요람 머리판에 붉은 끈으로 매단 초록 옥가락지","fact":"옥시토신 — 자궁 수축 · 젖 사출 · 양성 피드백(분만 · 수유)","hook":"옥가락지 = 옥시토신 · 요람 = 분만 · 수유","say":"오른쪽 탱크는 꼭지 없이 아기 요람 위에 매달렸고, 요람 머리판에 붉은 끈으로 초록 옥가락지가 걸렸다. 옥가락지가 곧 옥시토신. 요람이 뜻, 분만과 수유. 자궁을 수축시키고 젖을 짜낸다. 수축이 자극을 키워 옥시토신이 더 나오는 양성 피드백, 대표 예.","box":[[1260,760,300,340],[1290,900,80,120]],"src":["s07p01#5"],"cards":["G0-191","Q0-21","Q0-15","G0-215"]},{"obj":"위층 — 앞치마 일꾼들이 늘어서 파이프에서 받은 물로 병을 채워 만든다 ↔ 아래층엔 만드는 사람이 없다","fact":"전엽은 독립 내분비샘(스스로 합성 · 분비) · 후엽은 저장 · 방출만","hook":"위층엔 작업대 · 아래층엔 없음","say":"위층엔 앞치마 일꾼들이 늘어서 파이프에서 받은 액체로 병을 채우고 마개를 막는다, 바쁘게 만든다. 아래층엔 만드는 사람이 하나도 없다. 전엽은 독립 내분비샘이라 스스로 합성하고 분비한다. 후엽은 시상하부 신경조직의 연장이라 저장하고 방출만 한다. 위층에 작업대가 있고 아래층에 없는 것이 이 차이 그대로.","box":[[820,450,880,280],[640,740,1060,380]],"src":["s07p01#6"],"cards":["Q0-18","Q0-18#2"]}]};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
