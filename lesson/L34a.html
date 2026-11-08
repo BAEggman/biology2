@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>씨앗 공방 두 층 — 소포 더미와 대포 넷 (수배우체 · 배낭)</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L34a","scene":"s34","part":"a","title":"씨앗 공방 두 층 — 소포 더미와 대포 넷 (수배우체 · 배낭)","sub":"위층(꽃밥): 빈손 큰 사람(소포자모세포) · 소포 위 넷(소포자) · 관 멘 하나 + 외투 하나 머리 둘(관세포 · 생식세포) · 벗겨진 껍질(화분벽) · 똑같은 붉은 조끼 둘(정자) · 아래층(밑씨): 두 겹 아치 + 문 하나(주피 · 주공) · 대포 넷(대포자 · 셋 탐) · 청록 + 회색 둘(난세포 · 조세포) · 바구니 겨자색 둘(극핵) · 먼 벽 회색 셋(반족세포)","img":"img/L34a.webp","w":2048,"h":1144,"stops":[{"obj":"두 층 공방의 단면 — 위층 꽃가루 작업대 · 아래층 배낭 방","fact":"위 = 꽃밥 속(수배우체 계보) · 아래 = 밑씨 속(배낭) · 문 하나가 좌표","hook":"위층 수컷 · 아래층 암컷","say":"씨앗 공방을 잘라 두 층이 보인다. 위층은 꽃밥 속, 꽃가루 작업대. 아래층은 씨방 속 밑씨, 배낭 방. 위층을 왼쪽에서 오른쪽으로 읽으면 수배우체 계보가 한 줄이고, 아래층은 문이 하나뿐이라 방 전체에 좌표가 생긴다.","box":null,"src":["s34p01#0"],"cards":["P0-8#1","S-PL-3"]},{"obj":"위층 왼쪽 — 빈손으로 소포 더미를 올려다보는 훨씬 큰 사람","fact":"소포자모세포(2n) → 감수분열 · 빈손 = 자기 몫이 남지 않는다","hook":"큰 사람 빈손 = 모세포","say":"위층 왼쪽, 훨씬 큰 사람이 빈손으로 소포 더미를 올려다본다. 소포자모세포, 이배체. 감수분열에 들어간다. 빈손인 것은 자기 몫이 남지 않기 때문. 이 층을 왼쪽에서 오른쪽으로 읽으면 소포자모세포, 소포자 넷, 화분립, 생식세포, 정자 둘.","box":[20,80,340,480],"src":["s34p01#0"],"cards":["P0-8#1","S-PL-3"]},{"obj":"소포 더미 위에 앉은 작은 사람 넷 — 맨 위 소포에 셋 · 아래 소포에 하나 · 소포는 다 성하다","fact":"소포자(n) 4개 — 세는 것은 사람 · 넷 다 산다(대포자는 하나만)","hook":"소포 = 소포자 · 넷 다 삶","say":"소포 더미 위에 작은 사람 넷이 앉았다. 맨 위 소포에 셋, 아래 소포에 하나. 소포는 다 성하다. 감수분열 산물은 소포자 넷, 반수체. 세는 것은 소포가 아니라 사람. 넷이 다 사는 것이 아래층 대포자, 하나만 사는 것과 갈리는 자리. 소포가 곧 이름, 소포자.","box":[360,20,520,440],"src":["s34p01#1"],"cards":["P0-8#2","M1-4#5","M1-4","X-PL-12","D0-109"]},{"obj":"작업대의 알갱이 속 — 몸은 둘: 관을 멘 하나 · 단추 채운 외투 하나에서 머리 둘","fact":"소포자 체세포분열 1회 → 관세포 + 생식세포 = 수배우체 · 머리 둘 = 아직 안 갈라진 생식세포","hook":"외투 하나 머리 둘 = 갈라지기 전","say":"작업대의 알갱이를 갈라 보면 몸은 둘이다. 하나는 관을 멨고, 하나는 단추를 끝까지 채운 외투 하나에서 머리 둘이 나란히 나온다. 소포자가 체세포분열 한 번, 세포는 둘. 관세포와 생식세포, 이것이 수배우체. 외투 하나에 머리 둘인 것은 생식세포가 아직 정세포 둘로 안 갈라졌다는 뜻.","box":[960,80,420,320],"src":["s34p01#2"],"cards":["P0-8#2","P0-8#3","M1-7","M1-4#6","P0-8","X-PL-2","S-PL-2"]},{"obj":"겉이 오톨도톨한 두꺼운 껍질이 통째로 벗겨져 옆에 놓였다","fact":"화분벽 — 2세포(수배우체)에 이 벽까지 씌운 것이 화분립","hook":"오톨도톨 껍질 = 화분벽","say":"알갱이 옆에 겉이 오톨도톨한 두꺼운 껍질이 통째로 벗겨져 놓였다. 화분벽. 두 세포 수배우체에 이 벽까지 씌운 것이 화분립, 꽃가루 알갱이.","box":[1360,170,300,220],"src":["s34p01#3"],"cards":["M1-7","S-PL-1"]},{"obj":"어깨에 멘 긴 속 빈 관","fact":"관세포 → 화분관(정자를 만드는 쪽이 아니다)","hook":"관 = 관세포","say":"한 몸이 어깨에 긴 속 빈 관을 멨다. 관세포. 나중에 화분관이 된다. 이름이 곧 물건. 정자를 만드는 쪽이 아니다.","box":[1060,170,160,180],"src":["s34p01#4"],"cards":["P0-9#3","P0-9#4","X-PL-3"]},{"obj":"위층 맨 오른쪽 — 얼굴도 옷도 똑같은 붉은 조끼의 작은 둘","fact":"생식세포가 수분 뒤 체세포분열 → 정자 2개(하나가 갈라져 똑같다)","hook":"똑같은 붉은 둘 = 정자","say":"위층 맨 오른쪽, 얼굴도 옷도 똑같은 붉은 조끼 작은 둘. 외투 속 머리 둘이 갈라져 나온 정자 둘이지 큰 사람의 분신이 아니다. 생식세포가 수분한 뒤 체세포분열해 정자 두 개. 하나가 갈라진 것이라 둘이 똑같다. 화분관을 만드는 쪽이 아니다. 이 덱에서 붉은 옷은 정자.","box":[1740,230,280,320],"src":["s34p01#5"],"cards":["P0-9#1","P0-9#2","X-PL-4","P0-9"]},{"obj":"아래층 — 아치를 두 겹으로 두른 돌벽 · 왼쪽에 난 좁은 문 하나","fact":"주피 2겹(→ 종피) · 주공(작은 문) — 문 하나뿐인 것이 이 방의 좌표축","hook":"두 겹 벽 = 주피 · 좁은 문 = 주공","say":"아래층은 아치를 두 겹으로 두른 돌벽 방이고 왼쪽에 좁은 문이 하나 났다. 밑씨를 감싸는 주피 두 겹, 나중에 종피가 된다. 그 틈이 주공, 작은 문. 문이 하나뿐인 것이 이 방의 좌표축. 기출이 묻는 것은 거의 다 어느 쪽이냐.","box":[[0,560,2048,584],[560,720,180,380]],"src":["s34p02#0"],"cards":["P0-2","M1-5"]},{"obj":"아래층 왼쪽 끝의 대포 넷 — 셋은 검게 타 부서져 쌓였고 하나만 온전히 서 있다","fact":"대포자모세포(2n) → 대포자 4 · 1개만 생존 · 체세포분열 3회 → 8핵 7세포 배낭","hook":"대포 = 대포자 · 셋 탐 하나 삶","say":"아래층 왼쪽 끝에 대포 넷. 셋은 검게 타 주저앉았고 하나만 온전히 서 있다. 대포자모세포가 감수분열해 대포자 넷, 보통 하나만 살고 셋은 퇴화. 위층 소포자가 넷 다 사는 것과 정반대. 대포가 곧 이름, 대포자. 산 하나가 체세포분열 세 번 하면 여덟 핵 일곱 세포의 배낭.","box":[40,760,520,384],"src":["s34p02#1"],"cards":["P0-3","M1-5","M1-4#2","M1-4","X-PL-12","S-PL-4","P0-4","P0-4#1","M1-4#3","M1-14#2"]},{"obj":"문 바로 안쪽 — 걸상에 앉은 청록 옷 하나를 양옆 회색 옷 둘이 무릎 꿇고 떠받든다(쟁반 · 문 쪽 손짓)","fact":"주공 쪽 난세포 1 + 조세포 2 — 조세포가 화분관을 문 쪽으로 유인 · 청록 = 난세포","hook":"도울 조 = 무릎 꿇은 둘 · 청록 = 난세포","say":"문 바로 안쪽. 걸상에 앉은 청록 옷 하나를 양옆 회색 옷 둘이 무릎 꿇고 떠받든다. 하나는 쟁반을 받쳐 들고, 하나는 팔을 뻗어 문 쪽 길을 가리킨다. 주공 쪽에 난세포 하나와 조세포 둘. 손짓하는 둘이 조세포, 도울 조, 문 쪽으로 화분관을 유인한다. 가만히 앉은 하나가 난세포. 옷 색이 답, 이 공방의 청록 옷은 난세포이고 이 방에 그 하나뿐. 조세포와 반족세포는 회색.","box":[600,780,480,340],"src":["s34p02#2"],"cards":["P0-7","X-PL-5","M1-19"]},{"obj":"방 가운데 큰 바구니 하나에 나란히 앉은 겨자색 옷 둘","fact":"중앙세포 하나에 극핵 둘 — 8핵인데 7세포인 까닭 · 배젖 3n의 까닭","hook":"한 바구니에 겨자색 둘 = 극핵 둘","say":"방 가운데 큰 바구니 하나에 겨자색 옷 둘이 나란히 앉았다. 중앙세포는 하나인데 그 안에 극핵이 둘. 여덟 핵인데 세포가 일곱인 이유가 이 바구니. 배젖이 삼 엔인 이유, 정자 엔 더하기 극핵 엔 더하기 극핵 엔도 여기서 나온다. 겨자색이 극핵. 수정 전이라 이 방에는 붉은 옷이 아직 없다.","box":[1120,800,340,320],"src":["s34p02#3"],"cards":["P0-6","X-PL-6","M1-19","P0-5","X-PL-2","S-PL-2","P0-4#2"]},{"obj":"문에서 가장 먼 벽에 등을 붙이고 앉은 회색 옷 셋 — 통나무 위 둘 · 끝에 하나 · 맨발","fact":"반족세포 3 — 주공 반대편 · 기능 미상 · 수정에 참여 안 함","hook":"문 반대편 = 반족","say":"문에서 가장 먼 벽에 등을 붙이고 회색 옷 셋이 앉았다. 둘은 통나무 위, 하나는 통나무 끝, 셋 다 맨발. 반족세포 셋, 주공 반대편. 앉은 자리가 갈려도 셋은 각각 다른 세포. 기능은 미상이고 수정에 참여하지 않는다. 반족은 자리, 문의 정반대 끝.","box":[1500,790,540,340],"src":["s34p02#4"],"cards":["X-PL-5","M1-19"]}]};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
