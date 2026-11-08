@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>칸막이 너머 — 익히고 떨구고 · 닫고 누른다 (에틸렌 · ABA)</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L20b","scene":"s20","part":"b","title":"칸막이 너머 — 익히고 떨구고 · 닫고 누른다 (에틸렌 · ABA)","sub":"익은 토마토의 연보라 기체(에틸렌 · 성숙 · 양성 되먹임) · 갈고리 모종(삼중반응) · 떨어지는 누런 잎(탈리 · 노화) · 갓 쓴 아비(ABA) · 롤 셔터 내리기(기공 닫기) · 눌린 흙 속 닫힌 씨앗(휴면) · 구두 밑 모종(생장 억제) · 갈라진 땅의 빳빳한 잎(건조 내성)","img":"img/L20b.webp","w":2048,"h":1144,"stops":[{"obj":"열린 유리 칸막이 문 너머 — 익은 토마토를 든 사람과 갓 쓴 아비","fact":"멈추고 늙히는 둘 — 익히고 떨구고(에틸렌) · 닫고 누른다(ABA)","hook":"문 너머 둘은 내리고 누른다","say":"호르몬 온실의 열린 유리 칸막이 문 너머다. 여기 둘은 왼쪽 넷과 반대로 내리고, 떨구고, 누른다. 익은 토마토를 쳐든 사람이 에틸렌, 갓 쓴 늙은 아비가 에이비에이.","box":null,"src":["s20u01#0"],"cards":[]},{"obj":"사람이 쳐든 푹 익은 토마토에서 연보라 기체가 뭉게뭉게 — 구름 안 열매는 빨갛게 익고 · 구름 밖 아래 열매만 초록","fact":"에틸렌 — 유일한 기체 호르몬 · 열매 성숙 · 익은 열매가 옆 열매를 익힌다(양성 되먹임)","hook":"익은 토마토의 기체 = 에틸렌","say":"사람이 쳐든 푹 익은 토마토에서 연보라 기체가 뭉게뭉게 나와 토마토 포기를 감싼다. 구름 안 열매는 빨갛게, 주황으로 익고, 구름 밖 아래 열매만 초록. 에틸렌. 유일한 기체 호르몬, 열매 성숙. 익은 열매 자신이 기체를 내고 그 기체가 옆 열매를 익힌다. 상자 속 사과 한 알이 상자를 익히는 양성 되먹임. 그래서 녹색 바나나를 보낼 땐 에틸렌을 치운다.","box":[300,40,820,820],"src":["s20u01#8"],"cards":["P1-7"]},{"obj":"포기 발치의 모종 둘 — 가스 쪽 것은 짧고 굵게 옆으로 누운 갈고리꼴 · 다른 하나는 곧고 가늘다","fact":"삼중반응 — 신장 억제 · 비대 · 수평 생장(장애물을 돌아간다)","hook":"짧고 · 굵고 · 휜 셋","say":"포기 발치에 모종 둘. 가스 쪽 것은 짧고 굵게 옆으로 누운 갈고리꼴, 다른 하나는 곧고 가늘다. 삼중반응. 신장 억제, 비대, 수평 생장. 흙 속에서 장애물을 만난 싹이 밀고 나가는 대신 돌아간다. 짧고 굵고 휜, 셋을 한 덩어리로.","box":[[600,900,120,120],[900,820,100,180]],"src":["s20u01#9"],"cards":[]},{"obj":"구름에 싸인 토마토 포기에서 누런 잎 셋이 떨어져 내린다","fact":"잎 탈리 · 노화도 에틸렌(옥신 ↓ · 에틸렌 ↑ → 떨켜) · 늦추는 것은 시토키닌","hook":"구름 속에서 잎이 진다","say":"구름에 싸인 토마토 포기에서 누런 잎 셋이 떨어져 내린다. 잎 탈리, 낙엽과 노화를 밀어 주는 것도 에틸렌. 잎이 늙어 옥신 공급이 끊기면 떨켜 세포가 에틸렌에 민감해져 셀룰레이스가 벽을 녹인다. 기출은 에틸렌이 노화를 늦춘다고 뒤집어 낸다. 늦추는 것은 토끼, 시토키닌.","box":[[960,320,90,110],[960,500,90,90],[960,580,90,100]],"src":["s20u01#10"],"cards":[]},{"obj":"맨 오른쪽 바닥에 쪼그려 앉은 갓 쓴 늙은 아비 — 흰 두루마기 · 흰 수염 · 한 손은 셔터 손잡이 · 한 손은 흙더미","fact":"ABA(앱시스산) — 아바 = 아비 · 닫고 · 재우고 · 멈추고 · 버틴다","hook":"갓 쓴 아비 = 아바 = ABA","say":"맨 오른쪽, 바닥에 쪼그려 앉은 갓 쓴 늙은 아비. 챙 넓은 검은 갓, 흰 두루마기, 흰 수염. 한 손은 셔터 손잡이를, 한 손은 흙더미를 잡았다. 에이비에이, 앱시스산. 아바, 갓 쓴 아비가 그 이름. 하는 일이 넷인데 넷이 한 방향이다. 닫고, 재우고, 멈추고, 버틴다.","box":[1060,300,520,700],"src":["s20u01#11"],"cards":["P1-6","S-PL-14"]},{"obj":"아비 곁 큰 잎 위의 금속 롤 셔터 — 아비가 셔터 손잡이를 잡아 잎 위로 끌어내리는 중","fact":"기공을 닫는다 — 마르면 공변세포의 물을 빼내 쭈그러뜨린다 · 여는 게 아니다(최다 함정)","hook":"셔터를 내린다 = 기공을 닫는다","say":"아비 곁의 큰 잎 위에 금속 롤 셔터가 달려 있고, 아비가 셔터 손잡이를 잡아 잎 위로 끌어내리는 중이다. 기공을 닫는다. 마르면 공변세포에서 물을 빼내 쭈그러뜨린다. 여는 것이 아니라 닫는다, 내린다. 이 호르몬 최다 함정.","box":[[1420,100,500,420],[1480,500,380,500]],"src":["s20u01#12"],"cards":["P1-6#2","O1-22","S-PL-14","O1-22#2"]},{"obj":"아비의 다른 손바닥이 흙더미를 꾹 누른다 · 잘린 앞면 속에 닫힌 갈색 씨앗 하나 · 싹이 없다","fact":"종자(와 눈)의 휴면을 건다 — 조기 발아를 막는다 · 깨우는 지베렐린과 맞쌍","hook":"묻어 누른다 = 재운다","say":"아비의 다른 손바닥이 바닥의 짙은 흙더미를 꾹 누른다. 흙더미 앞이 잘려 속이 보이는데 닫힌 갈색 씨앗 하나가 묻혀 있고 싹은 없다. 종자와 눈의 휴면을 건다. 씨가 성숙할 때 에이비에이가 늘어 조기 발아를 막는다. 문 이쪽에서는 끌이 씨앗을 깼다. 깨우는 것은 지베렐린, 묻어 재우는 것이 이 아비, 맞쌍.","box":[[1040,820,380,220],[1180,940,80,60]],"src":["s20u01#13"],"cards":["P1-6#3","X-PL-27"]},{"obj":"아비 발치에 납작하게 눌려 누운 모종 — 떡잎 둘이 바닥에 붙었다","fact":"생장을 억제한다 — 왼쪽 넷이 미는 것을 이쪽이 되민다","hook":"구두로 누른다 = 멈춘다","say":"아비 발치에 모종 한 포기가 납작하게 눌려 누웠다. 떡잎 둘이 바닥에 붙어 있다. 생장을 억제한다. 왼쪽 넷이 미는 것을 이쪽이 되민다.","box":[1360,990,180,80],"src":["s20u01#14"],"cards":["P1-6#1"]},{"obj":"셔터 잎은 쩍쩍 갈라진 바닥 위에 빳빳이 섰다 · 곁의 같은 바닥 풀 한 포기는 바싹 말라 누렇다","fact":"건조 내성 — 멈추는 것이 버티는 힘(닫아서 버틴다) · 넷 중 이것만 「버틴다」","hook":"셔터 닿은 잎만 버틴다","say":"셔터 잎은 쩍쩍 갈라진 바닥 위에 빳빳이 서 있고, 그 곁 같은 갈라진 바닥의 풀 한 포기는 바싹 말라 누렇다. 아비의 셔터가 닿은 잎만 버틴다. 건조 내성을 준다. 멈추는 것이 곧 버티는 힘, 닫아서 버틴다. 넷 중 이것만 막는다가 아니라 버틴다. 갈라진 땅은 이 덱에서 건조 스트레스.","box":[[1480,860,568,284],[1760,740,260,250]],"src":["s20u01#15"],"cards":["P1-6#4"]}]};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
