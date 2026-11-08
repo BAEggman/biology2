@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>바늘 없는 돌시계와 붉은 토글 — 광주기성 · 피토크롬</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L20c","scene":"s20","part":"c","title":"바늘 없는 돌시계와 붉은 토글 — 광주기성 · 피토크롬","sub":"바늘 없는 돌시계의 까만 모래시계(암기) · 띠 넷(긴 밤 국화 활짝 · 짧은 밤 봉오리 · 붉은 줄에 끊긴 밤 봉오리 · 같은 띠에 장일 화초 활짝) · 잎이 받쳐 든 편지(플로리겐) · 놋쇠 토글(피토크롬) · 붉은 전구(적색 → Pfr) · 까만 전구(근적외 → Pr) · 반반 꼬리표(마지막 빛) · 상추 씨앗 · 눈가리개 씨앗","img":"img/L20c.webp","w":2048,"h":1144,"stops":[{"obj":"밤에서 아침으로 밝아 오는 유리 온실 — 왼쪽 돌시계 · 가운데 띠 넷 · 오른쪽 나무벽의 전구 둘과 토글","fact":"식물은 빛과 시간으로 「언제」를 정한다 — 밤 길이로 꽃 · 빛 색으로 싹","hook":"밤 하늘에서 아침으로","say":"밤에서 아침으로 밝아 오는 유리 온실이다. 유리 지붕 너머 하늘이 왼쪽은 별 뜬 밤, 오른쪽으로 갈수록 아침. 왼쪽 돌벽에 바늘 없는 둥근 시계, 가운데 크림색 벽에 띠 넷과 화분 넷, 오른쪽 나무벽에 붉은 전구와 까만 전구, 그 사이 토글. 식물은 빛과 시간으로 언제를 정한다. 이어진 밤의 길이로 꽃 필 때를, 빛의 색으로 싹틀 때를.","box":null,"src":["s20u03#0"],"cards":[]},{"obj":"왼쪽 돌벽의 둥근 시계 — 둘레에 눈금이 빙 둘렸는데 바늘이 없고 · 그 자리에 별 박힌 까만 모래시계","fact":"광주기성 — 재는 것은 낮 길이가 아니라 이어진 밤(암기)의 길이","hook":"시계엔 바늘 대신 밤 모래","say":"왼쪽 돌벽에 박힌 둥근 시계. 둘레에 시각 눈금이 빙 둘렸는데 바늘은 없다. 그 자리에 큰 모래시계 하나. 모래가 밤하늘처럼 새까맣고 별 부스러기가 박혔다. 광주기성. 낮 길이 변화로 계절을 읽어 개화와 휴면을 정한다. 그런데 식물이 재는 것은 낮 길이가 아니라 이어진 밤의 길이. 이름은 낮인데 재는 것은 밤이라 늘 헷갈린다.","box":[20,395,460,500],"src":["s20u03#1"],"cards":["P1-24","P1-28","S-PL-15"]},{"obj":"위 왼쪽 띠 — 왼쪽 끝 노랑(낮) 뒤로 검은 칸(밤)이 길게 이어져 화분 밑까지 · 그 화분의 국화가 주황으로 활짝","fact":"단일(장야)식물은 긴 밤이라야 핀다 — 국화 · 포인세티아 · 콩","hook":"긴 검정 = 긴 밤 = 국화 핌","say":"위 왼쪽 띠. 왼쪽 끝은 햇빛 노랑, 낮. 그 뒤로 검은 칸, 밤이 길게 이어져 화분 밑까지 들어간다. 띠 오른쪽에 올라앉은 화분의 국화가 주황으로 활짝 폈다. 단일식물, 장야식물은 긴 밤이라야 핀다. 이어진 밤이 임계 암기를 넘어야 꽃이 핀다. 국화, 포인세티아, 콩. 늦여름에서 겨울에 핀다.","box":[540,220,460,390],"src":["s20u03#2"],"cards":["P1-25","P1-30#1"]},{"obj":"위 오른쪽 띠 — 검은 칸이 짧게 끝나고 화분 앞에서 다시 노랑 · 같은 국화가 초록 봉오리를 꼭 닫았다(주황 끝만 살짝)","fact":"밤이 짧으면 못 핀다 — 그래서 단일식물의 다른 이름이 장야식물","hook":"짧은 검정 = 닫힘","say":"위 오른쪽. 같은 띠인데 검은 칸이 짧게 끝나고 화분 앞에서 다시 노랑이다. 같은 국화가 잎은 싱싱한데 꼭대기 봉오리를 초록으로 꼭 닫았다, 주황 꽃잎 끝만 살짝. 밤이 짧으면 못 핀다. 그래서 단일식물의 다른 이름이 장야식물이고, 이쪽이 실제 조건. 이름은 낮으로 부르는데 정하는 것은 밤.","box":[1000,270,340,350],"src":["s20u03#3"],"cards":["P1-30#1"]},{"obj":"아래 왼쪽 띠 — 위 왼쪽처럼 긴 검은 칸을 붉게 빛나는 세로줄이 끊었다 · 같은 국화가 꼭대기 봉오리를 닫았다","fact":"광중단 — 밤 한가운데 짧은 빛이 이어진 밤을 끊는다 · 적색광(근적외로 취소)","hook":"붉은 줄 = 밤이 끊김","say":"아래 왼쪽. 위 왼쪽과 똑같이 긴 검은 칸을 붉게 빛나는 가는 세로줄이 끊었다. 같은 국화가 꼭대기 봉오리를 초록으로 닫았다. 광중단. 밤 한가운데의 짧은 빛이 이어진 밤을 끊어 재기를 처음부터 다시 하게 한다. 밤의 총량은 같은데 연속이 끊겼다. 연속된 밤이 조건이라는 증거가 이 한 줄. 줄이 붉은 것은 광중단의 빛이 적색광이라서, 곧이어 근적외광을 주면 취소된다.","box":[540,670,440,330],"src":["s20u03#4"],"cards":["P1-29#1"]},{"obj":"아래 오른쪽 — 똑같이 붉은 줄에 끊긴 띠인데 · 화분은 넓은잎 화초이고 분홍 꽃송이가 활짝","fact":"장일(단야)식물은 짧은 밤이라야 — 광중단이 오히려 돕는다 · 시금치 · 무 · 상추","hook":"같은 띠 · 다른 식물 · 반대 결과","say":"아래 오른쪽. 아래 왼쪽과 똑같이 붉은 줄에 끊긴 띠인데, 그 화분은 국화가 아닌 넓은잎 화초이고 작은 분홍 꽃송이가 활짝. 같은 띠에 하나는 닫고 하나는 폈다. 장일식물, 단야식물은 짧은 밤이라야 피니, 긴 밤이 두 토막 난 것이 오히려 도움. 시금치, 무, 상추. 늦봄 초여름에 핀다. 조건이 같은데 결과가 반대면 원인은 식물.","box":[975,670,365,330],"src":["s20u03#5"],"cards":["P1-26","P1-29#2","P1-30#2","P1-29","P1-30"]},{"obj":"위 왼쪽 국화 — 아래 잎이 흰 편지 봉투를 받쳐 들었고 · 봉투 곁에서 굵은 점선 화살표가 줄기 곁을 따라 꼭대기 꽃 밑까지","fact":"플로리겐(FT 단백질) — 밤을 재는 곳은 잎 · 피는 곳은 꼭대기 · 체관을 타고 정단으로","hook":"잎에서 나온 편지가 꽃까지","say":"위 왼쪽 국화의 아래 잎 하나가 흰 편지 봉투를 받쳐 들었다. 봉투 곁에서 굵은 점선 화살표가 줄기 곁을 따라 꼭대기 꽃 밑까지 오른다. 밖에서 들이미는 손은 없다. 플로리겐, 에프티 단백질. 재는 곳과 피는 곳이 다르다. 밤을 재는 것은 잎이고 꽃은 꼭대기에서 핀다. 편지는 잎에서 나와 체관을 타고 정단분열조직으로 간다.","box":[820,220,190,270],"src":["s20u03#6"],"cards":["P1-32"]},{"obj":"오른쪽 나무벽의 크림색 스위치판에 짧고 뭉툭한 놋쇠 토글 — 붉은 전구와 까만 전구 사이","fact":"피토크롬 Pr ↔ Pfr — 빛으로 왔다 갔다 하는 광가역 스위치","hook":"토글 = 피토크롬","say":"오른쪽 나무벽의 크림색 사기 스위치판에 짧고 뭉툭한 놋쇠 토글 하나. 붉은 전구와 까만 전구 사이. 피토크롬, 피 알과 피 에프 알. 빛으로 왔다 갔다 하는 광가역 스위치.","box":[1640,445,145,215],"src":["s20u03#7"],"cards":["S-PL-15","P1-16"]},{"obj":"왼쪽 전구가 붉게 환히 켜져 붉은 빛살이 퍼진다","fact":"적색광 660 nm → Pr가 Pfr(생리적 활성형)로","hook":"붉은 빛 = 켠다","say":"왼쪽 전구가 붉게 환히 켜져 짧은 붉은 빛살이 퍼진다. 적색광, 육백육십 나노미터. 피 알이 피 에프 알, 생리적 활성형으로 바뀐다.","box":[1420,385,190,255],"src":["s20u03#8"],"cards":["P1-15"]},{"obj":"오른쪽 전구는 유리 속이 새까맣고 · 빛 대신 열 아지랑이만 피어오른다","fact":"근적외광 730 nm → Pfr가 Pr로 — 눈에 거의 안 보이는 빛이라 까만 전구","hook":"까만 전구 = 근적외 = 끈다","say":"오른쪽 전구는 유리 속이 새까맣고 빛 대신 열 아지랑이만 피어오른다. 근적외광, 원적색광, 칠백삼십 나노미터. 피 에프 알이 피 알로 돌아간다. 눈에 거의 안 보이는 빛이라 까만 전구.","box":[1835,365,150,280],"src":["s20u03#9"],"cards":["P1-15"]},{"obj":"두 화분 밑 선반에 매단 반반 꼬리표 — 싹튼 쪽은 왼 까망 · 오른 빨강 · 잠든 씨앗 쪽은 왼 빨강 · 오른 까망","fact":"마지막에 받은 광질이 결과를 정한다 · 광중단도 근적외로 취소된다","hook":"꼬리표의 오른쪽 반 = 마지막 빛","say":"두 화분 밑, 선반 아래에 작은 꼬리표가 하나씩 매달렸다. 싹튼 화분 밑 꼬리표는 왼쪽 반 까망, 오른쪽 반 빨강. 씨앗이 잠든 화분 밑 꼬리표는 왼쪽 반 빨강, 오른쪽 반 까망. 같은 두 빛, 차례만 반대. 결과는 오른쪽 반, 마지막에 받은 광질이 정한다. 몇 번 번갈아 쬐든 맨 끝만 본다. 광중단도 적색 뒤에 곧 근적외를 주면 취소된다.","box":[[1480,940,95,170],[1862,940,95,170]],"src":["s20u03#10"],"cards":["P1-31","P1-17"]},{"obj":"붉은 전구 밑 화분 — 씨앗이 갈라져 떡잎 둘 · 까만 전구 밑 화분 — 통씨앗이 파란 눈가리개를 하고 잔다 · 사이에 상추 씨앗 봉투","fact":"상추 발아 실험 — 끝이 적색이면 Pfr로 싹 · 근적외면 Pr로 잠든 채(죽은 게 아님)","hook":"상추 봉투 · 싹 vs 눈가리개 쓴 씨앗","say":"붉은 전구 아래 화분은 씨앗이 갈라지고 떡잎 둘의 싹이 섰다. 까만 전구 아래 화분은 씨앗이 통째로 흙에 비스듬히 앉아 파란 눈가리개를 하고 잔다. 썩지도 시들지도 않았다. 두 화분 사이에 상추 그림 씨앗 봉투. 상추 씨앗의 발아가 이 스위치의 교과서 실험. 마지막에 적색광이면 피 에프 알이 되어 싹이 트고, 근적외광이면 피 알로 돌아가 잠든 채 있다. 근적외광은 씨앗을 해치지 않는다, 자고 있을 뿐. 꽃이 피느냐는 이 토글이 아니라 띠 넷에서 본다.","box":[1435,650,570,270],"src":["s20u03#11"],"cards":[]}]};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
