@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>게놈의 수호자 — p53과 종양억제유전자</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험 — 순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
+</div>
+<script>
+const L = {"id":"L19d","scene":"s19","part":"d","title":"게놈의 수호자 — p53과 종양억제유전자","sub":"DNA 손상 → ATM/ATR → p53(5·3) → p21(2·1) 굄목 · 구덩이(사멸) · 빗장 둘(두 대립유전자 · 열성) · 쥐(Ras) · 쏟아지는 음반(암) · 깁기(BRCA) · 셋(p53 · Rb · BRCA1)","img":"img/L19d.webp","w":2048,"h":1144,"stops":[{"obj":"왼쪽 상한 지퍼 — 가운데만 이빨이 부서졌다","fact":"DNA 손상 — 지퍼 = 이중나선 · 한 자리만 망가진다","hook":"맞물린 이빨 지퍼 = 이중나선(덱 약속)","say":"바닥의 지퍼가 가운데만 벌어지고 쇠 이빨이 부서져 흩어졌다. 나머지는 멀쩡히 물려 있다. 맞물린 이빨의 지퍼는 이중나선. 온 가닥이 아니라 한 자리가 망가진 디엔에이 손상.","box":[0,800,500,260],"src":["s19p02b#0"],"cards":[]},{"obj":"곁의 현금인출기 — 팔을 뻗어 둥근 도장을 판에","fact":"ATM · ATR이 손상을 감지해 p53을 인산화(활성화)한다","hook":"현금인출기 = ATM · 도장 = 인산화","say":"지퍼 곁에 선 현금인출기, 옆구리에서 마디진 팔이 뻗어 나와 둥근 도장을 판에 대고 누른다. 에이티엠, 현금인출기. 에이티엠과 에이티알이 상한 자리를 보고 피오십삼을 인산화해 깨운다.","box":[20,230,500,560],"src":["s19p02b#1"],"cards":["C1-126"]},{"obj":"나란한 두 판 — 점 다섯 · 점 셋 · 왼 판에 도장 자국","fact":"p53 — 나란한 두 자리의 점을 왼쪽부터 읽는다","hook":"다섯 · 셋 = p53(덱의 점 번호 규약)","say":"가운데 나란히 선 두 판. 왼쪽 판에 점 다섯, 오른쪽 판에 점 셋. 왼쪽부터 읽으면 오십삼, 피오십삼. 왼 판에 붉은 도장 자국이 찍혔다.","box":[430,370,250,360],"src":["s19p02b#2"],"cards":[]},{"obj":"판에서 줄이 둘 — 문 쪽 · 구덩이 쪽","fact":"p53 = 게놈의 수호자 — 주기를 멈추거나(정지) 세포를 없앤다(사멸)","hook":"줄 둘 = 두 갈래","say":"큰 판에서 줄이 둘 나가 엇갈리지 않고 갈라진다. 하나는 낮게 오른쪽 문으로, 하나는 아래 구덩이로. 피오십삼은 손상을 감지해 세포주기를 멈추거나 사멸을 유도한다. 상한 것을 그대로 물려주지 않아 게놈의 수호자.","box":[[420,680,520,120],[640,760,260,340]],"src":["s19p02b#3"],"cards":["C1-22","F1-136"]},{"obj":"첫째 줄 끝 — 굄목 위 작은 패 둘(점 둘 · 하나) · 굄목에 막혀 멈춘 음반","fact":"p53이 전사를 촉진 → p21 → Cdk 억제 → 주기 정지","hook":"둘 · 하나 = p21 · 굄목 = 문을 괸다 · 음반 = Cdk","say":"첫째 줄이 닿은 곳, 문틈에 박힌 굄목 위에 작은 패 둘. 점 둘과 하나, 피이십일. 피오십삼이 전사를 촉진해 만드는 것이 피이십일. 굄목이 문을 못 열게 괴고, 음반 한 장이 굄목에 막혀 못 구른다. 음반은 씨디케이, 피이십일이 씨디케이를 억제해 주기를 멈춘다.","box":[740,600,220,180],"src":["s19p02b#4","s19p02b#5"],"cards":["C1-23","F1-137","F1-138"]},{"obj":"둘째 줄 끝 — 뚜껑 젖힌 빈 구덩이","fact":"회복 불가능하면 p53이 아폽토시스를 유도한다(그때 연다)","hook":"뚜껑이 젖혀져 열림","say":"둘째 줄이 닿은 곳, 바닥의 네모 구덩이가 나무 뚜껑을 젖힌 채 열려 있고 안은 비어 어둡다. 손상이 회복 불가능하면 피오십삼은 세포 자살을 유도한다. 늘 열린 게 아니라 그때 연다.","box":[500,780,420,320],"src":["s19p02b#6"],"cards":["F1-139"]},{"obj":"문 둘 — 왼 문 빗장 둘 중 위만 부러짐(닫힘) · 오른 문 둘 다 부러져 열림","fact":"종양억제유전자는 열성처럼 — 두 대립유전자가 모두 망가져야 드러난다","hook":"빗장 둘 = 대립유전자 둘 · 하나 부러져도 안 열림","say":"가운데 문 둘. 왼 문은 가로지른 빗장 둘 중 위 것만 두 동강 나고 아래는 멀쩡해 닫혀 있다. 오른 문은 빗장 둘이 다 부러져 바닥에 널렸고 활짝 열렸다. 종양억제유전자는 열성처럼 행동한다. 두 대립유전자가 모두 기능을 잃어야 드러난다.","box":[[700,80,340,600],[1160,80,420,600]],"src":["s19p02c#0"],"cards":["F1-170"]},{"obj":"빗장 끝의 점판 둘(5 · 3) — 두 빗장이 같은 판","fact":"p53이 종양억제유전자 대표 · 두 빗장 = 한 유전자의 두 대립유전자(크누드슨 두 번 타격)","hook":"같은 이름의 빗장 둘","say":"빗장마다 왼쪽 끝에 작은 판 둘, 점 다섯과 셋. 피오십삼이 종양억제유전자의 대표. 한 문의 두 빗장이 같은 이름인 것이 급소. 한 유전자의 두 대립유전자다. 크누드슨의 두 번 타격 가설, 같은 유전자가 두 번 망가져야. 피오십삼 하나와 알비 하나로 두 번이 아니다.","box":[[690,290,110,100],[700,440,100,80],[1150,280,120,110]],"src":["s19p02c#1","s19p02c#2"],"cards":["F1-135"]},{"obj":"빗장 자체 — 문을 가로질러 막는다","fact":"종양억제유전자 = 분열을 억제하거나 손상을 감시해 암을 막는 유전자","hook":"막는 물건(여는 물건이 아님)","say":"빗장은 문을 가로질러 못 열게 한다. 종양억제유전자란 세포 분열을 억제하거나 디엔에이 손상을 감시해 암을 막는 유전자. 막는 물건인 것이 그대로 뜻.","box":[700,260,340,230],"src":["s19p02c#3"],"cards":["F1-130"]},{"obj":"쥐가 왼 문을 온 힘으로 미는데 꿈쩍 않음","fact":"원종양유전자(Ras 등)는 미는 쪽 · 막는 것이 남아 있으면 안 열린다","hook":"쥐 = Ras(rat sarcoma)","say":"쥐 한 마리가 왼 문에 어깨를 대고 온 힘으로 밀지만 문은 꿈쩍도 않는다. 쥐는 라스, 원종양유전자. 성장을 미는 쪽. 아무리 밀어도 막는 빗장이 하나 남아 있으면 안 열린다.","box":[950,480,260,260],"src":["s19p02c#4"],"cards":["F1-168","F1-171"]},{"obj":"오른 열린 문에서 음반이 줄줄이 쏟아진다","fact":"p53 변이 → 손상 DNA를 가진 세포가 계속 분열 → 암","hook":"미는 것도 없는데 저절로 굴러 나온다","say":"오른쪽 열린 문에서 음반이 줄줄이 굴러 나와 수북이 쌓인다. 미는 것도 없는데 저절로. 피오십삼에 변이가 생기면 손상된 디엔에이를 가진 세포가 멈추지 않고 분열해 암이 된다. 왼 문 앞에 가만히 놓인 음반 한 장과 견주라.","box":[1160,520,500,480],"src":["s19p02c#5"],"cards":["C1-119"]},{"obj":"깁는 작업대 — 바늘 실이 지퍼의 벌어진 자리를 꿰맨다 · 벽에 브래지어 둘","fact":"DNA 수복 · BRCA1 · 2 = 수복에 관련된 종양억제유전자(유방암)","hook":"브라 = BRCA · 둘 = 1 · 2 · 바늘 = 도로 붙인다","say":"오른쪽 깁는 작업대. 벌어진 지퍼를 실 꿴 바늘이 몇 땀 떠서 도로 당겨 붙인다. 디엔에이 수복. 벽에는 하얀 브래지어 둘이 멀찍이 걸렸다. 브라, 비알씨에이 원과 투. 수복에 관련된 종양억제유전자, 유방암 유전자. 고장 나면 상한 자리가 안 고쳐진다. 빗장은 못 지나가게 하고 바늘은 도로 붙인다.","box":[1560,80,460,620],"src":["s19p02f#0","s19p02f#1","s19p02f#2"],"cards":["F1-143","F1-172"]},{"obj":"작업대 끝 — 점 5 · 3 판 · 루비 박힌 빗장 · 브래지어","fact":"대표 종양억제유전자 셋 — p53 · Rb · BRCA1(막는 쪽 + 고치는 쪽)","hook":"점판 · 루비 · 브라가 한 화면에","say":"작업대 오른쪽 끝에 점 다섯 셋 판, 왼쪽 끝에 루비가 박힌 빗장, 벽에 브래지어. 대표 종양억제유전자 셋이 한 화면에. 피오십삼, 알비, 비알씨에이 원. 막는 쪽과 고치는 쪽이 같은 갈래의 두 몫.","box":[[1860,320,188,220],[1800,580,180,340]],"src":["s19p02f#3"],"cards":["C1-61"]}]};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('img').src = L.img; $('img').alt = L.title;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+const stops = L.stops;
+const scoreKey = 'lesson_' + L.id;
+let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+let speakSeq = 0;
+function speak(t) {
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('judge').style.display = 'flex';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function judge(ok) {
+  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
+  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
+  showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
+  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
+  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
