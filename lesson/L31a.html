@@ -77,7 +77,7 @@ const stops = L.stops;
 const scoreKey = 'lesson_' + L.id;
 let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
 
-function rect(b, cls) { const [x, y, w, h] = b; return `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"/>`; }
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
 function draw() {
   let s = '';
   if (mode === 'tour' || mode === 'quiz') {
@@ -90,7 +90,7 @@ function draw() {
     if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
     if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
   } else if (mode === 'review') {
-    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot').replace('/>', ` data-k="${k}"/>`); });
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
   }
   ov.innerHTML = s;
   ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
