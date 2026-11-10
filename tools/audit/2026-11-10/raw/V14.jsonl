@@ -1,0 +1,19 @@
+{"lesson": "L31c", "stop": 1, "box": "1a", "kind": "BOX-CUT", "sev": "low", "what": "양동이 탑 오른쪽 열 양동이가 상자 오른쪽 끝에서 살짝 잘린다", "seen": "C 1a 오른쪽 가장자리에서 맨 오른 양동이 테두리가 끊김", "fix": "상자를 오른쪽으로 약 15px 넓힌다"}
+{"lesson": "L31c", "stop": 3, "box": "3b", "kind": "BOX-CUT", "sev": "low", "what": "뒤집은 주머니 아래·오른쪽이 상자에 걸려 조금 잘린다(나방은 온전)", "seen": "C 3b 오른쪽 아래에서 흰 주머니가 잘림", "fix": "상자를 아래·오른쪽으로 약 15px 넓힌다"}
+{"lesson": "L31c", "stop": 5, "box": "5", "kind": "BOX-CUT", "sev": "low", "what": "맥주잔 밑바닥이 상자 아래에서 조금 잘린다", "seen": "C 5 아래쪽에서 잔 받침이 끊김", "fix": "상자 아래를 약 20px 늘린다"}
+{"lesson": "L32a", "stop": 10, "box": "10", "kind": "BOX-CUT", "sev": "low", "what": "받는 사람의 오므린 두 손이 상자 아래·오른쪽 끝에서 잘린다", "seen": "C 10 오른쪽 아래에 손끝만 보임", "fix": "상자를 아래로 약 40px, 오른쪽으로 약 20px 넓힌다"}
+{"lesson": "L32a", "stop": 11, "box": "11", "kind": "BOX-CUT", "sev": "mid", "what": "흰 방울 머리 윗부분과 노란 공을 받는 왼손이 상자 밖으로 잘린다", "seen": "C 11 위쪽에서 머리 꼭대기가 평평하게 잘리고 왼쪽 손과 공이 안 보임", "fix": "상자를 위로 약 25px, 왼쪽으로 약 40px 넓힌다"}
+{"lesson": "L32b", "stop": 2, "box": "2a/2b", "kind": "BOX-MISS", "sev": "low", "what": "물건에 든 '아치 속 꽉 찬 검푸른 물'에 상자가 없다", "seen": "상자는 물 언덕(2a)과 빈 쟁반(2b)뿐, 아치 속 물은 어느 상자에도 안 들어감", "fix": "아치 속 물 상자를 2c로 추가"}
+{"lesson": "L32b", "stop": 5, "box": "5a/5b", "kind": "BOX-MISS", "sev": "low", "what": "'서 있는 물레방아'에 상자가 없다", "seen": "가운데 칸 오른쪽 끝의 바퀴가 5a·5b 밖", "fix": "바퀴를 덮는 상자 추가"}
+{"lesson": "L34a", "stop": 1, "box": "1", "kind": "BOX-CUT", "sev": "mid", "what": "큰 사람의 한쪽 빈손(그림 오른쪽 손)이 상자 오른쪽에서 반쯤 잘린다", "seen": "A에서 손이 x 약 320~390(2048기준), C 1 오른쪽 끝에서 손가락이 끊김", "fix": "상자를 오른쪽으로 약 40px 넓힌다"}
+{"lesson": "L34a", "stop": 7, "box": "7a/7b", "kind": "AMBIG", "sev": "low", "what": "'두 겹 아치'가 그림에서는 크게 좌우 두 아치로, 안쪽은 띠 둘~셋으로 읽혀 두 겹인지 모호", "seen": "왼 아치에 겹띠가 보이고 오른쪽에도 별도 아치가 있음", "fix": "글을 '겹쳐 두른 아치'로 완화하거나 그림 수정"}
+{"lesson": "L34b", "stop": 1, "box": "1", "kind": "PIC-MISMATCH", "sev": "mid", "what": "글은 관이 네모 구멍으로 들어온다는데 그림의 관은 구멍 밑 벽의 작은 홈을 꿰뚫고 지나가며 구멍과 따로 있다", "seen": "A: 흰 네모 창이 위에, 관은 그 아래 벽돌 홈에서 벽을 관통, 구멍과 닿지 않음", "fix": "그림에서 관을 구멍으로 옮기거나, 글·상자를 '관이 벽을 뚫은 자리'로 고친다"}
+{"lesson": "L34b", "stop": 11, "box": "11", "kind": "PIC-MISMATCH", "sev": "high", "what": "글은 겨자색 자루 셋인데 그림에는 넷이다(뒤 위 하나, 왼 뒤 하나, 오른쪽 하나, 앞 아래 하나). 또 자루는 떡 '뒤'가 아니라 아래 칸에 있다", "seen": "원본 확대: 자루 매듭이 넷, 맨 위 가운데 자루는 반쯤 가려짐", "fix": "그림을 자루 셋으로 고치거나 글을 넷으로(3n 뜻과 어긋나므로 그림 수정)"}
+{"lesson": "L34b", "stop": 12, "box": "12", "kind": "PIC-MISMATCH", "sev": "high", "what": "'자루가 셋'이 핵심인데 그림 자루는 넷", "seen": "상자 12 안에 자루 넷(위 가운데 뒤 자루 포함)", "fix": "자루 하나를 지워 셋으로"}
+{"lesson": "L34b", "stop": 12, "box": "12", "kind": "BOX-CUT", "sev": "low", "what": "맨 위 뒤 자루와 매듭이 상자 위쪽에서 잘린다", "seen": "C 12 위쪽에서 뒤 자루가 끊김", "fix": "상자를 위로 약 15px 넓힌다"}
+{"lesson": "L34b", "stop": 8, "box": "8", "kind": "BOX-CUT", "sev": "low", "what": "껍질 왼쪽 볼록한 부분이 상자 왼쪽에서 조금 잘린다", "seen": "C 8 왼쪽에서 갈색 가죽이 끊김", "fix": "상자를 왼쪽으로 약 15px 넓힌다"}
+{"lesson": "L31c", "kind": "SUMMARY", "stops": 7, "boxes": 9, "box_ok": 6, "claims_checked": 22, "note": "큰 문제 없음, 상자 가장자리 헐거움 셋"}
+{"lesson": "L32a", "kind": "SUMMARY", "stops": 14, "boxes": 27, "box_ok": 25, "claims_checked": 45, "note": "그림과 글 일치, 11번 상자가 머리와 손을 자른다"}
+{"lesson": "L32b", "kind": "SUMMARY", "stops": 10, "boxes": 19, "box_ok": 17, "claims_checked": 32, "note": "글과 그림 일치, 빠진 상자 둘뿐"}
+{"lesson": "L34a", "kind": "SUMMARY", "stops": 12, "boxes": 12, "box_ok": 11, "claims_checked": 28, "note": "개수 모두 일치, 1번 손 잘림"}
+{"lesson": "L34b", "kind": "SUMMARY", "stops": 14, "boxes": 14, "box_ok": 10, "claims_checked": 30, "note": "겨자 자루가 셋이 아닌 넷으로 그려져 핵심 개수가 어긋남"}
