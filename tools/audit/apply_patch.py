@@ -36,17 +36,33 @@ for les, ops in by.items():
     except Exception as e: errs.append(f"{les}: JSON 깨짐 {e}")
     out[path] = text
 cards = P.get('cards', [])
+def card_span(text, cid):
+    i = text.find('{"id":' + enc(cid) + ',')
+    if i < 0: return None
+    k = i; q = False; esc = False
+    while k < len(text):
+        c = text[k]
+        if q:
+            if esc: esc = False
+            elif c == '\\': esc = True
+            elif c == '"': q = False
+        elif c == '"': q = True
+        elif c == '}': return i, k + 1
+        k += 1
+    return None
+dump = lambda o: json.dumps(o, ensure_ascii=False, separators=(',', ':'))
 for fn in ('index.html', 'srs_v8.html'):
     path = os.path.join(ROOT, fn)
     if not os.path.exists(path): continue
     text = open(path, encoding='utf-8').read()
     for c in cards:
-        m = re.search(r'\{"id":' + re.escape(enc(c['card'])) + r',"q":("(?:[^"\\]|\\.)*"),"a":("(?:[^"\\]|\\.)*")', text)
-        if not m:
+        sp = card_span(text, c['card'])
+        if not sp:
             (errs if fn == 'index.html' else notes).append(f"{fn}: 카드 {c['card']} 못 찾음"); continue
-        g = 1 if c['field'] == 'q' else 2
-        if json.loads(m.group(g)) != c['old']: errs.append(f"{fn}: 카드 {c['card']}.{c['field']} 원문이 다르다 — 지금 「{json.loads(m.group(g))[:50]}」"); continue
-        s, e = m.span(g); text = text[:s] + enc(c['new']) + text[e:]
+        raw = text[sp[0]:sp[1]]; o = json.loads(raw)
+        if dump(o) != raw: errs.append(f"{fn}: 카드 {c['card']} 객체 꼴이 예상과 다르다"); continue
+        if o.get(c['field']) != c['old']: errs.append(f"{fn}: 카드 {c['card']}.{c['field']} 원문이 다르다 — 지금 「{str(o.get(c['field']))[:60]}」"); continue
+        o[c['field']] = c['new']; text = text[:sp[0]] + dump(o) + text[sp[1]:]
     out[path] = text
 print(f"과 {len(by)} · 고침 {n_ops}/{len(P.get('ops', []))} · 카드 고침 {len(cards)}")
 for n in notes: print('· ' + n)
