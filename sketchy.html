@@ -159,6 +159,21 @@
   .bl{display:inline-block;font-size:10.5px;font-weight:700;color:#fff;background:#D97706;
     padding:1px 7px;border-radius:999px;margin-right:7px;vertical-align:2px;letter-spacing:.03em}
   body.test .bridge{filter:none}
+  /* 새 Sketchy 과(lesson) 입구 — 2026-11-10 · 사용자 「sketchy 허브에서 찾을 수가 없는데?」 · 자료는 lesson/map.js(build_lesson.js 생성물) */
+  .lesson-banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;text-decoration:none;color:inherit;
+    background:var(--teal-50);border:1.5px solid var(--teal);border-radius:14px;padding:12px 16px;margin:-6px 0 22px}
+  .lesson-banner:hover{background:var(--teal-100)}
+  .lesson-banner .lb-k{font-size:11.5px;font-weight:700;color:#fff;background:var(--teal);padding:2px 9px;border-radius:999px}
+  .lesson-banner .lb-t{flex:1;min-width:220px;font-size:13.5px;color:var(--ink-2)}
+  .lesson-banner .lb-t b{color:var(--teal-800);font-size:15px}
+  .lesson-banner .lb-go{font-size:13.5px;font-weight:700;color:var(--teal-800);white-space:nowrap}
+  .lchips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:-4px 0 12px}
+  .lchips .lc-k{font-size:11.5px;font-weight:700;color:var(--teal-800)}
+  .lchips a{font-size:12.5px;font-weight:600;color:var(--teal-800);background:var(--teal-50);border:1px solid var(--teal-200);
+    border-radius:999px;padding:3px 10px;text-decoration:none}
+  .lchips a:hover{background:var(--teal-100);border-color:var(--teal)}
+  .lchips a .lid{font-family:ui-monospace,monospace;font-size:11.5px;margin-right:4px}
+  @media print{.lesson-banner,.lchips{display:none}}
 </style>
 </head>
 <body data-mode="all" data-view="all">
@@ -187,6 +202,12 @@
   <h1 id="hTitle">생물 시각 니모닉</h1>
   <p class="sub" id="hSub">&nbsp;</p>
 </header>
+
+<a class="lesson-banner" id="lessonBanner" href="lesson/index.html">
+  <span class="lb-k">새</span>
+  <span class="lb-t"><b>Sketchy 과(lesson)<span id="lbN"></span></b> — 한 장면 투어 · 되짚기 · 그림만 복습 · 시험. 아래 옛 판마다 붙은 「새 과」 단추로도 바로 들어간다.</span>
+  <span class="lb-go">과 목록 열기 →</span>
+</a>
 
 
 
@@ -225,6 +246,7 @@
 
 </div>
 
+<script src="lesson/map.js"></script>
 <script>
 const DATA = [
 {id:'s01',t:'볼티모어 항구',gate:'I',unit:'19 바이러스 — 볼티모어 분류',panels:[
@@ -3879,6 +3901,14 @@ const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c
 const RICH_OK = /&lt;(\/?)(b|i|em|strong|u|sub|sup)&gt;/g;
 const rich = s => esc(String(s==null?'':s)).replace(RICH_OK,'<$1$2>');
 let html='', traps='', nums='';
+/* 새 Sketchy 과 — 이 판의 행을 정거장으로 쓰는 과로 가는 단추. 자료 lesson/map.js 가 없으면(파일만 따로 열었을 때) 아무것도 안 붙는다 */
+const LM = (typeof window!=='undefined' && window.LESSON_MAP) || null;
+const lchips = pid => {
+  const ls = LM && LM.panels && LM.panels[pid];
+  if(!ls || !ls.length) return '';
+  return `<div class="lchips"><span class="lc-k">새 과 ▸</span>${ls.map(id=>
+    `<a href="lesson/${id}.html"><span class="lid">${id}</span>${esc(String((LM.lessons||{})[id]||''))}</a>`).join('')}</div>`;
+};
 
 DATA.forEach(sc=>{
   html += `<section class="scene" id="${sc.id}">
@@ -3898,14 +3928,14 @@ DATA.forEach(sc=>{
     /* 그림 태그는 한 곳에서만 만든다 — tools/apply.js 가 이 src 앵커가 정확히 하나인지로 파일이 안 뭉개졌나를 본다 */
     const img = `<img src="img/${p.id}.webp" alt="${sc.t} ${p.t}" loading="lazy" onerror="this.closest('.shot').style.display='none'">`;
     html += p.svg
-      ? `<article class="panel dia" id="${p.id}">${head}<div class="dia-wrap">${p.svg}</div>${bridge}<div class="facts">${facts}</div></article>`
+      ? `<article class="panel dia" id="${p.id}">${head}${lchips(p.id)}<div class="dia-wrap">${p.svg}</div>${bridge}<div class="facts">${facts}</div></article>`
       : p.wide
-      ? `<article class="panel wide" id="${p.id}">${head}
+      ? `<article class="panel wide" id="${p.id}">${head}${lchips(p.id)}
         <a class="shot" href="img/${p.id}.webp" target="_blank" rel="noopener" title="원본 크기로 보기">${img}</a>
         <div class="wide-note">단원 통합판 — 그림을 누르면 원본 크기로 열린다. 사실표의 〔 〕가 그림 속 구역이다.</div>
         ${bridge}<div class="facts">${facts}</div>
         ${p.fix?`<div class="fix">보강 필요 — ${esc(p.fix)}</div>`:''}</article>`
-      : `<article class="panel" id="${p.id}">${head}<div class="p-body">
+      : `<article class="panel" id="${p.id}">${head}${lchips(p.id)}<div class="p-body">
         <div class="shot">${img}</div>
         <div>${bridge}<div class="facts">${facts}</div>
         ${p.fix?`<div class="fix">보강 필요 — ${esc(p.fix)}</div>`:''}</div></div></article>`;
@@ -3929,6 +3959,7 @@ document.getElementById('scenes').innerHTML = html;
   document.getElementById('hTitle').textContent = `생물 시각 니모닉 — ${P.length}장`;
   document.getElementById('hSub').textContent   = `Sketchy ${P.length-d}패널 + 도해 ${d}건 · ${DATA.length}장면`;
   document.title = `Sketchy 허브 — 생물 시각 니모닉 ${P.length}장 (${P.length-d}패널 + 도해 ${d})`; })();
+if(LM){ const n=document.getElementById('lbN'); if(n) n.textContent = ` ${LM.n}개`; }
 document.getElementById('trapList').innerHTML = traps;
 document.getElementById('numList').innerHTML = nums;
 

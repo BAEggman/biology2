@@ -36,10 +36,14 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
   <h1 id="title"></h1>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -71,6 +75,8 @@ const L = __DATA__;
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
 $('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
 const stops = L.stops;
