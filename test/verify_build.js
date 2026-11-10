@@ -156,7 +156,8 @@ T('BUILD 마커 존재', ()=>eq(/\/\*BUILD:START[\s\S]*?BUILD:END\*\//.test(now)
 T('빌드가 기존 카드를 건드리지 않는다 (추가는 허용)', ()=>{
   const P=s=>JSON.parse(s.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
   const cur=new Map(P(now).map(c=>[c.id,JSON.stringify(c)]));
-  const bad=P(prev).filter(c=>cur.get(c.id)!==JSON.stringify(c));
+  const ED=BL.cardEdits||{};   /* [2026-11-10] 의도한 글 고침 — baseline.cardEdits 에 까닭이 있어야 통과 · 유실은 여전히 실패 */
+  const bad=P(prev).filter(c=>cur.get(c.id)!==JSON.stringify(c)&&!(cur.has(c.id)&&ED[c.id]));
   if(bad.length) throw new Error('빌드가 카드를 바꿨다 '+bad.length+'장: '+bad.slice(0,5).map(c=>c.id).join(','));
   return P(prev).length+'장 보존 · 현재 '+cur.size+'장'; });
 

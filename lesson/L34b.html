@@ -50,7 +50,8 @@
     <button id="bTour" class="on">투어</button>
     <button id="bRecap">되짚기</button>
     <button id="bReview">복습 — 그림만</button>
-    <button id="bQuiz">시험 — 순서대로</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
     <span class="score" id="score"></span>
   </div>
   <div class="stage" id="stage">
@@ -71,17 +72,34 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
 </div>
 <script>
-const L = {"id":"L34b","scene":"s34","part":"b","title":"관이 닿은 방과 종자 창고 — 중복수정 · 종자의 셋 · 발아","sub":"네모 구멍(주공) · 접시 위 알갱이(수분) · 부르는 회색 + 쓰러진 회색(조세포) · 붉은 둘의 두 행선지(난세포 손잡기 2n · 바구니 셋 3n) · 두 겹 가죽(종피) · 청록 + 붉은 아이(배) · 떡 둘(쌍자엽) · 떡 하나 + 자루 셋(단자엽 · 배젖 3n) · 물통의 뿌리 하나(발아)","img":"img/L34b.webp","w":2048,"h":1144,"stops":[{"obj":"왼쪽 — 배낭 방에 관이 닿았다 · 오른쪽 — 종자 창고","fact":"수정 → 종자: 왼쪽 방의 붉은 둘이 어디로 가는가 · 오른쪽 껍질 속의 셋","hook":"관이 닿은 방 · 갈라 본 껍질","say":"왼쪽은 아래층 배낭 방에 위층의 관이 내려와 닿은 뒤다. 오른쪽은 수정이 끝난 밑씨가 자란 종자 창고. 왼쪽에서는 붉은 옷 둘이 서로 다른 두 곳으로 가고, 오른쪽에서는 껍질을 갈라 보면 셋이다.","box":null,"src":["s34p03#3"],"cards":["P0-11"]},{"obj":"벽을 가로질러 뚫린 네모난 구멍 하나 — 관이 그리로 들어온다","fact":"화분관은 주피를 뚫지 않고 이미 나 있는 주공으로 들어온다","hook":"구멍으로 들어오지 뚫지 않는다","say":"벽을 가로질러 네모난 구멍이 하나 뚫렸고 관이 그리로 들어온다. 화분관은 주피를 뚫고 들어오는 게 아니라 이미 나 있는 주공으로 들어온다. 아래층에서 좌표축이 되었던 그 문.","box":[180,430,280,190],"src":["s34p03#0"],"cards":[]},{"obj":"관 바깥 끝 — 얕은 접시 위에 앉은 오톨도톨한 알갱이","fact":"수분 = 화분립이 암술머리에 닿는 것까지 · 관은 거기서 자라 내려온다(수분 ≠ 수정)","hook":"접시 위 알갱이 = 수분","say":"관의 바깥 끝, 얕은 접시 위에 오톨도톨한 알갱이가 앉아 있다. 수분은 화분립이 암술머리에 닿는 것까지. 화분관은 거기서 자라 나와 암술대를 지나 내려온다. 수분과 수정은 다른 사건.","box":[10,530,180,130],"src":["s34p03#1"],"cards":["P0-10","M1-8","M1-18#3"]},{"obj":"구멍 곁의 회색 옷 둘 — 하나는 서서 팔을 들어 관을 불러들이고 · 하나는 바닥에 쓰러져 있다","fact":"조세포 2가 화학물질로 관을 유인 · 관이 닿으면 하나가 죽어 정자의 통로가 된다","hook":"부르는 하나 · 쓰러진 하나","say":"구멍 곁의 회색 옷 둘. 하나는 서서 팔을 들어 관을 불러들이고, 하나는 그 곁 바닥에 쓰러져 있다. 조세포 둘이 화학물질로 화분관을 유인한다. 관이 도착하면 조세포 하나가 죽고 그 자리가 정자 둘이 나올 통로가 된다.","box":[300,640,380,390],"src":["s34p03#2"],"cards":[]},{"obj":"이 방에서 붉은 옷은 딱 둘 — 하나는 문 쪽에 · 하나는 바구니 안에","fact":"정자 2 — 예비가 아니라 서로 다른 두 곳으로 간다","hook":"붉은 둘 = 두 행선지","say":"이 방에서 붉은 옷을 입은 사람은 딱 둘. 하나는 문 쪽에, 하나는 바구니 안에. 정자 둘. 예비가 아니라 서로 다른 두 곳으로 간다.","box":[[500,440,120,320],[790,660,150,200]],"src":["s34p03#3"],"cards":["P0-11"]},{"obj":"문 쪽 붉은 옷 하나가 가만히 선 청록 옷과 두 손을 맞잡았다","fact":"정자 n + 난세포 n → 접합자 2n → 배 · 난세포가 받는 정자는 하나뿐","hook":"붉은 + 청록 손잡기 = 2n","say":"문 쪽 붉은 옷 하나가 가만히 선 청록 옷과 두 손을 맞잡았다. 이 방에서 청록 옷은 이 여자 하나뿐. 정자 엔 더하기 난세포 엔은 접합자 이 엔, 배가 된다. 난세포가 받는 정자는 하나뿐. 청록은 이 덱에서 늘 난세포.","box":[490,430,210,360],"src":["s34p03#4"],"cards":["P0-11#1","M1-20","M1-20#1"]},{"obj":"바구니 안이 셋 — 겨자색 둘에 붉은 옷 하나가 들어가 앉았다","fact":"정자 n + 극핵 n + 극핵 n → 배젖 3n · 종자에서 3n은 배젖뿐","hook":"바구니 셋 = 3n","say":"바구니 안이 셋이 됐다. 겨자색 둘에 붉은 옷 하나가 들어가 앉았다. 겨자색 둘이 극핵. 정자 엔 더하기 극핵 엔 더하기 극핵 엔은 배젖 삼 엔. 종자에서 삼 엔인 것은 배젖 하나뿐.","box":[690,660,350,340],"src":["s34p03#5"],"cards":["P0-11#2","X-PL-1","M1-20","M1-20#2"]},{"obj":"먼 벽에 앉은 회색 옷 셋 — 아무것도 하지 않는다","fact":"수정에 참여하는 것은 난세포 + 극핵 2뿐 · 조세포 · 반족세포는 불참","hook":"회색은 구경꾼","say":"먼 벽에 앉은 회색 옷 셋은 아무것도 하지 않는다. 수정에 참여하는 것은 난세포와 극핵 둘뿐. 조세포도 반족세포도 참여하지 않는다.","box":[740,430,310,210],"src":["s34p03#6"],"cards":["S-PL-6"]},{"obj":"창고 왼쪽 — 두 겹 가죽으로 싸 끈으로 묶은 껍질 · 바깥 갈색 가죽이 젖혀져 밝은 속 가죽이 보인다","fact":"종자 = 밑씨가 통째로 자란 것 · 두 겹 = 종피(주피 2겹이 굳음 · 모체 2n)","hook":"두 겹 가죽 = 주피가 굳은 종피","say":"창고 왼쪽에 두 겹 가죽으로 싸서 끈으로 묶은 껍질. 꼭지 곁에서 바깥 갈색 가죽이 젖혀져 그 밑의 밝은 속 가죽이 보인다. 종자는 밑씨가 통째로 자란 것. 겉을 싼 두 겹이 종피, 아래층 방의 주피 두 겹이 그대로 굳은 것이라 모체의 몸, 이 엔.","box":[1170,260,230,400],"src":["s34p04#0"],"cards":["X-PL-7","M1-10","S-PL-8"]},{"obj":"갈라 놓은 껍질 안에 앉은 아이 — 청록 윗도리에 붉은 바지","fact":"배 — 청록(난세포) + 붉음(정자)이 한 몸 = 접합자 2n · 종자의 일부","hook":"청록 위 붉은 아래 = 둘이 한 몸","say":"갈라 놓은 껍질 안에 아이가 앉았다. 청록 윗도리에 붉은 바지. 배. 청록 난세포와 붉은 정자가 한 몸에 있는 것이 접합자 이 엔. 아이가 껍질 밖이 아니라 안에 있는 것이 배는 종자의 일부라는 뜻.","box":[1400,270,200,390],"src":["s34p04#1"],"cards":["M1-10"]},{"obj":"가운데 껍질 — 흰 떡 두 장 · 그 밖에는 텅 비었다","fact":"쌍자엽 — 자엽 2 · 배젖을 흡수해 자엽에 저장(콩)","hook":"떡 둘 · 자루 없음 = 쌍자엽","say":"가운데 껍질에는 흰 떡 두 장, 그 밖에는 텅 비었다. 쌍자엽 종자. 떡잎이 둘이고 배젖을 흡수해 자엽에 저장한다. 그래서 자루가 하나도 안 남았다. 콩.","box":[1610,270,200,390],"src":["s34p04#2"],"cards":["P0-14#1","X-PL-8","M1-25","M1-25#2"]},{"obj":"오른쪽 껍질 — 흰 떡 한 장 · 그 뒤로 겨자색 자루 셋이 껍질을 채운다","fact":"단자엽 — 자엽 1(배반) · 배젖을 그대로 남긴다(옥수수)","hook":"떡 하나 · 자루 셋 = 단자엽","say":"오른쪽 껍질에는 흰 떡 한 장, 그 뒤로 겨자색 자루 셋이 껍질을 채우고 있다. 단자엽 종자. 떡잎이 하나, 배반이고 배젖을 그대로 남긴다. 그래서 자루가 남아 있다. 옥수수.","box":[1820,270,200,390],"src":["s34p04#3"],"cards":["P0-14#2","P0-14","M1-25","M1-25#1"]},{"obj":"자루가 하나도 둘도 아니고 셋인 것","fact":"배젖 — 겨자색은 극핵의 색 · 셋 = n + n + n = 3n","hook":"겨자색 셋 = 3n 배젖","say":"자루가 하나도 둘도 아니고 셋. 배젖. 겨자색은 아래층 바구니 극핵에서 그대로 온 색이고, 셋인 것은 정자 엔 더하기 극핵 엔 더하기 극핵 엔, 삼 엔이라서.","box":[1830,460,180,190],"src":["s34p04#4"],"cards":["M1-10","P0-13","S-PL-1"]},{"obj":"바닥 통의 물에 잠겨 부푼 껍질 — 아래로 굵은 뿌리 하나만 나왔고 위로는 아무것도 없다","fact":"발아 — 흡수로 부풀고 → 유근이 먼저 아래로 → 그 다음 떡잎","hook":"뿌리 먼저 · 위는 아직","say":"바닥 통의 물에 잠겨 부푼 껍질. 아래로 굵은 뿌리 하나만 나왔고 위로는 아무것도 없다. 발아. 흡수로 부풀고, 유근이 먼저 아래로, 그 다음 떡잎. 위가 비어 있는 것이 곧 순서.","box":[1580,780,400,340],"src":["s34p04#5"],"cards":["P0-15","P0-15#1","P0-15#2","P0-15#3"]}],"hubPanel":"s34p03"};
+const L = {"id":"L34b","scene":"s34","part":"b","title":"관이 닿은 방과 종자 창고 — 중복수정 · 종자의 셋 · 발아","sub":"네모 구멍(주공) · 접시 위 알갱이(수분) · 부르는 회색 + 쓰러진 회색(조세포) · 붉은 둘의 두 행선지(난세포 손잡기 2n · 바구니 셋 3n) · 두 겹 가죽(종피) · 청록 + 붉은 아이(배) · 떡 둘(쌍자엽) · 떡 하나 + 자루 셋(단자엽 · 배젖 3n) · 물통의 뿌리 하나(발아)","img":"img/L34b.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"왼쪽 — 배낭 방에 관이 닿았다 · 오른쪽 — 종자 창고","fact":"수정 → 종자: 왼쪽 방의 붉은 둘이 어디로 가는가 · 오른쪽 껍질 속의 셋","hook":"관이 닿은 방 · 갈라 본 껍질","say":"왼쪽은 아래층 배낭 방에 위층의 관이 내려와 닿은 뒤다. 오른쪽은 수정이 끝난 밑씨가 자란 종자 창고. 왼쪽에서는 붉은 옷 둘이 서로 다른 두 곳으로 가고, 오른쪽에서는 껍질을 갈라 보면 셋이다.","box":null,"src":["s34p03#3"],"cards":["P0-11"]},{"sid":"s2","obj":"벽을 가로질러 뚫린 네모난 구멍 하나 — 관이 그리로 들어온다","fact":"화분관은 주피를 뚫지 않고 이미 나 있는 주공으로 들어온다","hook":"구멍으로 들어오지 뚫지 않는다","say":"벽을 가로질러 네모난 구멍이 하나 뚫렸고 관이 그리로 들어온다. 화분관은 주피를 뚫고 들어오는 게 아니라 이미 나 있는 주공으로 들어온다. 아래층에서 좌표축이 되었던 그 문.","box":[180,430,280,190],"src":["s34p03#0"],"cards":[]},{"sid":"s3","obj":"관 바깥 끝 — 얕은 접시 위에 앉은 오톨도톨한 알갱이","fact":"수분 = 화분립이 암술머리에 닿는 것까지 · 관은 거기서 자라 내려온다(수분 ≠ 수정)","hook":"접시 위 알갱이 = 수분","say":"관의 바깥 끝, 얕은 접시 위에 오톨도톨한 알갱이가 앉아 있다. 수분은 화분립이 암술머리에 닿는 것까지. 화분관은 거기서 자라 나와 암술대를 지나 내려온다. 수분과 수정은 다른 사건.","box":[10,530,180,130],"src":["s34p03#1"],"cards":["P0-10","M1-8","M1-18#3"]},{"sid":"s4","obj":"구멍 곁의 회색 옷 둘 — 하나는 서서 팔을 들어 관을 불러들이고 · 하나는 바닥에 쓰러져 있다","fact":"조세포 2가 화학물질로 관을 유인 · 관이 닿으면 하나가 죽어 정자의 통로가 된다","hook":"부르는 하나 · 쓰러진 하나","say":"구멍 곁의 회색 옷 둘. 하나는 서서 팔을 들어 관을 불러들이고, 하나는 그 곁 바닥에 쓰러져 있다. 조세포 둘이 화학물질로 화분관을 유인한다. 관이 도착하면 조세포 하나가 죽고 그 자리가 정자 둘이 나올 통로가 된다.","box":[300,640,380,390],"src":["s34p03#2"],"cards":[]},{"sid":"s5","obj":"이 방에서 붉은 옷은 딱 둘 — 하나는 문 쪽에 · 하나는 바구니 안에","fact":"정자 2 — 예비가 아니라 서로 다른 두 곳으로 간다","hook":"붉은 둘 = 두 행선지","say":"이 방에서 붉은 옷을 입은 사람은 딱 둘. 하나는 문 쪽에, 하나는 바구니 안에. 정자 둘. 예비가 아니라 서로 다른 두 곳으로 간다.","box":[[500,440,120,320],[790,660,150,200]],"src":["s34p03#3"],"cards":["P0-11"]},{"sid":"s6","obj":"문 쪽 붉은 옷 하나가 가만히 선 청록 옷과 두 손을 맞잡았다","fact":"정자 n + 난세포 n → 접합자 2n → 배 · 난세포가 받는 정자는 하나뿐","hook":"붉은 + 청록 손잡기 = 2n","say":"문 쪽 붉은 옷 하나가 가만히 선 청록 옷과 두 손을 맞잡았다. 이 방에서 청록 옷은 이 여자 하나뿐. 정자 엔 더하기 난세포 엔은 접합자 이 엔, 배가 된다. 난세포가 받는 정자는 하나뿐. 청록은 이 덱에서 늘 난세포.","box":[490,430,210,360],"src":["s34p03#4"],"cards":["P0-11#1","M1-20","M1-20#1"]},{"sid":"s7","obj":"바구니 안이 셋 — 겨자색 둘에 붉은 옷 하나가 들어가 앉았다","fact":"정자 n + 극핵 n + 극핵 n → 배젖 3n · 종자에서 3n은 배젖뿐","hook":"바구니 셋 = 3n","say":"바구니 안이 셋이 됐다. 겨자색 둘에 붉은 옷 하나가 들어가 앉았다. 겨자색 둘이 극핵. 정자 엔 더하기 극핵 엔 더하기 극핵 엔은 배젖 삼 엔. 종자에서 삼 엔인 것은 배젖 하나뿐.","box":[690,660,350,340],"src":["s34p03#5"],"cards":["P0-11#2","X-PL-1","M1-20","M1-20#2"]},{"sid":"s8","obj":"먼 벽에 앉은 회색 옷 셋 — 아무것도 하지 않는다","fact":"수정에 참여하는 것은 난세포 + 극핵 2뿐 · 조세포 · 반족세포는 불참","hook":"회색은 구경꾼","say":"먼 벽에 앉은 회색 옷 셋은 아무것도 하지 않는다. 수정에 참여하는 것은 난세포와 극핵 둘뿐. 조세포도 반족세포도 참여하지 않는다.","box":[740,430,310,210],"src":["s34p03#6"],"cards":["S-PL-6"]},{"sid":"s9","obj":"창고 왼쪽 — 두 겹 가죽으로 싸 끈으로 묶은 껍질 · 바깥 갈색 가죽이 젖혀져 밝은 속 가죽이 보인다","fact":"종자 = 밑씨가 통째로 자란 것 · 두 겹 = 종피(주피 2겹이 굳음 · 모체 2n)","hook":"두 겹 가죽 = 주피가 굳은 종피","say":"창고 왼쪽에 두 겹 가죽으로 싸서 끈으로 묶은 껍질. 꼭지 곁에서 바깥 갈색 가죽이 젖혀져 그 밑의 밝은 속 가죽이 보인다. 종자는 밑씨가 통째로 자란 것. 겉을 싼 두 겹이 종피, 아래층 방의 주피 두 겹이 그대로 굳은 것이라 모체의 몸, 이 엔.","box":[1170,260,230,400],"src":["s34p04#0"],"cards":["X-PL-7","M1-10","S-PL-8"]},{"sid":"s10","obj":"갈라 놓은 껍질 안에 앉은 아이 — 청록 윗도리에 붉은 바지","fact":"배 — 청록(난세포) + 붉음(정자)이 한 몸 = 접합자 2n · 종자의 일부","hook":"청록 위 붉은 아래 = 둘이 한 몸","say":"갈라 놓은 껍질 안에 아이가 앉았다. 청록 윗도리에 붉은 바지. 배. 청록 난세포와 붉은 정자가 한 몸에 있는 것이 접합자 이 엔. 아이가 껍질 밖이 아니라 안에 있는 것이 배는 종자의 일부라는 뜻.","box":[1400,270,200,390],"src":["s34p04#1"],"cards":["M1-10"]},{"sid":"s11","obj":"가운데 껍질 — 흰 떡 두 장 · 그 밖에는 텅 비었다","fact":"쌍자엽 — 자엽 2 · 배젖을 흡수해 자엽에 저장(콩)","hook":"떡 둘 · 자루 없음 = 쌍자엽","say":"가운데 껍질에는 흰 떡 두 장, 그 밖에는 텅 비었다. 쌍자엽 종자. 떡잎이 둘이고 배젖을 흡수해 자엽에 저장한다. 그래서 자루가 하나도 안 남았다. 콩.","box":[1610,270,200,390],"src":["s34p04#2"],"cards":["P0-14#1","X-PL-8","M1-25","M1-25#2"]},{"sid":"s12","obj":"오른쪽 껍질 — 흰 떡 한 장 · 그 뒤로 겨자색 자루 셋이 껍질을 채운다","fact":"단자엽 — 자엽 1(배반) · 배젖을 그대로 남긴다(옥수수)","hook":"떡 하나 · 자루 셋 = 단자엽","say":"오른쪽 껍질에는 흰 떡 한 장, 그 뒤로 겨자색 자루 셋이 껍질을 채우고 있다. 단자엽 종자. 떡잎이 하나, 배반이고 배젖을 그대로 남긴다. 그래서 자루가 남아 있다. 옥수수.","box":[1820,270,200,390],"src":["s34p04#3"],"cards":["P0-14#2","P0-14","M1-25","M1-25#1"]},{"sid":"s13","obj":"자루가 하나도 둘도 아니고 셋인 것","fact":"배젖 — 겨자색은 극핵의 색 · 셋 = n + n + n = 3n","hook":"겨자색 셋 = 3n 배젖","say":"자루가 하나도 둘도 아니고 셋. 배젖. 겨자색은 아래층 바구니 극핵에서 그대로 온 색이고, 셋인 것은 정자 엔 더하기 극핵 엔 더하기 극핵 엔, 삼 엔이라서.","box":[1830,460,180,190],"src":["s34p04#4"],"cards":["M1-10","P0-13","S-PL-1"]},{"sid":"s14","obj":"바닥 통의 물에 잠겨 부푼 껍질 — 아래로 굵은 뿌리 하나만 나왔고 위로는 아무것도 없다","fact":"발아 — 흡수로 부풀고 → 유근이 먼저 아래로 → 그 다음 떡잎","hook":"뿌리 먼저 · 위는 아직","say":"바닥 통의 물에 잠겨 부푼 껍질. 아래로 굵은 뿌리 하나만 나왔고 위로는 아무것도 없다. 발아. 흡수로 부풀고, 유근이 먼저 아래로, 그 다음 떡잎. 위가 비어 있는 것이 곧 순서.","box":[1580,780,400,340],"src":["s34p04#5"],"cards":["P0-15","P0-15#1","P0-15#2","P0-15#3"]}],"hubPanel":"s34p03"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
-let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
 const scoreKey = 'lesson_' + L.id;
-let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
 function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
 function draw() {
@@ -111,8 +129,16 @@ function showCap(k, judge) {
   if (voice) speak(st.say || (st.obj + '. ' + st.fact));
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
 function speak(t) {
+  t = ttsNorm(t);
   const my = ++speakSeq, at = i;
   const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
   if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
@@ -146,27 +172,45 @@ function setMode(m) {
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
   if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
-  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
   showScore();
 }
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
-  $('judge').style.display = 'flex';
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 function judge(ok) {
-  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
-  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
-  showScore(); quizNext();
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
 }
 function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
 function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
 function showScore() {
-  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
-  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
-  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
@@ -175,6 +219,9 @@ $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');

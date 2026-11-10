@@ -22,10 +22,12 @@ for (const id of ids) {
     if (s.box) for (const [x, y, w, h] of (Array.isArray(s.box[0]) ? s.box : [s.box])) { if (x < 0 || y < 0 || x + w > L.w || y + h > L.h) bad.push(`${k}: 상자가 그림 밖 ${[x, y, w, h]}`); }
     if ((s.fact || '').length > 60) bad.push(`${k}: 사실 ${s.fact.length}자 (> 60)`);
     if (!s.say) bad.push(`${k}: say 없음`);
+    if (!s.sid) bad.push(`${k}: sid 없음 — python3 tools/lesson_sid.py ${id}`);
     s.cards = [];
     for (const r of (s.src || [])) { try { s.cards.push(...(resolveRef(r, idx).row[2] || [])); } catch (e) { bad.push(`${k}: ${e.message}`); } }
     s.cards = [...new Set(s.cards)];
   });
+  { const sids = L.stops.map(s => s.sid); if (new Set(sids).size !== sids.length) bad.push('sid 가 겹친다'); }
   if (bad.length) { console.error(`[${id}] 검사 실패:\n  ` + bad.join('\n  ')); process.exitCode = 1; continue; }
   L.hubPanel = firstPanel(L);  // 「Sketchy 허브(옛 판)」 링크가 이 과의 첫 옛 판으로 간다
   const html = tpl.replace('__TITLE__', L.title.replace(/[<&]/g, '')).replace('__DATA__', JSON.stringify(L));

@@ -50,7 +50,8 @@
     <button id="bTour" class="on">투어</button>
     <button id="bRecap">되짚기</button>
     <button id="bReview">복습 — 그림만</button>
-    <button id="bQuiz">시험 — 순서대로</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
     <span class="score" id="score"></span>
   </div>
   <div class="stage" id="stage">
@@ -71,17 +72,34 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
 </div>
 <script>
-const L = {"id":"L45e","scene":"s45","part":"e","title":"헛도는 세 방과 피하는 두 길 — 광호흡 · C₄ · CAM","sub":"산소화 · 손해(ATP · 당) · 퍼옥시좀 · 미토콘드리아 CO₂ · PEP 카르복실화효소 · 유관속초세포 · 공간 분리 · CAM 밤/낮 · 시간 분리 · 언제 유리한가","img":"img/L45e.webp","w":2048,"h":1144,"stops":[{"obj":"통벽 문 너머 좁은 방 셋 · 마당 건너 땡볕 집과 밤낮 탑","fact":"광호흡은 세 소기관을 거친다 · C₄(공간) · CAM(시간)은 그것을 피하는 두 길","hook":"방 셋 = 소기관 셋 · 집 = 공간 · 탑 = 시간","say":"탄소 공방 옆, 통벽 문 너머 좁은 방 셋이 이어지고, 마당 건너 땡볕 아래 집 한 채와 밤낮 탑이 섰다. 방 셋이 광호흡이 거치는 소기관 셋. 집과 탑이 광호흡을 피하는 두 길, 씨포와 캠이다.","box":null,"src":["s45u01#10","s45u01#21"],"cards":["C0-193","C0-232","C0-233","C0-234","C0-243","C0-200","C0-230"]},{"obj":"첫 방 — 같은 스코프 발톱에 흰 방울이 긴 막대 끝에 붙음","fact":"루비스코가 CO₂ 대신 O₂를 붙인다 = 산소화(광호흡 첫 걸음) · O₂는 소모된다","hook":"같은 스코프 · 흰 방울 = O₂","say":"첫 방, 공방과 같은 연초록 벽. 같은 루비빛 스코프의 발톱이 이번엔 흰 방울을 긴 막대 끝에 붙였다. 흰 방울은 산소. 루비스코가 이산화탄소 대신 산소를 붙이는 산소화 반응, 광호흡의 첫 걸음이다. 한 효소가 두 길을 낸다. 산소는 만들어지는 게 아니라 쓰인다.","box":[0,460,300,420],"src":["s45u01#11","s45u01#15"],"cards":["C0-195","C0-197","C0-242"]},{"obj":"첫 방 벽의 쇠 동전 판 틈으로 금화가 떨어진다 · 바닥의 홀쭉한 찢긴 자루","fact":"손해 — ATP는 들어가기만 · 당을 도로 잃는다(순생산 ↓)","hook":"동전 틈(나오는 것 없음) · 새는 자루","say":"첫 방 벽에 박힌 쇠 동전 판 틈으로 금화가 떨어져 들어간다. 나오는 판은 없다. 바닥엔 옆구리가 찢겨 홀쭉하게 주저앉은 자루. 광호흡의 손해다. 에이티피는 들어가기만 하고, 만든 당을 도로 잃는다. 안 만드는 게 아니라 잃는 것.","box":[[0,480,120,160],[0,860,200,284]],"src":["s45u01#12"],"cards":["C0-192","C0-198"]},{"obj":"가운데 방 — 거품 통에 걸친 퍼내는 국자","fact":"퍼옥시좀 — H₂O₂가 생기고 치워지는 곳","hook":"퍼내는 국자 = 퍼옥시좀 · 거품 = 과산화수소","say":"가운데 방에는 나무 통에 고운 흰 거품이 소복하고, 통 테에 걸친 국자가 거품을 퍼낸다. 거품이 과산화수소. 생기는 곳도 치우는 곳도 퍼옥시좀. 퍼내는 국자가 이름이다.","box":[300,600,280,460],"src":["s45u01#13"],"cards":["C0-194"]},{"obj":"셋째 방 — 주름 난로 굴뚝에서 어두운 방울이 빠져나간다","fact":"미토콘드리아에서 CO₂ 방출 — 들어오면 고정, 나가면 광호흡","hook":"주름 겹겹 = 미토콘드리아 · 굴뚝의 어두운 방울 = CO₂ 나감","say":"셋째 방, 불 없는 무쇠 난로가 주름 겹겹으로 접혔다. 주름은 미토콘드리아. 굴뚝 꼭대기에서 어두운 방울 하나가 연기 꼬리를 달고 지붕 위로 빠진다. 이산화탄소가 방출된다. 어두운 방울이 들어오면 탄소고정, 나가면 광호흡. 방향 하나가 뒤집힌다.","box":[[600,300,260,780],[600,20,140,160]],"src":["s45u01#14"],"cards":["C0-196"]},{"obj":"땡볕 집 바깥 방 — 땀 흘리는 사람의 빨간 말굽 자석이 어두운 방울을 짧은 막대에 붙이고 흰 방울은 튕긴다","fact":"C₄ 첫 고정 = 엽육세포 · PEP 카르복실화효소(O₂ 무반응 · CO₂ 친화 ↑) → 4탄","hook":"빨간 자석 = PEP 카르복실화효소 · 셋 + 방울 = 4탄","say":"땡볕 아래 집의 잎살 무늬 바깥 방. 땀 흘리는 사람이 빨간 말굽 자석으로 어두운 방울을 마디 셋 짧은 막대 끝에 붙인다. 흰 방울은 자석에 튕겨 나간다. 피이피 카르복실화효소다. 산소와는 반응하지 않고 이산화탄소 친화도가 높다. 삼탄 피이피에 이산화탄소가 붙어 사탄 옥살아세트산. 첫 산물이 사탄이라 씨포. 이 첫 고정은 엽육세포에서.","box":[860,380,340,660],"src":["s45u01#16"],"cards":["C0-201","C0-203","C0-204","C0-205","C0-206","C0-207"]},{"obj":"집 가운데 두꺼운 흰 벽의 작은 방이 관 다발을 칼집처럼 감쌈 · 어두운 방울로 그득 · 그 방에만 스코프","fact":"유관속초세포 — 루비스코 · 캘빈은 여기만 · 4탄이 CO₂를 놓아 농도 ↑ → 광호흡 ↓","hook":"관다발을 감싼 칼집(鞘) = 유관속초 · 방울 그득 = 농도 싸움에서 이김","say":"집 가운데 두꺼운 흰 벽의 작은 방이 띠로 묶은 곧은 관 다발을 칼집처럼 감쌌다. 유관속초세포. 초는 칼집. 루비스코와 캘빈 회로는 이 방에만 있다. 방 안은 어두운 방울로 그득하다. 날라 온 사탄이 이산화탄소를 도로 놓으니 농도가 높아지고, 루비스코가 산소를 잡을 일이 준다. 산소가 못 드는 게 아니라 농도 싸움에서 이기는 것.","box":[1100,420,420,580],"src":["s45u01#17"],"cards":["C0-208","C0-212","C0-218","C0-214"]},{"obj":"들창으로 끝 마디 방울빛 막대가 들어가고 · 바닥엔 맨 막대에 금화","fact":"공간적 분리 — 막대가 들창(원형질연락사)을 오가는 CO₂ 펌프 · 값 = ATP(피루브산 → PEP)","hook":"들창 = 원형질연락사 · 맨 막대 + 금화 = 되살리는 값","say":"안쪽 방 벽의 들창으로 끝 마디가 방울빛인 막대가 들어가고, 바닥엔 방울을 놓고 나온 맨 막대에 금화가 박혔다. 탄소고정과 캘빈을 다른 세포에서 하는 공간적 분리. 막대가 들창, 원형질연락사를 오가며 이산화탄소를 안쪽 방으로 퍼 나르는 펌프다. 값이 있다. 방울을 놓은 맨 막대, 피루브산이 금화를 먹고 피이피로 되살아난다. 에이티피가 더 든다.","box":[[1070,640,100,120],[1200,1000,260,80]],"src":["s45u01#18"],"cards":["C0-211","C0-213","C0-215","C0-216","C0-217","C0-210"]},{"obj":"탑 위층 — 초승달 창 곁 통통한 콩팥 둘 틈으로 어두운 방울 · 같은 자석 · 막대 든 항아리","fact":"CAM은 밤에 기공을 열어 CO₂를 4탄(말산)으로 액포에 담는다","hook":"초승달 = 밤 · 콩팥 둘 벌어짐 = 기공 열림 · 항아리 = 액포","say":"밤낮 탑 위층. 초승달 뜬 창 곁에 콩팥 모양 둘이 통통히 부풀어 틈이 벌어졌고 그 틈으로 어두운 방울이 든다. 공변세포, 기공이 밤에 열린다. 서늘한 밤에 열어야 물을 덜 잃는다. 무릎 꿇은 사람이 같은 빨간 자석으로 방울을 막대에 붙여 항아리에 담는다. 캠은 밤에 이산화탄소를 사탄 말산으로 만들어 액포에 담아 둔다.","box":[1560,160,480,500],"src":["s45u01#19"],"cards":["C0-220","C0-223","C0-225","C0-226#1","C0-226#2","C0-226#3","C0-227","C0-236"]},{"obj":"탑 아래층 — 해 창 곁 홀쭉한 콩팥 둘 맞붙음 · 쓰러진 항아리에서 풀려난 방울이 스코프로","fact":"낮엔 기공을 닫고(물 지킴) · 담아 둔 유기산의 CO₂로 캘빈을 돌린다","hook":"해 = 낮 · 맞붙음 = 닫힘 · 항아리를 쏟음","say":"사다리로 내려간 아래층. 둥근 해 뜬 창 곁의 콩팥 둘은 홀쭉해져 틈 없이 맞붙었다. 낮에는 기공을 닫아 물을 지킨다. 닫아도 굶지 않는 것은 쓰러진 항아리에서 막대의 방울이 풀려나 스코프로 가기 때문. 밤에 담아 둔 유기산에서 나온 이산화탄소로 낮에 캘빈이 돈다.","box":[1560,680,480,420],"src":["s45u01#20"],"cards":["C0-224","C0-228","C0-229","C0-231"]},{"obj":"집은 벽으로 · 탑은 층으로 갈랐다 — 같은 빨간 자석","fact":"C₄ = 공간 · CAM = 시간 분리 · 둘 다 PEP 카르복실화효소로 먼저 잡아 루비스코 곁 CO₂ ↑","hook":"벽 vs 층 · 자석은 같다","say":"집은 벽으로, 방 속의 방으로 갈랐고 탑은 위아래 층, 달과 해로 갈랐다. 씨포는 공간적 분리, 캠은 시간적 분리. 닮은 것은 둘 다 같은 빨간 자석, 피이피 카르복실화효소로 먼저 사탄에 붙잡아 루비스코 곁의 이산화탄소를 높인다는 것. 기출은 이 둘을 바꿔 낸다.","box":[[860,380,660,620],[1560,160,480,940]],"src":["s45u01#21"],"cards":["C0-232","C0-233","C0-234","C0-243","C0-200","C0-230"]},{"obj":"땡볕 · 땀 — 집과 탑은 마당 건너 더운 쪽에","fact":"덥고 건조하고 밝을 때 광호흡 ↑(기공 닫힘 → CO₂ ↓ · O₂ ↑) → C₄ · CAM이 유리","hook":"옥수수 · 사탕수수(C₄) vs 선인장 · 파인애플(CAM)","say":"집과 탑은 마당 건너 땡볕 쪽에 있고 사람들은 땀을 흘린다. 덥고 건조하고 밝을 때 기공이 닫혀 잎 속 이산화탄소가 줄고 산소가 늘어 광호흡이 는다. 그때 씨포와 캠이 유리하다. 옥수수와 사탕수수가 씨포, 선인장과 파인애플이 캠.","box":[[1240,0,340,240],[850,80,240,160]],"src":[],"cards":[]}],"hubPanel":"s45u01"};
+const L = {"id":"L45e","scene":"s45","part":"e","title":"헛도는 세 방과 피하는 두 길 — 광호흡 · C₄ · CAM","sub":"산소화 · 손해(ATP · 당) · 퍼옥시좀 · 미토콘드리아 CO₂ · PEP 카르복실화효소 · 유관속초세포 · 공간 분리 · CAM 밤/낮 · 시간 분리 · 언제 유리한가","img":"img/L45e.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"통벽 문 너머 좁은 방 셋 · 마당 건너 땡볕 집과 밤낮 탑","fact":"광호흡은 세 소기관을 거친다 · C₄(공간) · CAM(시간)은 그것을 피하는 두 길","hook":"방 셋 = 소기관 셋 · 집 = 공간 · 탑 = 시간","say":"탄소 공방 옆, 통벽 문 너머 좁은 방 셋이 이어지고, 마당 건너 땡볕 아래 집 한 채와 밤낮 탑이 섰다. 방 셋이 광호흡이 거치는 소기관 셋. 집과 탑이 광호흡을 피하는 두 길, 씨포와 캠이다.","box":null,"src":["s45u01#10","s45u01#21"],"cards":["C0-193","C0-232","C0-233","C0-234","C0-243","C0-200","C0-230"]},{"sid":"s2","obj":"첫 방 — 같은 스코프 발톱에 흰 방울이 긴 막대 끝에 붙음","fact":"루비스코가 CO₂ 대신 O₂를 붙인다 = 산소화(광호흡 첫 걸음) · O₂는 소모된다","hook":"같은 스코프 · 흰 방울 = O₂","say":"첫 방, 공방과 같은 연초록 벽. 같은 루비빛 스코프의 발톱이 이번엔 흰 방울을 긴 막대 끝에 붙였다. 흰 방울은 산소. 루비스코가 이산화탄소 대신 산소를 붙이는 산소화 반응, 광호흡의 첫 걸음이다. 한 효소가 두 길을 낸다. 산소는 만들어지는 게 아니라 쓰인다.","box":[0,460,300,420],"src":["s45u01#11","s45u01#15"],"cards":["C0-195","C0-197","C0-242"]},{"sid":"s3","obj":"첫 방 벽의 쇠 동전 판 틈으로 금화가 떨어진다 · 바닥의 홀쭉한 찢긴 자루","fact":"손해 — ATP는 들어가기만 · 당을 도로 잃는다(순생산 ↓)","hook":"동전 틈(나오는 것 없음) · 새는 자루","say":"첫 방 벽에 박힌 쇠 동전 판 틈으로 금화가 떨어져 들어간다. 나오는 판은 없다. 바닥엔 옆구리가 찢겨 홀쭉하게 주저앉은 자루. 광호흡의 손해다. 에이티피는 들어가기만 하고, 만든 당을 도로 잃는다. 안 만드는 게 아니라 잃는 것.","box":[[0,480,120,160],[0,860,200,284]],"src":["s45u01#12"],"cards":["C0-192","C0-198"]},{"sid":"s4","obj":"가운데 방 — 거품 통에 걸친 퍼내는 국자","fact":"퍼옥시좀 — H₂O₂가 생기고 치워지는 곳","hook":"퍼내는 국자 = 퍼옥시좀 · 거품 = 과산화수소","say":"가운데 방에는 나무 통에 고운 흰 거품이 소복하고, 통 테에 걸친 국자가 거품을 퍼낸다. 거품이 과산화수소. 생기는 곳도 치우는 곳도 퍼옥시좀. 퍼내는 국자가 이름이다.","box":[300,600,280,460],"src":["s45u01#13"],"cards":["C0-194"]},{"sid":"s5","obj":"셋째 방 — 주름 난로 굴뚝에서 어두운 방울이 빠져나간다","fact":"미토콘드리아에서 CO₂ 방출 — 들어오면 고정, 나가면 광호흡","hook":"주름 겹겹 = 미토콘드리아 · 굴뚝의 어두운 방울 = CO₂ 나감","say":"셋째 방, 불 없는 무쇠 난로가 주름 겹겹으로 접혔다. 주름은 미토콘드리아. 굴뚝 꼭대기에서 어두운 방울 하나가 연기 꼬리를 달고 지붕 위로 빠진다. 이산화탄소가 방출된다. 어두운 방울이 들어오면 탄소고정, 나가면 광호흡. 방향 하나가 뒤집힌다.","box":[[600,300,260,780],[600,20,140,160]],"src":["s45u01#14"],"cards":["C0-196"]},{"sid":"s6","obj":"땡볕 집 바깥 방 — 땀 흘리는 사람의 빨간 말굽 자석이 어두운 방울을 짧은 막대에 붙이고 흰 방울은 튕긴다","fact":"C₄ 첫 고정 = 엽육세포 · PEP 카르복실화효소(O₂ 무반응 · CO₂ 친화 ↑) → 4탄","hook":"빨간 자석 = PEP 카르복실화효소 · 셋 + 방울 = 4탄","say":"땡볕 아래 집의 잎살 무늬 바깥 방. 땀 흘리는 사람이 빨간 말굽 자석으로 어두운 방울을 마디 셋 짧은 막대 끝에 붙인다. 흰 방울은 자석에 튕겨 나간다. 피이피 카르복실화효소다. 산소와는 반응하지 않고 이산화탄소 친화도가 높다. 삼탄 피이피에 이산화탄소가 붙어 사탄 옥살아세트산. 첫 산물이 사탄이라 씨포. 이 첫 고정은 엽육세포에서.","box":[860,380,340,660],"src":["s45u01#16"],"cards":["C0-201","C0-203","C0-204","C0-205","C0-206","C0-207"]},{"sid":"s7","obj":"집 가운데 두꺼운 흰 벽의 작은 방이 관 다발을 칼집처럼 감쌈 · 어두운 방울로 그득 · 그 방에만 스코프","fact":"유관속초세포 — 루비스코 · 캘빈은 여기만 · 4탄이 CO₂를 놓아 농도 ↑ → 광호흡 ↓","hook":"관다발을 감싼 칼집(鞘) = 유관속초 · 방울 그득 = 농도 싸움에서 이김","say":"집 가운데 두꺼운 흰 벽의 작은 방이 띠로 묶은 곧은 관 다발을 칼집처럼 감쌌다. 유관속초세포. 초는 칼집. 루비스코와 캘빈 회로는 이 방에만 있다. 방 안은 어두운 방울로 그득하다. 날라 온 사탄이 이산화탄소를 도로 놓으니 농도가 높아지고, 루비스코가 산소를 잡을 일이 준다. 산소가 못 드는 게 아니라 농도 싸움에서 이기는 것.","box":[1100,420,420,580],"src":["s45u01#17"],"cards":["C0-208","C0-212","C0-218","C0-214"]},{"sid":"s8","obj":"들창으로 끝 마디 방울빛 막대가 들어가고 · 바닥엔 맨 막대에 금화","fact":"공간적 분리 — 막대가 들창(원형질연락사)을 오가는 CO₂ 펌프 · 값 = ATP(피루브산 → PEP)","hook":"들창 = 원형질연락사 · 맨 막대 + 금화 = 되살리는 값","say":"안쪽 방 벽의 들창으로 끝 마디가 방울빛인 막대가 들어가고, 바닥엔 방울을 놓고 나온 맨 막대에 금화가 박혔다. 탄소고정과 캘빈을 다른 세포에서 하는 공간적 분리. 막대가 들창, 원형질연락사를 오가며 이산화탄소를 안쪽 방으로 퍼 나르는 펌프다. 값이 있다. 방울을 놓은 맨 막대, 피루브산이 금화를 먹고 피이피로 되살아난다. 에이티피가 더 든다.","box":[[1070,640,100,120],[1200,1000,260,80]],"src":["s45u01#18"],"cards":["C0-211","C0-213","C0-215","C0-216","C0-217","C0-210"]},{"sid":"s9","obj":"탑 위층 — 초승달 창 곁 통통한 콩팥 둘 틈으로 어두운 방울 · 같은 자석 · 막대 든 항아리","fact":"CAM은 밤에 기공을 열어 CO₂를 4탄(말산)으로 액포에 담는다","hook":"초승달 = 밤 · 콩팥 둘 벌어짐 = 기공 열림 · 항아리 = 액포","say":"밤낮 탑 위층. 초승달 뜬 창 곁에 콩팥 모양 둘이 통통히 부풀어 틈이 벌어졌고 그 틈으로 어두운 방울이 든다. 공변세포, 기공이 밤에 열린다. 서늘한 밤에 열어야 물을 덜 잃는다. 무릎 꿇은 사람이 같은 빨간 자석으로 방울을 막대에 붙여 항아리에 담는다. 캠은 밤에 이산화탄소를 사탄 말산으로 만들어 액포에 담아 둔다.","box":[1560,160,480,500],"src":["s45u01#19"],"cards":["C0-220","C0-223","C0-225","C0-226#1","C0-226#2","C0-226#3","C0-227","C0-236"]},{"sid":"s10","obj":"탑 아래층 — 해 창 곁 홀쭉한 콩팥 둘 맞붙음 · 쓰러진 항아리에서 풀려난 방울이 스코프로","fact":"낮엔 기공을 닫고(물 지킴) · 담아 둔 유기산의 CO₂로 캘빈을 돌린다","hook":"해 = 낮 · 맞붙음 = 닫힘 · 항아리를 쏟음","say":"사다리로 내려간 아래층. 둥근 해 뜬 창 곁의 콩팥 둘은 홀쭉해져 틈 없이 맞붙었다. 낮에는 기공을 닫아 물을 지킨다. 닫아도 굶지 않는 것은 쓰러진 항아리에서 막대의 방울이 풀려나 스코프로 가기 때문. 밤에 담아 둔 유기산에서 나온 이산화탄소로 낮에 캘빈이 돈다.","box":[1560,680,480,420],"src":["s45u01#20"],"cards":["C0-224","C0-228","C0-229","C0-231"]},{"sid":"s11","obj":"집은 벽으로 · 탑은 층으로 갈랐다 — 같은 빨간 자석","fact":"C₄ = 공간 · CAM = 시간 분리 · 둘 다 PEP 카르복실화효소로 먼저 잡아 루비스코 곁 CO₂ ↑","hook":"벽 vs 층 · 자석은 같다","say":"집은 벽으로, 방 속의 방으로 갈랐고 탑은 위아래 층, 달과 해로 갈랐다. 씨포는 공간적 분리, 캠은 시간적 분리. 닮은 것은 둘 다 같은 빨간 자석, 피이피 카르복실화효소로 먼저 사탄에 붙잡아 루비스코 곁의 이산화탄소를 높인다는 것. 기출은 이 둘을 바꿔 낸다.","box":[[860,380,660,620],[1560,160,480,940]],"src":["s45u01#21"],"cards":["C0-232","C0-233","C0-234","C0-243","C0-200","C0-230"]},{"sid":"s12","obj":"땡볕 · 땀 — 집과 탑은 마당 건너 더운 쪽에","fact":"덥고 건조하고 밝을 때 광호흡 ↑(기공 닫힘 → CO₂ ↓ · O₂ ↑) → C₄ · CAM이 유리","hook":"옥수수 · 사탕수수(C₄) vs 선인장 · 파인애플(CAM)","say":"집과 탑은 마당 건너 땡볕 쪽에 있고 사람들은 땀을 흘린다. 덥고 건조하고 밝을 때 기공이 닫혀 잎 속 이산화탄소가 줄고 산소가 늘어 광호흡이 는다. 그때 씨포와 캠이 유리하다. 옥수수와 사탕수수가 씨포, 선인장과 파인애플이 캠.","box":[[1240,0,340,240],[850,80,240,160]],"src":[],"cards":[]}],"hubPanel":"s45u01"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
-let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
 const scoreKey = 'lesson_' + L.id;
-let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
 function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
 function draw() {
@@ -111,8 +129,16 @@ function showCap(k, judge) {
   if (voice) speak(st.say || (st.obj + '. ' + st.fact));
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
 function speak(t) {
+  t = ttsNorm(t);
   const my = ++speakSeq, at = i;
   const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
   if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
@@ -146,27 +172,45 @@ function setMode(m) {
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
   if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
-  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
   showScore();
 }
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
-  $('judge').style.display = 'flex';
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 function judge(ok) {
-  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
-  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
-  showScore(); quizNext();
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
 }
 function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
 function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
 function showScore() {
-  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
-  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
-  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
@@ -175,6 +219,9 @@ $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');

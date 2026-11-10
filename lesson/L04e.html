@@ -50,7 +50,8 @@
     <button id="bTour" class="on">투어</button>
     <button id="bRecap">되짚기</button>
     <button id="bReview">복습 — 그림만</button>
-    <button id="bQuiz">시험 — 순서대로</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
     <span class="score" id="score"></span>
   </div>
   <div class="stage" id="stage">
@@ -71,17 +72,34 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
 </div>
 <script>
-const L = {"id":"L04e","scene":"s04","part":"e","title":"후구 구역 — 앞벽 막힌 넷째 가게","sub":"달팽이 · 지렁이 · 게 간판 세 가게는 앞문으로 곧장(선구) · 앞벽이 벽돌로 막혀 옆문으로 도는 넷째 가게(후구) · 별 간판(극피 5방사) · 액자 속 좌우대칭 유생 · 천장 수도 본관(수관계) · 등의 곧은 막대(척삭)","img":"img/L04e.webp","w":2048,"h":1144,"stops":[{"obj":"부두 거리의 가게 넷 — 셋은 손님이 앞문으로 · 넷째는 앞벽이 막혀 옆으로 돈다","fact":"원구가 입이 되면 선구 · 항문이 되면 후구 — 예외는 정상 곁에서 읽힌다","hook":"앞문 셋 · 옆문 하나","say":"부두 거리에 가게가 넷 줄지었다. 셋은 손님이 앞문으로 곧장 들어가고, 하나만 앞벽이 막혀 옆으로 돌아 들어간다. 처음 뚫린 문, 원구가 입이 되면 선구, 항문이 되면 후구. 예외는 정상 사례가 옆에 있어야 예외로 읽힌다.","box":null,"src":["s04p05#0","s04p05#1"],"cards":["X-AN-6","N0-20","N0-20#1","N0-21","N0-21#1","X-AN-3","N0-20#2","N0-25#1","X-AN-1","X-AN-4"]},{"obj":"간판이 달팽이 · 지렁이 · 게인 세 가게 — 손님이 앞문으로 곧장 들어간다","fact":"선구동물 — 원구가 입 · 연체 · 환형 · 절지 전부 선구","hook":"세 간판 = 답 · 앞문 = 먼저 뚫린 문이 입","say":"간판이 달팽이, 지렁이, 게인 세 가게. 손님이 앞문으로 곧장 들어간다. 맨 처음 뚫린 그 문이 그대로 입, 선구. 달팽이는 연체, 지렁이는 환형, 게는 절지. 세 간판이 곧 답이다. 연체, 환형, 절지는 전부 선구동물.","box":[110,80,1100,920],"src":["s04p05#0"],"cards":["X-AN-6","N0-20","N0-20#1","N0-21","N0-21#1","X-AN-3"]},{"obj":"앞벽이 벽돌로 막혀 옆으로 돌아 들어가는 넷째 가게","fact":"후구동물 — 원구가 항문이 되고 입은 나중에 뚫린다","hook":"막힌 앞벽 = 원구는 항문 · 옆문 = 나중 입","say":"넷째 가게는 앞벽이 벽돌로 막혔다. 손님이 옆으로 돌아 들어간다. 처음 뚫린 앞 자리는 입이 못 되고 그 자리가 항문이 된다. 나중에 뚫은 옆문이 입. 후구동물.","box":[[1200,480,420,520],[1700,560,140,380]],"src":["s04p05#1"],"cards":["N0-20#2","N0-25#1","X-AN-1","X-AN-4"]},{"obj":"꼭짓점 다섯인 별 간판 — 바로 그 넷째 가게에 걸렸다","fact":"극피 — 성체 5방사 · 후구(무척추라고 선구로 고르면 틀림)","hook":"별 = 극피 · 별이 걸린 가게가 옆문 가게","say":"그 넷째 가게에 걸린 간판은 꼭짓점이 다섯인 별. 극피동물, 성체는 오방사 대칭. 별과 옆문이 같은 가게에 걸려 있는 것이 요점. 극피동물은 후구동물이고, 무척추동물이라는 이유로 선구로 고르면 틀린다.","box":[1310,260,230,240],"src":["s04p05#2"],"cards":["X-AN-2","N0-21#2","N1-29#2"]},{"obj":"넷째 가게의 벽돌 앞벽에 걸린 액자 — 좌우대칭 유생","fact":"극피 유생은 좌우대칭","hook":"액자 속 어린 모습은 좌우대칭","say":"넷째 가게의 벽돌 앞벽에 액자가 걸렸고 액자 속은 왼쪽 오른쪽이 거울처럼 같은 좌우대칭 벌레 꼴 유생이다. 극피동물의 유생은 좌우대칭. 별은 어른이 되어 얻는 모양.","box":[1310,610,230,240],"src":["s04p05#3"],"cards":["N1-29","N1-29#1","X-AN-11"]},{"obj":"넷째 가게 처마를 따라 난 수도 본관 — 나팔처럼 벌어진 입들과 붉은 밸브","fact":"수관계 — 물이 찬 관과 관족","hook":"수도 본관 = 수관계 · 나팔 입 = 관족","say":"넷째 가게 처마를 따라 수도 본관이 지나고, 거기 나팔처럼 벌어진 입들이 아래로 달렸고 붉은 밸브가 있다. 수관계. 물이 찬 관과 관족. 극피동물이 움직이고 먹는 장치.","box":[1200,20,690,350],"src":["s04p05#4"],"cards":["N1-30","S-AN-7"]},{"obj":"넷째 가게 곁에 선 사람 — 등에 긴 곧은 막대를 졌다","fact":"척삭 — 후구는 극피와 척삭뿐","hook":"등의 곧은 막대 = 척삭","say":"넷째 가게 곁에 선 사람은 등에 긴 곧은 막대를 졌다. 척삭. 등을 따라 난 속이 찬 막대. 후구동물은 별 간판의 극피와 척삭, 둘뿐이다. 척삭 상회는 다음 과.","box":[1860,580,188,500],"src":["s04p05#5"],"cards":[]},{"obj":"넷째 가게의 벽돌 앞벽과 별 간판이 한 가게에","fact":"극피동물 = 후구동물 — 별과 옆문이 같은 가게","hook":"별 + 막힌 앞벽 = 한 집","say":"다시 넷째 가게. 벽돌로 막힌 앞벽과 별 간판이 한 가게에 있다. 극피동물이 후구동물. 선구 셋 곁의 예외 하나.","box":[[1200,480,420,520],[1310,260,230,240]],"src":["s04p05#2"],"cards":["X-AN-2","N0-21#2","N1-29#2"]}],"hubPanel":"s04p05"};
+const L = {"id":"L04e","scene":"s04","part":"e","title":"후구 구역 — 앞벽 막힌 넷째 가게","sub":"달팽이 · 지렁이 · 게 간판 세 가게는 앞문으로 곧장(선구) · 앞벽이 벽돌로 막혀 옆문으로 도는 넷째 가게(후구) · 별 간판(극피 5방사) · 액자 속 좌우대칭 유생 · 천장 수도 본관(수관계) · 등의 곧은 막대(척삭)","img":"img/L04e.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"부두 거리의 가게 넷 — 셋은 손님이 앞문으로 · 넷째는 앞벽이 막혀 옆으로 돈다","fact":"원구가 입이 되면 선구 · 항문이 되면 후구 — 예외는 정상 곁에서 읽힌다","hook":"앞문 셋 · 옆문 하나","say":"부두 거리에 가게가 넷 줄지었다. 셋은 손님이 앞문으로 곧장 들어가고, 하나만 앞벽이 막혀 옆으로 돌아 들어간다. 처음 뚫린 문, 원구가 입이 되면 선구, 항문이 되면 후구. 예외는 정상 사례가 옆에 있어야 예외로 읽힌다.","box":null,"src":["s04p05#0","s04p05#1"],"cards":["X-AN-6","N0-20","N0-20#1","N0-21","N0-21#1","X-AN-3","N0-20#2","N0-25#1","X-AN-1","X-AN-4"]},{"sid":"s2","obj":"간판이 달팽이 · 지렁이 · 게인 세 가게 — 손님이 앞문으로 곧장 들어간다","fact":"선구동물 — 원구가 입 · 연체 · 환형 · 절지 전부 선구","hook":"세 간판 = 답 · 앞문 = 먼저 뚫린 문이 입","say":"간판이 달팽이, 지렁이, 게인 세 가게. 손님이 앞문으로 곧장 들어간다. 맨 처음 뚫린 그 문이 그대로 입, 선구. 달팽이는 연체, 지렁이는 환형, 게는 절지. 세 간판이 곧 답이다. 연체, 환형, 절지는 전부 선구동물.","box":[110,80,1100,920],"src":["s04p05#0"],"cards":["X-AN-6","N0-20","N0-20#1","N0-21","N0-21#1","X-AN-3"]},{"sid":"s3","obj":"앞벽이 벽돌로 막혀 옆으로 돌아 들어가는 넷째 가게","fact":"후구동물 — 원구가 항문이 되고 입은 나중에 뚫린다","hook":"막힌 앞벽 = 원구는 항문 · 옆문 = 나중 입","say":"넷째 가게는 앞벽이 벽돌로 막혔다. 손님이 옆으로 돌아 들어간다. 처음 뚫린 앞 자리는 입이 못 되고 그 자리가 항문이 된다. 나중에 뚫은 옆문이 입. 후구동물.","box":[[1200,480,420,520],[1700,560,140,380]],"src":["s04p05#1"],"cards":["N0-20#2","N0-25#1","X-AN-1","X-AN-4"]},{"sid":"s4","obj":"꼭짓점 다섯인 별 간판 — 바로 그 넷째 가게에 걸렸다","fact":"극피 — 성체 5방사 · 후구(무척추라고 선구로 고르면 틀림)","hook":"별 = 극피 · 별이 걸린 가게가 옆문 가게","say":"그 넷째 가게에 걸린 간판은 꼭짓점이 다섯인 별. 극피동물, 성체는 오방사 대칭. 별과 옆문이 같은 가게에 걸려 있는 것이 요점. 극피동물은 후구동물이고, 무척추동물이라는 이유로 선구로 고르면 틀린다.","box":[1310,260,230,240],"src":["s04p05#2"],"cards":["X-AN-2","N0-21#2","N1-29#2"]},{"sid":"s5","obj":"넷째 가게의 벽돌 앞벽에 걸린 액자 — 좌우대칭 유생","fact":"극피 유생은 좌우대칭","hook":"액자 속 어린 모습은 좌우대칭","say":"넷째 가게의 벽돌 앞벽에 액자가 걸렸고 액자 속은 왼쪽 오른쪽이 거울처럼 같은 좌우대칭 벌레 꼴 유생이다. 극피동물의 유생은 좌우대칭. 별은 어른이 되어 얻는 모양.","box":[1310,610,230,240],"src":["s04p05#3"],"cards":["N1-29","N1-29#1","X-AN-11"]},{"sid":"s6","obj":"넷째 가게 처마를 따라 난 수도 본관 — 나팔처럼 벌어진 입들과 붉은 밸브","fact":"수관계 — 물이 찬 관과 관족","hook":"수도 본관 = 수관계 · 나팔 입 = 관족","say":"넷째 가게 처마를 따라 수도 본관이 지나고, 거기 나팔처럼 벌어진 입들이 아래로 달렸고 붉은 밸브가 있다. 수관계. 물이 찬 관과 관족. 극피동물이 움직이고 먹는 장치.","box":[1200,20,690,350],"src":["s04p05#4"],"cards":["N1-30","S-AN-7"]},{"sid":"s7","obj":"넷째 가게 곁에 선 사람 — 등에 긴 곧은 막대를 졌다","fact":"척삭 — 후구는 극피와 척삭뿐","hook":"등의 곧은 막대 = 척삭","say":"넷째 가게 곁에 선 사람은 등에 긴 곧은 막대를 졌다. 척삭. 등을 따라 난 속이 찬 막대. 후구동물은 별 간판의 극피와 척삭, 둘뿐이다. 척삭 상회는 다음 과.","box":[1860,580,188,500],"src":["s04p05#5"],"cards":[]},{"sid":"s8","obj":"넷째 가게의 벽돌 앞벽과 별 간판이 한 가게에","fact":"극피동물 = 후구동물 — 별과 옆문이 같은 가게","hook":"별 + 막힌 앞벽 = 한 집","say":"다시 넷째 가게. 벽돌로 막힌 앞벽과 별 간판이 한 가게에 있다. 극피동물이 후구동물. 선구 셋 곁의 예외 하나.","box":[[1200,480,420,520],[1310,260,230,240]],"src":["s04p05#2"],"cards":["X-AN-2","N0-21#2","N1-29#2"]}],"hubPanel":"s04p05"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
-let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
 const scoreKey = 'lesson_' + L.id;
-let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
 function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
 function draw() {
@@ -111,8 +129,16 @@ function showCap(k, judge) {
   if (voice) speak(st.say || (st.obj + '. ' + st.fact));
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
 function speak(t) {
+  t = ttsNorm(t);
   const my = ++speakSeq, at = i;
   const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
   if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
@@ -146,27 +172,45 @@ function setMode(m) {
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
   if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
-  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
   showScore();
 }
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
-  $('judge').style.display = 'flex';
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 function judge(ok) {
-  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
-  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
-  showScore(); quizNext();
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
 }
 function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
 function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
 function showScore() {
-  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
-  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
-  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
@@ -175,6 +219,9 @@ $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');

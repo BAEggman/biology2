@@ -50,7 +50,8 @@
     <button id="bTour" class="on">투어</button>
     <button id="bRecap">되짚기</button>
     <button id="bReview">복습 — 그림만</button>
-    <button id="bQuiz">시험 — 순서대로</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
     <span class="score" id="score"></span>
   </div>
   <div class="stage" id="stage">
@@ -71,17 +72,34 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
 </div>
 <script>
-const L = {"id":"L43b","scene":"s43","part":"b","title":"담장 안 손질 작업대와 선반 셋 — RNA 가공 · 선택적 스플라이싱","sub":"앞머리 모자(5′ 캡) · 꼬리 술(poly-A) · 어깨동무 다섯의 가위(스플라이소좀) · 청록/회색(엑손/인트론) · 올가미 토막(라리아트) · 구멍으로 나가는 짧은 청록 띠(ex = 나감) · 선반 셋 ○△☆ / ○□☆ + 자루만 다른 연장(선택적 스플라이싱 · 도메인)","img":"img/L43b.webp","w":2048,"h":1144,"stops":[{"obj":"벽돌 담 안의 손질 작업장 — 왼쪽 긴 작업대(앞머리 모자 · 꼬리 술 · 가운데 잘라 잇기) · 오른쪽 벽의 선반 셋","fact":"진핵 RNA 가공 셋 — 5′ 캡 · poly-A 꼬리 · 스플라이싱 · 다 핵 안에서 끝나야 나간다","hook":"손질 셋 · 끝나야 나간다","say":"벽돌 담장 안, 손질 작업장이다. 왼쪽 긴 작업대에서 띠를 손질한다. 앞머리에 모자, 꼬리에 술, 가운데는 잘라 잇기. 진핵의 RNA 가공 셋, 5′ 캡, poly-A 꼬리, 스플라이싱. 전부 담장 안, 핵 안에서 끝나고, 끝나야 구멍으로 나간다. 오른쪽 벽엔 선반 셋.","box":null,"src":["s43p02#7"],"cards":["F0-56","F1-81","F0-55"]},{"obj":"작업대 왼쪽 끝 — 띠의 앞머리에 작은 모자를 씌우는 일꾼","fact":"5′ 캡 — 분해를 막고 · 리보솜 작은 소단위체가 먼저 잡는 손잡이","hook":"모자 = 5′ 캡","say":"작업대 왼쪽 끝, 일꾼이 띠의 앞머리에 작은 모자를 씌운다. 모자가 곧 5′ 캡. 하는 일이 둘. 분해를 막고, 밖에서 읽을 때 리보솜 작은 소단위체가 맨 먼저 잡는 손잡이가 된다.","box":[80,430,220,350],"src":["s43p02#0"],"cards":["F0-56#1","F1-81#1","F0-57","F0-59","F1-82#1","F0-116"]},{"obj":"작업대 오른쪽 끝 — 띠의 꼬리에 똑같은 술을 여러 가닥 매다는 일꾼","fact":"poly-A 꼬리 — 안정성을 높이고 핵 밖으로 나가기 · 번역을 돕는다","hook":"똑같은 술 여러 가닥 = poly-A","say":"작업대 오른쪽 끝, 일꾼이 띠의 꼬리에 똑같은 술을 여러 가닥 매단다. 똑같은 것이 여럿, 폴리 에이 꼬리. 띠를 오래가게 하고, 핵 밖으로 나가는 것과 번역을 돕는다.","box":[1020,480,220,440],"src":["s43p02#1"],"cards":["F0-56#2","F1-81#2","F0-61","F0-63","F1-82#6","F0-84","F0-84#1","F0-84#2","F0-84#3"]},{"obj":"작업대 가운데 — 다섯 일꾼이 어깨동무로 한 덩어리가 되어 큰 가위 하나를 띠에 댄다","fact":"스플라이소좀 — 단백질 + snRNA(snRNP 다섯)가 모인 한 복합체가 자른다","hook":"어깨동무 다섯 = 스플라이소좀","say":"작업대 가운데, 다섯 일꾼이 어깨동무로 한 덩어리가 되어 큰 가위 하나를 띠에 댄다. 자르는 것은 한 사람이 아니라 한 복합체, 스플라이소좀. 단백질과 작은 핵 RNA가 모인 snRNP 다섯 종이 붙어 있어 다섯 사람.","box":[360,280,560,380],"src":["s43p02#2"],"cards":["F0-68","F0-69","F0-174"]},{"obj":"띠는 청록과 회색이 번갈아 있다 — 통에 버려진 것은 회색뿐 · 구멍으로 나가는 것은 청록뿐","fact":"청록 = 엑손(남아 번역) · 회색 = 인트론(잘려 나감) · 잘라 잇기 = 스플라이싱","hook":"회색은 통으로 · 청록은 밖으로","say":"작업대의 띠는 청록과 회색이 번갈아 있다. 가위질이 끝난 뒤를 보면 갈린다. 바닥 통에 버려진 것은 회색뿐, 구멍으로 나가는 띠는 청록뿐. 청록이 엑손, 최종 mRNA에 남아 번역되는 구간. 회색이 인트론, 전사는 되지만 번역되지 않고 잘려 나가는 구간. 잘라 내고 남은 것을 잇는 것이 스플라이싱.","box":[200,500,880,260],"src":["s43p02#3"],"cards":["F0-65","F0-66","F0-67","F0-56#3","F1-81#3","F1-79#3"]},{"obj":"잘린 회색 토막은 올가미 매듭으로 묶여 담장 안 바닥 통에 버려진다 — 모자도 술도 없다","fact":"인트론은 올가미(라리아트)로 빠지고 · 캡 · 꼬리가 없어 곧 분해된다","hook":"올가미 = 라리아트","say":"잘린 회색 토막은 하나하나 올가미 매듭으로 묶여 담장 안 바닥 통에 버려진다. 모자도 술도 없다. 인트론이 빠질 때 생기는 고리가 라리아트, 올가미. 캡도 꼬리도 없어 보호받지 못하니 곧 분해된다.","box":[540,770,520,350],"src":["s43p02#4"],"cards":["F0-70","F0-72","F0-171"]},{"obj":"둥근 구멍 너머 — 일꾼이 청록만 이은 짧은 띠를 들고 나간다 · 앞끝엔 작은 청록 모자 · 뒤끝엔 술","fact":"엑손은 나가고(ex-) 인트론은 안에 남는다(in-) · 손질이 끝난 것만 나간다","hook":"ex = 나간다 · in = 안에","say":"둥근 구멍 너머, 일꾼이 청록 조각만 이어 붙인 짧은 띠를 들고 나간다. 앞끝엔 작은 청록 모자, 뒤끝엔 술이 다 달렸다. 엑손은 엑시트, 나가고, 인트론은 인, 안에 남는다. 이름이 곧 행선지. 둘을 바꿔 놓은 선지가 이 단원 최다 오답. 손질이 다 끝난 것만 나간다.","box":[1110,90,380,410],"src":["s43p02#5"],"cards":[]},{"obj":"작업대 위의 띠는 길고 · 구멍으로 나가는 띠는 훨씬 짧다","fact":"유전자가 암호화 구간보다 훨씬 긴 것은 인트론이 많이 끼어 있어서","hook":"긴 띠 → 짧은 띠","say":"작업대 위의 띠는 길고, 구멍으로 나가는 띠는 훨씬 짧다. 실제 유전자가 암호화 구간보다 훨씬 긴 것은 인트론이 많이 끼어 있기 때문.","box":[[200,500,880,260],[1110,90,380,410]],"src":["s43p02#6"],"cards":["F0-85"]},{"obj":"오른쪽 선반 셋 — 회색 섞인 원본 띠는 맨 위 하나뿐 · 곁의 일꾼이 맨 위를 가리키며 아래로 쓸어내린다","fact":"선택적 스플라이싱 — 유전자 하나에서 완성품 여럿(아래 둘은 같은 원본에서)","hook":"원본은 맨 위 하나","say":"오른쪽 벽의 선반 셋. 회색이 섞인 원본 띠는 맨 위 선반 하나뿐. 곁의 일꾼이 한 손으로 맨 위를 가리키고 다른 손으로 아래로 쓸어내린다. 아래 둘은 새로 만든 것이 아니라 같은 원본에서 내려온 것. 유전자는 하나인데 완성품이 여럿, 선택적 스플라이싱.","box":[1440,180,600,800],"src":["s43p03#0"],"cards":[]},{"obj":"가운데 선반 ○ △ ☆ + 둥근 손잡이 · 쇠 날 연장 · 아래 선반 ○ □ ☆ + 같은 둥근 손잡이에 쇠 용수철 자루 연장","fact":"엑손 조합을 달리해 다른 폴리펩타이드 — DNA는 그대로 · 자를 자리만 다르게","hook":"같은 원본 · 다른 조합","say":"가운데 선반엔 동그라미, 세모, 별. 그 끝에 둥근 나무 손잡이에 쇠 날을 단 연장. 아래 선반엔 동그라미, 네모, 별. 끝에 같은 둥근 손잡이에 쇠 용수철 자루를 단 연장. 하나의 유전자에서 엑손 조합을 달리해 여러 폴리펩타이드를 만든다. DNA가 달라진 것이 아니라 자를 자리를 달리 잡았을 뿐. 그래서 가위는 맨 위 선반에만 있다.","box":[1640,420,400,560],"src":["s43p03#1"],"cards":["F0-73"]},{"obj":"두 선반 모두 ○로 시작해 ☆로 끝나고 가운데 한 조각만 다르다 · 연장 둘도 같은 둥근 손잡이에 가운데 한 마디만 다르다(곧은 쇠 ↔ 용수철 · 놓인 방향은 반대)","fact":"도메인 — 단백질 속 기능 단위 · 한 조각만 갈아 끼워도 하는 일이 바뀐다","hook":"한 마디만 갈아 끼운다 = 도메인","say":"두 선반 모두 동그라미로 시작해 별로 끝나고, 가운데 한 조각만 다르다. 연장 둘도 같은 둥근 손잡이에 가운데 한 마디만 다르다, 곧은 쇠와 용수철. 그 한 마디를 갈아 끼웠을 뿐인데 하나는 빳빳이 파는 연장, 하나는 튕기는 연장. 도메인, 단백질 안에서 특정 기능을 맡은 구조 단위. 조각 하나가 기능 하나라 가운데만 바꿔도 일이 통째로 바뀐다.","box":[[1850,540,180,140],[1850,780,180,140]],"src":["s43p03#2"],"cards":["F0-79","F0-77"]},{"obj":"맨 위 띠는 청록 조각들 사이사이에 회색이 끼어 있고 · 가위가 그 위에 놓였다","fact":"인트론이 엑손 사이를 벌려 재조합 자리가 넓어진다 → 엑손 셔플링이 쉬워진다","hook":"벌어진 틈 = 가위 들어갈 자리","say":"맨 위 띠는 청록 조각들 사이사이에 회색이 끼어 있고, 가위가 그 위에 놓였다. 인트론이 엑손 사이 거리를 늘려 놓는다. 사이가 넓으면 가위가 들어갈 자리도 넓다. 유전자끼리 교차, 재조합이 그 사이에서 일어날 확률이 높아져 엑손 셔플링이 쉬워진다.","box":[1620,180,410,240],"src":["s43p03#3"],"cards":["F0-78","F0-76"]},{"obj":"원본은 맨 위 하나인데 선반 아래로 연장이 둘 나왔다","fact":"유전자 수보다 단백질이 훨씬 다양하다 — 사람이 적은 유전자로 복잡한 까닭","hook":"원본 하나 · 연장 둘","say":"원본은 맨 위 하나인데 선반 아래로 연장이 둘 나왔다. 유전자 수보다 훨씬 다양한 단백질이 만들어진다. 사람이 적은 유전자 수로도 복잡한 몸을 갖는 큰 까닭이 선택적 스플라이싱.","box":[[1620,180,410,240],[1850,540,180,140],[1850,780,180,140]],"src":["s43p03#4"],"cards":["F0-74","F0-75","K2-24"]}],"hubPanel":"s43p02"};
+const L = {"id":"L43b","scene":"s43","part":"b","title":"담장 안 손질 작업대와 선반 셋 — RNA 가공 · 선택적 스플라이싱","sub":"앞머리 모자(5′ 캡) · 꼬리 술(poly-A) · 어깨동무 다섯의 가위(스플라이소좀) · 청록/회색(엑손/인트론) · 올가미 토막(라리아트) · 구멍으로 나가는 짧은 청록 띠(ex = 나감) · 선반 셋 ○△☆ / ○□☆ + 자루만 다른 연장(선택적 스플라이싱 · 도메인)","img":"img/L43b.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"벽돌 담 안의 손질 작업장 — 왼쪽 긴 작업대(앞머리 모자 · 꼬리 술 · 가운데 잘라 잇기) · 오른쪽 벽의 선반 셋","fact":"진핵 RNA 가공 셋 — 5′ 캡 · poly-A 꼬리 · 스플라이싱 · 다 핵 안에서 끝나야 나간다","hook":"손질 셋 · 끝나야 나간다","say":"벽돌 담장 안, 손질 작업장이다. 왼쪽 긴 작업대에서 띠를 손질한다. 앞머리에 모자, 꼬리에 술, 가운데는 잘라 잇기. 진핵의 RNA 가공 셋, 5′ 캡, poly-A 꼬리, 스플라이싱. 전부 담장 안, 핵 안에서 끝나고, 끝나야 구멍으로 나간다. 오른쪽 벽엔 선반 셋.","box":null,"src":["s43p02#7"],"cards":["F0-56","F1-81","F0-55"]},{"sid":"s2","obj":"작업대 왼쪽 끝 — 띠의 앞머리에 작은 모자를 씌우는 일꾼","fact":"5′ 캡 — 핵 밖 이동을 돕고 · 분해를 막고 · 리보솜 작은 소단위체가 먼저 잡는 손잡이","hook":"모자 = 5′ 캡","say":"작업대 왼쪽 끝, 일꾼이 띠의 앞머리에 작은 모자를 씌운다. 모자가 곧 5′ 캡. 하는 일이 셋, 캡만 따로 물으면 뒤의 둘. 핵 밖으로 나가는 것을 돕고, 분해를 막고, 밖에서 읽을 때 리보솜 작은 소단위체가 맨 먼저 잡는 손잡이가 된다.","box":[80,430,220,350],"src":["s43p02#0"],"cards":["F0-56#1","F1-81#1","F0-57","F0-59","F1-82#1","F0-116"]},{"sid":"s3","obj":"작업대 오른쪽 끝 — 띠의 꼬리에 똑같은 술을 여러 가닥 매다는 일꾼","fact":"poly-A 꼬리 — 안정성을 높이고 핵 밖으로 나가기 · 번역을 돕는다","hook":"똑같은 술 여러 가닥 = poly-A","say":"작업대 오른쪽 끝, 일꾼이 띠의 꼬리에 똑같은 술을 여러 가닥 매단다. 똑같은 것이 여럿, 폴리 에이 꼬리. 띠를 오래가게 하고, 핵 밖으로 나가는 것과 번역을 돕는다.","box":[1020,480,220,440],"src":["s43p02#1"],"cards":["F0-56#2","F1-81#2","F0-61","F0-63","F1-82#6","F0-84","F0-84#1","F0-84#2","F0-84#3"]},{"sid":"s4","obj":"작업대 가운데 — 다섯 일꾼이 어깨동무로 한 덩어리가 되어 큰 가위 하나를 띠에 댄다","fact":"스플라이소좀 — 단백질 + snRNA(snRNP 다섯)가 모인 한 복합체가 자른다","hook":"어깨동무 다섯 = 스플라이소좀","say":"작업대 가운데, 다섯 일꾼이 어깨동무로 한 덩어리가 되어 큰 가위 하나를 띠에 댄다. 자르는 것은 한 사람이 아니라 한 복합체, 스플라이소좀. 단백질과 작은 핵 RNA가 모인 snRNP 다섯 종이 붙어 있어 다섯 사람.","box":[360,280,560,380],"src":["s43p02#2"],"cards":["F0-68","F0-69","F0-174"]},{"sid":"s5","obj":"띠는 청록과 회색이 번갈아 있다 — 통에 버려진 것은 회색뿐 · 구멍으로 나가는 것은 청록뿐","fact":"청록 = 엑손(mRNA 에 남음 · 양끝 UTR 은 번역 안 됨) · 회색 = 인트론(잘려 나감)","hook":"회색은 통으로 · 청록은 밖으로","say":"작업대의 띠는 청록과 회색이 번갈아 있다. 가위질이 끝난 뒤를 보면 갈린다. 바닥 통에 버려진 것은 회색뿐, 구멍으로 나가는 띠는 청록뿐. 청록이 엑손, 최종 mRNA에 남는 구간. 대부분 번역되지만 양끝의 비번역 부위, 유티알도 엑손이다. 남되 번역되지 않는다. 회색이 인트론, 전사는 되지만 잘려 나가 최종 mRNA에 없는 구간. 잘라 내고 남은 것을 잇는 것이 스플라이싱.","box":[200,500,880,260],"src":["s43p02#3"],"cards":["F0-65","F0-66","F0-67","F0-56#3","F1-81#3","F1-79#3"]},{"sid":"s6","obj":"잘린 회색 토막은 올가미 매듭으로 묶여 담장 안 바닥 통에 버려진다 — 모자도 술도 없다","fact":"인트론은 올가미(라리아트)로 빠지고 · 캡 · 꼬리가 없어 곧 분해된다","hook":"올가미 = 라리아트","say":"잘린 회색 토막은 하나하나 올가미 매듭으로 묶여 담장 안 바닥 통에 버려진다. 모자도 술도 없다. 인트론이 빠질 때 생기는 고리가 라리아트, 올가미. 캡도 꼬리도 없어 보호받지 못하니 곧 분해된다.","box":[540,770,520,350],"src":["s43p02#4"],"cards":["F0-70","F0-72","F0-171"]},{"sid":"s7","obj":"둥근 구멍 너머 — 일꾼이 청록만 이은 짧은 띠를 들고 나간다 · 앞끝엔 작은 청록 모자 · 뒤끝엔 술","fact":"엑손은 나가고(ex-) 인트론은 안에 남는다(in-) · 손질이 끝난 것만 나간다","hook":"ex = 나간다 · in = 안에","say":"둥근 구멍 너머, 일꾼이 청록 조각만 이어 붙인 짧은 띠를 들고 나간다. 앞끝엔 작은 청록 모자, 뒤끝엔 술이 다 달렸다. 엑손은 엑시트, 나가고, 인트론은 인, 안에 남는다. 이름이 곧 행선지. 둘을 바꿔 놓은 선지가 이 단원 최다 오답. 손질이 다 끝난 것만 나간다.","box":[1110,90,380,410],"src":["s43p02#5"],"cards":[]},{"sid":"s8","obj":"작업대 위의 띠는 길고 · 구멍으로 나가는 띠는 훨씬 짧다","fact":"유전자가 암호화 구간보다 훨씬 긴 것은 인트론이 많이 끼어 있어서","hook":"긴 띠 → 짧은 띠","say":"작업대 위의 띠는 길고, 구멍으로 나가는 띠는 훨씬 짧다. 실제 유전자가 암호화 구간보다 훨씬 긴 것은 인트론이 많이 끼어 있기 때문.","box":[[200,500,880,260],[1110,90,380,410]],"src":["s43p02#6"],"cards":["F0-85"]},{"sid":"s9","obj":"오른쪽 선반 셋 — 회색 섞인 원본 띠는 맨 위 하나뿐 · 곁의 일꾼이 맨 위를 가리키며 아래로 쓸어내린다","fact":"선택적 스플라이싱 — 유전자 하나에서 완성품 여럿(아래 둘은 같은 원본에서)","hook":"원본은 맨 위 하나","say":"오른쪽 벽의 선반 셋. 회색이 섞인 원본 띠는 맨 위 선반 하나뿐. 곁의 일꾼이 한 손으로 맨 위를 가리키고 다른 손으로 아래로 쓸어내린다. 아래 둘은 새로 만든 것이 아니라 같은 원본에서 내려온 것. 유전자는 하나인데 완성품이 여럿, 선택적 스플라이싱.","box":[1440,180,600,800],"src":["s43p03#0"],"cards":[]},{"sid":"s10","obj":"가운데 선반 ○ △ ☆ + 둥근 손잡이 · 쇠 날 연장 · 아래 선반 ○ □ ☆ + 같은 둥근 손잡이에 쇠 용수철 자루 연장","fact":"엑손 조합을 달리해 다른 폴리펩타이드 — DNA는 그대로 · 자를 자리만 다르게","hook":"같은 원본 · 다른 조합","say":"가운데 선반엔 동그라미, 세모, 별. 그 끝에 둥근 나무 손잡이에 쇠 날을 단 연장. 아래 선반엔 동그라미, 네모, 별. 끝에 같은 둥근 손잡이에 쇠 용수철 자루를 단 연장. 하나의 유전자에서 엑손 조합을 달리해 여러 폴리펩타이드를 만든다. DNA가 달라진 것이 아니라 자를 자리를 달리 잡았을 뿐. 그래서 가위는 맨 위 선반에만 있다.","box":[1640,420,400,560],"src":["s43p03#1"],"cards":["F0-73"]},{"sid":"s11","obj":"두 선반 모두 ○로 시작해 ☆로 끝나고 가운데 한 조각만 다르다 · 연장 둘도 같은 둥근 손잡이에 가운데 한 마디만 다르다(곧은 쇠 ↔ 용수철 · 놓인 방향은 반대)","fact":"도메인 — 단백질 속 기능 단위 · 한 조각만 갈아 끼워도 하는 일이 바뀐다","hook":"한 마디만 갈아 끼운다 = 도메인","say":"두 선반 모두 동그라미로 시작해 별로 끝나고, 가운데 한 조각만 다르다. 연장 둘도 같은 둥근 손잡이에 가운데 한 마디만 다르다, 곧은 쇠와 용수철. 그 한 마디를 갈아 끼웠을 뿐인데 하나는 빳빳이 파는 연장, 하나는 튕기는 연장. 도메인, 단백질 안에서 특정 기능을 맡은 구조 단위. 조각 하나가 기능 하나라 가운데만 바꿔도 일이 통째로 바뀐다.","box":[[1850,540,180,140],[1850,780,180,140]],"src":["s43p03#2"],"cards":["F0-79","F0-77"]},{"sid":"s12","obj":"맨 위 띠는 청록 조각들 사이사이에 회색이 끼어 있고 · 가위가 그 위에 놓였다","fact":"인트론이 엑손 사이를 벌려 재조합 자리가 넓어진다 → 엑손 셔플링이 쉬워진다","hook":"벌어진 틈 = 가위 들어갈 자리","say":"맨 위 띠는 청록 조각들 사이사이에 회색이 끼어 있고, 가위가 그 위에 놓였다. 인트론이 엑손 사이 거리를 늘려 놓는다. 사이가 넓으면 가위가 들어갈 자리도 넓다. 유전자끼리 교차, 재조합이 그 사이에서 일어날 확률이 높아져 엑손 셔플링이 쉬워진다.","box":[1620,180,410,240],"src":["s43p03#3"],"cards":["F0-78","F0-76"]},{"sid":"s13","obj":"원본은 맨 위 하나인데 선반 아래로 연장이 둘 나왔다","fact":"유전자 수보다 단백질이 훨씬 다양하다 — 사람이 적은 유전자로 복잡한 까닭","hook":"원본 하나 · 연장 둘","say":"원본은 맨 위 하나인데 선반 아래로 연장이 둘 나왔다. 유전자 수보다 훨씬 다양한 단백질이 만들어진다. 사람이 적은 유전자 수로도 복잡한 몸을 갖는 큰 까닭이 선택적 스플라이싱.","box":[[1620,180,410,240],[1850,540,180,140],[1850,780,180,140]],"src":["s43p03#4"],"cards":["F0-74","F0-75","K2-24"]}],"hubPanel":"s43p02"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
-let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
 const scoreKey = 'lesson_' + L.id;
-let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
 function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
 function draw() {
@@ -111,8 +129,16 @@ function showCap(k, judge) {
   if (voice) speak(st.say || (st.obj + '. ' + st.fact));
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
 function speak(t) {
+  t = ttsNorm(t);
   const my = ++speakSeq, at = i;
   const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
   if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
@@ -146,27 +172,45 @@ function setMode(m) {
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
   if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
-  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
   showScore();
 }
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
-  $('judge').style.display = 'flex';
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 function judge(ok) {
-  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
-  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
-  showScore(); quizNext();
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
 }
 function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
 function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
 function showScore() {
-  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
-  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
-  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
@@ -175,6 +219,9 @@ $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');

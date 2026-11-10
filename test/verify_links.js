@@ -106,7 +106,8 @@ console.log('\n── 회귀 ──');
 T('기존 카드가 유실·변형되지 않는다 (추가는 허용)', ()=>{
   const P=s=>JSON.parse(s.match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
   const now=new Map(P(h).map(c=>[c.id,JSON.stringify(c)]));
-  const bad=P(o).filter(c=>now.get(c.id)!==JSON.stringify(c));
+  const ED=BL.cardEdits||{};   /* [2026-11-10] 의도한 글 고침 — baseline.cardEdits 에 까닭이 있어야 통과 · 유실은 여전히 실패 */
+  const bad=P(o).filter(c=>now.get(c.id)!==JSON.stringify(c)&&!(now.has(c.id)&&ED[c.id]));
   if(bad.length) throw new Error('유실·변형 '+bad.length+'장: '+bad.slice(0,5).map(c=>c.id).join(','));
   return P(o).length+'장 보존 · 현재 '+now.size+'장'; });
 T('EXAM 무변경', ()=>{ const g=s=>s.match(/id=["']EXAM["'][^>]*>([\s\S]*?)<\/script>/)[1];

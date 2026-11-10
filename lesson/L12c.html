@@ -50,7 +50,8 @@
     <button id="bTour" class="on">투어</button>
     <button id="bRecap">되짚기</button>
     <button id="bReview">복습 — 그림만</button>
-    <button id="bQuiz">시험 — 순서대로</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
     <span class="score" id="score"></span>
   </div>
   <div class="stage" id="stage">
@@ -71,17 +72,34 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
 </div>
 <script>
-const L = {"id":"L12c","scene":"s12","part":"c","title":"회장 문 앞 긴 의자 — 비타민 B1 · B2 · B3 · B9 · B12","sub":"넥타이 + 발목 돌 + 붉은 열매(B1 티아민 · 각기병) · 노란 리본 둘 + 입꼬리 조각(B2 리보플라빈 · FAD · FMN) · 노인 + 신발 셋 + 빈 양동이(B3 나이아신 · NAD) · 잎 아홉 + 지퍼 벌어진 아기(B9 엽산) · 코발트 코 + 봉투(B12 · 내인자 · 회장) · 되돌려진 사람 + 압정(B12 결핍)","img":"img/L12c.webp","w":2048,"h":1144,"stops":[{"obj":"긴 의자 맨 왼쪽 — 연두 넥타이를 맨 사람이 축 늘어졌다 · 두 발목이 밧줄로 돌덩이에 묶였다 · 손에 붉은 열매 · 발치에도 붉은 열매","fact":"B1 티아민 — 탈탄산 조효소 · 결핍 각기병(심장 기능 저하 · 운동 협응 장애 · 신경 문제)","hook":"넥타이 = 티아민 · 붉은 열매 둘 = 베리베리","say":"운하 끝 산책로의 긴 의자. 맨 왼쪽에 넥타이를 맨 사람이 벽에 기대 축 늘어졌다. 넥타이, 타이아민, 비타민 B1 티아민이다. 두 발목이 밧줄로 돌덩이에 묶여 발을 못 맞춘다. 손에는 붉은 열매 둘, 발치에도 붉은 열매. 베리 베리, 각기병이다. B1 이 모자라면 심장 기능이 떨어지고, 운동 협응이 무너지고, 신경에 문제가 생긴다. B1 의 일은 탈탄산 대사를 돕는 조효소다.","box":[200,280,380,730],"src":["s12p04#0"],"cards":["G1-18","G1-19","G1-20","G1-20#1","G1-20#2","G1-20#3"]},{"obj":"둘째 — 머리 양옆에 노란 리본 둘을 묶은 소녀 · 입 양 끝에 노란 조각 둘","fact":"B2 리보플라빈 — 조효소 FAD · FMN · 결핍 입 주위와 피부 갈라짐","hook":"리본 = 리보플라빈 · 노랑(flavus)","say":"둘째 자리 소녀는 머리 양옆에 노란 리본을 둘 묶었다. 리본, 리보플라빈, 비타민 B2. 플라빈은 노랑이라는 뜻이다. 리본이 둘인 것은 B2 가 들어가는 조효소 둘, FAD 와 FMN. 입 양 끝에 노란 조각이 붙었다. 결핍되면 입 주위와 피부가 갈라진다.","box":[560,330,230,480],"src":["s12p04#1"],"cards":["G1-21","G1-22","G1-23"]},{"obj":"셋째 — 흰머리 노인 · 목에 신발 셋을 목걸이처럼 걸었다 · 텅 빈 양동이 · 멍한 눈 · 벗겨지는 팔","fact":"B3 나이아신 — 조효소 NAD · NADP · 결핍 피부 · 위장 문제와 혼란","hook":"나이 든 사람의 신 = 나이아신 · 신발 셋 = B3","say":"셋째 자리 흰머리 노인은 목에 신발 셋을 목걸이처럼 걸었다. 나이 든 사람의 신, 나이아신. 신발이 셋이라 B3. 손에는 텅 빈 양동이. 세포호흡에서 본 그 양동이, NAD 와 NADP 다. 나이아신이 이 조효소가 된다. 눈은 멍하고 팔 피부가 벗겨진다. 결핍되면 피부와 위장에 탈이 나고 정신이 흐려진다.","box":[780,290,280,690],"src":["s12p04#2"],"cards":["G1-24","G1-25","G1-26"]},{"obj":"넷째 — 의자 앞에 선, 아기를 업은 여자가 잎 아홉 장을 부채처럼 쳐들었다 · 아기 옷 등 지퍼가 아래쪽에서 벌어졌다","fact":"B9 엽산 — 핵산 · 아미노산 대사 조효소 · 결핍 빈혈과 선천성 결손 위험","hook":"잎(folium) 아홉 = 엽산 B9","say":"넷째, 아기를 업은 여자가 잎 아홉 장을 부채처럼 쳐들었다. 잎, folium, 엽산. 아홉 장이라 B9. 엽산은 핵산과 아미노산 대사를 돕는 조효소다. 등에 업힌 아기의 옷 지퍼가 아래쪽에서 다 잠기지 않고 벌어졌다. 엽산이 모자라면 빈혈이 생기고, 태아의 선천성 결손, 신경관 결손 위험이 커진다.","box":[[1060,160,420,840]],"src":["s12p04#3"],"cards":["G1-36","G1-37","G1-38"]},{"obj":"오른쪽 돌벽 쇠 개찰구 — 코끝이 코발트빛인 사람이 창구에 흰 봉투를 내민다(봉투가 있어야 문이 열린다)","fact":"B12 코발라민 — 내인자가 있어야 회장에서 흡수된다","hook":"파란 코 = 코발라민 · 봉투 = 내인자","say":"오른쪽 돌벽의 쇠 개찰구, 회장 문이다. 코가 코발트빛인 사람이 창구에 흰 봉투를 내민다. 코발트, 코발라민, 비타민 B12. 실제로 B12 분자 한가운데에 코발트가 있다. 봉투는 위 통에서 벽돌 인부가 보낸 내인자. 이 봉투가 있어야 문이 열린다. 내인자가 있어야 회장에서 흡수된다.","box":[1640,220,300,750],"src":["s12p04#4"],"cards":["G1-39"]},{"obj":"개찰구 앞 — 봉투 없이 돌려보내진 사람 · 빈손을 펴 보이고 · 다리가 꼬여 비틀거리고 · 맨발로 압정을 밟고도 모른다 · 낯빛이 창백하다","fact":"B12 결핍 — 빈혈 · 무감각 · 균형 상실(신경 증상이 엽산 결핍과 갈리는 점)","hook":"봉투 없으면 못 들어간다","say":"개찰구 앞에는 봉투 없이 돌려보내진 사람이 있다. 빈손을 펴 보인다, 낼 봉투가 없다. 다리가 꼬여 비틀거리고, 맨발로 압정을 밟고도 모른다. 낯빛은 창백하다. B12 결핍이다. 빈혈, 무감각, 균형 상실. 엽산 결핍도 빈혈이라 둘이 겹치는데, 갈리는 것은 신경 증상, 압정과 비틀거림이다.","box":[1300,290,340,800],"src":["s12p04#5"],"cards":["G1-41"]},{"obj":"의자 곁의 넷과 개찰구 앞의 둘 — 문을 상대하는 것은 코발트빛 코 쪽뿐","fact":"비타민 B는 조효소가 되어 일한다 · 흡수에 내인자가 필요한 것은 B12 하나","hook":"문은 B12 만의 일","say":"다시 보자. 의자 곁의 넷, B1, B2, B3, B9 는 문과 상관없이 앉거나 서 있다. 문 앞에서 봉투를 내야 하는 것은 B12 하나다. 비타민 B 는 모두 조효소가 되어 일한다. 그 일들은 문 안쪽 조제실에서 본다.","box":null,"src":["s12p04#4"],"cards":["G1-39"]}],"hubPanel":"s12p04"};
+const L = {"id":"L12c","scene":"s12","part":"c","title":"회장 문 앞 긴 의자 — 비타민 B1 · B2 · B3 · B9 · B12","sub":"넥타이 + 발목 돌 + 붉은 열매(B1 티아민 · 각기병) · 노란 리본 둘 + 입꼬리 조각(B2 리보플라빈 · FAD · FMN) · 노인 + 신발 셋 + 빈 양동이(B3 나이아신 · NAD) · 잎 아홉 + 지퍼 벌어진 아기(B9 엽산) · 코발트 코 + 봉투(B12 · 내인자 · 회장) · 되돌려진 사람 + 압정(B12 결핍)","img":"img/L12c.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"긴 의자 맨 왼쪽 — 연두 넥타이를 맨 사람이 축 늘어졌다 · 두 발목이 밧줄로 돌덩이에 묶였다 · 손에 붉은 열매 · 발치에도 붉은 열매","fact":"B1 티아민 — 탈탄산 조효소 · 결핍 각기병(심장 기능 저하 · 운동 협응 장애 · 신경 문제)","hook":"넥타이 = 티아민 · 붉은 열매 둘 = 베리베리","say":"운하 끝 산책로의 긴 의자. 맨 왼쪽에 넥타이를 맨 사람이 벽에 기대 축 늘어졌다. 넥타이, 타이아민, 비타민 B1 티아민이다. 두 발목이 밧줄로 돌덩이에 묶여 발을 못 맞춘다. 손에는 붉은 열매 둘, 발치에도 붉은 열매. 베리 베리, 각기병이다. B1 이 모자라면 심장 기능이 떨어지고, 운동 협응이 무너지고, 신경에 문제가 생긴다. B1 의 일은 탈탄산 대사를 돕는 조효소다.","box":[200,280,380,730],"src":["s12p04#0"],"cards":["G1-18","G1-19","G1-20","G1-20#1","G1-20#2","G1-20#3"]},{"sid":"s2","obj":"둘째 — 머리 양옆에 노란 리본 둘을 묶은 소녀 · 입 양 끝에 노란 조각 둘","fact":"B2 리보플라빈 — 조효소 FAD · FMN · 결핍 입 주위와 피부 갈라짐","hook":"리본 = 리보플라빈 · 노랑(flavus)","say":"둘째 자리 소녀는 머리 양옆에 노란 리본을 둘 묶었다. 리본, 리보플라빈, 비타민 B2. 플라빈은 노랑이라는 뜻이다. 리본이 둘인 것은 B2 가 들어가는 조효소 둘, FAD 와 FMN. 입 양 끝에 노란 조각이 붙었다. 결핍되면 입 주위와 피부가 갈라진다.","box":[560,330,230,480],"src":["s12p04#1"],"cards":["G1-21","G1-22","G1-23"]},{"sid":"s3","obj":"셋째 — 흰머리 노인 · 목에 신발 셋을 목걸이처럼 걸었다 · 텅 빈 양동이 · 멍한 눈 · 벗겨지는 팔","fact":"B3 나이아신 — 조효소 NAD · NADP · 결핍 피부 · 위장 문제와 혼란","hook":"나이 든 사람의 신 = 나이아신 · 신발 셋 = B3","say":"셋째 자리 흰머리 노인은 목에 신발 셋을 목걸이처럼 걸었다. 나이 든 사람의 신, 나이아신. 신발이 셋이라 B3. 손에는 텅 빈 양동이. 세포호흡에서 본 그 양동이, NAD 와 NADP 다. 나이아신이 이 조효소가 된다. 눈은 멍하고 팔 피부가 벗겨진다. 결핍되면 피부와 위장에 탈이 나고 정신이 흐려진다.","box":[780,290,280,690],"src":["s12p04#2"],"cards":["G1-24","G1-25","G1-26"]},{"sid":"s4","obj":"넷째 — 의자 앞에 선, 아기를 업은 여자가 잎 아홉 장을 부채처럼 쳐들었다 · 아기 옷 등 지퍼가 아래쪽에서 벌어졌다","fact":"B9 엽산 — 핵산 · 아미노산 대사 조효소 · 결핍 빈혈과 선천성 결손 위험","hook":"잎(folium) 아홉 = 엽산 B9","say":"넷째, 아기를 업은 여자가 잎 아홉 장을 부채처럼 쳐들었다. 잎, folium, 엽산. 아홉 장이라 B9. 엽산은 핵산과 아미노산 대사를 돕는 조효소다. 등에 업힌 아기의 옷 지퍼가 아래쪽에서 다 잠기지 않고 벌어졌다. 엽산이 모자라면 빈혈이 생기고, 태아의 선천성 결손, 신경관 결손 위험이 커진다.","box":[[1060,160,420,840]],"src":["s12p04#3"],"cards":["G1-36","G1-37","G1-38"]},{"sid":"s5","obj":"오른쪽 돌벽 쇠 개찰구 — 코끝이 코발트빛인 사람이 창구에 흰 봉투를 내민다(봉투가 있어야 문이 열린다)","fact":"B12 코발라민 — 내인자가 있어야 회장에서 흡수된다","hook":"파란 코 = 코발라민 · 봉투 = 내인자","say":"오른쪽 돌벽의 쇠 개찰구, 회장 문이다. 코가 코발트빛인 사람이 창구에 흰 봉투를 내민다. 코발트, 코발라민, 비타민 B12. 실제로 B12 분자 한가운데에 코발트가 있다. 봉투는 위 통에서 벽돌 인부가 보낸 내인자. 이 봉투가 있어야 문이 열린다. 내인자가 있어야 회장에서 흡수된다.","box":[1640,220,300,750],"src":["s12p04#4"],"cards":["G1-39"]},{"sid":"s6","obj":"개찰구 앞 — 봉투 없이 돌려보내진 사람 · 빈손을 펴 보이고 · 다리가 꼬여 비틀거리고 · 맨발로 압정을 밟고도 모른다 · 낯빛이 창백하다","fact":"B12 결핍 — 빈혈 · 무감각 · 균형 상실(신경 증상이 엽산 결핍과 갈리는 점)","hook":"봉투 없으면 못 들어간다","say":"개찰구 앞에는 봉투 없이 돌려보내진 사람이 있다. 빈손을 펴 보인다, 낼 봉투가 없다. 다리가 꼬여 비틀거리고, 맨발로 압정을 밟고도 모른다. 낯빛은 창백하다. B12 결핍이다. 빈혈, 무감각, 균형 상실. 엽산 결핍도 빈혈이라 둘이 겹치는데, 갈리는 것은 신경 증상, 압정과 비틀거림이다.","box":[1300,290,340,800],"src":["s12p04#5"],"cards":["G1-41"]},{"sid":"s7","obj":"의자 곁의 넷과 개찰구 앞의 둘 — 문을 상대하는 것은 코발트빛 코 쪽뿐","fact":"비타민 B는 조효소가 되어 일한다 · 흡수에 내인자가 필요한 것은 B12 하나","hook":"문은 B12 만의 일","say":"다시 보자. 의자 곁의 넷, B1, B2, B3, B9 는 문과 상관없이 앉거나 서 있다. 문 앞에서 봉투를 내야 하는 것은 B12 하나다. 비타민 B 는 모두 조효소가 되어 일한다. 그 일들은 문 안쪽 조제실에서 본다.","box":null,"src":["s12p04#4"],"cards":["G1-39"]}],"hubPanel":"s12p04"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
-let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
 const scoreKey = 'lesson_' + L.id;
-let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
 function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
 function draw() {
@@ -111,8 +129,16 @@ function showCap(k, judge) {
   if (voice) speak(st.say || (st.obj + '. ' + st.fact));
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
 function speak(t) {
+  t = ttsNorm(t);
   const my = ++speakSeq, at = i;
   const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
   if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
@@ -146,27 +172,45 @@ function setMode(m) {
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
   if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
-  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
   showScore();
 }
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
-  $('judge').style.display = 'flex';
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 function judge(ok) {
-  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
-  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
-  showScore(); quizNext();
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
 }
 function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
 function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
 function showScore() {
-  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
-  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
-  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
@@ -175,6 +219,9 @@ $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');

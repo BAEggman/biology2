@@ -50,7 +50,8 @@
     <button id="bTour" class="on">투어</button>
     <button id="bRecap">되짚기</button>
     <button id="bReview">복습 — 그림만</button>
-    <button id="bQuiz">시험 — 순서대로</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
     <span class="score" id="score"></span>
   </div>
   <div class="stage" id="stage">
@@ -71,17 +72,34 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
 </div>
 <script>
-const L = {"id":"L05b","scene":"s05","part":"b","title":"캠핑장의 짝짓기 — 울타리 뽑기 · 천막 둘 · 지퍼 · 낙하산: 균류의 유성생식","sub":"칸마다 천막 하나(반수체 우세) · 뽑힌 산울타리(원형질융합) · 한 칸에 천막 둘(이핵 n+n ≠ 2n) · 버섯까지 이어진 짝 칸(담자균의 긴 n+n · 자실체) · 지퍼로 하나 된 줄무늬 천막(핵융합 · 유일한 2n) · 터져 날아가는 낙하산 천막 넷(감수분열 → 반수체 포자) · 가로막 없는 통로의 천막 줄(접합균 다핵균사)","img":"img/L05b.webp","w":2048,"h":1144,"stops":[{"obj":"산울타리로 바둑판처럼 칸을 나눈 넓은 캠핑장 — 칸마다 문 열린 돔 천막 하나(안에 보라 공) · 왼쪽 위는 모두 파랑 · 왼쪽 아래는 모두 노랑 · 그 경계 가운데 두 칸만 바닥까지 파랑 · 노랑으로 칠했다 (틀)","fact":"균류 생활사는 반수체(n) 우세 — 칸(세포)마다 핵이 하나","hook":"칸마다 천막 하나 = n · 캠핑장 대부분 = 반수체 우세","say":"넓은 캠핑장이다. 낮은 산울타리가 풀밭을 바둑판처럼 칸으로 나눴고, 칸마다 문 열린 돔 천막이 하나씩 섰다. 천막 안에는 보라 공. 덱에서 늘 그렇듯 천막은 핵이다. 칸 하나가 세포, 천막 하나가 핵 하나, 곧 반수체 n 이다. 캠핑장의 대부분이 이렇게 천막 하나짜리 칸이다. 균류는 생활사의 대부분을 반수체로 보낸다. 왼쪽 위 천막은 모두 파랑, 왼쪽 아래는 모두 노랑. 서로 다른 짝짓기형이다.","box":null,"src":["s05p03#1"],"cards":["M2-12"]},{"obj":"가운데 — 바닥까지 파랗게 칠한 칸과 노랗게 칠한 칸 사이 산울타리를 파란 옷 · 노란 옷 두 캠퍼가 맨손으로 뿌리째 뽑는다 · 두 천막은 제자리","fact":"원형질융합 — 두 균사의 세포질만 합쳐지고 핵은 아직 따로","hook":"뽑힌 산울타리 = 원형질융합(세포질만)","say":"가운데, 파랑 칸과 노랑 칸이 맞닿은 곳에서 파란 옷과 노란 옷의 두 캠퍼가 사이의 산울타리를 뿌리째 뽑아낸다. 두 칸이 한 칸이 된다. 그런데 파란 천막과 노란 천막은 제자리에 그대로 있다. 원형질융합이다. 두 균사의 세포질만 합쳐지고, 핵은 아직 합쳐지지 않는다. 담만 헐었지 집은 그대로다.","box":[380,440,650,420],"src":["s05p03#2"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21"]},{"obj":"합친 칸 옆부터 오른쪽 위로 이어지는 칸 줄 — 칸마다 파랑 · 노랑 천막 둘이 따로 나란히","fact":"이핵 · 2핵(n+n) — 서로 다른 반수체 핵 둘이 한 세포에 따로 · 2n 아님","hook":"한 칸에 천막 둘 = n+n ≠ 2n","say":"합친 칸 옆에서부터 오른쪽 위로 칸이 줄지어 이어진다. 칸마다 파란 천막과 노란 천막이 하나씩, 따로 나란히 섰다. 한 세포에 서로 다른 반수체 핵이 둘이다. 이핵 상태이고, 핵이 이렇게 짝을 이루면 2핵, n+n 이라 한다. 꼭 기억하자. 천막 둘은 2n 이 아니다. 두 핵이 한 칸에 있어도 합쳐지기 전까지는 n 더하기 n 이다.","box":[915,320,540,400],"src":["s05p03#2"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21"]},{"obj":"그 칸 줄이 커다란 갈색 버섯(점 · 고리 없음)까지 이어지고, 버섯 대도 파랑 · 노랑 천막 짝이 든 칸을 층층이 쌓아 지었다","fact":"담자균은 n+n 시기가 길다 · 버섯(자실체)도 2핵균사로 이루어진다","hook":"버섯 대까지 이어진 짝 칸 = 긴 n+n · 버섯 = 2핵균사","say":"짝 칸 줄은 길게 이어져 커다란 갈색 버섯에 닿는다. 균류 마을의 버섯 지붕 집에서 본 그 담자균 버섯이다. 버섯의 대를 보면 짝 칸을 층층이 쌓아 지었다. 층마다 파랑과 노랑 천막이 하나씩이다. 담자균은 이 n+n 시기가 아주 길다. 우리가 먹는 버섯, 곧 자실체도 2핵균사로 이루어진다.","box":[1300,55,460,680],"src":["s05p03#2","s05p02#2"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21","M2-21"]},{"obj":"버섯 갓 오른쪽 아래 — 파랑 · 노랑 천막이 큰 지퍼 하나로 합쳐져 파랑 · 노랑 줄무늬 큰 천막이 되며 번쩍 빛난다","fact":"핵융합 → 2n 접합자 · 대부분 균류에서 유일한 2배체 단계","hook":"지퍼로 하나 된 줄무늬 천막 = 핵융합 · 유일한 2n","say":"버섯 갓 오른쪽 아래에서 드디어 파란 천막과 노란 천막이 큰 지퍼 하나로 합쳐진다. 번쩍 빛나며 파랑 노랑 줄무늬의 큰 천막 하나가 된다. 핵융합이다. 두 반수체 핵이 하나로 합쳐져 2배체, 2n 접합자가 된다. 대부분의 균류에서 2n 은 이 줄무늬 천막뿐이다.","box":[1690,425,290,250],"src":["s05p03#0"],"cards":["M2-11","M2-13#3"]},{"obj":"그 줄무늬 천막이 점선 화살을 따라 바로 위로 올라가 깨져 터지고, 흰 낙하산을 단 작은 천막 넷(파랑 둘 · 노랑 둘)이 오른쪽 위로 날아간다","fact":"2n 은 순간 — 곧바로 감수분열해 반수체 포자가 된다","hook":"터진 줄무늬 천막 → 낙하산 천막 넷 = 감수분열 → 포자","say":"줄무늬 천막은 오래 버티지 못한다. 점선 화살을 따라 바로 위로 올라가더니 금이 가며 터지고, 흰 낙하산을 단 작은 천막 넷이 튀어나와 오른쪽 위로 날아간다. 파랑 둘, 노랑 둘. 감수분열이다. 2n 은 핵융합 직후 순간뿐이고, 곧바로 감수분열해 반수체 포자가 된다. 포자는 날아가 내려앉아 다시 천막 하나짜리 칸, 반수체 균사로 자란다. 처음의 바둑판으로 돌아온 것이다.","box":[1740,115,305,300],"src":["s05p03#0"],"cards":["M2-11","M2-13#3"]},{"obj":"오른쪽 아래 빵 덩이 옆 — 양옆만 산울타리이고 칸을 가르는 가로막이 하나도 없는 긴 통로에 파란 천막이 줄줄이","fact":"접합균 — 격벽 없는 다핵균사(한 세포질에 핵이 여럿)","hook":"가로막 없는 통로의 천막 줄 = 다핵균사","say":"오른쪽 아래에는 균류 마을에서 본 빵곰팡이의 빵 덩이가 놓였다. 그 옆으로 긴 통로가 뻗는다. 양옆은 산울타리인데, 칸을 가르는 가로막이 하나도 없다. 그 긴 통로 하나에 파란 천막이 줄줄이 들어섰다. 접합균의 다핵균사다. 균사를 칸으로 나누는 격벽이 없어서, 한 세포질 안에 핵이 여럿 들어 있다.","box":[1400,690,648,454],"src":["s05p01#2"],"cards":["M2-18#2","S-EV-6"]},{"obj":"가운데에서 오른쪽 위로 자리 순서대로 — 뽑힌 산울타리 → 한 칸에 천막 둘 → 지퍼로 하나 → 낙하산 넷 (되짚기)","fact":"원형질융합 → 이핵(n+n) → 핵융합(2n) → 감수분열 → 반수체 포자","hook":"울타리 · 둘 · 지퍼 · 낙하산","say":"길을 따라 순서를 되짚자. 산울타리를 뽑는다, 원형질융합. 한 칸에 천막 둘, 이핵 n+n. 지퍼로 하나, 핵융합 2n. 터져서 낙하산 넷, 감수분열과 반수체 포자. 세포질이 먼저, 핵은 나중이다. 울타리 다음에 지퍼. 원형질융합과 핵융합을 헷갈리지 말자.","box":[[660,440,240,230],[920,505,230,215],[1690,425,290,250],[1740,115,305,300]],"src":["s05p03#2","s05p03#0"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21","M2-11","M2-13#3"]}],"hubPanel":"s05p03"};
+const L = {"id":"L05b","scene":"s05","part":"b","title":"캠핑장의 짝짓기 — 울타리 뽑기 · 천막 둘 · 지퍼 · 낙하산: 균류의 유성생식","sub":"칸마다 천막 하나(반수체 우세) · 뽑힌 산울타리(원형질융합) · 한 칸에 천막 둘(이핵 n+n ≠ 2n) · 버섯까지 이어진 짝 칸(담자균의 긴 n+n · 자실체) · 지퍼로 하나 된 줄무늬 천막(핵융합 · 유일한 2n) · 터져 날아가는 낙하산 천막 넷(감수분열 → 반수체 포자) · 가로막 없는 통로의 천막 줄(접합균 다핵균사)","img":"img/L05b.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"산울타리로 바둑판처럼 칸을 나눈 넓은 캠핑장 — 칸마다 문 열린 돔 천막 하나(안에 보라 공) · 왼쪽 위는 모두 파랑 · 왼쪽 아래는 모두 노랑 · 그 경계 가운데 두 칸만 바닥까지 파랑 · 노랑으로 칠했다 (틀)","fact":"균류 생활사는 반수체(n) 우세 — 칸(세포)마다 핵이 하나","hook":"칸마다 천막 하나 = n · 캠핑장 대부분 = 반수체 우세","say":"넓은 캠핑장이다. 낮은 산울타리가 풀밭을 바둑판처럼 칸으로 나눴고, 칸마다 문 열린 돔 천막이 하나씩 섰다. 천막 안에는 보라 공. 덱에서 늘 그렇듯 천막은 핵이다. 칸 하나가 세포, 천막 하나가 핵 하나, 곧 반수체 n 이다. 캠핑장의 대부분이 이렇게 천막 하나짜리 칸이다. 균류는 생활사의 대부분을 반수체로 보낸다. 왼쪽 위 천막은 모두 파랑, 왼쪽 아래는 모두 노랑. 서로 다른 짝짓기형이다.","box":null,"src":["s05p03#1"],"cards":["M2-12"]},{"sid":"s2","obj":"가운데 — 바닥까지 파랗게 칠한 칸과 노랗게 칠한 칸 사이 산울타리를 파란 옷 · 노란 옷 두 캠퍼가 맨손으로 뿌리째 뽑는다 · 두 천막은 제자리","fact":"원형질융합 — 두 균사의 세포질만 합쳐지고 핵은 아직 따로","hook":"뽑힌 산울타리 = 원형질융합(세포질만)","say":"가운데, 파랑 칸과 노랑 칸이 맞닿은 곳에서 파란 옷과 노란 옷의 두 캠퍼가 사이의 산울타리를 뿌리째 뽑아낸다. 두 칸이 한 칸이 된다. 그런데 파란 천막과 노란 천막은 제자리에 그대로 있다. 원형질융합이다. 두 균사의 세포질만 합쳐지고, 핵은 아직 합쳐지지 않는다. 담만 헐었지 집은 그대로다.","box":[380,440,650,420],"src":["s05p03#2"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21"]},{"sid":"s3","obj":"합친 칸 옆부터 오른쪽 위로 이어지는 칸 줄 — 칸마다 파랑 · 노랑 천막 둘이 따로 나란히","fact":"이핵 · 2핵(n+n) — 서로 다른 반수체 핵 둘이 한 세포에 따로 · 2n 아님","hook":"한 칸에 천막 둘 = n+n ≠ 2n","say":"합친 칸 옆에서부터 오른쪽 위로 칸이 줄지어 이어진다. 칸마다 파란 천막과 노란 천막이 하나씩, 따로 나란히 섰다. 한 세포에 서로 다른 반수체 핵이 둘이다. 이핵 상태이고, 핵이 이렇게 짝을 이루면 2핵, n+n 이라 한다. 꼭 기억하자. 천막 둘은 2n 이 아니다. 두 핵이 한 칸에 있어도 합쳐지기 전까지는 n 더하기 n 이다.","box":[915,320,540,400],"src":["s05p03#2"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21"]},{"sid":"s4","obj":"그 칸 줄이 커다란 갈색 버섯(점 · 고리 없음)까지 이어지고, 버섯 대도 파랑 · 노랑 천막 짝이 든 칸을 층층이 쌓아 지었다","fact":"담자균은 n+n 시기가 길다 · 버섯(자실체)도 2핵균사로 이루어진다","hook":"버섯 대까지 이어진 짝 칸 = 긴 n+n · 버섯 = 2핵균사","say":"짝 칸 줄은 길게 이어져 커다란 갈색 버섯에 닿는다. 균류 마을의 버섯 지붕 집에서 본 그 담자균 버섯이다. 버섯의 대를 보면 짝 칸을 층층이 쌓아 지었다. 층마다 파랑과 노랑 천막이 하나씩이다. 담자균은 이 n+n 시기가 아주 길다. 우리가 먹는 버섯, 곧 자실체도 2핵균사로 이루어진다.","box":[1300,55,460,680],"src":["s05p03#2","s05p02#2"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21","M2-21"]},{"sid":"s5","obj":"버섯 갓 오른쪽 아래 — 파랑 · 노랑 천막이 큰 지퍼 하나로 합쳐져 파랑 · 노랑 줄무늬 큰 천막이 되며 번쩍 빛난다","fact":"핵융합 → 2n 접합자 · 대부분 균류에서 유일한 2배체 단계","hook":"지퍼로 하나 된 줄무늬 천막 = 핵융합 · 유일한 2n","say":"버섯 갓 오른쪽 아래에서 드디어 파란 천막과 노란 천막이 큰 지퍼 하나로 합쳐진다. 번쩍 빛나며 파랑 노랑 줄무늬의 큰 천막 하나가 된다. 핵융합이다. 두 반수체 핵이 하나로 합쳐져 2배체, 2n 접합자가 된다. 대부분의 균류에서 2n 은 이 줄무늬 천막뿐이다.","box":[1690,425,290,250],"src":["s05p03#0"],"cards":["M2-11","M2-13#3"]},{"sid":"s6","obj":"그 줄무늬 천막이 점선 화살을 따라 바로 위로 올라가 깨져 터지고, 흰 낙하산을 단 작은 천막 넷(파랑 둘 · 노랑 둘)이 오른쪽 위로 날아간다","fact":"2n 은 순간 — 곧바로 감수분열해 반수체 포자가 된다","hook":"터진 줄무늬 천막 → 낙하산 천막 넷 = 감수분열 → 포자","say":"줄무늬 천막은 오래 버티지 못한다. 점선 화살을 따라 바로 위로 올라가더니 금이 가며 터지고, 흰 낙하산을 단 작은 천막 넷이 튀어나와 오른쪽 위로 날아간다. 파랑 둘, 노랑 둘. 감수분열이다. 2n 은 핵융합 직후 순간뿐이고, 곧바로 감수분열해 반수체 포자가 된다. 포자는 날아가 내려앉아 다시 천막 하나짜리 칸, 반수체 균사로 자란다. 처음의 바둑판으로 돌아온 것이다.","box":[1740,115,305,300],"src":["s05p03#0"],"cards":["M2-11","M2-13#3"]},{"sid":"s7","obj":"오른쪽 아래 빵 덩이 옆 — 양옆만 산울타리이고 칸을 가르는 가로막이 하나도 없는 긴 통로에 파란 천막이 줄줄이","fact":"접합균 — 격벽 없는 다핵균사(한 세포질에 핵이 여럿)","hook":"가로막 없는 통로의 천막 줄 = 다핵균사","say":"오른쪽 아래에는 균류 마을에서 본 빵곰팡이의 빵 덩이가 놓였다. 그 옆으로 긴 통로가 뻗는다. 양옆은 산울타리인데, 칸을 가르는 가로막이 하나도 없다. 그 긴 통로 하나에 파란 천막이 줄줄이 들어섰다. 접합균의 다핵균사다. 균사를 칸으로 나누는 격벽이 없어서, 한 세포질 안에 핵이 여럿 들어 있다.","box":[1400,690,648,454],"src":["s05p01#2"],"cards":["M2-18#2","S-EV-6"]},{"sid":"s8","obj":"가운데에서 오른쪽 위로 자리 순서대로 — 뽑힌 산울타리 → 한 칸에 천막 둘 → 지퍼로 하나 → 낙하산 넷 (되짚기)","fact":"원형질융합 → 이핵(n+n) → 핵융합(2n) → 감수분열 → 반수체 포자","hook":"울타리 · 둘 · 지퍼 · 낙하산","say":"길을 따라 순서를 되짚자. 산울타리를 뽑는다, 원형질융합. 한 칸에 천막 둘, 이핵 n+n. 지퍼로 하나, 핵융합 2n. 터져서 낙하산 넷, 감수분열과 반수체 포자. 세포질이 먼저, 핵은 나중이다. 울타리 다음에 지퍼. 원형질융합과 핵융합을 헷갈리지 말자.","box":[[660,440,240,230],[920,505,230,215],[1690,425,290,250],[1740,115,305,300]],"src":["s05p03#2","s05p03#0"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21","M2-11","M2-13#3"]}],"hubPanel":"s05p03"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
-let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
 const scoreKey = 'lesson_' + L.id;
-let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
 function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
 function draw() {
@@ -111,8 +129,16 @@ function showCap(k, judge) {
   if (voice) speak(st.say || (st.obj + '. ' + st.fact));
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
 function speak(t) {
+  t = ttsNorm(t);
   const my = ++speakSeq, at = i;
   const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
   if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
@@ -146,27 +172,45 @@ function setMode(m) {
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
   if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
-  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
   showScore();
 }
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
-  $('judge').style.display = 'flex';
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 function judge(ok) {
-  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
-  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
-  showScore(); quizNext();
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
 }
 function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
 function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
 function showScore() {
-  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
-  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
-  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
@@ -175,6 +219,9 @@ $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');

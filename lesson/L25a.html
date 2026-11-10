@@ -50,7 +50,8 @@
     <button id="bTour" class="on">투어</button>
     <button id="bRecap">되짚기</button>
     <button id="bReview">복습 — 그림만</button>
-    <button id="bQuiz">시험 — 순서대로</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
     <span class="score" id="score"></span>
   </div>
   <div class="stage" id="stage">
@@ -71,17 +72,34 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
 </div>
 <script>
-const L = {"id":"L25a","scene":"s25","part":"a","title":"네 줄 인쇄 마당 — 문턱의 문지기 · 우유병 · 돔 덮개 · 포도 그릇: lac 오페론","sub":"빨간 매트 · 나무 문턱 · 그림 타일 셋(프로모터 · 작동자 · 구조유전자) · 문턱에 버틴 문지기(활성 억제자) · 우유병 빠는 문지기(알로락토스 · 유도성) · 고리 건 돔 덮개와 용수철(cAMP-CRP · 양성 조절) · 빈 포도 그릇 곁 고리 더미(포도당 낮음 → cAMP 높음) · 네 줄 = 네 조건(꺼짐 · 꺼짐 · 조금 · 활짝 · 이화물질 억제)","img":"img/L25a.webp","w":2048,"h":1144,"stops":[{"obj":"담장 없는 인쇄 마당에 똑같은 회색 줄 넷이 뒤에서 앞으로 나란하다 — 줄마다 빨간 매트 위 바퀴 달린 인쇄 기계 → 나무 문턱 → 해 · 나무 · 집 타일 (틀)","fact":"lac 오페론 = 프로모터 · 작동자 · 구조유전자 셋 — 함께 한 mRNA 로 전사","hook":"빨간 매트 = 프로모터 · 문턱 = 작동자 · 그림 타일 셋 = 구조유전자","say":"담장 없는 인쇄 마당이다. 원핵세포의 마당, 공장 마당에서 본 그 세계다. 회색 줄 넷이 똑같이 생겨 뒤에서 앞으로 나란히 깔렸다. 줄마다 왼쪽 끝에 빨간 매트, 그 위에 바퀴 달린 인쇄 기계가 섰다. 기계는 RNA 중합효소다. 기계 바로 앞을 나무 문턱이 가로지르고, 그 너머에 해, 나무, 집 그림 타일 셋이 깔렸다. 빨간 매트가 프로모터, 문턱이 작동자, 그림 타일 셋이 구조유전자다. 이 셋이 한 묶음, lac 오페론이다. 기계가 타일 위를 지나가면 해 나무 집이 한 종이띠에 찍혀 나온다. 유전자 셋이 mRNA 하나로 함께 전사된다. 네 줄은 같은 오페론이 네 가지 조건에 놓인 모습이다.","box":null,"src":["s25p01#2"],"cards":["F1-22","F1-23","F1-38","F1-26","F1-37","F1-1#1"]},{"obj":"맨 뒤 줄 — 대머리 문지기가 나무 문턱 위에 팔짱 끼고 버티고 앉았다 · 곁의 그릇엔 포도가 가득 · 기계는 매트에 그대로, 나오는 종이띠 없음","fact":"lac 억제자는 평소 활성 — 작동자에 붙어 전사를 막는다(젖당 없을 때)","hook":"문턱에 버티고 앉은 문지기 = 작동자에 붙은 억제자","say":"맨 뒤 줄을 보자. 검은 티셔츠의 대머리 문지기가 나무 문턱 위에 팔짱을 끼고 버티고 앉았다. 기계는 매트에서 한 발짝도 못 나가고, 나오는 종이띠도 없다. lac 억제자다. 젖당이 없으면 억제자는 활성 상태로 작동자에 붙어 RNA 중합효소의 길을 막는다. 그래서 거의 발현되지 않는다. 문턱, 곧 작동자가 오페론의 스위치 자리다.","box":[[900,90,190,245],[310,175,165,135]],"src":["s25p01#0"],"cards":["F1-16","F1-149","F1-3","F1-68","F1-21","F1-29"]},{"obj":"앞 두 줄 — 문지기가 문턱을 떠나 줄 가장자리 풀밭에 앉아 눈을 감고 우유병을 빤다","fact":"알로락토스(유도자)가 억제자를 불활성화 → 작동자에서 떨어진다 · 유도성 오페론","hook":"우유병 받고 문턱을 떠난 문지기 = 유도자 · 불활성 억제자","say":"앞의 두 줄에서는 문지기가 문턱을 떠났다. 줄 가장자리 풀밭에 털썩 앉아 눈을 감고 우유병을 쪽쪽 빤다. 우유병은 알로락토스다. 젖당이 들어오면 일부가 알로락토스로 바뀌고, 이것이 억제자에 붙으면 억제자가 모양이 바뀌어 비활성이 되고 작동자에서 떨어진다. 그래서 알로락토스를 유도자라 하고, 기질이 있을 때 켜지는 lac 오페론을 유도성 오페론이라 한다. 두 줄 모두 문지기가 비켰으니 막는 것은 이미 풀렸다.","box":[[890,585,200,205],[785,885,270,240]],"src":["s25p01#1","s25p01b#0"],"cards":["F1-14","F1-17","F1-12","F1-15","F1-5"]},{"obj":"빨간 매트 위 은빛 돔 덮개 — 꼭지에 금 고리를 걸었다 · 덮개에서 뻗은 큰 용수철이 기계 등을 민다","fact":"cAMP-CRP(CAP)가 프로모터 근처에 붙어 RNA 중합효소 결합을 돕는다 · 양성 조절","hook":"고리 건 돔 덮개 = cAMP-CRP · 용수철로 밂 = 양성 조절","say":"둘째 줄과 맨 앞 줄의 빨간 매트에는 은빛 돔 덮개가 놓였다. 덮개 꼭지에 금 고리 하나가 걸렸고, 덮개에서 뻗은 큰 용수철이 기계 등을 힘껏 민다. 돔 덮개가 CRP, 다른 이름으로 CAP 이다. 금 고리는 금화를 구부려 만든 고리, cAMP 다. 고리가 걸려야 덮개가 매트에 얹힌다. cAMP 와 결합한 CRP 가 프로모터 근처 조절 부위에 붙어 RNA 중합효소가 프로모터에 잘 붙도록 돕는다. 전사를 직접 밀어 주는 것, 양성 조절이다.","box":[[275,745,520,190],[435,330,305,155]],"src":["s25p01#2"],"cards":["F1-22","F1-23","F1-38","F1-26","F1-37","F1-1#1"]},{"obj":"옆으로 쓰러진 빈 그릇에서 금 고리가 쏟아져 나왔다(맨 앞 줄은 수북이) — 포도가 가득한 그릇 곁엔 고리가 없다","fact":"포도당이 낮으면 cAMP 가 높다 · 포도당이 높으면 cAMP 가 낮다","hook":"빈 포도 그릇에서 쏟아진 고리 = 포도당 낮음 → cAMP 높음","say":"왼쪽 끝 그릇들을 보자. 포도가 가득 찬 그릇 곁에는 아무것도 없다. 그런데 포도를 다 먹어 옆으로 쓰러진 빈 그릇에서는 금 고리가 쏟아져 나왔다. 맨 앞 줄은 수북하다. 포도는 언제나 포도당이다. 포도당이 떨어지면 세포 안 cAMP 가 높아진다. 다른 당을 쓸 채비를 하라는 신호다. 포도당이 많으면 cAMP 는 낮다. 고리가 쌓인 줄에만 돔 덮개가 얹혀 있는 것도 그래서다.","box":[[25,780,395,260],[220,355,185,135]],"src":["s25p01#3"],"cards":["F1-24","F1-25","F1-150","F1-13","F1-27"]},{"obj":"맨 앞 줄 — 문지기는 비켰고 · 빈 그릇 곁에 고리 더미 · 덮개가 밀어 기계가 오른쪽 끝까지 내달리고 해 · 나무 · 집이 찍힌 종이띠가 끝없이 굽이쳐 쏟아진다","fact":"젖당 있음 + 포도당 없음 = 최대 발현(억제자 풀림 + cAMP-CRP 밂)","hook":"문지기 없음 + 덮개 밂 = 종이띠가 끝없이","say":"맨 앞 줄이 가장 요란하다. 문지기는 우유병을 들고 비켜났고, 포도 그릇은 비어 고리가 쏟아졌고, 매트의 돔 덮개가 용수철로 힘껏 민다. 기계는 속도선을 그리며 오른쪽 끝까지 내달리고, 해 나무 집이 찍힌 종이띠가 끝없이 굽이쳐 쏟아진다. 젖당이 있고 포도당이 없을 때, lac 오페론은 가장 강하게 켜진다. 막는 것은 풀렸고 미는 것은 붙었다. 최대 발현은 이 한 줄뿐이다.","box":[[1135,715,850,400]],"src":["s25p01b#1"],"cards":[]},{"obj":"셋째 줄 — 문지기는 비켰지만 그릇에 포도가 가득 · 덮개도 고리도 없다 · 기계가 문턱을 조금 넘어 짧은 종이띠만","fact":"포도당이 많으면 cAMP-CRP 가 없어 억제자가 없어도 조금만 · 이화물질 억제","hook":"포도 가득 + 덮개 없음 = 짧은 종이띠 = 이화물질 억제","say":"셋째 줄도 문지기는 우유병을 들고 비켜났다. 그런데 그릇에 포도가 가득하고, 고리도 돔 덮개도 없다. 기계는 문턱을 겨우 넘어 짧은 종이띠만 내놓았다. 젖당이 있어도 포도당이 많으면 cAMP 가 낮아 cAMP-CRP 가 생기지 않는다. 밀어 주는 것이 없으니 발현이 낮다. 막는 것이 없어졌다고 저절로 많이 나오지는 않는다. 좋은 밥인 포도당이 있으면 딴 밥 차릴 채비를 하지 않는 것, 이것이 이화물질 억제다. 포도당 효과라고도 한다.","box":[[130,540,180,165],[635,540,630,125]],"src":["s25p01b#2","s25p01b#3"],"cards":["F1-28","F1-36"]},{"obj":"둘째 줄 — 쓰러진 빈 그릇 곁 금 고리 · 덮개의 용수철이 기계를 밀어도 문턱 위 문지기 때문에 기계가 꼼짝 못 한다","fact":"젖당이 없으면 포도당이 없어도 꺼짐 — 억제자가 막으면 cAMP-CRP 도 소용없다","hook":"덮개가 밀어도 문지기가 버티면 꺼짐","say":"둘째 줄은 앞 줄과 거꾸로다. 포도 그릇이 비어 고리가 쏟아졌고, 돔 덮개도 얹혀 용수철로 기계를 민다. 그런데 문턱 위에 문지기가 팔짱 끼고 버티고 앉았다. 기계는 꼼짝 못 한다. 젖당이 없으면 포도당이 없어도 lac 오페론은 꺼져 있다. 억제자가 작동자를 막고 있으면 cAMP-CRP 가 아무리 밀어도 소용없다.","box":[[435,300,640,230]],"src":["s25p01#0","s25p01b#4"],"cards":["F1-16","F1-149","F1-3","F1-68","F1-21","F1-29"]},{"obj":"둘째 줄 한 자리에 둘이 맞선다 — 문턱 위에서 막는 문지기 · 뒤에서 용수철로 미는 돔 덮개","fact":"음성 조절 = 억제자가 전사를 막음 · 양성 조절 = 활성자가 촉진 · lac 은 둘 다","hook":"막는 문지기 = 음성 · 미는 덮개 = 양성","say":"둘째 줄 한 자리에 두 힘이 맞선다. 앞에서 막는 문지기, 뒤에서 미는 돔 덮개. 억제자가 전사를 막는 것이 음성 조절, 활성자가 전사를 촉진하는 것이 양성 조절이다. lac 오페론은 이 둘을 한 자리에서 동시에 받는다. 활성자와 억제자가 같은 유전자에 함께 작용할 수 있다. trp 오페론과 lac 오페론은 둘 다 억제자에 의한 음성 조절을 받는다는 점이 같다.","box":[[915,290,160,240],[560,350,185,120]],"src":["s25p01#4"],"cards":["F1-33","F1-31","F1-67","F1-162"]},{"obj":"맨 앞 줄이 켜진 조건 둘 — 문지기가 빠는 우유병 · 옆으로 쓰러진 빈 포도 그릇","fact":"첫째 조건 젖당 있음(억제자 풀림) · 둘째 조건 포도당 없음(CAP 붙음)","hook":"우유병 = 첫째 · 빈 포도 그릇 = 둘째","say":"조건을 둘로 정리하자. 첫째는 문지기가 빠는 우유병, 젖당이 있어 억제자가 비켜나는 것이다. 이것이 lac 오페론이 켜지는 첫 번째 조건이다. 둘째는 쓰러진 빈 포도 그릇, 포도당이 부족해 고리가 쌓이고 덮개가 미는 것이다. 이것이 최대로 켜지는 두 번째 조건이다. 둘이 겹쳐야 종이띠가 끝없이 쏟아진다.","box":[[890,625,90,90],[830,900,110,90],[25,780,175,150]],"src":["s25p01#1","s25p01#3"],"cards":["F1-14","F1-17","F1-12","F1-15","F1-5","F1-24","F1-25","F1-150","F1-13","F1-27"]},{"obj":"네 줄을 뒤에서 앞으로 (되짚기) — 버티는 문지기 둘(꺼짐) · 비킨 문지기와 포도 가득(조금) · 비킨 문지기와 빈 그릇(활짝)","fact":"젖당 없음 → 꺼짐 · 젖당 + 포도당 → 조금 · 젖당 + 포도당 없음 → 활짝","hook":"뒤 둘 꺼짐 · 셋째 조금 · 맨 앞 활짝","say":"네 줄을 뒤에서 앞으로 되짚자. 뒤의 두 줄은 문지기가 문턱에 버티고 있다. 젖당이 없으면 포도당이 있든 없든 꺼짐. 셋째 줄은 문지기가 비켰지만 포도가 가득하다. 젖당이 있고 포도당도 있으면 조금만. 맨 앞 줄은 문지기가 비키고 그릇도 비었다. 젖당이 있고 포도당이 없으면 활짝. 한 문장으로, lac 오페론은 젖당이 있을 때 켜지고 포도당이 없을 때 가장 강하게 켜지는 유도성 오페론이다.","box":[[310,85,780,245],[220,290,860,240],[130,530,1140,260],[25,740,1960,390]],"src":["s25p01b#4"],"cards":[]}],"hubPanel":"s25p01"};
+const L = {"id":"L25a","scene":"s25","part":"a","title":"네 줄 인쇄 마당 — 문턱의 문지기 · 우유병 · 돔 덮개 · 포도 그릇: lac 오페론","sub":"빨간 매트 · 나무 문턱 · 그림 타일 셋(프로모터 · 작동자 · 구조유전자) · 문턱에 버틴 문지기(활성 억제자) · 우유병 빠는 문지기(알로락토스 · 유도성) · 고리 건 돔 덮개와 용수철(cAMP-CRP · 양성 조절) · 빈 포도 그릇 곁 고리 더미(포도당 낮음 → cAMP 높음) · 네 줄 = 네 조건(꺼짐 · 꺼짐 · 조금 · 활짝 · 이화물질 억제)","img":"img/L25a.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"담장 없는 인쇄 마당에 똑같은 회색 줄 넷이 뒤에서 앞으로 나란하다 — 줄마다 빨간 매트 위 바퀴 달린 인쇄 기계 → 나무 문턱 → 해 · 나무 · 집 타일 (틀)","fact":"lac 오페론 = 프로모터 · 작동자 · 구조유전자 셋 — 함께 한 mRNA 로 전사","hook":"빨간 매트 = 프로모터 · 문턱 = 작동자 · 그림 타일 셋 = 구조유전자","say":"담장 없는 인쇄 마당이다. 원핵세포의 마당, 공장 마당에서 본 그 세계다. 회색 줄 넷이 똑같이 생겨 뒤에서 앞으로 나란히 깔렸다. 줄마다 왼쪽 끝에 빨간 매트, 그 위에 바퀴 달린 인쇄 기계가 섰다. 기계는 RNA 중합효소다. 기계 바로 앞을 나무 문턱이 가로지르고, 그 너머에 해, 나무, 집 그림 타일 셋이 깔렸다. 빨간 매트가 프로모터, 문턱이 작동자, 그림 타일 셋이 구조유전자다. 이 셋이 한 묶음, lac 오페론이다. 기계가 타일 위를 지나가면 해 나무 집이 한 종이띠에 찍혀 나온다. 유전자 셋이 mRNA 하나로 함께 전사된다. 네 줄은 같은 오페론이 네 가지 조건에 놓인 모습이다.","box":null,"src":["s25p01#2"],"cards":["F1-22","F1-23","F1-38","F1-26","F1-37","F1-1#1"]},{"sid":"s2","obj":"맨 뒤 줄 — 대머리 문지기가 나무 문턱 위에 팔짱 끼고 버티고 앉았다 · 곁의 그릇엔 포도가 가득 · 기계는 매트에 그대로, 나오는 종이띠 없음","fact":"lac 억제자는 평소 활성 — 작동자에 붙어 전사를 막는다(젖당 없을 때)","hook":"문턱에 버티고 앉은 문지기 = 작동자에 붙은 억제자","say":"맨 뒤 줄을 보자. 검은 티셔츠의 대머리 문지기가 나무 문턱 위에 팔짱을 끼고 버티고 앉았다. 기계는 매트에서 한 발짝도 못 나가고, 나오는 종이띠도 없다. lac 억제자다. 젖당이 없으면 억제자는 활성 상태로 작동자에 붙어 RNA 중합효소의 길을 막는다. 그래서 거의 발현되지 않는다. 문턱, 곧 작동자가 오페론의 스위치 자리다.","box":[[900,90,190,245],[310,175,165,135]],"src":["s25p01#0"],"cards":["F1-16","F1-149","F1-3","F1-68","F1-21","F1-29"]},{"sid":"s3","obj":"앞 두 줄 — 문지기가 문턱을 떠나 줄 가장자리 풀밭에 앉아 눈을 감고 우유병을 빤다","fact":"알로락토스(유도자)가 억제자를 불활성화 → 작동자에서 떨어진다 · 유도성 오페론","hook":"우유병 받고 문턱을 떠난 문지기 = 유도자 · 불활성 억제자","say":"앞의 두 줄에서는 문지기가 문턱을 떠났다. 줄 가장자리 풀밭에 털썩 앉아 눈을 감고 우유병을 쪽쪽 빤다. 우유병은 알로락토스다. 젖당이 들어오면 일부가 알로락토스로 바뀌고, 이것이 억제자에 붙으면 억제자가 모양이 바뀌어 비활성이 되고 작동자에서 떨어진다. 그래서 알로락토스를 유도자라 하고, 기질이 있을 때 켜지는 lac 오페론을 유도성 오페론이라 한다. 두 줄 모두 문지기가 비켰으니 막는 것은 이미 풀렸다.","box":[[890,585,200,205],[785,885,270,240]],"src":["s25p01#1","s25p01b#0"],"cards":["F1-14","F1-17","F1-12","F1-15","F1-5"]},{"sid":"s4","obj":"빨간 매트 위 은빛 돔 덮개 — 꼭지에 금 고리를 걸었다 · 덮개에서 뻗은 큰 용수철이 기계 등을 민다","fact":"cAMP-CRP(CAP)가 프로모터 근처에 붙어 RNA 중합효소 결합을 돕는다 · 양성 조절","hook":"고리 건 돔 덮개 = cAMP-CRP · 용수철로 밂 = 양성 조절","say":"둘째 줄과 맨 앞 줄의 빨간 매트에는 은빛 돔 덮개가 놓였다. 덮개 꼭지에 금 고리 하나가 걸렸고, 덮개에서 뻗은 큰 용수철이 기계 등을 힘껏 민다. 돔 덮개가 CRP, 다른 이름으로 CAP 이다. 금 고리는 금화를 구부려 만든 고리, cAMP 다. 고리가 걸려야 덮개가 매트에 얹힌다. cAMP 와 결합한 CRP 가 프로모터 근처 조절 부위에 붙어 RNA 중합효소가 프로모터에 잘 붙도록 돕는다. 전사를 직접 밀어 주는 것, 양성 조절이다.","box":[[275,745,520,190],[435,330,305,155]],"src":["s25p01#2"],"cards":["F1-22","F1-23","F1-38","F1-26","F1-37","F1-1#1"]},{"sid":"s5","obj":"옆으로 쓰러진 빈 그릇에서 금 고리가 쏟아져 나왔다(맨 앞 줄은 수북이) — 포도가 가득한 그릇 곁엔 고리가 없다","fact":"포도당이 낮으면 cAMP 가 높다 · 포도당이 높으면 cAMP 가 낮다","hook":"빈 포도 그릇에서 쏟아진 고리 = 포도당 낮음 → cAMP 높음","say":"왼쪽 끝 그릇들을 보자. 포도가 가득 찬 그릇 곁에는 아무것도 없다. 그런데 포도를 다 먹어 옆으로 쓰러진 빈 그릇에서는 금 고리가 쏟아져 나왔다. 맨 앞 줄은 수북하다. 포도는 언제나 포도당이다. 포도당이 떨어지면 세포 안 cAMP 가 높아진다. 다른 당을 쓸 채비를 하라는 신호다. 포도당이 많으면 cAMP 는 낮다. 고리가 쌓인 줄에만 돔 덮개가 얹혀 있는 것도 그래서다.","box":[[25,780,395,260],[220,355,185,135]],"src":["s25p01#3"],"cards":["F1-24","F1-25","F1-150","F1-13","F1-27"]},{"sid":"s6","obj":"맨 앞 줄 — 문지기는 비켰고 · 빈 그릇 곁에 고리 더미 · 덮개가 밀어 기계가 오른쪽 끝까지 내달리고 해 · 나무 · 집이 찍힌 종이띠가 끝없이 굽이쳐 쏟아진다","fact":"젖당 있음 + 포도당 없음 = 최대 발현(억제자 풀림 + cAMP-CRP 밂)","hook":"문지기 없음 + 덮개 밂 = 종이띠가 끝없이","say":"맨 앞 줄이 가장 요란하다. 문지기는 우유병을 들고 비켜났고, 포도 그릇은 비어 고리가 쏟아졌고, 매트의 돔 덮개가 용수철로 힘껏 민다. 기계는 속도선을 그리며 오른쪽 끝까지 내달리고, 해 나무 집이 찍힌 종이띠가 끝없이 굽이쳐 쏟아진다. 젖당이 있고 포도당이 없을 때, lac 오페론은 가장 강하게 켜진다. 막는 것은 풀렸고 미는 것은 붙었다. 최대 발현은 이 한 줄뿐이다.","box":[[1135,715,850,400]],"src":["s25p01b#1"],"cards":[]},{"sid":"s7","obj":"셋째 줄 — 문지기는 비켰지만 그릇에 포도가 가득 · 덮개도 고리도 없다 · 기계가 문턱을 조금 넘어 짧은 종이띠만","fact":"포도당이 많으면 cAMP-CRP 가 없어 억제자가 없어도 조금만 · 이화물질 억제","hook":"포도 가득 + 덮개 없음 = 짧은 종이띠 = 이화물질 억제","say":"셋째 줄도 문지기는 우유병을 들고 비켜났다. 그런데 그릇에 포도가 가득하고, 고리도 돔 덮개도 없다. 기계는 문턱을 겨우 넘어 짧은 종이띠만 내놓았다. 젖당이 있어도 포도당이 많으면 cAMP 가 낮아 cAMP-CRP 가 생기지 않는다. 밀어 주는 것이 없으니 발현이 낮다. 막는 것이 없어졌다고 저절로 많이 나오지는 않는다. 좋은 밥인 포도당이 있으면 딴 밥 차릴 채비를 하지 않는 것, 이것이 이화물질 억제다. 포도당 효과라고도 한다.","box":[[130,540,180,165],[635,540,630,125]],"src":["s25p01b#2","s25p01b#3"],"cards":["F1-28","F1-36"]},{"sid":"s8","obj":"둘째 줄 — 쓰러진 빈 그릇 곁 금 고리 · 덮개의 용수철이 기계를 밀어도 문턱 위 문지기 때문에 기계가 꼼짝 못 한다","fact":"젖당이 없으면 포도당이 없어도 꺼짐 — 억제자가 막으면 cAMP-CRP 도 소용없다","hook":"덮개가 밀어도 문지기가 버티면 꺼짐","say":"둘째 줄은 앞 줄과 거꾸로다. 포도 그릇이 비어 고리가 쏟아졌고, 돔 덮개도 얹혀 용수철로 기계를 민다. 그런데 문턱 위에 문지기가 팔짱 끼고 버티고 앉았다. 기계는 꼼짝 못 한다. 젖당이 없으면 포도당이 없어도 lac 오페론은 꺼져 있다. 억제자가 작동자를 막고 있으면 cAMP-CRP 가 아무리 밀어도 소용없다.","box":[[435,300,640,230]],"src":["s25p01#0","s25p01b#4"],"cards":["F1-16","F1-149","F1-3","F1-68","F1-21","F1-29"]},{"sid":"s9","obj":"둘째 줄 한 자리에 둘이 맞선다 — 문턱 위에서 막는 문지기 · 뒤에서 용수철로 미는 돔 덮개","fact":"음성 조절 = 억제자가 전사를 막음 · 양성 조절 = 활성자가 촉진 · lac 은 둘 다","hook":"막는 문지기 = 음성 · 미는 덮개 = 양성","say":"둘째 줄 한 자리에 두 힘이 맞선다. 앞에서 막는 문지기, 뒤에서 미는 돔 덮개. 억제자가 전사를 막는 것이 음성 조절, 활성자가 전사를 촉진하는 것이 양성 조절이다. lac 오페론은 이 둘을 한 자리에서 동시에 받는다. 활성자와 억제자가 같은 유전자에 함께 작용할 수 있다. trp 오페론과 lac 오페론은 둘 다 억제자에 의한 음성 조절을 받는다는 점이 같다.","box":[[915,290,160,240],[560,350,185,120]],"src":["s25p01#4"],"cards":["F1-33","F1-31","F1-67","F1-162"]},{"sid":"s10","obj":"맨 앞 줄이 켜진 조건 둘 — 문지기가 빠는 우유병 · 옆으로 쓰러진 빈 포도 그릇","fact":"첫째 조건 젖당 있음(억제자 풀림) · 둘째 조건 포도당 없음(CAP 붙음)","hook":"우유병 = 첫째 · 빈 포도 그릇 = 둘째","say":"조건을 둘로 정리하자. 첫째는 문지기가 빠는 우유병, 젖당이 있어 억제자가 비켜나는 것이다. 이것이 lac 오페론이 켜지는 첫 번째 조건이다. 둘째는 쓰러진 빈 포도 그릇, 포도당이 부족해 고리가 쌓이고 덮개가 미는 것이다. 이것이 최대로 켜지는 두 번째 조건이다. 둘이 겹쳐야 종이띠가 끝없이 쏟아진다.","box":[[890,625,90,90],[830,900,110,90],[25,780,175,150]],"src":["s25p01#1","s25p01#3"],"cards":["F1-14","F1-17","F1-12","F1-15","F1-5","F1-24","F1-25","F1-150","F1-13","F1-27"]},{"sid":"s11","obj":"네 줄을 뒤에서 앞으로 (되짚기) — 버티는 문지기 둘(꺼짐) · 비킨 문지기와 포도 가득(조금) · 비킨 문지기와 빈 그릇(활짝)","fact":"젖당 없음 → 꺼짐 · 젖당 + 포도당 → 조금 · 젖당 + 포도당 없음 → 활짝","hook":"뒤 둘 꺼짐 · 셋째 조금 · 맨 앞 활짝","say":"네 줄을 뒤에서 앞으로 되짚자. 뒤의 두 줄은 문지기가 문턱에 버티고 있다. 젖당이 없으면 포도당이 있든 없든 꺼짐. 셋째 줄은 문지기가 비켰지만 포도가 가득하다. 젖당이 있고 포도당도 있으면 조금만. 맨 앞 줄은 문지기가 비키고 그릇도 비었다. 젖당이 있고 포도당이 없으면 활짝. 한 문장으로, lac 오페론은 젖당이 있을 때 켜지고 포도당이 없을 때 가장 강하게 켜지는 유도성 오페론이다.","box":[[310,85,780,245],[220,290,860,240],[130,530,1140,260],[25,740,1960,390]],"src":["s25p01b#4"],"cards":[]}],"hubPanel":"s25p01"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
-let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
 const scoreKey = 'lesson_' + L.id;
-let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
 function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
 function draw() {
@@ -111,8 +129,16 @@ function showCap(k, judge) {
   if (voice) speak(st.say || (st.obj + '. ' + st.fact));
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
 function speak(t) {
+  t = ttsNorm(t);
   const my = ++speakSeq, at = i;
   const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
   if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
@@ -146,27 +172,45 @@ function setMode(m) {
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
   if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
-  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
   showScore();
 }
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
-  $('judge').style.display = 'flex';
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 function judge(ok) {
-  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
-  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
-  showScore(); quizNext();
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
 }
 function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
 function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
 function showScore() {
-  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
-  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
-  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
@@ -175,6 +219,9 @@ $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');

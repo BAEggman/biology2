@@ -50,7 +50,8 @@
     <button id="bTour" class="on">투어</button>
     <button id="bRecap">되짚기</button>
     <button id="bReview">복습 — 그림만</button>
-    <button id="bQuiz">시험 — 순서대로</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
     <span class="score" id="score"></span>
   </div>
   <div class="stage" id="stage">
@@ -71,17 +72,34 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다.</p>
 </div>
 <script>
-const L = {"id":"L19g","scene":"s19","part":"g","title":"벌레의 작업대와 버클 띠 — Bcl-2와 예쁜꼬마선충","sub":"미토콘드리아 외막의 조절자 Bcl-2(Ced-9 상동체 · 버클) · Bax · Bak(상자 · 박) · 눌린 Ced-4와 닫힌 Ced-3 → 풀림 · 활성/비활성 조절 · 131번","img":"img/L19g.webp","w":2048,"h":1144,"stops":[{"obj":"같은 콩 모양 통 둘 — 왼쪽 성함 · 오른쪽 껍질 구멍 셋","fact":"Ced-9 / Bcl-2는 미토콘드리아 외막의 조절자 — 겉껍질이 뚫리느냐 마느냐","hook":"콩 모양 + 안쪽 주름 = 미토콘드리아 · 겉껍질 = 외막","say":"똑같은 콩 모양 통이 둘이다. 왼쪽은 껍질이 성해 붉은 알갱이가 안에 그대로, 오른쪽은 껍질에 구멍 셋이 뚫려 알갱이가 쏟아진다. 콩 모양은 미토콘드리아. 세드 구, 사람의 비씨엘 투는 미토콘드리아 외막에 있는 세포예정사 조절자. 안쪽 주름이 아니라 바깥 껍질이 뚫리느냐 마느냐가 전부.","box":[40,280,740,660],"src":["s19p02h#0"],"cards":["B0-169"]},{"obj":"왼 통 허리를 바싹 조인 띠와 네모 버클","fact":"Bcl-2 집안(Ced-9의 상동체) — 조이면 새지 않는다(사멸 억제)","hook":"버클 = Bcl · 조임 = 안 샘","say":"왼쪽 통의 허리를 두른 띠와 네모난 버클이 바싹 조여 껍질이 살짝 잘록하다. 버클, 비씨엘. 포유류에서 미토콘드리아 아폽토시스를 조절하는 비씨엘 투 집안. 조이면 새지 않는다, 하는 일까지 겹친다.","box":[120,580,240,180],"src":["s19p02h#1"],"cards":["B0-170"]},{"obj":"오른 통 곁의 뚜껑 연 네모 상자와 속 파낸 박","fact":"사멸 촉진 Bax · Bak — 이 둘이 있으면 외막이 뚫린다","hook":"박스 = Bax · 박 = Bak","say":"오른쪽 통 곁 바닥에 선 것은 딱 둘. 뚜껑을 연 네모 상자와 속을 파낸 박 바가지. 박스가 백스, 박이 백. 비씨엘 투 집안에서 사멸을 촉진하는 대표 둘. 구멍 곁에 서 있고 왼쪽 통엔 없는 것이, 이 둘이 있으면 뚫린다는 뜻.","box":[620,740,420,330],"src":["s19p02h#2"],"cards":["C1-117"]},{"obj":"오른 통엔 띠가 없고 · 왼 통 곁엔 상자 · 박이 없다","fact":"한 집안(B로 시작 · 외막)이 조이는 편과 뚫는 편으로 갈린다 · 띠가 내인성 경로의 마개","hook":"같은 자리의 두 편","say":"오른쪽 통에는 띠도 버클도 없어서 새고, 왼쪽 통 곁에는 상자도 박도 없다. 한 집안에 편이 둘. 이름이 다 비로 시작하고 사는 자리도 외막인데 조이는 쪽과 뚫는 쪽으로 갈린다. 이 띠 하나가 내인성 경로 전체의 마개. 뚫려야 알갱이가 새고, 새야 테가 되고, 테가 있어야 아홉이 켜진다.","box":[[40,280,740,660],[620,740,420,330]],"src":["s19p02h#3","s19p02h#4"],"cards":["X-SG-23"]},{"obj":"작업대 왼쪽 — 점 넷 판이 버클 띠에 눌려 납작 · 캐스터네츠 닫힘 · 점 셋 판 누움","fact":"아폽토시스 단백질은 평소 불활성 — 없는 게 아니라 눌려 있다","hook":"연장은 다 놓여 있다","say":"작업대 왼쪽. 점이 넷 찍힌 판이 버클 띠에 눌려 바닥에 납작 붙어 있고, 곁의 캐스터네츠는 두 짝이 맞물려 닫혔고, 점 셋 판이 납작하게 누워 있다. 대부분의 아폽토시스 단백질은 평소 불활성. 없는 게 아니라 눌려 있다. 연장은 다 놓여 있다.","box":[1000,460,480,260],"src":["s19p02i#0"],"cards":["B0-167"]},{"obj":"작업대 오른쪽 — 띠가 풀려 버클이 끌러지고 점 넷 판이 일어섰다","fact":"사멸 신호 → Ced-9이 Ced-4를 더는 못 누른다(미는 게 아니라 풀리는 것)","hook":"버클 띠 = Ced-9 · 점 넷 = Ced-4","say":"작업대 오른쪽. 같은 점 넷 판이 일어서 있고 띠는 풀려 늘어졌으며 버클이 끌러졌다. 버클 띠가 세드 구, 점 넷 판이 세드 사. 세포가 예정사 신호를 받으면 세드 구는 세드 사를 더 이상 불활성화할 수 없다. 미는 게 아니라 풀리는 것, 검문소 문법 그대로.","box":[1500,300,300,500],"src":["s19p02i#1"],"cards":["B0-171"]},{"obj":"일어선 판 곁 캐스터네츠가 활짝 · 점 셋 판이 기댐","fact":"Ced-4가 풀리면 Ced-3(캐스페이즈)이 켜져 단백질 · 핵산을 분해한다","hook":"벌어진 캐스터네츠 = 켜진 효소 · 점 셋 = Ced-3","say":"일어선 판 곁의 캐스터네츠가 활짝 벌어졌고 거기 점 셋 판이 기대어 있다. 세드 구가 세드 사를 놓아 준 결과, 단백질과 핵산을 분해하는 효소가 켜진다. 캐스터네츠가 벌어지는 것이 활성화, 점 셋이 세드 삼. 세드 삼이 곧 캐스페이즈.","box":[1740,440,280,260],"src":["s19p02i#2"],"cards":["B0-172","B0-174"]},{"obj":"작업대의 판은 점 넷과 점 셋뿐","fact":"선충 아폽토시스의 두 주요 유전자 ced-3 · ced-4","hook":"점을 세면 셋과 넷","say":"작업대의 판은 두 가지뿐이다. 점 넷과 점 셋, 양쪽에 하나씩. 예쁜꼬마선충 아폽토시스의 두 주요 유전자 세드 삼과 세드 사. 그 유전자가 만드는 단백질이 이 두 판.","box":[[1020,480,260,220],[1240,600,220,100],[1540,320,220,260],[1800,560,220,160]],"src":["s19p02i#3"],"cards":["B0-165","B0-166"]},{"obj":"왼쪽과 오른쪽에 놓인 것이 똑같다 — 눌렸냐 일어섰냐","fact":"조절은 활성 · 비활성 수준 — 새로 만들어 오는 것이 없다","hook":"같은 물건의 두 상태","say":"왼쪽과 오른쪽에 놓인 것은 똑같다. 다른 것은 눌렸느냐 일어섰느냐, 닫혔느냐 벌어졌느냐뿐. 선충의 아폽토시스 조절은 단백질의 활성과 비활성 수준에서 일어난다. 관련 단백질은 이미 있고 켜짐과 꺼짐으로 조절된다. 새로 만들어 오는 것이 없다.","box":[960,300,1080,480],"src":["s19p02i#4"],"cards":["B0-168","B0-196"]},{"obj":"벽의 판 셋 — 점 하나 · 셋 · 하나","fact":"선충 발생 중 아폽토시스는 언제나 131번(정해져 있어 예정사)","hook":"하나 · 셋 · 하나 = 131","say":"벽에 작은 판 셋이 띄엄띄엄 걸렸다. 왼쪽부터 점 하나, 셋, 하나. 백삼십일. 예쁜꼬마선충이 정상적으로 자라는 동안 아폽토시스는 언제나 백삼십일 번 일어난다. 늘 같은 수, 정해져 있다는 뜻이라 예정사.","box":[1060,80,900,180],"src":["s19p02i#5"],"cards":["B0-164"]},{"obj":"두 장면 — 통의 버클과 작업대의 버클이 같은 물건","fact":"벌레 이름(Ced-9)과 사람 이름(Bcl-2)이 같은 물건 · Ced-3 = 캐스페이즈","hook":"버클 하나로 둘을 나른다","say":"왼쪽 통을 조인 버클과 작업대의 버클은 같은 물건이다. 벌레의 이름 세드 구와 사람의 이름 비씨엘 투가 같은 것을 가리킨다. 세드 삼이 드는 캐스터네츠는 사람의 캐스페이즈.","box":[[140,580,220,160],[1480,540,260,260]],"src":["s19p02h#3"],"cards":["X-SG-23"]}],"hubPanel":"s19p02h"};
+const L = {"id":"L19g","scene":"s19","part":"g","title":"벌레의 작업대와 버클 띠 — Bcl-2와 예쁜꼬마선충","sub":"미토콘드리아 외막의 조절자 Bcl-2(Ced-9 상동체 · 버클) · Bax · Bak(상자 · 박) · 눌린 Ced-4와 닫힌 Ced-3 → 풀림 · 활성/비활성 조절 · 131번","img":"img/L19g.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"같은 콩 모양 통 둘 — 왼쪽 성함 · 오른쪽 껍질 구멍 셋","fact":"Ced-9 / Bcl-2는 미토콘드리아 외막의 조절자 — 겉껍질이 뚫리느냐 마느냐","hook":"콩 모양 + 안쪽 주름 = 미토콘드리아 · 겉껍질 = 외막","say":"똑같은 콩 모양 통이 둘이다. 왼쪽은 껍질이 성해 붉은 알갱이가 안에 그대로, 오른쪽은 껍질에 구멍 셋이 뚫려 알갱이가 쏟아진다. 콩 모양은 미토콘드리아. 세드 구, 사람의 비씨엘 투는 미토콘드리아 외막에 있는 세포예정사 조절자. 안쪽 주름이 아니라 바깥 껍질이 뚫리느냐 마느냐가 전부.","box":[40,280,740,660],"src":["s19p02h#0"],"cards":["B0-169"]},{"sid":"s2","obj":"왼 통 허리를 바싹 조인 띠와 네모 버클","fact":"Bcl-2 집안(Ced-9의 상동체) — 조이면 새지 않는다(사멸 억제)","hook":"버클 = Bcl · 조임 = 안 샘","say":"왼쪽 통의 허리를 두른 띠와 네모난 버클이 바싹 조여 껍질이 살짝 잘록하다. 버클, 비씨엘. 포유류에서 미토콘드리아 아폽토시스를 조절하는 비씨엘 투 집안. 조이면 새지 않는다, 하는 일까지 겹친다.","box":[120,580,240,180],"src":["s19p02h#1"],"cards":["B0-170"]},{"sid":"s3","obj":"오른 통 곁의 뚜껑 연 네모 상자와 속 파낸 박","fact":"사멸 촉진 Bax · Bak — 이 둘이 있으면 외막이 뚫린다","hook":"박스 = Bax · 박 = Bak","say":"오른쪽 통 곁 바닥에 선 것은 딱 둘. 뚜껑을 연 네모 상자와 속을 파낸 박 바가지. 박스가 백스, 박이 백. 비씨엘 투 집안에서 사멸을 촉진하는 대표 둘. 구멍 곁에 서 있고 왼쪽 통엔 없는 것이, 이 둘이 있으면 뚫린다는 뜻.","box":[620,740,420,330],"src":["s19p02h#2"],"cards":["C1-117"]},{"sid":"s4","obj":"오른 통엔 띠가 없고 · 왼 통 곁엔 상자 · 박이 없다","fact":"한 집안(B로 시작 · 외막)이 조이는 편과 뚫는 편으로 갈린다 · 띠가 내인성 경로의 마개","hook":"같은 자리의 두 편","say":"오른쪽 통에는 띠도 버클도 없어서 새고, 왼쪽 통 곁에는 상자도 박도 없다. 한 집안에 편이 둘. 이름이 다 비로 시작하고 사는 자리도 외막인데 조이는 쪽과 뚫는 쪽으로 갈린다. 이 띠 하나가 내인성 경로 전체의 마개. 뚫려야 알갱이가 새고, 새야 테가 되고, 테가 있어야 아홉이 켜진다.","box":[[40,280,740,660],[620,740,420,330]],"src":["s19p02h#3","s19p02h#4"],"cards":["X-SG-23"]},{"sid":"s5","obj":"작업대 왼쪽 — 점 넷 판이 버클 띠에 눌려 납작 · 캐스터네츠 닫힘 · 점 셋 판 누움","fact":"아폽토시스 단백질은 평소 불활성 — 없는 게 아니라 눌려 있다","hook":"연장은 다 놓여 있다","say":"작업대 왼쪽. 점이 넷 찍힌 판이 버클 띠에 눌려 바닥에 납작 붙어 있고, 곁의 캐스터네츠는 두 짝이 맞물려 닫혔고, 점 셋 판이 납작하게 누워 있다. 대부분의 아폽토시스 단백질은 평소 불활성. 없는 게 아니라 눌려 있다. 연장은 다 놓여 있다.","box":[1000,460,480,260],"src":["s19p02i#0"],"cards":["B0-167"]},{"sid":"s6","obj":"작업대 오른쪽 — 띠가 풀려 버클이 끌러지고 점 넷 판이 일어섰다","fact":"사멸 신호 → Ced-9이 Ced-4를 더는 못 누른다(미는 게 아니라 풀리는 것)","hook":"버클 띠 = Ced-9 · 점 넷 = Ced-4","say":"작업대 오른쪽. 같은 점 넷 판이 일어서 있고 띠는 풀려 늘어졌으며 버클이 끌러졌다. 버클 띠가 세드 구, 점 넷 판이 세드 사. 세포가 예정사 신호를 받으면 세드 구는 세드 사를 더 이상 불활성화할 수 없다. 미는 게 아니라 풀리는 것, 검문소 문법 그대로.","box":[1500,300,300,500],"src":["s19p02i#1"],"cards":["B0-171"]},{"sid":"s7","obj":"일어선 판 곁 캐스터네츠가 활짝 · 점 셋 판이 기댐","fact":"Ced-4가 풀리면 Ced-3(캐스페이즈)이 켜져 단백질 · 핵산을 분해한다","hook":"벌어진 캐스터네츠 = 켜진 효소 · 점 셋 = Ced-3","say":"일어선 판 곁의 캐스터네츠가 활짝 벌어졌고 거기 점 셋 판이 기대어 있다. 세드 구가 세드 사를 놓아 준 결과, 단백질과 핵산을 분해하는 효소가 켜진다. 캐스터네츠가 벌어지는 것이 활성화, 점 셋이 세드 삼. 세드 삼이 곧 캐스페이즈.","box":[1740,440,280,260],"src":["s19p02i#2"],"cards":["B0-172","B0-174"]},{"sid":"s8","obj":"작업대의 판은 점 넷과 점 셋뿐","fact":"선충 아폽토시스의 두 주요 유전자 ced-3 · ced-4","hook":"점을 세면 셋과 넷","say":"작업대의 판은 두 가지뿐이다. 점 넷과 점 셋, 양쪽에 하나씩. 예쁜꼬마선충 아폽토시스의 두 주요 유전자 세드 삼과 세드 사. 그 유전자가 만드는 단백질이 이 두 판.","box":[[1020,480,260,220],[1240,600,220,100],[1540,320,220,260],[1800,560,220,160]],"src":["s19p02i#3"],"cards":["B0-165","B0-166"]},{"sid":"s9","obj":"왼쪽과 오른쪽에 놓인 것이 똑같다 — 눌렸냐 일어섰냐","fact":"조절은 활성 · 비활성 수준 — 새로 만들어 오는 것이 없다","hook":"같은 물건의 두 상태","say":"왼쪽과 오른쪽에 놓인 것은 똑같다. 다른 것은 눌렸느냐 일어섰느냐, 닫혔느냐 벌어졌느냐뿐. 선충의 아폽토시스 조절은 단백질의 활성과 비활성 수준에서 일어난다. 관련 단백질은 이미 있고 켜짐과 꺼짐으로 조절된다. 새로 만들어 오는 것이 없다.","box":[960,300,1080,480],"src":["s19p02i#4"],"cards":["B0-168","B0-196"]},{"sid":"s10","obj":"벽의 판 셋 — 점 하나 · 셋 · 하나","fact":"선충 발생 중 아폽토시스는 언제나 131번(정해져 있어 예정사)","hook":"하나 · 셋 · 하나 = 131","say":"벽에 작은 판 셋이 띄엄띄엄 걸렸다. 왼쪽부터 점 하나, 셋, 하나. 백삼십일. 예쁜꼬마선충이 정상적으로 자라는 동안 아폽토시스는 언제나 백삼십일 번 일어난다. 늘 같은 수, 정해져 있다는 뜻이라 예정사.","box":[1060,80,900,180],"src":["s19p02i#5"],"cards":["B0-164"]},{"sid":"s11","obj":"두 장면 — 통의 버클과 작업대의 버클이 같은 물건","fact":"벌레 이름(Ced-9)과 사람 이름(Bcl-2)이 같은 물건 · Ced-3 = 캐스페이즈","hook":"버클 하나로 둘을 나른다","say":"왼쪽 통을 조인 버클과 작업대의 버클은 같은 물건이다. 벌레의 이름 세드 구와 사람의 이름 비씨엘 투가 같은 것을 가리킨다. 세드 삼이 드는 캐스터네츠는 사람의 캐스페이즈.","box":[[140,580,220,160],[1480,540,260,260]],"src":["s19p02h#3"],"cards":["X-SG-23"]}],"hubPanel":"s19p02h"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
-let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false;
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
 const scoreKey = 'lesson_' + L.id;
-let score = {}; try { score = JSON.parse(localStorage.getItem(scoreKey) || '{}'); } catch (e) {}
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
 function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
 function draw() {
@@ -111,8 +129,16 @@ function showCap(k, judge) {
   if (voice) speak(st.say || (st.obj + '. ' + st.fact));
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
 function speak(t) {
+  t = ttsNorm(t);
   const my = ++speakSeq, at = i;
   const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
   if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
@@ -146,27 +172,45 @@ function setMode(m) {
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
   if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
-  if (m === 'quiz') { $('bQuiz').classList.add('on'); quizOrder = stops.map((_, k) => k).filter(k => stops[k].box); quizPos = 0; quizAsk(); }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
   showScore();
 }
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
-  $('judge').style.display = 'flex';
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); }
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 function judge(ok) {
-  const k = quizOrder[quizPos]; score[k] = score[k] || []; score[k].push({ t: Date.now(), ok });
-  try { localStorage.setItem(scoreKey, JSON.stringify(score)); } catch (e) {}
-  showScore(); quizNext();
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
 }
 function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
 function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
 function showScore() {
-  const ks = Object.keys(score); if (!ks.length) { $('score').textContent = ''; return; }
-  const last = ks.map(k => score[k][score[k].length - 1].ok); const ok = last.filter(Boolean).length;
-  $('score').textContent = `마지막 시험 ${ok} / ${stops.length}`;
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
@@ -175,6 +219,9 @@ $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');
