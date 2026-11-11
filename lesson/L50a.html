@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>몸 마을 자재 창고 — 기관계 · 교환 표면 · 상피 다섯 · 결합조직 넷</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+</div>
+<script>
+const L = {"id":"L50a","scene":"s50","part":"a","title":"몸 마을 자재 창고 — 기관계 · 교환 표면 · 상피 다섯 · 결합조직 넷","sub":"뒷벽 인체 그림의 네 빛깔 기관 무리 + 손 맞잡은 일꾼 넷(기관계 협력) · 스물다섯 칸 깔개 한 칸 위의 살갗 오림(교환 표면 = 피부의 약 25배) · 윗면 반들 · 아랫면 풀 묻은 타일(상피의 극성) · 진열판 다섯 — 종잇장 한 겹(단층편평) · 물방울 짜는 상자 꼴(입방) · 손 달린 키 큰 기둥(단층원주) · 들쭉날쭉 기둥 + 털이 미는 초록 끈적이(거짓중층원주) · 장화에 문질러도 끄떡없는 두툼한 발판(중층편평) · 성긴 실 상자 + 노란 공(성긴결합 · 지방) · 꼭두각시 알통과 팔꿈치의 흰 끈(힘줄 · 인대) · 미장이와 곡괭이 일꾼의 뼈 기둥(조골 · 파골 · 중심관) · 실과 끈적이를 뿜는 젤 덩이(연골) · 가위표 친 알통 팔(근육은 결합조직 아님)","img":"img/L50a.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"몸 마을 자재 창고 — 뒷벽의 큰 인체 그림(분홍 허파 · 기관 / 초록 림프관 · 붉은 골수 든 넓적다리뼈 / 노랑 콩팥 · 방광 / 보라 작은 샘들) · 그 아래 같은 빛깔 작업복 일꾼 넷이 손을 맞잡았다 (틀)","fact":"기관계는 서로 협력해 생존과 항상성을 지킨다 — 호흡 · 면역림프 · 배설 · 내분비 …","hook":"네 빛깔 기관 무리 = 기관계 · 손 맞잡은 일꾼 넷 = 협력","say":"몸 마을의 자재 창고다. 몸을 짓는 재료가 여기 다 있다. 뒷벽에 큰 인체 그림이 걸렸다. 분홍은 허파와 기관, 곧 호흡계. 초록은 림프관과 림프절, 붉은 골수가 든 넓적다리뼈, 그리고 가슴샘과 비장까지, 면역계와 림프계. 노랑은 콩팥에서 요관을 따라 방광과 요도로, 배설계. 보라의 작은 샘들은 머리의 뇌하수체, 목의 갑상샘, 이자, 콩팥 위의 부신, 내분비계다. 그림 아래 네 빛깔 작업복 일꾼이 손을 맞잡았다. 기관계는 따로 일하지 않는다. 서로 협력해야 살아남고, 항상성이 유지된다.","box":[[860,100,350,495],[860,555,365,150]],"cards":["G0-11","G0-2","G0-3","G0-4","G0-5"]},{"sid":"s2","obj":"바닥 한가운데 다섯 줄 다섯 칸, 스물다섯 칸짜리 검정 · 크림 바둑판 깔개(한 귀퉁이가 말렸다) · 맨 앞줄 가운데 크림 칸 안에 꼭 맞게 놓인, 사람 꼴로 오린 얇은 살갗 한 장(머리털이 삐죽)","fact":"소화 · 호흡 · 순환계의 교환 표면은 피부의 약 25배 — 교환 효율을 크게 높인다","hook":"살갗 한 벌 = 깔개 한 칸 · 깔개 25칸 = 몸 안 교환 표면","say":"바닥 한가운데에 다섯 줄 다섯 칸, 스물다섯 칸짜리 바둑판 깔개가 펼쳐졌다. 맨 앞줄 가운데 크림 칸 안에, 사람 꼴로 오린 얇은 살갗 한 장이 꼭 맞게 놓였다. 사람 몸을 덮는 피부 한 벌이 딱 한 칸이다. 사람의 소화계, 호흡계, 순환계가 바깥과 물질을 바꾸는 겉면을 다 펴면 피부의 약 25배, 이 깔개 전체다. 몸속으로 접어 넣은 넓은 겉면이 물질 교환의 효율을 크게 높인다.","box":[[630,760,875,335]],"cards":["G0-12","G0-180"]},{"sid":"s3","obj":"타일 진열대 앞 — 일꾼이 타일 한 장을 비스듬히 들어 보인다 · 윗면은 반들반들한 파랑 · 밑에서는 누런 풀이 끈적하게 흘러내린다","fact":"상피는 극성이 있다 — 바깥(관 안)을 보는 윗면과 아래 조직에 붙는 아랫면이 다르다","hook":"반들반들 윗면 · 풀 묻은 아랫면 = 상피의 극성","say":"왼쪽은 타일 전시장이다. 상피는 몸의 겉과 관의 안쪽을 덮는 타일이다. 진열대 앞 일꾼이 타일 한 장을 비스듬히 들어 보인다. 윗면은 반들반들한 파랑인데, 밑에서는 누런 풀이 끈적하게 흘러내린다. 위아래가 다르다. 상피의 극성이다. 바깥이나 관 안쪽을 보는 윗면과, 아래 조직의 바닥막에 붙는 아랫면이 하는 일이 다르다.","box":[[428,728,270,335]],"cards":["G0-25"]},{"sid":"s4","obj":"첫째 진열판 — 유리창처럼 얇고 납작한 타일 한 겹 · 칸칸에 흰 방울과 어두운 방울이 그대로 스며 들었다 · 뒤에 분홍 풍선과 빨간 호스","fact":"단층편평상피 — 얇아서 확산에 유리 · 폐포 · 혈관벽","hook":"유리창 같은 얇은 한 겹 = 단층편평 · 뒤의 분홍 풍선(폐포) · 빨간 호스(혈관)","say":"첫째 진열판은 유리창처럼 얇고 납작한 타일 한 겹이다. 칸칸에 흰 방울과 어두운 방울이 그대로 스며 들었다. 막힘없이 넘나든다. 단층편평상피다. 납작한 세포 한 겹이라 가장 얇고, 확산으로 물질을 바꾸기에 가장 좋다. 뒤에 분홍 풍선과 빨간 호스가 있다. 폐포와 혈관벽, 이 상피가 있는 곳이다. 「가장 얇아 확산에 유리」가 나오면 단층편평상피다.","box":[[12,440,245,400]],"cards":["G0-22","G0-23","G0-53"]},{"sid":"s5","obj":"둘째 진열판 — 네모반듯한 상자 꼴 타일 · 타일마다 맑은 물방울을 떨어뜨려 아래 작은 유리병에 받는다","fact":"입방상피 — 분비에 특수화된 상자 꼴 세포 · 신장세관 · 갑상샘 · 침샘","hook":"물방울 짜는 상자 꼴 타일 = 입방상피(분비)","say":"둘째 진열판은 네모반듯한 상자 꼴 타일이다. 타일마다 맑은 물방울을 떨어뜨려 아래 작은 유리병에 받는다. 입방상피다. 정육면체 같은 세포가 분비를 맡는다. 콩팥의 세관, 갑상샘, 침샘에 있다. 「분비선 상피」가 나오면 먼저 입방상피를 떠올린다.","box":[[230,408,195,362]],"cards":["G0-18","G0-19","G0-54"]},{"sid":"s6","obj":"셋째 진열판 — 기둥처럼 키 큰 타일 한 줄 · 꼭대기마다 작은 손이 위로 활짝 펼쳐졌고 · 아래 끝은 파란 물길로 이어진다","fact":"단층원주상피 — 흡수 · 분비에 유리한 키 큰 기둥 세포 · 소장 안쪽","hook":"손 달린 키 큰 기둥 = 단층원주상피(흡수)","say":"셋째 진열판은 기둥처럼 키가 큰 타일 한 줄이다. 꼭대기마다 작은 손이 위로 활짝 펼쳐졌고, 아래 끝은 파란 물길로 이어진다. 위에서 받아 아래로 넘긴다. 단층원주상피다. 키 큰 기둥 세포 한 겹이 흡수와 분비를 맡는다. 소장의 안쪽 벽이 이것이다. 「소장 흡수 표면」이 나오면 단층원주상피다.","box":[[395,402,180,322]],"cards":["G0-20","G0-21","G0-55"]},{"sid":"s7","obj":"넷째 진열판 — 키가 들쭉날쭉한 기둥 타일이 모두 같은 받침에 섰다 · 가장 큰 기둥 꼭대기와 위로 기운 관에 털 · 관을 따라 웃는 초록 끈적이가 밀려 올라간다","fact":"거짓중층원주상피 — 여러 층 같지만 한 층 · 섬모가 점액을 민다 · 호흡관","hook":"들쭉날쭉 기둥 + 털이 미는 초록 끈적이 = 거짓중층원주상피","say":"넷째 진열판의 기둥 타일은 키가 들쭉날쭉해 여러 층처럼 보인다. 그런데 모두 같은 받침에 발을 딛고 섰다. 한 층이다. 그래서 거짓중층원주상피. 가장 큰 기둥 꼭대기와 위로 기운 관에 털, 섬모가 났고, 관을 따라 초록 끈적이가 밀려 올라간다. 호흡관의 점막이다. 먼지 묻은 점액을 목 쪽으로 쓸어 올린다. 「섬모가 점액을 이동」이 나오면 거짓중층원주상피다.","box":[[540,332,160,350]],"cards":["G0-24","G0-52"]},{"sid":"s8","obj":"다섯째 진열판 — 얇은 판이 수없이 겹친 두툼한 발판 · 큰 장화가 위를 문질러 맨 윗장이 부스러기로 벗겨진다 · 더미는 끄떡없다","fact":"중층편평상피 — 여러 층 · 빨리 재생 · 마찰에 강함 · 피부 겉 · 입 · 항문 · 질","hook":"장화에 문질러도 끄떡없는 두툼한 발판 = 중층편평상피","say":"다섯째 진열판은 얇은 판이 수없이 겹친 두툼한 발판이다. 큰 장화가 위를 문질러 맨 윗장이 부스러기로 벗겨져도 더미는 끄떡없다. 아래에서 새 판이 빨리 올라오기 때문이다. 중층편평상피다. 여러 층이고, 빠르게 재생하고, 마찰에 강하다. 피부의 바깥층, 입 안, 항문, 질의 안쪽 벽처럼 쓸리고 닳는 곳에 있다. 피부와 그 유도체, 털과 손톱 같은 것을 묶어 피부계라 한다.","box":[[668,362,152,275]],"cards":["G0-16","G0-17","G0-8"]},{"sid":"s9","obj":"오른쪽 열린 나무 상자 — 분홍 가는 실이 거미줄처럼 성기게 엉켜 속의 분홍 꾸러미들을 붙들고 · 실 사이사이에 동그란 노란 공","fact":"성긴결합조직 — 상피를 아래 조직에 잇고 기관을 제자리에 고정 · 지방조직은 그 특수형","hook":"꾸러미를 붙드는 성긴 실 = 성긴결합조직 · 노란 공 = 지방조직","say":"오른쪽은 결합 자재 코너다. 결합조직은 세포 사이를 넓은 세포외기질이 채운 조직, 몸을 잇고 받친다. 열린 나무 상자 안에 분홍 가는 실이 거미줄처럼 성기게 엉켜 분홍 꾸러미들을 제자리에 붙든다. 성긴결합조직이다. 상피를 아래 조직에 이어 주고 기관을 제자리에 고정한다. 실 사이사이에 동그란 노란 공이 박혔다. 지방조직, 지방을 저장하는 성긴결합조직의 특수형이다.","box":[[1258,442,280,290]],"cards":["G0-26","G0-33"]},{"sid":"s10","obj":"받침대의 뼈대 모형 — 들어 올린 팔의 위팔에 불룩한 빨간 알통 · 알통 아래끝과 팔꿈치 뼈들을 흰 끈이 칭칭 묶었다","fact":"섬유성결합조직 — 힘줄은 근육과 뼈를 · 인대는 뼈와 뼈를 잇는다","hook":"알통 끝 → 뼈를 묶은 끈 = 힘줄 · 뼈 ↔ 뼈를 묶은 끈 = 인대","say":"받침대에 뼈대 모형이 매달렸다. 들어 올린 팔의 위팔에 불룩한 빨간 알통이 붙었고, 팔꿈치에서 흰 끈이 칭칭 감겼다. 그 끈은 두 가지 일을 한다. 알통의 아래끝을 아래팔뼈에 묶는 끈, 근육과 뼈를 잇는 힘줄. 그리고 위팔뼈와 아래팔뼈를 서로 묶는 끈, 뼈와 뼈를 잇는 인대. 둘 다 콜라젠 섬유가 빽빽한 섬유성결합조직이다. 힘줄은 근육에서 뼈로, 인대는 뼈에서 뼈로.","box":[[1498,262,192,465]],"cards":["G0-27","G0-28","G0-29"]},{"sid":"s11","obj":"상아빛 굵은 뼈 기둥 — 잘린 윗면에 가운데 구멍을 둘러싼 나이테 같은 고리 · 흙손 든 미장이가 그 위에 흰 벽돌을 쌓고 · 곁의 일꾼은 곡괭이로 옆을 쪼아 낸다","fact":"뼈 = 광물화된 기질의 결합조직 · 조골세포는 짓고 파골세포는 헐고 · 골단위 가운데 중심관","hook":"벽돌 쌓는 미장이 = 조골세포 · 곡괭이 일꾼 = 파골세포 · 고리 가운데 구멍 = 중심관","say":"상아빛 굵은 뼈 기둥이 섰다. 잘린 윗면에 가운데 구멍을 둘러싼 나이테 같은 고리가 겹겹이다. 뼈의 단위, 골단위다. 가운데 구멍이 중심관, 혈관과 신경이 지나는 길이다. 뼈가 결합조직인 까닭은 세포 밖 기질에 칼슘 같은 광물이 박혀 단단하기 때문이다. 흙손을 든 미장이가 그 위에 흰 벽돌을 쌓는다. 뼈를 짓는 조골세포다. 곁의 일꾼은 곡괭이로 옆을 쪼아 낸다. 뼈를 허는 파골세포다. 뼈는 짓고 허물기를 늘 되풀이한다.","box":[[1608,548,385,322]],"cards":["G0-30","G0-31","G0-32"]},{"sid":"s12","obj":"반투명한 푸르스름한 젤 덩이(연골) — 속의 작은 타원 주머니마다 둥근 세포 하나 · 주머니 사이를 가는 흰 실 그물과 맑은 끈적이 덩이가 채웠다","fact":"연골세포는 콜라젠과 콘드로이틴황산염을 낸다 · 골격계 = 뼈 · 인대 · 힘줄 · 연골","hook":"주머니 속 세포 + 흰 실 그물 + 끈적이 = 연골(콜라젠 · 콘드로이틴황산염)","say":"앞에 반투명한 푸르스름한 젤 덩이가 놓였다. 커다란 젤 지우개 같다. 연골이다. 속의 작은 타원 주머니마다 둥근 연골세포가 하나씩 앉았고, 주머니 사이를 가는 흰 실 그물과 맑은 끈적이 덩이가 채웠다. 세포가 뿜어낸 것이다. 흰 실은 콜라젠, 끈적이는 콘드로이틴황산염이다. 둘이 어우러져 단단하면서도 휘는 연골이 된다. 뼈, 인대, 힘줄, 연골, 이 오른쪽 코너의 넷이 함께 골격계를 이룬다.","box":[[1698,878,300,212]],"cards":["G0-34","G0-9"]},{"sid":"s13","obj":"맨 오른쪽 벽 — 벽에서 주먹을 쥐고 알통을 세운 팔이 솟았고 널빤지 둘이 X 자로 가로질러 박혔다","fact":"결합조직이 아닌 것은 근육 — 뼈 · 혈액 · 지방 · 연골은 모두 결합조직","hook":"가위표 친 알통 팔 = 근육은 결합조직이 아니다","say":"맨 오른쪽 벽에서 주먹을 쥐고 알통을 세운 팔이 솟았다. 그 위로 널빤지 둘이 X 자로 박혔다. 이 덱에서 알통 세운 팔은 근육, 널빤지 가위표는 「여기서는 안 쓴다」다. 결합 자재 코너에서 근육은 빠진다. 근육은 결합조직이 아니라 근육조직이다. 뼈, 혈액, 지방, 연골은 모두 결합조직이다. 부엌의 가라앉힌 피도 결합조직이었다. 고르는 문제의 함정이다.","box":[[1772,198,274,328]],"cards":["G0-181"]}],"cq":{"G0-11":["기관계 수준 통합이 중요한 이유는?","개별 기관계가 서로 협력해 생존과 항상성을 유지하기 때문이다"],"G0-2":["포유동물의 호흡계 주요 구성은?","허파, 기관 및 호흡관"],"G0-3":["면역계와 림프계의 대표 기관은?","골수 · 림프절 · 흉선 · 비장 · 림프관"],"G0-4":["배설계의 주요 기관은?","신장, 요관, 방광, 요도"],"G0-5":["내분비계의 대표 기관은?","뇌하수체 · 갑상샘 · 이자 · 부신 등"],"G0-12":["인간에서 소화계·호흡계·순환계의 교환 표면적이 피부보다 큰 생리적 의미는?","물질 교환 효율을 크게 높인다는 뜻이다"],"G0-180":["소화·호흡·순환계의 교환 표면적은 피부의 약 몇 배인가?","약 25배"],"G0-25":["상피조직의 공통적 특징 중 하나는?","극성이 있다"],"G0-22":["단층편평상피의 특징은?","얇아서 확산에 의한 물질교환에 유리하다"],"G0-23":["단층편평상피가 잘 발견되는 곳은?","폐포, 혈관벽"],"G0-53":["문제에서 '가장 얇아 확산에 유리'가 나오면 어떤 상피를 떠올려야 하는가?","단층편평상피"],"G0-18":["입방상피의 특징은?","분비에 특수화된 큐브형 세포로 이루어진다"],"G0-19":["입방상피가 잘 발견되는 곳은?","신장세관 · 갑상샘 · 침샘 등"],"G0-54":["문제에서 '분비선 상피'가 나오면 가장 먼저 떠올릴 상피는?","입방상피"],"G0-20":["단층원주상피의 특징은?","흡수와 분비에 유리한 큰 기둥 모양 세포로 구성된다"],"G0-21":["단층원주상피가 잘 발견되는 곳은?","소장 내강"],"G0-55":["문제에서 '소장 흡수 표면'이 나오면 가장 먼저 떠올릴 상피는?","단층원주상피"],"G0-24":["거짓중층원주상피의 특징은?","호흡관 점막을 이루며 섬모로 점액을 이동시킨다"],"G0-52":["문제에서 '섬모가 점액을 이동'이 나오면 어떤 상피를 떠올려야 하는가?","거짓중층원주상피"],"G0-16":["중층편평상피의 특징은?","다층이며 빠르게 재생되고 마찰에 강하다"],"G0-17":["중층편평상피가 잘 발견되는 곳은?","피부 바깥층 · 입 · 항문 · 질 내벽"],"G0-8":["피부계는 무엇으로 이루어지는가?","피부와 그 유도체"],"G0-26":["성긴결합조직의 기능은?","상피를 아래 조직에 연결하고 기관을 제자리에 고정한다"],"G0-33":["지방조직은 어떤 결합조직의 특수형인가?","성긴결합조직"],"G0-27":["섬유성결합조직의 대표 예 2가지는?","힘줄과 인대"],"G0-28":["힘줄(tendon)의 연결은?","근육과 뼈"],"G0-29":["인대(ligament)의 연결은?","뼈와 뼈"],"G0-30":["뼈가 결합조직인 이유는?","광물화된 세포외기질을 가진 결합조직이기 때문이다"],"G0-31":["조골세포와 파골세포의 역할은?","조골세포는 뼈를 만들고 · 파골세포는 뼈를 분해한다"],"G0-32":["골단위(osteon)의 중심 구조는?","중심관(central canal)"],"G0-34":["연골세포(chondrocyte)가 분비하는 대표 성분은?","콜라겐과 콘드로이틴황산염"],"G0-9":["골격계는 무엇으로 이루어지는가?","뼈, 인대, 힘줄, 연골"],"G0-181":["다음 중 결합조직이 아닌 것을 고르는 함정(뼈/혈액/지방/연골/근육)에서 답은?","근육(나머지는 모두 결합조직)"]},"hubPanel":null};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
+$('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
+const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
+const scoreKey = 'lesson_' + L.id;
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+let speakSeq = 0;
+function speak(t) {
+  t = ttsNorm(t);
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
+}
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+// 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
+// SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
+function srsInbox(k, ok) {
+  const cards = [...new Set(stops[k].cards || [])]; if (!cards.length) return;
+  try {
+    const key = 'lesson_srs_inbox', id = sess.id + ':' + sidOf(k);
+    let box = JSON.parse(localStorage.getItem(key) || '[]'); if (!Array.isArray(box)) box = [];
+    box = box.filter(m => m && m.id !== id);
+    if (!ok) box.push({ id, t: Date.now(), lesson: L.id, sid: sidOf(k), cards });
+    localStorage.setItem(key, JSON.stringify(box.slice(-400)));
+  } catch (e) {}
+}
+function judge(ok) {
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  srsInbox(k, ok);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
