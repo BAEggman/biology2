@@ -4,7 +4,7 @@
 // 함께 쓰는 것: lesson/map.js(옛 판 → 새 과 — Sketchy 허브 sketchy.html 이 읽어 판마다 「새 과」 단추를 단다) · index.html(SRS) 「새 Sketchy 과」 배지의 숫자
 //   --standalone DIR : 그림을 data: URI 로 안에 넣은 한 파일 <ID>_standalone.html 을 DIR 에 따로(저장소에는 안 둔다)
 const fs = require('fs'), path = require('path'), { execSync } = require('child_process');
-const { ROOT, panelIndex, resolveRef, strip } = require('./lesson_lib');
+const { ROOT, panelIndex, resolveRef, strip, stopCards } = require('./lesson_lib');
 const tpl = fs.readFileSync(path.join(__dirname, 'lesson_player.html'), 'utf8');
 const argv = process.argv.slice(2); const si = argv.indexOf('--standalone');
 const standaloneDir = si >= 0 ? argv[si + 1] : null;
@@ -13,6 +13,10 @@ if (!ids.length) ids = fs.readdirSync(path.join(ROOT, 'lessons')).filter(f => /^
 fs.mkdirSync(path.join(ROOT, 'lesson'), { recursive: true });
 const idx = panelIndex();
 const SITE = 'https://baeggman.github.io/biology2/';  // GitHub Pages 배포 주소 — 한 파일(standalone)의 바깥 링크에만 쓴다
+// 카드(SRS) — 정거장이 카드를 곧장 가리킬 때(stops[].cards) 있는 카드인지 보고, 시험 화면의 「딸린 기출」 글을 싣는다
+const CARDS = (() => { const m = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').match(/<script[^>]*id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/); const o = {}; if (m) for (const c of JSON.parse(m[1])) o[c.id] = c; return o; })();
+// 정거장의 카드 = 옛 판 행(src)에 딸린 카드 + 곧장 건 카드(cards — 옛 판에 없는 카드를 새 과에 걸 때)
+const cardsOf = s => stopCards(s, idx);
 const firstPanel = L => { for (const s of L.stops) for (const r of (s.src || [])) return r.split('#')[0]; return null; };
 for (const id of ids) {
   const L = JSON.parse(fs.readFileSync(path.join(ROOT, 'lessons', id + '.json'), 'utf8'));
@@ -23,12 +27,16 @@ for (const id of ids) {
     if ((s.fact || '').length > 60) bad.push(`${k}: 사실 ${s.fact.length}자 (> 60)`);
     if (!s.say) bad.push(`${k}: say 없음`);
     if (!s.sid) bad.push(`${k}: sid 없음 — python3 tools/lesson_sid.py ${id}`);
-    s.cards = [];
-    for (const r of (s.src || [])) { try { s.cards.push(...(resolveRef(r, idx).row[2] || [])); } catch (e) { bad.push(`${k}: ${e.message}`); } }
-    s.cards = [...new Set(s.cards)];
+    for (const r of (s.src || [])) { try { resolveRef(r, idx); } catch (e) { bad.push(`${k}: ${e.message}`); } }
+    for (const c of (Array.isArray(s.cards) ? s.cards : [])) if (!CARDS[c]) bad.push(`${k}: 곧장 건 카드가 없다 ${c}`);
+    if (s.cards !== undefined && !Array.isArray(s.cards)) bad.push(`${k}: cards 는 카드 ID 배열`);
+    for (const c of (Array.isArray(s.drop) ? s.drop : [])) if (!CARDS[c]) bad.push(`${k}: 뗄 카드가 없다 ${c}`);
+    s.cards = cardsOf(s);
   });
   { const sids = L.stops.map(s => s.sid); if (new Set(sids).size !== sids.length) bad.push('sid 가 겹친다'); }
   if (bad.length) { console.error(`[${id}] 검사 실패:\n  ` + bad.join('\n  ')); process.exitCode = 1; continue; }
+  L.cq = {};  // 딸린 기출의 물음 · 답(시험 화면에서 답을 본 뒤 채점 기준으로 편다)
+  for (const s of L.stops) for (const c of s.cards) { const C = CARDS[c]; if (C && !L.cq[c]) L.cq[c] = [strip(C.q), strip(Array.isArray(C.it) && C.it.length ? C.it.join(' · ') : C.a)]; }
   L.hubPanel = firstPanel(L);  // 「Sketchy 허브(옛 판)」 링크가 이 과의 첫 옛 판으로 간다
   const html = tpl.replace('__TITLE__', L.title.replace(/[<&]/g, '')).replace('__DATA__', JSON.stringify(L));
   fs.writeFileSync(path.join(ROOT, 'lesson', id + '.html'), html);
@@ -54,7 +62,7 @@ const idxHtml = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><met
 h1{font-size:20px}h2{font-size:15px;margin-top:22px}.sub{color:#4b4b55;font-size:13px}a{color:#0f766e}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #e3e1da;padding:5px 6px;text-align:left}th{color:#4b4b55;font-weight:600}
 .card{display:block;border:1px solid #e3e1da;background:#fff;border-radius:12px;padding:12px 14px;margin:8px 0;text-decoration:none;color:inherit}.card b{color:#0f766e}.bar{height:6px;background:#e3e1da;border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:#0f766e}</style></head><body><div class="wrap">
 <h1>과(lesson) 목록</h1><p class="sub">Sketchy 식 — 한 장면 · 물건 하나 = 사실 하나 · 투어로 듣고 그림만으로 되찾는다. 옛 덱은 과가 다 설 때까지 그대로 — <a href="../sketchy.html">Sketchy 허브</a>(옛 그림 판 · 판마다 「새 과」 단추) · <a href="../index.html">SRS</a>(기출 카드).</p>
-${all.map(L => `<a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(s => (s.src || []).flatMap(r => { try { return resolveRef(r, idx).row[2] || []; } catch (e) { return []; } }))).size} · ${esc(L.sub || '')}</div></a>`).join('')}
+${all.map(L => `<a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(cardsOf)).size} · ${esc(L.sub || '')}</div></a>`).join('')}
 <h2>갈아엎기 진척 — 행 ${tot.rc}/${tot.r} · 기출 카드 ${tot.cc}/${tot.c}</h2><div class="bar"><i style="width:${(100 * tot.cc / Math.max(1, tot.c)).toFixed(1)}%"></i></div>
 <table><tr><th>묶음</th><th>단원</th><th>카드</th><th>행</th><th>덮인 행</th><th>덮인 카드</th><th>과</th></tr>
 ${cover.map(x => `<tr><td>${x.id}</td><td>${esc(x.unit)}</td><td>${x.cards}</td><td>${x.rows}</td><td>${x.rowsCovered}</td><td>${x.cardsCovered}</td><td>${x.lessons.map(l => `<a href="${l}.html">${l}</a>`).join(' ')}</td></tr>`).join('')}

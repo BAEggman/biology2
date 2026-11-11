@@ -11,6 +11,8 @@
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
   .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
   button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
   button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
@@ -72,15 +74,21 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script>
-const L = {"id":"L46c","scene":"s46","part":"c","title":"부엌 식탁의 가라앉힌 유리병과 붉은 원반 — 혈장 · 세포성 요소 · 적혈구","sub":"가라앉아 세 층으로 갈린 유리병(혈장 + 세포성 요소) · 절반 넘는 노란 층(혈장 55 %) · 선처럼 얇은 흰 띠(백혈구 · 혈소판) · 짙은 빨강 층(적혈구) · 구멍 없는 옴폭 원반 · 옆모습 아령(양면오목원반 · 산소 운반) · 내던진 돔 천막 · 콩 통(핵 · 미토콘드리아 없음) · 창밖의 해 + 당구 + 금화 둘(무산소 해당과정으로만 ATP)","img":"img/L46c.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"부엌 식탁 위 키 큰 유리병 — 피가 가라앉아 칼로 자른 듯 반듯한 세 층(노랑 · 얇은 흰 띠 · 짙은 빨강) (틀)","fact":"피 = 혈장(액체 기질) + 세포성 요소 — 원심분리하면 층으로 갈린다","hook":"가라앉힌 유리병의 세 층 = 혈장 + 세포성 요소","say":"부엌 식탁 위에 키 큰 유리병이 섰다. 담긴 것은 피다. 굳지 않게 해서 원심분리기로 돌려 가라앉혔더니 칼로 자른 듯 반듯하게 층이 갈렸다. 맨 위는 맑은 노란 층, 그 밑에 선처럼 얇은 흰 띠, 맨 아래는 짙은 빨강. 피는 크게 둘이다. 액체인 혈장과, 그 속에 떠 있던 세포성 요소. 노란 층이 혈장이고, 흰 띠와 빨간 층이 세포성 요소다.","box":[250,70,370,875],"src":["s46p04#0"],"cards":["H0-143"]},{"sid":"s2","obj":"맨 위 맑은 노란 층 — 병 속 피의 절반이 넘는다","fact":"혈장 = 혈액의 액체성 기질 · 부피의 약 55 %(절반이 넘는다)","hook":"절반 넘는 노란 층 = 혈장 55 %","say":"맨 위 맑은 노란 층이 가장 두껍다. 병 속 피의 절반을 조금 넘는다. 혈장이다. 혈액의 액체성 기질이고, 부피의 약 55 퍼센트를 차지한다. 물에 단백질과 영양소, 노폐물이 녹아 있는 노란 국물이라고 생각하자.","box":[270,275,330,390],"src":["s46p04#1"],"cards":["H0-144","H0-146"]},{"sid":"s3","obj":"맨 아래 짙은 빨강 층 · 그 위 경계에 선처럼 얇은 흰 띠","fact":"붉은 층 = 적혈구 · 얇은 흰 띠 = 백혈구 · 혈소판 — 얇다 = 적혈구가 압도적","hook":"빨간 층 = 적혈구 · 얇은 흰 띠 = 백혈구 · 혈소판","say":"맨 아래 짙은 빨강 층이 적혈구다. 그 위 경계에 선처럼 얇은 흰 띠가 있다. 백혈구와 혈소판이 모인 띠다. 띠가 이렇게 얇다는 것 자체가 사실이다. 세포성 요소 가운데 적혈구가 압도적으로 많고, 백혈구와 혈소판은 아주 적다.","box":[270,632,330,295],"src":["s46p04#2"],"cards":[]},{"sid":"s4","obj":"식탁의 붉은 원반들 — 양면이 옴폭하고 가운데가 얇아 옅은 분홍으로 비친다(구멍은 없다) · 모로 선 하나는 옆모습이 아령 · 표면마다 흰 방울이 매달렸다","fact":"적혈구 = 양면오목원반 — 표면적을 넓혀 기체 교환이 빠르다 · 일은 산소 운반","hook":"구멍 안 뚫린 도넛 · 옆모습 아령 = 양면오목원반","say":"식탁 위에 붉은 원반들이 흩어져 있다. 구멍을 뚫다 만 도넛처럼 양면이 옴폭하고, 가운데는 얇아서 옅은 분홍으로 비친다. 구멍은 없다. 모로 선 원반 하나를 옆에서 보면 양 끝이 두툼하고 가운데가 잘록한 아령 꼴이다. 적혈구의 양면오목원반형이다. 가운데를 옴폭하게 해서 표면적을 넓혔고, 그래서 기체 교환이 빠르다. 원반마다 흰 방울, 산소가 매달려 있다. 적혈구가 하는 일은 산소 운반이다.","box":[[665,700,540,265],[985,635,85,200]],"src":["s46p04#3"],"cards":["H0-155","H0-156","H0-157"]},{"sid":"s5","obj":"얼굴 달린 붉은 원반이 어깨 너머로 내던진 것들(점선 궤적 · 먼지) — 문 열린 작은 돔 천막(안에 보라 공) · 안쪽에 주름이 접힌 콩 모양 통 둘","fact":"포유류 적혈구엔 핵(헤모글로빈을 더 담으려) · 미토콘드리아(나르는 O₂ 를 안 쓰려)가 없다","hook":"내던진 천막 = 핵 없음 · 내던진 콩 통 = 미토콘드리아 없음","say":"오른쪽에는 얼굴과 팔다리가 달린 붉은 원반이 섰다. 점선 궤적을 그리며 어깨 너머로 방금 내던진 것들이 그 뒤에 떨어졌다. 문 열린 작은 돔 천막, 안에 보라 공. 유사분열 헛간에서 본 그 천막, 핵이다. 안쪽에 주름이 접힌 콩 모양 통 둘, 미토콘드리아다. 포유류 적혈구는 자라면서 핵을 밀어내 버린다. 핵을 버린 것은 헤모글로빈을 더 많이 담으려는 것이고, 미토콘드리아를 버린 것은 제가 나르는 산소를 제가 써 버리지 않으려는 것이다.","box":[[1715,620,300,190],[1760,820,250,135]],"src":["s46p04#4"],"cards":["H0-158","H0-159","H0-160"]},{"sid":"s6","obj":"그 원반이 당구공을 쳐 금화 둘이 튄다 · 창밖에 해가 떴다 · 제 몸의 흰 방울엔 손대지 않는다","fact":"적혈구의 ATP 는 무산소 해당과정으로만 — 나르는 산소는 쓰지 않는다","hook":"창밖의 해 + 당구 = 해당 · 금화 = ATP","say":"천막과 콩 통을 내던진 붉은 원반은 큐를 들고 당구공을 친다. 공 곁으로 금화 둘이 튀어 오른다. 창밖에는 해가 떴다. 해와 당구, 해당과정이다. 금화는 언제나 ATP 다. 미토콘드리아가 없으니 적혈구는 ATP 를 무산소 해당과정으로만 만든다. 몸에 산소 방울이 잔뜩 매달려 있어도 손대지 않는다. 그 산소는 나를 짐이지 제 몫이 아니다.","box":[[1235,740,130,185],[1400,573,280,350],[865,105,320,290]],"src":["s46p04#4"],"cards":["H0-158","H0-159","H0-160"]}],"hubPanel":"s46p04"};
+const L = {"id":"L46c","scene":"s46","part":"c","title":"부엌 식탁의 가라앉힌 유리병과 붉은 원반 — 혈장 · 세포성 요소 · 적혈구","sub":"가라앉아 세 층으로 갈린 유리병(혈장 + 세포성 요소) · 절반 넘는 노란 층(혈장 55 %) · 선처럼 얇은 흰 띠(백혈구 · 혈소판) · 짙은 빨강 층(적혈구) · 구멍 없는 옴폭 원반 · 옆모습 아령(양면오목원반 · 산소 운반) · 내던진 돔 천막 · 콩 통(핵 · 미토콘드리아 없음) · 창밖의 해 + 당구 + 금화 둘(무산소 해당과정으로만 ATP)","img":"img/L46c.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"부엌 식탁 위 키 큰 유리병 — 피가 가라앉아 칼로 자른 듯 반듯한 세 층(노랑 · 얇은 흰 띠 · 짙은 빨강) (틀)","fact":"피 = 혈장(액체 기질) + 세포성 요소 — 원심분리하면 층으로 갈린다","hook":"가라앉힌 유리병의 세 층 = 혈장 + 세포성 요소","say":"부엌 식탁 위에 키 큰 유리병이 섰다. 담긴 것은 피다. 굳지 않게 해서 원심분리기로 돌려 가라앉혔더니 칼로 자른 듯 반듯하게 층이 갈렸다. 맨 위는 맑은 노란 층, 그 밑에 선처럼 얇은 흰 띠, 맨 아래는 짙은 빨강. 피는 크게 둘이다. 액체인 혈장과, 그 속에 떠 있던 세포성 요소. 노란 층이 혈장이고, 흰 띠와 빨간 층이 세포성 요소다.","box":[250,70,370,875],"src":["s46p04#0"],"cards":["H0-143"]},{"sid":"s2","obj":"맨 위 맑은 노란 층 — 병 속 피의 절반이 넘는다","fact":"혈장 = 혈액의 액체성 기질 · 부피의 약 55 %(절반이 넘는다)","hook":"절반 넘는 노란 층 = 혈장 55 %","say":"맨 위 맑은 노란 층이 가장 두껍다. 병 속 피의 절반을 조금 넘는다. 혈장이다. 혈액의 액체성 기질이고, 부피의 약 55 퍼센트를 차지한다. 물에 단백질과 영양소, 노폐물이 녹아 있는 노란 국물이라고 생각하자.","box":[270,275,330,390],"src":["s46p04#1"],"cards":["H0-144","H0-146"]},{"sid":"s3","obj":"맨 아래 짙은 빨강 층 · 그 위 경계에 선처럼 얇은 흰 띠","fact":"붉은 층 = 적혈구 · 얇은 흰 띠 = 백혈구 · 혈소판 — 얇다 = 적혈구가 압도적","hook":"빨간 층 = 적혈구 · 얇은 흰 띠 = 백혈구 · 혈소판","say":"맨 아래 짙은 빨강 층이 적혈구다. 그 위 경계에 선처럼 얇은 흰 띠가 있다. 백혈구와 혈소판이 모인 띠다. 띠가 이렇게 얇다는 것 자체가 사실이다. 세포성 요소 가운데 적혈구가 압도적으로 많고, 백혈구와 혈소판은 아주 적다.","box":[270,632,330,295],"src":["s46p04#2"],"cards":[]},{"sid":"s4","obj":"식탁의 붉은 원반들 — 양면이 옴폭하고 가운데가 얇아 옅은 분홍으로 비친다(구멍은 없다) · 모로 선 하나는 옆모습이 아령 · 표면마다 흰 방울이 매달렸다","fact":"적혈구 = 양면오목원반 — 표면적을 넓혀 기체 교환이 빠르다 · 일은 산소 운반","hook":"구멍 안 뚫린 도넛 · 옆모습 아령 = 양면오목원반","say":"식탁 위에 붉은 원반들이 흩어져 있다. 구멍을 뚫다 만 도넛처럼 양면이 옴폭하고, 가운데는 얇아서 옅은 분홍으로 비친다. 구멍은 없다. 모로 선 원반 하나를 옆에서 보면 양 끝이 두툼하고 가운데가 잘록한 아령 꼴이다. 적혈구의 양면오목원반형이다. 가운데를 옴폭하게 해서 표면적을 넓혔고, 그래서 기체 교환이 빠르다. 원반마다 흰 방울, 산소가 매달려 있다. 적혈구가 하는 일은 산소 운반이다.","box":[[665,700,540,265],[985,635,85,200]],"src":["s46p04#3"],"cards":["H0-155","H0-156","H0-157"]},{"sid":"s5","obj":"얼굴 달린 붉은 원반이 어깨 너머로 내던진 것들(점선 궤적 · 먼지) — 문 열린 작은 돔 천막(안에 보라 공) · 안쪽에 주름이 접힌 콩 모양 통 둘","fact":"포유류 적혈구엔 핵(헤모글로빈을 더 담으려) · 미토콘드리아(나르는 O₂ 를 안 쓰려)가 없다","hook":"내던진 천막 = 핵 없음 · 내던진 콩 통 = 미토콘드리아 없음","say":"오른쪽에는 얼굴과 팔다리가 달린 붉은 원반이 섰다. 점선 궤적을 그리며 어깨 너머로 방금 내던진 것들이 그 뒤에 떨어졌다. 문 열린 작은 돔 천막, 안에 보라 공. 유사분열 헛간에서 본 그 천막, 핵이다. 안쪽에 주름이 접힌 콩 모양 통 둘, 미토콘드리아다. 포유류 적혈구는 자라면서 핵을 밀어내 버린다. 핵을 버린 것은 헤모글로빈을 더 많이 담으려는 것이고, 미토콘드리아를 버린 것은 제가 나르는 산소를 제가 써 버리지 않으려는 것이다.","box":[[1715,620,300,190],[1760,820,250,135]],"src":["s46p04#4"],"cards":["H0-158","H0-159","H0-160"]},{"sid":"s6","obj":"그 원반이 당구공을 쳐 금화 둘이 튄다 · 창밖에 해가 떴다 · 제 몸의 흰 방울엔 손대지 않는다","fact":"적혈구의 ATP 는 무산소 해당과정으로만 — 나르는 산소는 쓰지 않는다","hook":"창밖의 해 + 당구 = 해당 · 금화 = ATP","say":"천막과 콩 통을 내던진 붉은 원반은 큐를 들고 당구공을 친다. 공 곁으로 금화 둘이 튀어 오른다. 창밖에는 해가 떴다. 해와 당구, 해당과정이다. 금화는 언제나 ATP 다. 미토콘드리아가 없으니 적혈구는 ATP 를 무산소 해당과정으로만 만든다. 몸에 산소 방울이 잔뜩 매달려 있어도 손대지 않는다. 그 산소는 나를 짐이지 제 몫이 아니다.","box":[[1235,740,130,185],[1400,573,280,350],[865,105,320,290]],"src":["s46p04#4"],"cards":["H0-158","H0-159","H0-160"]}],"cq":{"H0-143":["혈액의 두 큰 구성요소는?","혈장과 세포성 요소"],"H0-144":["혈액 부피 중 혈장이 차지하는 비율은?","약 55%"],"H0-146":["혈장(plasma)이란?","혈액의 액체성 기질"],"H0-155":["적혈구(erythrocyte)의 주된 기능은?","산소 운반"],"H0-156":["적혈구의 대표적인 모양은?","양면오목원반형"],"H0-157":["적혈구가 양면오목인 이유는?","표면적을 넓혀 기체교환을 빠르게 하기 위해"],"H0-158":["포유류 적혈구에 핵이 없는 이유는?","헤모글로빈을 더 많이 담기 위해"],"H0-159":["포유류 적혈구에 미토콘드리아가 없는 이유는?","운반하는 산소를 자체적으로 소비하지 않기 위해"],"H0-160":["적혈구가 ATP를 만드는 방식은?","무산소 해당과정"]},"hubPanel":"s46p04"};
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
 const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
@@ -167,7 +175,7 @@ function recap() {
   if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
 }
 function setMode(m) {
-  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -183,10 +191,14 @@ function setMode(m) {
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
-  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
   $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 // 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
 // SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
 function srsInbox(k, ok) {

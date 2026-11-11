@@ -31,4 +31,12 @@ function lessons() {
   return fs.readdirSync(dir).filter(f => /^L\d{2}[a-z]?\.json$/.test(f)).sort()
     .map(f => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')));
 }
-module.exports = { ROOT, deck, strip, panelIndex, resolveRef, lessons };
+// 정거장의 카드 = 옛 판 행(src)에 딸린 카드 + 곧장 건 카드(cards) − 이 정거장 것이 아닌 카드(drop)
+function stopCards(s, idx) {
+  const out = []; idx = idx || panelIndex();
+  for (const r of (s.src || [])) { try { out.push(...(resolveRef(r, idx).row[2] || [])); } catch (e) {} }
+  out.push(...(Array.isArray(s.cards) ? s.cards : []));
+  const drop = new Set(Array.isArray(s.drop) ? s.drop : []);
+  return [...new Set(out)].filter(c => !drop.has(c));
+}
+module.exports = { ROOT, deck, strip, panelIndex, resolveRef, lessons, stopCards };

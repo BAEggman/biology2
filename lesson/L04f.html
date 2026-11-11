@@ -11,6 +11,8 @@
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
   .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
   button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
   button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
@@ -72,15 +74,21 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script>
-const L = {"id":"L04f","scene":"s04","part":"f","title":"척삭 상회와 굳은 통 — 척삭동물의 넷","sub":"들보(척삭) · 그 위 흰 관(등쪽 속 빈 신경관) · 앞벽의 틈(인두열) · 뒷문 뒤의 뒤채(항문 뒤 꼬리) · 뚝 떨어진 통(피낭동물 성체 · 틈만) · 굳은 밑동 + 지붕 깔때기(고착 · 여과섭식) · 액자 속 유생(넷 다)","img":"img/L04f.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"옆벽을 잘라 안이 보이는 상회 한 채 — 들보 · 흰 관 · 틈 · 뒤채 · 오른쪽에 뚝 떨어진 통","fact":"척삭동물의 넷이 건물 하나에 — 위 · 앞 · 뒤라는 자리가 곧 이름","hook":"한 건물에 넷 · 자리가 이름","say":"부둣가 척삭 상회다. 옆벽을 잘라 안이 보인다. 들보, 그 위의 흰 관, 앞벽의 틈, 뒷문 너머의 뒤채. 척삭동물의 네 가지가 건물 하나에 다 있다. 위, 앞, 뒤라는 자리가 곧 이름. 오른쪽에 뚝 떨어진 통 건물은 어른이 되며 틈만 남기고 다 잃은 쪽.","box":null,"src":["s04p06#0"],"cards":["N1-32"]},{"sid":"s2","obj":"쇠받침 셋에 얹혀 앞뒤로 가로지르는 굵은 나무 들보 — 잘린 끝에 나이테","fact":"척삭 — 속이 찬 막대 하나 · 척추가 아니라 척삭(척추는 나중에 이 자리를 대신)","hook":"통짜 들보 = 척삭","say":"쇠받침 셋에 얹혀 건물을 앞뒤로 가로지르는 굵은 나무 들보 하나. 잘린 끝의 나이테가 통짜임을 보여 준다. 척삭. 속이 찬 막대 하나가 몸을 앞뒤로 꿴다. 척추가 아니라 척삭. 척추동물에서는 나중에 척추가 이 자리를 대신한다.","box":[300,550,700,290],"src":["s04p06#0"],"cards":["N1-32"]},{"sid":"s3","obj":"들보 바로 위에 나란히 얹힌 흰 관 — 끝이 뚫려 속이 들여다보인다","fact":"등쪽 속 빈 신경관 — 무척추의 신경삭은 배쪽 · 속이 차 있다","hook":"위 = 등쪽 · 관 = 속 빔","say":"들보 바로 위에 흰 관이 나란히 얹혔다. 끝이 뚫려 속이 들여다보인다. 등쪽 속 빈 신경관. 등쪽이라 들보보다 위에 있고, 속 빈이라 관이다. 무척추동물의 신경삭은 배쪽이고 속이 차 있다. 정확히 반대.","box":[380,490,580,120],"src":["s04p06#1"],"cards":[]},{"sid":"s4","obj":"왼쪽 끝 벽에 세로로 뚫린 좁은 틈 셋","fact":"인두열 — 인두는 목이라 앞 · 걸러 먹다가 어류에서 아가미","hook":"앞벽의 틈 = 목의 틈","say":"왼쪽 끝 벽에 좁은 틈 셋이 세로로 뚫렸다. 인두열. 인두는 목이라 앞쪽에 있다. 물을 걸러 먹는 데 쓰다가 어류에서 아가미가 된다.","box":[130,470,120,170],"src":["s04p06#2"],"cards":["J0-29"]},{"sid":"s5","obj":"청록 뒷문 곁에서 더 뒤로 뻗어 나가 끝이 뾰족한 낮은 뒤채","fact":"항문 뒤 꼬리 — 뒷문(항문)보다 뒤에 있다는 것이 이름 전부","hook":"뒷문 뒤의 뾰족 뒤채 = 꼬리","say":"청록색 뒷문보다 더 뒤로 뻗어 나가 끝이 뾰족한 낮은 뒤채. 항문 뒤 꼬리. 뒷문, 곧 항문보다 뒤에 있다는 것이 이름 전부. 항문 앞이면 꼬리가 아니다.","box":[980,450,360,220],"src":["s04p06#3"],"cards":[]},{"sid":"s6","obj":"오른쪽에 뚝 떨어져 혼자 선 통 건물 — 들보도 흰 관도 뒤채도 없고 왼쪽 벽의 틈만","fact":"피낭동물(멍게 · 미삭) 성체 — 넷 중 인두열(새열)만 남긴다","hook":"틈만 남은 통 = 어른 멍게","say":"오른쪽에 뚝 떨어져 혼자 선 통 건물. 들보도 흰 관도 뒤채도 없고 왼쪽 벽의 틈만 남았다. 피낭동물, 멍게, 미삭동물. 성체는 넷 중 인두열, 새열만 남기고 척삭, 꼬리, 신경계 대부분을 잃는다.","box":[1400,330,560,600],"src":["s04p06#4"],"cards":["N2-3","N2-3#1"]},{"sid":"s7","obj":"통의 밑동이 부둣돌에 붙어 굳었고 · 지붕의 깔때기로 물이 쏟아져 들어간다","fact":"성체 멍게 — 고착 · 여과섭식(물은 들어가는 쪽)","hook":"굳은 밑동 = 고착 · 깔때기로 들어가는 물 = 걸러 먹기","say":"통의 밑동이 부둣돌에 붙어 굳었고, 지붕의 깔때기로 물이 쏟아져 들어간다. 성체 멍게는 고착 생활을 하며 물을 걸러 먹는다, 여과섭식. 물은 들어가는 쪽이다. 뿜어 나오는 것이 아니라.","box":[[1280,760,760,190],[1580,0,230,380]],"src":["s04p06#5"],"cards":["N2-3#2"]},{"sid":"s8","obj":"통 벽에 걸린 액자 — 액자 속 어린 자신은 들보 · 흰 관 · 틈 · 작은 문과 그 뒤의 꼬리를 다 가졌다","fact":"유생 때는 넷 다 · 창고기(두삭)는 성체도 넷 유지","hook":"액자 속 어린 모습 = 넷 다","say":"통 벽에 액자가 걸렸다. 액자 속 어린 자신은 들보, 흰 관, 앞의 틈, 작은 문과 그 뒤의 꼬리를 다 갖고 있다. 유생 때는 네 가지를 다 갖는다. 반대로 두삭동물 창고기는 성체가 되어도 넷을 그대로 유지한다.","box":[1570,470,340,260],"src":["s04p06#6"],"cards":["N2-2","N2-2#1","N2-2#2","S-AN-13"]}],"hubPanel":"s04p06"};
+const L = {"id":"L04f","scene":"s04","part":"f","title":"척삭 상회와 굳은 통 — 척삭동물의 넷","sub":"들보(척삭) · 그 위 흰 관(등쪽 속 빈 신경관) · 앞벽의 틈(인두열) · 뒷문 뒤의 뒤채(항문 뒤 꼬리) · 뚝 떨어진 통(피낭동물 성체 · 틈만) · 굳은 밑동 + 지붕 깔때기(고착 · 여과섭식) · 액자 속 유생(넷 다)","img":"img/L04f.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"옆벽을 잘라 안이 보이는 상회 한 채 — 들보 · 흰 관 · 틈 · 뒤채 · 오른쪽에 뚝 떨어진 통","fact":"척삭동물의 넷이 건물 하나에 — 위 · 앞 · 뒤라는 자리가 곧 이름","hook":"한 건물에 넷 · 자리가 이름","say":"부둣가 척삭 상회다. 옆벽을 잘라 안이 보인다. 들보, 그 위의 흰 관, 앞벽의 틈, 뒷문 너머의 뒤채. 척삭동물의 네 가지가 건물 하나에 다 있다. 위, 앞, 뒤라는 자리가 곧 이름. 오른쪽에 뚝 떨어진 통 건물은 어른이 되며 틈만 남기고 다 잃은 쪽.","box":null,"src":["s04p06#0"],"cards":["N1-32"]},{"sid":"s2","obj":"쇠받침 셋에 얹혀 앞뒤로 가로지르는 굵은 나무 들보 — 잘린 끝에 나이테","fact":"척삭 — 속이 찬 막대 하나 · 척추가 아니라 척삭(척추는 나중에 이 자리를 대신)","hook":"통짜 들보 = 척삭","say":"쇠받침 셋에 얹혀 건물을 앞뒤로 가로지르는 굵은 나무 들보 하나. 잘린 끝의 나이테가 통짜임을 보여 준다. 척삭. 속이 찬 막대 하나가 몸을 앞뒤로 꿴다. 척추가 아니라 척삭. 척추동물에서는 나중에 척추가 이 자리를 대신한다.","box":[300,550,700,290],"src":["s04p06#0"],"cards":["N1-32"]},{"sid":"s3","obj":"들보 바로 위에 나란히 얹힌 흰 관 — 끝이 뚫려 속이 들여다보인다","fact":"등쪽 속 빈 신경관 — 무척추의 신경삭은 배쪽 · 속이 차 있다","hook":"위 = 등쪽 · 관 = 속 빔","say":"들보 바로 위에 흰 관이 나란히 얹혔다. 끝이 뚫려 속이 들여다보인다. 등쪽 속 빈 신경관. 등쪽이라 들보보다 위에 있고, 속 빈이라 관이다. 무척추동물의 신경삭은 배쪽이고 속이 차 있다. 정확히 반대.","box":[380,490,580,120],"src":["s04p06#1"],"cards":[]},{"sid":"s4","obj":"왼쪽 끝 벽에 세로로 뚫린 좁은 틈 셋","fact":"인두열 — 인두는 목이라 앞 · 걸러 먹다가 어류에서 아가미 · 척추동물 배아는 인두궁","hook":"앞벽의 틈 = 목의 틈","say":"왼쪽 끝 벽에 좁은 틈 셋이 세로로 뚫렸다. 인두열. 인두는 목이라 앞쪽에 있다. 물을 걸러 먹는 데 쓰다가 어류에서 아가미가 된다. 뭍에 사는 척추동물도 배아 때는 목에 인두궁이 생기고 항문 뒤 꼬리가 달려, 이 둘이 척추동물 배아의 상동 구조다.","box":[130,470,120,170],"src":["s04p06#2"],"cards":["J0-29"]},{"sid":"s5","obj":"청록 뒷문 곁에서 더 뒤로 뻗어 나가 끝이 뾰족한 낮은 뒤채","fact":"항문 뒤 꼬리 — 뒷문(항문)보다 뒤에 있다는 것이 이름 전부","hook":"뒷문 뒤의 뾰족 뒤채 = 꼬리","say":"청록색 뒷문보다 더 뒤로 뻗어 나가 끝이 뾰족한 낮은 뒤채. 항문 뒤 꼬리. 뒷문, 곧 항문보다 뒤에 있다는 것이 이름 전부. 항문 앞이면 꼬리가 아니다.","box":[980,450,360,220],"src":["s04p06#3"],"cards":[]},{"sid":"s6","obj":"오른쪽에 뚝 떨어져 혼자 선 통 건물 — 들보도 흰 관도 뒤채도 없고 왼쪽 벽의 틈만","fact":"피낭동물(멍게 · 미삭) 성체 — 넷 중 인두열(새열)만 남긴다","hook":"틈만 남은 통 = 어른 멍게","say":"오른쪽에 뚝 떨어져 혼자 선 통 건물. 들보도 흰 관도 뒤채도 없고 왼쪽 벽의 틈만 남았다. 피낭동물, 멍게, 미삭동물. 성체는 넷 중 인두열, 새열만 남기고 척삭, 꼬리, 신경계 대부분을 잃는다. 그래도 척추동물의 신경능선을 닮은 세포가 있어 척추동물 기원의 단서가 된다.","box":[1400,330,560,600],"src":["s04p06#4"],"cards":["N2-3","N2-3#1"]},{"sid":"s7","obj":"통의 밑동이 부둣돌에 붙어 굳었고 · 지붕의 깔때기로 물이 쏟아져 들어간다","fact":"성체 멍게 — 고착 · 여과섭식(입수공으로 들어가 출수공으로 나감)","hook":"굳은 밑동 = 고착 · 깔때기로 들어가는 물 = 걸러 먹기","say":"통의 밑동이 부둣돌에 붙어 굳었고, 지붕의 깔때기로 물이 쏟아져 들어간다. 성체 멍게는 고착 생활을 하며 물을 걸러 먹는다, 여과섭식. 이 깔때기는 물이 들어가는 입수공이다. 물은 인두열에서 걸러진 뒤 따로 난 출수공으로 나간다.","box":[[1280,760,760,190],[1580,0,230,380]],"src":["s04p06#5"],"cards":["N2-3#2"]},{"sid":"s8","obj":"통 벽에 걸린 액자 — 액자 속 어린 자신은 들보 · 흰 관 · 틈 · 작은 문과 그 뒤의 꼬리를 다 가졌다","fact":"유생 때는 넷 다 · 창고기(두삭)는 성체도 넷 유지 · 척삭동물의 기저","hook":"액자 속 어린 모습 = 넷 다 · 넷 다 갖춘 상회 = 어른 창고기","say":"통 벽에 액자가 걸렸다. 액자 속 어린 자신은 들보, 흰 관, 앞의 틈, 작은 문과 그 뒤의 꼬리를 다 갖고 있다. 유생 때는 네 가지를 다 갖는다. 반대로 넷을 다 갖춘 왼쪽 상회 그대로 어른이 되는 쪽이 두삭동물 창고기다. 성체가 되어도 넷을 그대로 유지한다. 척삭동물 가운데 가장 먼저 갈라진 무리라, 조상 척삭동물도 창고기를 닮았으리라 본다.","box":[1570,470,340,260],"src":["s04p06#6"],"cards":["N2-2","N2-2#1","N2-2#2","S-AN-13"]}],"cq":{"N1-32":["척삭동물(Chordata)의 4대 특징은?","척삭(notochord) · 등쪽 속 빈 신경관 · 인두열(pharyngeal slits) · 근절 있는 항문 뒤 꼬리"],"J0-29":["척추동물 배아가 공유하는 발생학적 상동 구조는?","항문 뒤 꼬리(post-anal tail)와 인두궁(pharyngeal arch)"],"N2-3":["피낭동물(멍게)의 특징은?","유생만 4대 특징 · 성체는 고착·여과섭식 · 신경능선 비슷한 세포로 척추동물 기원 단서"],"N2-3#1":["피낭동물(멍게)의 특징은?","유생만 4대 특징"],"N2-3#2":["피낭동물(멍게)의 특징은?","성체는 고착·여과섭식"],"N2-2":["두삭동물(창고기)의 특징은?","성체도 4대 특징 유지, 척삭동물 기저 · 조상 척삭동물이 창고기와 비슷했을 것"],"N2-2#1":["두삭동물(창고기)의 특징은?","성체도 4대 특징 유지"],"N2-2#2":["두삭동물(창고기)의 특징은?","척삭동물 기저; 조상 척삭동물이 창고기와 비슷했을 것"],"S-AN-13":["척삭동물 4대 특징의 유지 정도로 두삭·피낭을 나누면?","두삭(창고기)=성체도 유지 / 피낭(멍게)=유생만"]},"hubPanel":"s04p06"};
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
 const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
@@ -167,7 +175,7 @@ function recap() {
   if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
 }
 function setMode(m) {
-  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -183,10 +191,14 @@ function setMode(m) {
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
-  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
   $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 // 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
 // SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
 function srsInbox(k, ok) {

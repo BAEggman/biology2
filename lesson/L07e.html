@@ -11,6 +11,8 @@
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
   .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
   button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
   button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
@@ -72,15 +74,21 @@
   <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script>
-const L = {"id":"L07e","scene":"s07","part":"e","title":"관제탑이 파이프로 내려보내는 셋 — 방출호르몬과 음성 피드백","sub":"똑같은 흰 낙하산 셋(방출호르몬 -RH) · 나비(TRH) · 세 층 케이크(CRH) · 묶인 달걀 둘(GnRH) · 아래에서 따로 올라오는 가는 붉은 관 + 보라 결정(음성 피드백 · T3 · T4) · 반만 닫힌 덧문 둘(TRH · TSH 함께 억제)","img":"img/L07e.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"호르몬 본사 빌딩의 윗부분 — 옥상 관제탑 · 그 곁 깔때기에서 위층으로 내려가는 굵은 파란 파이프(앞을 갈라 속이 보임) · 위층 창구 · 바깥 벽을 타는 가는 붉은 관","fact":"시상하부 방출호르몬이 문맥으로 전엽을 켜고 · 결과물이 돌아와 줄인다","hook":"내려보내고 · 되돌아와 누른다","say":"호르몬 본사 빌딩의 윗부분을 당겨 본다. 옥상 관제탑의 관제사가 창밖으로 몸을 내밀어 낙하산을 깔때기로 떨어뜨린다. 깔때기 밑은 굵은 파란 물 파이프, 앞을 갈라 속이 보인다. 파이프는 위층으로 내려간다. 관제탑은 시상하부, 파이프는 문맥, 위층은 뇌하수체 전엽. 그리고 오른쪽 바깥 벽을 타고 가는 붉은 관 하나가 아래에서 따로 올라온다.","box":null,"src":["s07p05#0"],"cards":["G0-147"]},{"sid":"s2","obj":"파이프 속 똑같이 생긴 흰 낙하산 셋이 한 줄로 내려간다 — 매달린 짐만 다르다","fact":"전엽을 조절하는 시상하부 호르몬 셋 — TRH · CRH · GnRH","hook":"똑같은 낙하산 = -RH(방출)","say":"파이프 속으로 흰 낙하산 셋이 한 줄로 떨어져 내려간다. 낙하산은 똑같고 매달린 짐만 다르다. 낙하산이 이름 끝의 RH, 방출호르몬. 놓아서 내려보내는 것이 방출이다. 시상하부는 직접 일하지 않고 내려보내기만 한다. 전엽을 조절하는 시상하부 호르몬 셋, TRH, CRH, GnRH. 매달린 짐이 앞 글자다.","box":[930,400,180,640],"src":["s07p05#0"],"cards":["G0-147"]},{"sid":"s3","obj":"맨 위 낙하산에 매달린 나비","fact":"TRH — 갑상샘 축의 첫 마디(TSH를 내보내라)","hook":"나비 = 갑상샘 → TRH","say":"맨 위 낙하산에는 나비가 매달렸다. 나비는 갑상샘. 위층 창구에서 나비 접시를 내놓는 것이 TSH였다. 그러니 나비를 매단 낙하산은 TSH를 내보내라는 지시, TRH다. 혈중 갑상샘 호르몬이 낮을 때 켜지는 축의 첫 마디다.","box":[960,420,120,170],"src":["s07p05#1"],"cards":["G0-147#1","Q0-25#1","G0-162#1"]},{"sid":"s4","obj":"가운데 낙하산에 매달린 세 층 케이크","fact":"CRH — 부신 피질 축의 첫 마디(ACTH를 내보내라)","hook":"층층 케이크 = 부신 피질 → CRH","say":"가운데 낙하산에는 세 층 케이크. 층층 케이크는 겹겹의 층으로 된 부신 피질이고, 위층에서 그 케이크 창구의 것이 ACTH였다. 그러니 CRH, 부신 피질 축의 첫 마디다.","box":[960,600,120,180],"src":["s07p05#2"],"cards":["G0-147#2"]},{"sid":"s5","obj":"맨 아래 낙하산에 붉은 리본으로 묶인 달걀 둘","fact":"GnRH — 하나의 지시가 FSH · LH 둘을 켠다 · 남성 호르몬 경로의 첫 마디","hook":"묶인 달걀 둘 = 생식샘 → GnRH","say":"맨 아래 낙하산에는 붉은 리본으로 묶인 달걀 둘. 달걀은 생식샘, 위층에서 그 창구의 것이 FSH와 LH였다. GnRH, 하나의 지시가 둘을 켠다. 그래서 달걀이 둘이다. 남성 호르몬 조절 경로의 첫 마디도 이것이다.","box":[960,790,120,170],"src":["s07p05#3"],"cards":["G0-147#3","Q1-20#1"]},{"sid":"s6","obj":"오른쪽 바깥 벽 — 가는 붉은 관이 그림 아래 끝 밖에서 따로 올라온다(흰 꺾쇠가 위로) · 굵은 파이프와 이어진 데가 없다 · 갈라 본 자리에 보라 결정","fact":"음성 피드백 — 결과물이 온몸의 피를 돌아와 자극을 줄인다","hook":"다른 길로 거슬러 온다","say":"오른쪽 바깥 벽을 보자. 가는 붉은 관이 그림 아래 끝 밖에서 따로 올라온다. 관 위의 흰 꺾쇠가 위를 가리킨다. 굵은 파이프와는 어디에도 이어져 있지 않다. 갈라 본 자리에 보라 결정이 오른다. 요오드가 든 갑상샘 호르몬이다. 음성 피드백, 반응으로 나온 것이 많아지면 되돌아와 자극을 줄인다. 내려간 길을 거꾸로 오는 것이 아니라 온몸의 피를 돌아 다른 길로 온다.","box":[1840,100,110,1044],"src":["s07p05#4"],"cards":["Q0-25#4","Q0-14"]},{"sid":"s7","obj":"가는 관의 두 갈래(꺾쇠가 덧문 쪽으로) — 하나는 깔때기 입의 나무 덧문에 · 하나는 위층 나비 창구의 셔터에 닿아 내리누른다 · 둘 다 반만 닫혔다","fact":"T3 · T4가 TRH와 TSH를 함께 억제한다 · 끄지 않고 줄인다","hook":"덧문 둘 · 반만","say":"가는 관은 위에서 두 갈래로 나뉜다. 한 갈래는 깔때기 입의 나무 덧문을 내리누르고, 다른 갈래는 위층 나비 창구의 셔터를 내리누른다. 갑상샘 호르몬 T3와 T4가 TRH와 TSH를 함께 억제한다. 둘 다 반만 닫혔다. 끄는 것이지 부수는 것이 아니다. 아래쪽 양이 줄면 덧문이 다시 들리고 낙하산이 또 내려간다.","box":[[800,60,440,180],[1190,620,410,320],[1380,570,470,90]],"src":["s07p05#4"],"cards":["Q0-25#4","Q0-14"]}],"hubPanel":"s07p05"};
+const L = {"id":"L07e","scene":"s07","part":"e","title":"관제탑이 파이프로 내려보내는 셋 — 방출호르몬과 음성 피드백","sub":"똑같은 흰 낙하산 셋(방출호르몬 -RH) · 나비(TRH) · 세 층 케이크(CRH) · 묶인 달걀 둘(GnRH) · 아래에서 따로 올라오는 가는 붉은 관 + 보라 결정(음성 피드백 · T3 · T4) · 반만 닫힌 덧문 둘(TRH · TSH 함께 억제)","img":"img/L07e.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"호르몬 본사 빌딩의 윗부분 — 옥상 관제탑 · 그 곁 깔때기에서 위층으로 내려가는 굵은 파란 파이프(앞을 갈라 속이 보임) · 위층 창구 · 바깥 벽을 타는 가는 붉은 관","fact":"시상하부 방출호르몬이 문맥으로 전엽을 켜고 · 결과물이 돌아와 줄인다","hook":"내려보내고 · 되돌아와 누른다","say":"호르몬 본사 빌딩의 윗부분을 당겨 본다. 옥상 관제탑의 관제사가 창밖으로 몸을 내밀어 낙하산을 깔때기로 떨어뜨린다. 깔때기 밑은 굵은 파란 물 파이프, 앞을 갈라 속이 보인다. 파이프는 위층으로 내려간다. 관제탑은 시상하부, 파이프는 문맥, 위층은 뇌하수체 전엽. 그리고 오른쪽 바깥 벽을 타고 가는 붉은 관 하나가 아래에서 따로 올라온다.","box":null,"src":["s07p05#0"],"cards":["G0-147"]},{"sid":"s2","obj":"파이프 속 똑같이 생긴 흰 낙하산 셋이 한 줄로 내려간다 — 매달린 짐만 다르다","fact":"전엽을 조절하는 시상하부 호르몬 대표 셋 — TRH · CRH · GnRH","hook":"똑같은 낙하산 = -RH(방출)","say":"파이프 속으로 흰 낙하산 셋이 한 줄로 떨어져 내려간다. 낙하산은 똑같고 매달린 짐만 다르다. 낙하산이 이름 끝의 RH, 방출호르몬. 놓아서 내려보내는 것이 방출이다. 시상하부는 직접 일하지 않고 내려보내기만 한다. 전엽을 조절하는 시상하부 호르몬 가운데 대표 셋이 TRH, CRH, GnRH다. 매달린 짐이 앞 글자다. 이 밖에 성장호르몬과 프로락틴 쪽에는 방출호르몬과 억제호르몬이 따로 있다.","box":[930,400,180,640],"src":["s07p05#0"],"cards":["G0-147"]},{"sid":"s3","obj":"맨 위 낙하산에 매달린 나비","fact":"TRH — 갑상샘 축의 첫 마디(TSH를 내보내라)","hook":"나비 = 갑상샘 → TRH","say":"맨 위 낙하산에는 나비가 매달렸다. 나비는 갑상샘. 위층 창구에서 나비 접시를 내놓는 것이 TSH였다. 그러니 나비를 매단 낙하산은 TSH를 내보내라는 지시, TRH다. 혈중 갑상샘 호르몬이 낮을 때 켜지는 축의 첫 마디다.","box":[960,420,120,170],"src":["s07p05#1"],"cards":["G0-147#1","Q0-25#1","G0-162#1"]},{"sid":"s4","obj":"가운데 낙하산에 매달린 세 층 케이크","fact":"CRH — 부신 피질 축의 첫 마디(ACTH를 내보내라)","hook":"층층 케이크(C) = 부신 피질(cortex) → CRH","say":"가운데 낙하산에는 세 층 케이크. 층층 케이크는 겹겹의 층으로 된 부신 피질이고, 위층에서 그 케이크 창구의 것이 ACTH였다. 그러니 CRH. C는 케이크의 C이고, 피질을 뜻하는 코텍스의 C다. 부신 피질 축의 첫 마디다.","box":[960,600,120,180],"src":["s07p05#2"],"cards":["G0-147#2"]},{"sid":"s5","obj":"맨 아래 낙하산에 붉은 리본으로 묶인 달걀 둘","fact":"GnRH — 하나의 지시가 FSH · LH 둘을 켠다 · 남성 호르몬 경로의 첫 마디","hook":"묶인 달걀 둘 = 생식샘(고나드) → GnRH","say":"맨 아래 낙하산에는 붉은 리본으로 묶인 달걀 둘. 달걀은 생식샘, 위층에서 그 창구의 것이 FSH와 LH였다. 생식샘이 영어로 고나드라 앞 글자가 Gn이다. GnRH, 하나의 지시가 둘을 켠다. 그래서 달걀이 둘이다. 남성 호르몬 조절 경로의 첫 마디도 이것이다.","box":[960,790,120,170],"src":["s07p05#3"],"cards":["G0-147#3","Q1-20#1"]},{"sid":"s6","obj":"오른쪽 바깥 벽 — 가는 붉은 관이 그림 아래 끝 밖에서 따로 올라온다(흰 꺾쇠가 위로) · 굵은 파이프와 이어진 데가 없다 · 갈라 본 자리에 보라 결정","fact":"음성 피드백 — 결과물이 온몸의 피를 돌아와 자극을 줄여 본래 상태를 되찾는다","hook":"다른 길로 거슬러 온다","say":"오른쪽 바깥 벽을 보자. 가는 붉은 관이 그림 아래 끝 밖에서 따로 올라온다. 관 위의 흰 꺾쇠가 위를 가리킨다. 굵은 파이프와는 어디에도 이어져 있지 않다. 갈라 본 자리에 보라 결정이 오른다. 요오드가 든 갑상샘 호르몬이다. 음성 피드백, 반응으로 나온 것이 많아지면 되돌아와 자극을 줄여 본래 상태를 되찾는다. 항상성의 기본이다. 내려간 길을 거꾸로 오는 것이 아니라 온몸의 피를 돌아 다른 길로 온다.","box":[1840,100,110,1044],"src":["s07p05#4"],"cards":["Q0-25#4","Q0-14"]},{"sid":"s7","obj":"가는 관의 두 갈래(꺾쇠가 덧문 쪽으로) — 하나는 깔때기 입의 나무 덧문에 · 하나는 위층 나비 창구의 셔터에 닿아 내리누른다 · 둘 다 반만 닫혔다","fact":"T3 · T4가 TRH와 TSH를 함께 억제한다 · 끄지 않고 줄인다","hook":"덧문 둘 · 반만","say":"가는 관은 위에서 두 갈래로 나뉜다. 한 갈래는 깔때기 입의 나무 덧문을 내리누르고, 다른 갈래는 위층 나비 창구의 셔터를 내리누른다. 갑상샘 호르몬 T3와 T4가 TRH와 TSH를 함께 억제한다. 둘 다 반만 닫혔다. 아주 끄는 것이 아니라 줄이는 것이다. 아래쪽 양이 줄면 덧문이 다시 들리고 낙하산이 또 내려간다.","box":[[800,60,440,180],[1190,620,410,320],[1380,570,470,90]],"src":["s07p05#4"],"cards":["Q0-25#4","Q0-14"]}],"cq":{"G0-147":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","TRH · CRH · GnRH"],"G0-147#1":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","TRH"],"Q0-25#1":["갑상선 호르몬 T3·T4의 조절 경로는?","시상하부 TRH"],"G0-162#1":["혈중 갑상샘 호르몬이 낮을 때 활성화되는 축은?","TRH"],"G0-147#2":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","CRH"],"G0-147#3":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","GnRH"],"Q1-20#1":["남성 호르몬 조절 경로는?","시상하부 GnRH"],"Q0-25#4":["갑상선 호르몬 T3·T4의 조절 경로는?","(음성 피드백으로 TRH·TSH 억제)"],"Q0-14":["음성 피드백(negative feedback)의 역할은?","반응이 자극을 줄여 기존 상태 회복(항상성 경로의 기본, 인슐린↔글루카곤)"]},"hubPanel":"s07p05"};
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; $('sub').textContent = L.sub || ''; document.title = L.title;
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
 const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
@@ -167,7 +175,7 @@ function recap() {
   if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
 }
 function setMode(m) {
-  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작';
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -183,10 +191,14 @@ function setMode(m) {
 function quizAsk() {
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
-  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">이 물건은 무엇을 나르나?</div><div class="fact muted">떠올린 뒤 「답 보기」</div>`;
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
   $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
 }
-function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
 // 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
 // SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
 function srsInbox(k, ok) {

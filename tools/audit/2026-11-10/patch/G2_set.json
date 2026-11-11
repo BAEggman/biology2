@@ -1,0 +1,108 @@
+{
+ "set": [
+  {
+   "lesson": "L17b",
+   "sid": "s4",
+   "cards_add": [
+    "H0-106"
+   ]
+  },
+  {
+   "lesson": "L17b",
+   "sid": "s5",
+   "cards_add": [
+    "H0-109",
+    "H0-110"
+   ]
+  },
+  {
+   "lesson": "L17b",
+   "sid": "s6",
+   "cards_add": [
+    "H0-111"
+   ]
+  },
+  {
+   "lesson": "L17b",
+   "sid": "s7",
+   "cards_add": [
+    "H0-111",
+    "H0-113",
+    "H0-114"
+   ]
+  },
+  {
+   "lesson": "L31a",
+   "sid": "s2",
+   "cards_add": [
+    "B1-41"
+   ]
+  },
+  {
+   "lesson": "L31a",
+   "sid": "s3",
+   "cards_add": [
+    "B1-40"
+   ]
+  },
+  {
+   "lesson": "L31a",
+   "sid": "s4",
+   "cards_add": [
+    "B1-43",
+    "B1-44",
+    "B1-45",
+    "B1-46"
+   ]
+  },
+  {
+   "lesson": "L12c",
+   "sid": "s6",
+   "cards_add": [
+    "G1-40"
+   ]
+  },
+  {
+   "lesson": "L05a",
+   "sid": "s6",
+   "cards_add": [
+    "M2-20#2"
+   ]
+  },
+  {
+   "lesson": "L05b",
+   "sid": "s7",
+   "cards_add": [
+    "M2-18#1"
+   ]
+  },
+  {
+   "lesson": "L19e",
+   "sid": "s8",
+   "drop_add": [
+    "X-SG-23"
+   ]
+  },
+  {
+   "lesson": "L19f",
+   "sid": "s2",
+   "drop_add": [
+    "B0-169"
+   ]
+  },
+  {
+   "lesson": "L20b",
+   "sid": "s6",
+   "drop_add": [
+    "O1-22"
+   ]
+  },
+  {
+   "lesson": "L45c",
+   "sid": "s13",
+   "drop_add": [
+    "C0-63"
+   ]
+  }
+ ]
+}
