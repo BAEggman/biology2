@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두 층 당구장의 열 일꾼 — 해당과정 열 걸음</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+</div>
+<script>
+const L = {"id":"L31d","scene":"s31","part":"d","title":"두 층 당구장의 열 일꾼 — 해당과정 열 걸음","sub":"위층 초록 당구대(투자기 1~5) · 아래층 파란 당구대(회수기 6~10 · 모두 둘씩) · 육각 고리 열쇠 문지기(헥소키나아제) · 베레모 화가(이성질화효소 — 둘째 · 다섯째) · 과일 앞치마와 열쇠(PFK) · 레이스 재단사의 가위(알도레이스 → G3P + DHAP) · 맨손 도장과 양동이(G3P 탈수소효소 · NADH) · 열쇠 돼지(인산글리세르산 인산화효소) · 열쇠 없는 돼지(자리옮김효소) · 물놀이 아이의 비틀어 짜기(에놀레이스 · H₂O · PEP) · 파라오와 열쇠(피루브산 인산화효소)","img":"img/L31d.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"두 층 당구장 — 위층 발코니의 초록 당구대 · 오른쪽 계단 · 아래층 파란 당구대 · 아래층 왼쪽 끝의 주름 붉은 커튼 문","fact":"해당과정 10반응 = 투자기 1~5(위층) + 회수기 6~10(아래층) · 회수기는 두 번씩","hook":"위층 = 투자 · 아래층 = 회수 · 아래층은 무엇이든 둘씩","say":"해 뜨는 당구장에 층이 둘이다. 위층 발코니의 초록 당구대에서 다섯 일꾼이 왼쪽에서 오른쪽으로 일하고, 오른쪽 계단을 내려와 아래층 파란 당구대에서 다섯 일꾼이 오른쪽에서 왼쪽으로 일한다. 해당과정의 열 반응이다. 해당은 당을 푼다는 뜻. 위층 다섯이 에너지 투자기, 아래층 다섯이 회수기. 아래층에서는 무엇이든 두 개씩이다. 포도당 하나가 3탄소 둘로 갈라진 뒤라 회수기 반응은 모두 두 번씩 일어난다. 이 그림의 약속은 앞 과 그대로다. 정육면체 블록은 6탄소, 각뿔은 3탄소, 붉은 도장은 인산, 동전은 에이티피, 열쇠는 키나아제.","src":[],"cards":["B1-33","B1-60","B1-28"]},{"sid":"s2","obj":"위층 맨 왼쪽 — 고리가 육각형인 열쇠를 목에 건 제복 문지기가 금화 하나를 쥐고 포도 무늬 붉은 블록 귀퉁이에 붉은 도장을 찍는다","fact":"1 헥소키나아제 — 포도당 → 포도당 6-인산 · ATP 하나를 쓴다","hook":"육각(헥사) 고리 열쇠 = 헥소키나아제 · 포도 무늬 블록 = 포도당 · 금화를 쓰고 도장 = ATP 의 인산을 붙임","say":"위층 맨 왼쪽, 제복 입은 문지기. 목에 건 열쇠의 고리가 육각형이다. 육각이 헥사, 열쇠가 키나아제, 헥소키나아제다. 한 손에 금화 하나를 쥐고 다른 손으로 포도 무늬 붉은 블록 귀퉁이에 붉은 도장을 찍는다. 포도 무늬 블록이 6탄소 포도당. 금화의 인산 하나가 당으로 옮겨 가 포도당 6-인산이 된다. 첫 동전, 에이티피 하나를 여기서 쓴다. 인산이 붙은 당은 세포 밖으로 못 나간다.","box":[[195,70,335,370]],"src":[],"cards":["B1-41","B1-40"]},{"sid":"s3","obj":"둘째 — 베레모 화가가 붓으로 블록의 포도 무늬를 사과 무늬로 덧칠한다(반은 포도 · 반은 사과) · 귀퉁이 도장은 그대로","fact":"2 포도당인산 이성질화효소 — 포도당 6-인산 → 과당 6-인산 · 모양만 바꾼다","hook":"덧칠 = 이성질화(원자는 그대로 겉모습만) · 포도 → 사과 = 포도당 → 과당","say":"둘째, 베레모를 쓴 화가가 붓으로 블록의 포도 무늬를 사과 무늬로 덧칠한다. 반은 아직 포도, 반은 벌써 사과. 칠만 바뀌고 블록도 도장도 그대로다. 원자는 그대로 두고 모양만 바꾸는 효소, 이성질화효소. 포도당 6-인산이 과당 6-인산이 된다. 에이티피는 쓰지 않는다. 이 화가는 다섯째 자리에 한 번 더 나온다.","box":[[600,80,230,350]],"src":[],"cards":["B1-42"]},{"sid":"s4","obj":"셋째 — 과일 앞치마의 통통한 주인이 사과를 들고 허리에 열쇠를 찼다 · 사과 무늬 블록에 둘째 도장을 찍는다 · 곁에 금화 하나","fact":"3 PFK — 과당 6-인산 → 과당 1,6-이인산 · ATP 하나 더 · 가장 중요한 조절효소","hook":"과일(프럭토) + 열쇠(키나아제) = PFK · 양끝 도장 = 1,6-이인산","say":"셋째, 과일 앞치마를 두른 통통한 주인. 손에 사과, 허리에 열쇠. 과일이 프럭토, 열쇠가 키나아제, 포스포프럭토키나아제, 피에프케이다. 곁의 금화 하나를 써서 블록의 맞은편 귀퉁이에도 도장을 찍는다. 이제 블록 양끝에 도장이 하나씩, 과당 1,6-이인산. 에이티피를 쓰는 둘째이자 마지막 자리다. 이 주인이 해당과정의 속도를 정하는 가장 중요한 조절 효소다. 에이티피가 넘치면 멈추고 모자라면 서두른다.","box":[[880,80,300,355]],"src":[],"cards":["B1-43","B1-44","B1-46","B1-40"]},{"sid":"s5","obj":"넷째 — 하얀 레이스 드레스의 재단사가 큰 가위를 벌렸고 · 블록이 각뿔 둘로 갈라졌다: 붉은 각뿔 하나와 파란 각뿔 하나(둘 다 아래쪽에 도장)","fact":"4 알도레이스 — 과당 1,6-이인산 → G3P 하나 + DHAP 하나(서로 다른 3탄당)","hook":"레이스 = 알도레이스 · 가위 = 자름 · 붉은 각뿔 = G3P · 파란 각뿔 = DHAP","say":"넷째, 하얀 레이스 드레스의 재단사가 큰 가위를 벌렸다. 레이스, 알도레이스. 가위질 한 번에 6탄소 블록이 3탄소 각뿔 둘로 갈라졌다. 그런데 둘의 색이 다르다. 붉은 각뿔이 지쓰리피, 파란 각뿔이 디에이치에이피. 둘 다 3탄당이지만 다른 물질이다. 둘 다 아래쪽에 도장이 하나씩 있다.","box":[[1200,60,300,370]],"src":[],"cards":["B1-47","B1-48"]},{"sid":"s6","obj":"다섯째(위층 오른쪽 끝) — 같은 베레모 화가가 붓을 들었고 그 앞에 붉은 각뿔 둘이 나란히 섰다","fact":"5 3탄당인산 이성질화효소 — DHAP → G3P · 이제 G3P 둘","hook":"같은 화가 = 이성질화효소 · 파랑을 붉게 = DHAP만 G3P로","say":"위층 오른쪽 끝, 아까 그 베레모 화가가 다시 나왔다. 파란 각뿔을 붉게 칠해 이제 붉은 각뿔 둘이 나란히 섰다. 디에이치에이피만 지쓰리피로 바뀐다, 디만 지로. 같은 화가이니 같은 일, 이성질화다. 이번엔 3탄당을 칠하니 3탄당인산 이성질화효소. 이제 지쓰리피가 둘. 여기까지가 투자기다. 동전 둘을 썼고 아직 하나도 못 벌었다.","box":[[1520,80,270,350]],"src":[],"cards":["B1-49"]},{"sid":"s7","obj":"아래층 오른쪽 끝 계단 밑 — 맨발 소년이 맨손으로 각뿔 둘의 꼭대기에 붉은 도장을 찍는다 · 바닥에 물이 가득한 금속 양동이 둘","fact":"6 G3P 탈수소효소 — G3P + 무기인산 → 1,3-BPG · NAD⁺ → NADH","hook":"맨손 도장 = 동전 없이 붙는 무기인산 · 가득 찬 금속 양동이 = NADH · 꼭대기 + 아래 = 1번 · 3번 인산","say":"계단을 내려오면 아래층 오른쪽 끝. 맨발 소년이 맨손으로 각뿔 둘의 꼭대기에 붉은 도장을 찍는다. 동전이 없다. 에이티피 없이 무기인산이 붙는다. 꼭대기가 1번 자리, 아래쪽이 3번 자리. 도장이 둘이 되었으니 1,3-비스포스포글리세르산이다. 바닥의 금속 양동이 둘은 물이 가득하다. 가득 찬 양동이는 엔에이디에이치. 지쓰리피를 산화해 엔에이디 플러스를 채우는 효소, 지쓰리피 탈수소효소다. 해당과정의 엔에이디에이치는 이 자리에서만 나온다.","box":[[1560,660,260,300],[1480,1010,330,134]],"src":[],"cards":["B1-50","B1-51","B1-37"]},{"sid":"s8","obj":"그 왼쪽 — 열쇠를 목에 건 분홍 돼지가 각뿔 꼭대기의 도장을 떼어 낸다 · 앞에 붉은 점 박힌 금화 둘","fact":"7 인산글리세르산 인산화효소 — 1,3-BPG → 3-PG · ATP 생성(기질수준 인산화)","hook":"돼지(피그) = PG(인산글리세르산) · 열쇠 = 키나아제 · 도장이 금화로 = ATP","say":"그 왼쪽, 열쇠를 목에 건 분홍 돼지. 돼지, 피그, 피지, 인산글리세르산. 열쇠는 키나아제. 인산글리세르산 인산화효소다. 각뿔 꼭대기의 도장을 떼어 빈 동전에 붙인다. 앞에 붉은 점 박힌 금화가 둘, 에이티피 둘이다. 효소가 기질의 인산을 에이디피에 곧장 옮기는 기질수준 인산화, 그 첫 번째. 아래쪽 도장만 남은 각뿔이 3-포스포글리세르산이다.","box":[[1260,660,260,360]],"src":[],"cards":["B1-52","B1-53","B1-54"]},{"sid":"s9","obj":"그 왼쪽 — 열쇠 없는 분홍 돼지가 코로 각뿔의 도장을 아래쪽에서 비탈 면 가운데로 밀어 올린다","fact":"8 인산글리세르산 자리옮김효소 — 3-PG → 2-PG · 인산의 자리만 옮긴다","hook":"같은 돼지 = PG · 열쇠 없음 = 키나아제 아님 · 코로 밀어 올림 = 자리옮김","say":"그 왼쪽, 같은 분홍 돼지인데 열쇠가 없다. 인산글리세르산은 그대로이고 키나아제가 아니다. 코로 각뿔의 도장을 아래쪽에서 비탈 면 가운데로 밀어 올린다. 3번 자리의 인산이 2번 자리로. 자리옮김효소, 뮤테이스다. 3-포스포글리세르산이 2-포스포글리세르산이 된다. 동전도 양동이도 없다.","box":[[960,660,260,360]],"src":[],"cards":["B1-55"]},{"sid":"s10","obj":"그 왼쪽 — 튜브를 낀 수영복 아이가 각뿔을 젖은 수건처럼 비틀어 짠다 · 물방울이 떨어져 바닥에 웅덩이","fact":"9 에놀레이스 — 2-PG → PEP + H₂O(물을 빼 고에너지 인산 공여체로)","hook":"물놀이(놀) = 에놀레이스 · 짜서 물이 빠짐 = 탈수 · 비틀려 팽팽 = 고에너지 PEP","say":"그 왼쪽, 튜브를 낀 수영복 아이. 물놀이, 놀이의 놀, 에놀레이스. 각뿔을 젖은 수건처럼 비틀어 짜자 물방울이 뚝뚝 떨어져 바닥에 웅덩이가 진다. 이 바닥 웅덩이가 진짜 물이다. 아까 양동이의 물은 엔에이디에이치 약속이었다. 물이 빠지고 비틀려 팽팽해진 각뿔이 포스포에놀피루브산, 피이피. 인산을 내주고 싶어 안달이 난 고에너지 상태다.","box":[[640,660,260,430]],"src":[],"cards":["B1-56"]},{"sid":"s11","obj":"아래층 왼쪽 끝 — 줄무늬 두건의 파라오가 가슴에 열쇠를 걸고 매끈한 붉은 각뿔 둘의 꼭대기에 손을 얹었다 · 앞에 붉은 점 박힌 금화 둘","fact":"10 피루브산 인산화효소 — PEP → 피루브산 · ATP 생성(기질수준 인산화)","hook":"파라오의 피라미드 = 피루브산 · 열쇠 = 키나아제 · 매끈한 민 각뿔 = 피루브산","say":"아래층 왼쪽 끝, 줄무늬 두건의 파라오. 파라오의 피라미드가 피루브산, 가슴의 열쇠가 키나아제. 피루브산 인산화효소다. 비틀린 각뿔의 마지막 도장을 떼어 동전에 붙이자 각뿔이 매끈하게 풀렸다. 도장 없는 민 각뿔 둘, 피루브산 둘. 앞의 붉은 점 금화 둘이 기질수준 인산화의 두 번째. 이름은 생성물에서 땄지만 인산을 내주는 쪽은 피이피다. 곁의 붉은 커튼 문이 미토콘드리아, 산소가 있으면 피루브산은 그리로 간다.","box":[[300,600,340,420]],"src":[],"cards":["B1-57","B1-58","B1-59"]},{"sid":"s12","obj":"되짚기 — 위층 금화 둘은 붉은 점 없이 쓰였고 · 아래층 붉은 점 금화는 돼지 앞 둘 + 파라오 앞 둘 · 양동이 둘 · 웅덩이 · 민 각뿔 둘","fact":"포도당 1 → 피루브산 2 · ATP 4 − 2 = 순 2 · NADH 2 · H₂O 2 · CO₂ 0","hook":"쓴 금화 둘 · 번 금화 넷 · 양동이 둘 · 연기 없음","say":"다시 세어 보자. 위층에서 쓴 금화 둘, 아래층에서 번 금화 넷, 돼지 앞 둘과 파라오 앞 둘. 넷에서 둘을 빼면 순 이익 에이티피 둘. 엔에이디에이치 양동이 둘, 피루브산 각뿔 둘, 짜낸 물 둘. 이산화탄소는 하나도 안 나온다, 연기가 없다. 물질 이름은 이렇게 외운다. 포, 육, 과, 일육, 지쓰리피와 디에이치에이피, 디만 지로, 일삼, 삼, 이, 펩, 피. 포도당, 포도당 6-인산, 과당 6-인산, 과당 1,6-이인산, 갈라져 둘, 그리고 1,3-비피지, 3-피지, 2-피지, 피이피, 피루브산.","box":[[195,70,335,370],[880,80,300,355],[1260,660,260,360],[300,600,340,420],[1480,1010,330,134],[640,980,260,110]],"src":[],"cards":["B1-36","B1-38","B1-61","B1-34","B1-35","B1-39"]}],"cq":{"B1-33":["해당과정은 어떤 두 시기로 나뉘는가?","에너지 투자기와 에너지 회수기"],"B1-60":["해당과정에서 한 포도당이 두 G3P를 거치므로 회수기 반응은 몇 번씩 일어나는가?","각각 2번씩"],"B1-28":["해당과정(glycolysis)의 뜻은?","당을 분해한다는 뜻"],"B1-41":["포도당을 포도당 6-인산으로 만드는 효소는?","헥소키나아제(hexokinase)"],"B1-40":["해당과정에서 ATP가 투입되는 두 단계는?","포도당→포도당 6-인산 · 과당 6-인산→과당 1,6-이인산"],"B1-42":["포도당인산이성질화효소(isomerase)가 하는 일은?","포도당 유도체를 과당 유도체로 바꾼다"],"B1-43":["과당 6-인산에 ATP를 더 써서 인산기를 붙이는 효소는?","PFK(인산과당인산화효소)"],"B1-44":["해당과정에서 가장 중요한 조절 효소로 자주 묻는 것은?","PFK"],"B1-46":["PFK가 작용하는 기질과 생성물은?","과당 6-인산 → 과당 1,6-이인산"],"B1-47":["알도레이스가 하는 일은?","과당 1,6-이인산을 두 개의 3탄당으로 쪼갠다"],"B1-48":["알도레이스 반응으로 생기는 두 3탄당은?","G3P와 DHAP"],"B1-49":["DHAP는 결국 무엇으로 전환되어 이후 과정을 계속하는가?","G3P"],"B1-50":["에너지 회수기에서 NADH가 생성되는 단계는?","G3P → 1,3-BPG"],"B1-51":["G3P를 1,3-BPG로 산화하며 NADH를 만드는 효소는?","3탄당인산 탈수소효소(G3P 탈수소효소)"],"B1-37":["해당과정에서 생성되는 NADH는?","2개"],"B1-52":["해당과정의 기질수준 인산화 단계 2개는?","1,3-BPG→3PG · PEP→피루브산"],"B1-53":["1,3-BPG에서 ATP가 생성되는 다음 산물은?","3-PG"],"B1-54":["1,3-BPG에서 ATP를 만드는(기질수준 인산화) 효소는?","인산글리세르산 인산화효소(phosphoglycerate kinase)"],"B1-55":["3-PG를 2-PG로 바꾸는(인산기 위치 이동) 효소는?","자리옮김효소(인산글리세르산 자리옮김효소, mutase)"],"B1-56":["2-PG에서 물을 빼 PEP(고에너지 이중결합)를 만드는 효소는?","에놀레이스(enolase)"],"B1-57":["PEP에서 ATP가 생성되며 만들어지는 최종 산물은?","피루브산"],"B1-58":["PEP에서 ATP를 만들며 피루브산을 생성하는 효소는?","피루브산 인산화효소(pyruvate kinase)"],"B1-59":["해당과정에서 직접 ATP를 만드는 단계 수는?","2단계"],"B1-36":["해당과정의 순 ATP 수지는?","2개"],"B1-38":["해당과정에서 생성되는 CO2는?","0개"],"B1-61":["해당과정을 포도당 1분자 기준으로 요약하면?","피루브산 2개 · ATP 순 2개 · NADH 2개"],"B1-34":["해당과정의 에너지 투자기에서 소비되는 ATP는?","2개"],"B1-35":["해당과정의 에너지 회수기에서 생성되는 ATP는?","4개"],"B1-39":["강의 노트에서 해당과정의 총 에너지 생성률로 같이 적은 것은?","ATP 2개와 NADH 2개"]},"hubPanel":null};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
+$('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
+const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
+const scoreKey = 'lesson_' + L.id;
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+let speakSeq = 0;
+function speak(t) {
+  t = ttsNorm(t);
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
+}
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+// 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
+// SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
+function srsInbox(k, ok) {
+  const cards = [...new Set(stops[k].cards || [])]; if (!cards.length) return;
+  try {
+    const key = 'lesson_srs_inbox', id = sess.id + ':' + sidOf(k);
+    let box = JSON.parse(localStorage.getItem(key) || '[]'); if (!Array.isArray(box)) box = [];
+    box = box.filter(m => m && m.id !== id);
+    if (!ok) box.push({ id, t: Date.now(), lesson: L.id, sid: sidOf(k), cards });
+    localStorage.setItem(key, JSON.stringify(box.slice(-400)));
+  } catch (e) {}
+}
+function judge(ok) {
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  srsInbox(k, ok);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
