@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지붕 위 유리 돔 풍선 다락 — 기도 · 폐포 · 숨쉬기 · 분압 · 호흡 조절</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+</div>
+<script>
+const L = {"id":"L46f","scene":"s46","part":"f","title":"지붕 위 유리 돔 풍선 다락 — 기도 · 폐포 · 숨쉬기 · 분압 · 호흡 조절","sub":"심장 집 지붕의 유리 돔(폐) · 얼굴 굴뚝 → 목 → 고리 관 → 갈래 → 잔가지 → 분홍 풍선 송이(기도 · 폐포) · 풍선마다 감긴 붉은 · 푸른 실관(모세혈관 · 얇은 막) · 나가는 붉은 호스의 흰 방울 / 들어오는 푸른 호스의 어두운 방울(O₂ · CO₂ · 동맥혈 · 정맥혈) · 비누 분무기와 쭈그러든 풍선의 아기(서팩턴트 · 미숙아) · 고무막을 끌어내리는 일꾼 + 낮은 바늘 + 왼쪽 종 모형(흡기 · 음압) · 고무막이 솟은 오른쪽 종 모형(날숨) · 나무 갈비 테 · 목에 힘줄이 선 달리는 사람(호흡근 · 보조근) · 종이봉투 한 숨 / 짜도 남는 노인의 풍선(1회 호흡량 · 잔기량) · 선반의 병 셋(들숨 · 폐포 · 날숨 분압) · 연기를 물에 뿜는 돌 망루 + 붉어진 시험지(연수 · CO₂ → H⁺) · 연기 뿜는 달리는 사람 + 풀무(대사 ↑ → 호흡 ↑) · 눈 덮인 갈림길 위 작은 망루의 빈 병과 호루라기(말초 화학수용기 · 심한 저산소)","img":"img/L46f.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"심장 집 지붕 위의 큰 유리 돔 다락 — 꼭대기 얼굴 굴뚝으로 숨을 들이고 · 돔 오른쪽 벽에 환풍기 · 돔 아래 집 안에서 붉은 호스와 푸른 호스가 U 자로 이어진다 (틀)","fact":"폐는 기체교환 · 피를 돌리는 것은 심장 / 환기 = 공기 드나듦 · 기체교환 = 확산","hook":"지붕의 유리 돔 = 폐 · 아래 집 = 심장 · 환풍기 = 환기 · 풍선 속 = 기체교환","say":"심장 집의 지붕 위, 폐 풍선을 키운 다락이 큰 유리 돔이 되었다. 돔 꼭대기 얼굴 굴뚝이 숨을 들이고, 돔 아래 집 안에서는 붉은 호스와 푸른 호스가 U 자로 이어진다. 폐는 기체교환만 맡는다. 피를 돌리는 것은 아래 집, 심장이다. 돔 오른쪽 벽의 환풍기를 보자. 공기를 들이마시고 내쉬는 것이 환기다. 풍선 속에서 공기와 피가 기체를 주고받는 것은 기체교환, 폐포와 혈액, 또는 조직과 혈액 사이의 확산이다. 환기와 기체교환은 다른 말이다.","box":null,"cards":["H0-213","H0-289"]},{"sid":"s2","obj":"돔 꼭대기의 얼굴 굴뚝 — 흰 화살을 따라 흰 방울이 벌린 입으로 들어가고 · 목에서 나온 고리 진 회색 관이 돔 안으로 내려가 두 갈래 → 잔가지로 갈라지고 · 잔가지 끝마다 분홍 풍선 송이","fact":"비강 · 구강 → 인두 → 후두 → 기관 → 기관지 → 세기관지 → 폐포(교환 단위)","hook":"얼굴 = 코 · 입 · 목 = 인두 · 후두 · 고리 관 = 기관 · 두 갈래 = 기관지 · 잔가지 = 세기관지 · 풍선 = 폐포","say":"돔 꼭대기에 커다란 얼굴 굴뚝이 섰다. 흰 화살을 따라 흰 방울이 벌린 입으로 빨려 든다. 공기가 지나는 길을 순서대로 따라가 보자. 코와 입, 비강과 구강. 굴뚝의 목, 인두와 후두. 목에서 나온 회색 관에는 고리가 줄지어 있다. 연골 고리가 받친 기관이다. 돔 안에서 관이 두 갈래로 갈라지니 기관지, 다시 잔가지로 갈라지니 세기관지. 잔가지 끝마다 분홍 풍선 송이가 달렸다. 세기관지 끝의 폐포, 척추동물 폐에서 기체를 바꾸는 단위다.","box":[[895,40,290,290],[960,300,140,200]],"cards":["H0-209","H0-204","H0-210"]},{"sid":"s3","obj":"돔 안을 빽빽이 채운 작은 분홍 풍선 송이들 — 송이마다 가는 붉은 실관과 푸른 실관이 그물처럼 감쌌다","fact":"폐포 = 엄청난 표면적 · 모세혈관이 감싼다 · 아주 얇은 막을 사이에 두고 교환","hook":"작은 풍선 무수히 = 넓은 표면 · 감긴 실관 = 모세혈관 · 풍선 막 한 겹 = 얇은 막","say":"돔 안은 작은 분홍 풍선 송이로 빽빽하다. 큰 풍선 하나보다 작은 풍선 수억 개를 펼치면 겉넓이가 훨씬 넓다. 폐포의 장점, 엄청난 표면적이다. 송이마다 가는 붉은 실관과 푸른 실관이 그물처럼 감쌌다. 폐포를 둘러싼 혈관, 모세혈관이다. 풍선의 고무 막 한 겹과 실관의 벽 한 겹, 그 아주 얇은 막을 사이에 두고 공기와 피가 기체를 주고받는다.","box":[[735,465,525,295]],"cards":["H0-205","H0-206","H0-216"]},{"sid":"s4","obj":"집 안에서 U 자로 이어진 호스 — 돔에서 내려오는 붉은 쪽엔 흰 방울이 가득 · 바닥을 돌아 돔으로 올라가는 푸른 쪽엔 흰 방울 둘과 어두운 방울 여럿","fact":"O₂ 폐포 → 혈액 · CO₂ 혈액 → 폐포 · 동맥혈 104 / 40 · 정맥혈 40 / 45","hook":"흰 방울 가득한 붉은 호스 = 동맥혈 · 흰 방울 적고 어두운 방울 낀 푸른 호스 = 정맥혈","say":"집 안에는 호스 하나가 U 자로 이어졌다. 돔에서 내려오는 붉은 쪽에는 흰 방울이 가득하다. 흰 방울은 산소, 산소는 폐포 공기에서 혈액으로 넘어갔다. 바닥을 돌아 돔으로 올라가는 푸른 쪽에는 흰 방울이 둘뿐이고 어두운 방울이 여럿이다. 어두운 방울은 이산화탄소, 혈액에서 폐포 공기로 넘어가 내쉬어진다. 수치로 보면 폐에서 나온 동맥혈은 산소 분압 104, 이산화탄소 40 수은주밀리미터로 폐포 공기와 같다. 몸을 돌고 온 정맥혈은 산소 40, 이산화탄소 45 다.","box":[[825,830,95,280],[1245,820,80,250]],"cards":["H0-211","H0-212","H0-241","H0-243"]},{"sid":"s5","obj":"청소부가 비누 분무기를 뿌린 분홍 풍선 송이는 동그랗게 부풀었다 · 곁 요람의 갓난아기 이불 위엔 바람 빠져 쭈글쭈글한 풍선 셋 · 요람 곁에 빈 비누병이 쓰러져 있다","fact":"서팩턴트 = 폐포 표면장력 ↓ → 허탈 방지 · 미숙아는 부족 → 폐포가 안 펴져 호흡곤란","hook":"비누(계면활성제) = 서팩턴트 · 빈 비누병 + 바람 빠진 풍선 = 미숙아 호흡곤란","say":"돔 오른쪽 아래, 청소부가 비누 분무기를 분홍 풍선 송이에 뿌린다. 비누, 계면활성제, 서팩턴트다. 젖은 풍선은 물의 표면장력 때문에 안쪽으로 오그라들어 들러붙으려 한다. 서팩턴트가 폐포 표면장력을 낮춰 폐포가 쭈그러드는 허탈을 막는다. 그래서 비누를 뿌린 송이는 동그랗다. 곁 요람의 갓난아기 이불 위에는 바람 빠져 쭈글쭈글한 풍선 셋이 늘어졌고, 요람 곁에는 빈 비누병이 쓰러져 있다. 미숙아는 서팩턴트가 아직 모자라 폐포가 잘 펴지지 않아 호흡곤란이 온다.","box":[[1440,760,300,340]],"cards":["H0-214","H0-215"]},{"sid":"s6","obj":"돔 바닥의 붉은 고무막을 집 안의 일꾼이 두 손으로 끌어내린다 · 돔 안 압력계 바늘은 왼쪽 초록 · 왼쪽 탁자의 종 모형 하나 — 왼쪽 끝에서 뻗은 손이 고무막을 당기자 풍선 둘이 크게 부풀고 흰 화살 셋이 위에서 들어온다","fact":"음압 호흡 — 흡기: 횡격막 수축 ↓ · 늑간근 수축 · 흉강 부피 ↑ · 폐내압 < 대기압","hook":"고무막을 끌어내림 = 횡격막 수축 · 낮은 바늘 = 음압 · 커진 부피로 공기가 빨려 듦","say":"돔 바닥은 붉은 고무막이다. 집 안의 일꾼이 그 고무막을 두 손으로 끌어내린다. 들숨에는 횡격막이 수축해 아래로 내려가고, 갈비 사이의 늑간근도 수축해 갈비뼈를 들어 올린다. 그러면 흉강 부피가 커진다. 돔 안 압력계 바늘은 왼쪽 낮은 초록, 커진 공간 속 폐내 압력이 바깥 대기압보다 낮아진다. 공기는 압력이 낮은 쪽으로 빨려 든다. 밀어 넣는 것이 아니라 끌어당기는 숨, 포유류의 음압 호흡이다. 왼쪽 탁자의 종 모형도 같다. 손이 고무막을 당기자 풍선이 크게 부풀고 흰 화살이 들어온다.","box":[[935,820,175,250],[1150,725,100,95],[70,325,165,360]],"cards":["H0-217","H0-218","H0-219","H0-220","H0-221"]},{"sid":"s7","obj":"왼쪽 탁자의 다른 종 모형 — 고무막이 위로 불룩 솟았고 · 안의 풍선은 작게 오그라들었고 · 흰 화살 둘이 위로 빠져나간다","fact":"날숨: 횡격막 이완 → 위로 · 흉강 부피 ↓ · 폐내압 > 대기압 → 공기가 나간다","hook":"위로 솟은 고무막 = 이완한 횡격막 · 작아진 풍선 · 나가는 화살 = 날숨","say":"왼쪽 탁자의 다른 종 모형을 보자. 손을 놓자 고무막이 위로 불룩 솟았다. 날숨에는 횡격막이 이완해 둥글게 위로 올라간다. 흉강 부피가 줄고, 안의 풍선이 작게 오그라든다. 줄어든 공간 속 폐내 압력이 대기압보다 높아지니 공기가 밖으로 밀려 나간다. 흰 화살 둘이 위로 빠져나간다. 편안한 날숨은 근육이 힘을 빼는 것만으로 된다.","box":[[240,325,160,250]],"cards":["H0-222","H0-223","H0-224"]},{"sid":"s8","obj":"돔을 두른 나무 갈비 테와 고무막을 당기는 일꾼 · 오른쪽 아래 — 입을 쩍 벌리고 헐떡이며 달리는 사람의 목에 힘줄이 줄줄이 섰다","fact":"안정 시 환기 = 횡격막 + 늑간근 · 격한 운동 때 목 · 가슴의 보조 호흡근이 돕는다","hook":"일꾼 + 갈비 테 = 늘 쓰는 두 근육 · 줄줄이 선 목 힘줄 = 보조 호흡근","say":"평소 숨을 쉴 때 일하는 근육은 둘이다. 고무막을 당기는 일꾼, 횡격막과 돔을 두른 나무 갈비 테 사이의 근육, 늑간근. 그런데 오른쪽 아래를 보자. 입을 쩍 벌리고 헐떡이며 달리는 사람의 목에 힘줄이 줄줄이 섰다. 격하게 운동할 때는 목과 가슴의 보조 호흡근까지 나서서 갈비를 더 들어 올린다.","box":[[935,820,175,250],[1795,750,185,305]],"cards":["H0-225","H0-226"]},{"sid":"s9","obj":"왼쪽 아래 — 차분한 사람이 종이봉투에 숨을 한 번 내쉰다 · 곁의 지팡이 노인이 분홍 풍선을 끌어안고 온 힘으로 짜는데 풍선이 여전히 빵빵하다","fact":"1회 호흡량 = 평상시 한 번 드나드는 양 · 잔기량 = 최대로 내쉬어도 남는 양 · 나이 들면 ↑","hook":"봉투에 한 숨 = 1회 호흡량 · 짜도 남는 풍선 = 잔기량 · 노인 = 나이 들수록 ↑","say":"왼쪽 아래에서 차분한 사람이 종이봉투에 숨을 한 번 내쉰다. 평상시 한 번 숨쉴 때 드나드는 공기의 양, 1회 호흡량이다. 곁의 지팡이 노인은 분홍 풍선을 끌어안고 온 힘으로 짜는데도 풍선이 여전히 빵빵하다. 있는 힘껏 내쉬어도 폐에 남는 공기, 잔기량이다. 날숨이 완전히 끝나지 않아 폐가 다 비워지지 않으니, 사람의 폐에는 늘 얼마쯤 공기가 남는다. 노인이 짜는 까닭, 나이가 들면 폐의 탄력이 줄어 잔기량이 늘어난다.","box":[[140,740,450,360]],"cards":["H0-227","H0-228","H0-229","H0-230"]},{"sid":"s10","obj":"선반의 유리병 셋 — 첫 병은 흰 방울로 꽉 찼고 · 가운데 병은 흰 방울이 줄고 어두운 방울 둘 · 끝 병은 그 사이(흰 방울 열둘 · 어두운 방울 하나)","fact":"들숨 PO₂ 160 / PCO₂ 0.3 · 폐포 104 / 40 · 날숨은 둘 사이(남은 공기와 섞임)","hook":"흰 방울 = O₂ · 어두운 방울 = CO₂ · 병 셋 = 들숨 · 폐포 · 날숨","say":"선반에 유리병 셋이 놓였다. 흰 방울은 산소, 어두운 방울은 이산화탄소다. 첫 병은 흰 방울로 꽉 찼다. 들이마신 공기, 산소 분압 약 160, 이산화탄소는 0.3 수은주밀리미터로 거의 없다. 가운데 병은 흰 방울이 줄고 어두운 방울이 생겼다. 폐포 공기, 산소 104, 이산화탄소 40. 끝 병은 그 사이다. 내쉰 공기가 들숨과 폐포 공기의 중간쯤인 까닭은, 폐포에서 나온 공기가 기도에 남아 있던 들숨 공기와 섞여 나오기 때문이다.","box":[[415,335,320,170]],"cards":["H0-239","H0-240","H0-244"]},{"sid":"s11","obj":"오른쪽의 높은 돌 망루 — 발치의 가스통이 호스로 연기를 웅덩이 물에 뿜고 · 발치의 경비가 그 물에 담근 긴 시험지가 붉게 물들었다","fact":"호흡 중추 = 연수 — CO₂ 로 생긴 H⁺ ↑ · pH ↓ 감지 · 평소 주 자극은 고CO₂(저산소 아님)","hook":"연기 + 물(수) = 연수 · 붉어진 시험지 = H⁺ · pH ↓","say":"오른쪽에 높은 돌 망루가 섰다. 숨을 다스리는 호흡조절중추, 망루의 이름은 연수다. 발치를 보면 가스통이 호스로 연기를 웅덩이 물에 뿜는다. 연기와 물, 연수. 발치의 경비가 그 물에 긴 시험지를 담그자 붉게 물들었다. 이산화탄소가 물에 녹으면 수소 이온이 생겨 산성이 된다. 연수는 이산화탄소가 늘어 생긴 수소 이온 증가와 pH 감소를 감지한다. 그래서 평소 호흡을 다스리는 주된 자극은 산소 부족이 아니라 이산화탄소가 많은 것, 낮은 pH 다.","box":[[1505,280,225,400],[1465,520,340,230]],"cards":["H0-231","H0-232","H0-235"]},{"sid":"s12","obj":"망루 앞을 달리는 사람이 입과 머리 뒤로 검은 연기를 내뿜고 · 망루 꼭대기 경비가 풀무를 두 손으로 세게 빨리 밀었다 당긴다","fact":"대사 ↑ → CO₂ ↑ · pH ↓ → 호흡 깊이 · 속도 ↑ · 활동 조직 PO₂ ↓ PCO₂ ↑","hook":"뿜는 검은 연기 = 활동 근육의 CO₂ · 세게 빨리 움직이는 풀무 = 깊고 빠른 호흡","say":"망루 앞을 달리는 사람이 입과 머리 뒤로 검은 연기를 내뿜는다. 운동으로 대사 활동이 늘면 근육이 이산화탄소를 많이 만든다. 활동하는 조직은 산소 분압이 낮고 이산화탄소 분압이 높다. 혈액의 이산화탄소가 늘고 pH 가 떨어진다. 그러자 망루 꼭대기 경비가 풀무를 두 손으로 세게 빨리 밀었다 당긴다. 이산화탄소 증가는 호흡의 깊이와 속도를 늘린다. 이산화탄소를 더 많이 내보내 떨어진 pH 를 되돌리려는 것이다.","box":[[1345,370,160,190],[1540,125,165,155]],"cards":["H0-233","H0-234","H0-238","H0-242"]},{"sid":"s13","obj":"먼 눈 덮인 산비탈의 작은 나무 망루 — 아래로 산길이 둘로 갈린다 · 경비가 흰 알갱이가 바닥난 유리병을 손에 들고 흔들며 호루라기를 분다","fact":"대동맥 · 목동맥의 화학수용기가 매우 낮은 O₂ 를 감지 → 심한 저산소에서 호흡이 빨라진다","hook":"갈림길 = 대동맥 · 목동맥 · 눈 덮인 고산 = 산소 부족 · 바닥난 병을 흔들며 호루라기","say":"먼 눈 덮인 산비탈에 작은 나무 망루가 섰고, 그 아래로 산길이 둘로 갈린다. 갈림길은 대동맥과 목동맥의 갈림이다. 그곳의 화학수용기가 이 작은 망루다. 경비가 흰 알갱이가 바닥난 유리병을 손에 들고 흔들어 보며 호루라기를 분다. 이 작은 망루는 산소가 매우 낮을 때만 반응한다. 고산지대처럼 산소가 아주 모자라면 대동맥과 목동맥의 화학수용기가 감지해 호흡을 빠르게 한다.","box":[[1815,305,175,225],[1880,480,168,190]],"cards":["H0-236","H0-237"]}],"cq":{"H0-213":["폐는 기체교환만 담당하고 순환은 누가 돕는가?","심장"],"H0-289":["환기와 기체교환의 차이는?","환기는 공기를 들이마시고 내쉬는 것 · 기체교환은 폐포와 혈액 또는 조직과 혈액 사이의 확산"],"H0-209":["호흡기 구조를 공기 흐름 순서로 쓰면?","비강/구강 → 인두 → 후두 → 기관 → 기관지 → 세기관지 → 폐포"],"H0-204":["척추동물 폐의 기체교환 단위는?","폐포"],"H0-210":["세기관지의 말단에 있는 기체교환 구조는?","폐포"],"H0-205":["폐포의 장점은?","엄청난 표면적 제공"],"H0-206":["폐포를 둘러싸는 혈관은?","모세혈관"],"H0-216":["폐포와 모세혈관의 관계를 한 문장으로 쓰면?","아주 얇은 막을 사이에 두고 기체를 교환한다"],"H0-211":["폐포에서 산소는 어느 쪽으로 이동하는가?","폐포 공기 → 혈액"],"H0-212":["폐포에서 이산화탄소는 어느 쪽으로 이동하는가?","혈액 → 폐포 공기"],"H0-241":["산소화된 동맥혈의 대표적 분압은?","PO2 약 104 mmHg · PCO2 약 40 mmHg"],"H0-243":["정맥혈의 대표적 분압은?","PO2 약 40 mmHg · PCO2 약 45 mmHg"],"H0-214":["서팩턴트(surfactant)의 역할은?","폐포 표면장력을 낮춰 허탈을 막는다"],"H0-215":["미숙아에게 서팩턴트 부족이 위험한 이유는?","폐포가 잘 펴지지 않아 호흡곤란이 생길 수 있기 때문"],"H0-217":["포유류의 숨쉬기 방식은?","음압 호흡"],"H0-218":["흡기(inhalation) 때 횡격막은 어떻게 되는가?","수축하여 아래로 내려간다"],"H0-219":["흡기 때 늑간근은 어떻게 되는가?","수축한다"],"H0-220":["흡기 때 흉강 부피는?","증가한다"],"H0-221":["흡기 때 폐내 압력은 외부 대기압에 비해 어떻게 되는가?","낮아진다"],"H0-222":["날숨(exhalation) 때 횡격막은 어떻게 되는가?","이완하여 위로 올라간다"],"H0-223":["날숨 때 흉강 부피는?","감소한다"],"H0-224":["날숨 때 폐내 압력은 외부 대기압에 비해 어떻게 되는가?","높아진다"],"H0-225":["안정 시 환기를 위해 주로 필요한 근육은?","횡격막과 늑간근"],"H0-226":["격한 운동 시 호흡을 돕는 추가 근육은?","목과 가슴의 보조 호흡근"],"H0-227":["1회 호흡량(tidal volume)이란?","평상시 한 번 숨쉴 때 드나드는 공기량"],"H0-228":["잔기량(residual volume)이란?","최대로 날숨한 뒤에도 폐에 남는 공기량"],"H0-229":["나이가 들수록 증가하기 쉬운 폐 용적은?","잔기량"],"H0-230":["인간의 폐에 항상 일부 공기가 남아 있는 이유를 한 문장으로 쓰면?","날숨이 완전히 끝나지 않아 폐가 완전히 비워지지 않기 때문"],"H0-239":["들이마신 공기의 대표적 분압은?","PO2 약 160 mmHg · PCO2 약 0.3 mmHg"],"H0-240":["폐포 공기의 대표적 분압은?","PO2 약 104 mmHg · PCO2 약 40 mmHg"],"H0-244":["날숨 공기의 분압이 들숨과 폐포 공기의 중간쯤 되는 이유는?","폐포 잔류 공기와 섞이기 때문"],"H0-231":["호흡조절중추는 주로 어디에 있는가?","연수"],"H0-232":["연수의 호흡조절중추가 주로 감지하는 것은?","CO2 증가에 따른 H+ 증가와 pH 감소"],"H0-235":["평상시 호흡조절의 주된 자극은 저산소증인가 고이산화탄소증인가?","고이산화탄소증/낮은 pH"],"H0-233":["대사활동 증가 시 혈액 CO2는 어떻게 되는가?","증가한다"],"H0-234":["CO2 증가가 호흡에 미치는 효과는?","호흡 깊이와 속도를 증가시킨다"],"H0-238":["혈액의 pH가 떨어질 때 호흡이 증가하는 이유는?","CO2를 더 배출해 pH를 회복하려 하기 때문"],"H0-242":["조직액/활동 조직의 대표적 분압 경향은?","PO2 낮고 PCO2 높다"],"H0-236":["고산지대처럼 산소가 매우 낮을 때 이를 감지하는 곳은?","대동맥과 목동맥의 화학수용기"],"H0-237":["저산소증이 심할 때 호흡은 어떻게 변하는가?","빨라진다"]},"hubPanel":null};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
+$('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
+const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
+const scoreKey = 'lesson_' + L.id;
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+let speakSeq = 0;
+function speak(t) {
+  t = ttsNorm(t);
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
+}
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+// 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
+// SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
+function srsInbox(k, ok) {
+  const cards = [...new Set(stops[k].cards || [])]; if (!cards.length) return;
+  try {
+    const key = 'lesson_srs_inbox', id = sess.id + ':' + sidOf(k);
+    let box = JSON.parse(localStorage.getItem(key) || '[]'); if (!Array.isArray(box)) box = [];
+    box = box.filter(m => m && m.id !== id);
+    if (!ok) box.push({ id, t: Date.now(), lesson: L.id, sid: sidOf(k), cards });
+    localStorage.setItem(key, JSON.stringify(box.slice(-400)));
+  } catch (e) {}
+}
+function judge(ok) {
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  srsInbox(k, ok);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
