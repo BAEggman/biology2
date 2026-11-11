@@ -4,7 +4,7 @@
 // 함께 쓰는 것: lesson/map.js(옛 판 → 새 과 — Sketchy 허브 sketchy.html 이 읽어 판마다 「새 과」 단추를 단다) · index.html(SRS) 「새 Sketchy 과」 배지의 숫자
 //   --standalone DIR : 그림을 data: URI 로 안에 넣은 한 파일 <ID>_standalone.html 을 DIR 에 따로(저장소에는 안 둔다)
 const fs = require('fs'), path = require('path'), { execSync } = require('child_process');
-const { ROOT, panelIndex, resolveRef, strip, stopCards } = require('./lesson_lib');
+const { ROOT, panelIndex, resolveRef, strip, stopCards, deck } = require('./lesson_lib');
 const tpl = fs.readFileSync(path.join(__dirname, 'lesson_player.html'), 'utf8');
 const argv = process.argv.slice(2); const si = argv.indexOf('--standalone');
 const standaloneDir = si >= 0 ? argv[si + 1] : null;
@@ -57,13 +57,25 @@ const all = fs.readdirSync(path.join(ROOT, 'lessons')).filter(f => /^L\d{2}[a-z]
   .map(f => JSON.parse(fs.readFileSync(path.join(ROOT, 'lessons', f), 'utf8')));
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const tot = cover.reduce((a, x) => ({ r: a.r + x.rows, c: a.c + x.cards, rc: a.rc + x.rowsCovered, cc: a.cc + x.cardsCovered }), { r: 0, c: 0, rc: 0, cc: 0 });
+// SRS 카드 전체(부모 기준)가 어디 있나 — 지은 과 · 과가 아직 없는 옛 s 판 · d 묶음 · 그림이 아무 데도 없음 (GPT 감사: 「67.2%」 하나로는 그림 없는 카드가 안 보인다)
+const cardPlace = (() => {
+  const covered = new Set(); for (const L of all) for (const st of L.stops) for (const r of (st.src || [])) covered.add(r);
+  const direct = new Set(); for (const L of all) for (const st of L.stops) for (const c of (Array.isArray(st.cards) ? st.cards : [])) direct.add(c.replace(/#\d+$/, ''));
+  const where = {};
+  for (const sc of deck()) for (const P of sc.panels) { if (P.retired) continue; P.f.forEach((row, i) => { for (const c0 of (row[2] || [])) { const c = c0.replace(/#\d+$/, ''); const w = (where[c] = where[c] || new Set()); w.add(covered.has(P.id + '#' + i) ? 'built' : sc.id[0] === 'd' ? 'd' : 'pendS'); } }); }
+  for (const c of direct) (where[c] = where[c] || new Set()).add('built');
+  const cls = id => { const w = where[id]; if (!w) return null; return w.has('built') ? 'built' : w.has('pendS') ? 'pendS' : 'd'; };
+  const T = { tot: 0, built: 0, pendS: 0, d: 0, none: 0 };
+  for (const c of Object.values(CARDS)) { const st = cls(c.id) || (c.p && c.p !== c.id ? cls(c.p) : null) || 'none'; T.tot++; T[st]++; }
+  return T;
+})();
 const idxHtml = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>과(lesson) 목록 — 생물 Sketchy</title>
 <style>body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:#f7f5ef;color:#1b1b1f}.wrap{max-width:900px;margin:0 auto;padding:16px}
 h1{font-size:20px}h2{font-size:15px;margin-top:22px}.sub{color:#4b4b55;font-size:13px}a{color:#0f766e}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #e3e1da;padding:5px 6px;text-align:left}th{color:#4b4b55;font-weight:600}
 .card{display:block;border:1px solid #e3e1da;background:#fff;border-radius:12px;padding:12px 14px;margin:8px 0;text-decoration:none;color:inherit}.card b{color:#0f766e}.bar{height:6px;background:#e3e1da;border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:#0f766e}</style></head><body><div class="wrap">
 <h1>과(lesson) 목록</h1><p class="sub">Sketchy 식 — 한 장면 · 물건 하나 = 사실 하나 · 투어로 듣고 그림만으로 되찾는다. 옛 덱은 과가 다 설 때까지 그대로 — <a href="../sketchy.html">Sketchy 허브</a>(옛 그림 판 · 판마다 「새 과」 단추) · <a href="symbols.html">기호 사전</a>(같은 물건 = 같은 뜻) · <a href="../index.html">SRS</a>(기출 카드).</p>
 ${all.map(L => `<a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(cardsOf)).size} · ${esc(L.sub || '')}</div></a>`).join('')}
-<h2>갈아엎기 진척 — 행 ${tot.rc}/${tot.r} · 기출 카드 ${tot.cc}/${tot.c}</h2><div class="bar"><i style="width:${(100 * tot.cc / Math.max(1, tot.c)).toFixed(1)}%"></i></div>
+<h2>SRS 카드 ${cardPlace.tot}장이 어디 있나</h2><p class="sub">지은 과 <b>${cardPlace.built}</b> · 과가 아직 없는 옛 s 판 <b>${cardPlace.pendS}</b> · d 묶음(도해) <b>${cardPlace.d}</b> · <b>그림이 아무 데도 없음 ${cardPlace.none}</b> — 아래 진척 막대는 옛 판에 딸린 카드만 센다.</p>\n<h2>갈아엎기 진척 — 행 ${tot.rc}/${tot.r} · 기출 카드 ${tot.cc}/${tot.c}</h2><div class="bar"><i style="width:${(100 * tot.cc / Math.max(1, tot.c)).toFixed(1)}%"></i></div>
 <table><tr><th>묶음</th><th>단원</th><th>카드</th><th>행</th><th>덮인 행</th><th>덮인 카드</th><th>과</th></tr>
 ${cover.map(x => `<tr><td>${x.id}</td><td>${esc(x.unit)}</td><td>${x.cards}</td><td>${x.rows}</td><td>${x.rowsCovered}</td><td>${x.cardsCovered}</td><td>${x.lessons.map(l => `<a href="${l}.html">${l}</a>`).join(' ')}</td></tr>`).join('')}
 </table><p class="sub">d 묶음(도해)은 s 묶음을 다 세운 뒤 결정(2026-11-08).</p></div></body></html>`;
