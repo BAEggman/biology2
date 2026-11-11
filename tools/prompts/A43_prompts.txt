@@ -1,0 +1,51 @@
+43장 덧붙임 — Gemini 구역 편집 프롬프트(카본 높음 · 2026-11-11). 조각은 zone.py crop 으로 긴 변 1024 로 올렸다.
+
+[A1] L46a 우심방 — crop 560 380 1020 660 · zone2 paste "578,418,978,628" thr 6
+Edit this cartoon picture. Keep exactly the same drawing style: bold black ink outlines, flat bright colors. This is one room of a cut-away wooden house: slate-blue water fills the room, a grey-blue pipe comes down through the ceiling, wooden trapdoor flaps hang at the bottom.
+1. Make the slate-blue water in this room a bit lower (its wavy surface about one third lower than now), so more of the pale back wall shows.
+2. On the back wall, just to the RIGHT of the open end of the grey-blue pipe, hang an old wooden PENDULUM WALL CLOCK: a round white clock face with two black hands (no numbers, no marks) and below it a tall glass case in which a shiny golden pendulum swings (small curved motion lines on both sides of the pendulum). The whole clock stays dry above the water.
+3. Beside the clock, a small glass THERMOMETER with a red bulb hangs on the back wall (no numbers, no scale marks).
+4. On the right side wall of the room, low down near the floor beside the wooden trapdoor, mount a small black TRAFFIC LIGHT with three round lamps in a column: only the top RED lamp is lit and glowing, the yellow and green lamps are dark.
+Keep everything else exactly the same: the pipe, the wooden frame and beams, the walls, the trapdoor flaps, the red room at the far right edge. No text, no numbers, no letters anywhere.
+→ 그대로 섰다. 신호등이 24×58 px 로 작아 PIL 로 43×108 로 다시 그림(빨간불 + 번짐 · 나무틀엔 안 번지게).
+
+[A3] L46a 큰 사람 — crop 1420 360 2048 1010 · zone paste "1480,425,1765,718;1795,712,1918,868" thr 16
+Edit this cartoon picture. Keep exactly the same drawing style: bold black ink outlines, flat bright colors.
+1. On his raised open hand (the hand near the wooden door), the happy man now holds up a BIG clear glass water JUG with a short neck and a round side handle, about as big as his head, completely full of crimson-red water, balanced proudly on his palm like a waiter.
+2. His other hand (resting on his belly, right next to where the red pipe goes into his chest) now holds a small clear glass laboratory BEAKER with a pouring lip and a few black graduation lines on its side (no numbers), full of the same crimson-red water.
+Keep everything else exactly the same: his face, hair, shirt, trousers, the red pipe going into his chest with its white arrow, the grey-blue pipe on top of his head, the wooden door with the yellow half-moon, the white arrow and the no-U-turn sign, the grey-blue pipe at the bottom, the plain background. No text, no numbers, no letters anywhere.
+→ 비커 대신 삼각 플라스크 · 물빛이 포도주 빛(H 349°) — PIL 로 관과 같은 진홍(H 0°)으로 바꿈(와인 = 하디-바인베르크 예약).
+
+[B1] L46b 관상 호스 — crop 0 200 640 1100 · zone2 paste "0,345,472,905" thr 20
+Edit this cartoon picture. Keep exactly the same drawing style: bold black ink outlines, flat bright colors.
+From the underside of the big thick crimson hose, right where it leaves the little wooden house next to the open door, a THIN crimson hose (about one fifth as thick as the big one) branches off, bends back toward the house and runs over the house's own plank wall below the window, winding across that wall in big S-curves like a climbing vine and disappearing around the left corner of the house - the house is watering its own walls.
+In the middle of the wall, at one spot, the thin hose is squeezed narrow: a lumpy yellow greasy blob is stuck there with a dark-red blood clot on top of it, so the hose is pinched almost shut at that spot. A small shiny GOLD PADLOCK (closed, no key) is clamped onto the thin hose right at that pinched spot.
+Keep everything else exactly the same: the house, the window, the open door with the yellow half-moon, the big crimson hose, the round striped cross-section on the grass, the grey-blue hose with the white arrow, the grass. No text, no numbers, no letters anywhere.
+→ 핏덩이가 산딸기 송이 꼴(포도송이 = 글리코젠 예약과 겹칠까) — PIL 로 매끈한 검붉은 덩이. 호스가 막힌 꼴이 약했다(일치 검사 1회 △) → B2.
+
+[B2] L46b 잘록 · 옅은 분홍 — crop 0 560 420 920 · zone paste "0,560,330,905" thr 20
+Edit this cartoon picture. Keep exactly the same drawing style: bold black ink outlines, flat colors.
+The thin crimson hose comes down from the top, passes through the lumpy yellow greasy blob, and goes on down to the lower left.
+1. Right where the thin hose goes into and comes out of the yellow blob, squeeze the hose very narrow, like an hourglass waist, with a few small black squeeze lines on both sides.
+2. After the blob, the rest of the thin hose (the part going down to the lower-left corner) becomes clearly thinner and pale washed-out pink, as if only a little blood can get through.
+Keep the upper part of the thin hose (coming from the top) crimson and as thick as now. Keep the yellow blob, the dark-red clot on top of it, the gold padlock, the wooden planks, the grey-blue hose, the grass exactly the same. No text, no numbers, no letters anywhere.
+
+[C1] L46c 혈장 — crop 180 180 700 700 · zone paste "282,325,592,628" thr 16
+Edit this cartoon picture. Keep exactly the same drawing style: bold black ink outlines, flat colors.
+Inside the tall glass jar, in the clear pale-yellow liquid of the top layer, small things are floating, spread out so that each one is clearly visible:
+(1) a small open PHOTO ALBUM with a few tiny photos on its pages,
+(2) a small sky-blue Y-shaped GRABBER - a little letter-Y shape with two short claw tips at the ends of its two arms,
+(3) a golden-orange OIL DROP held inside a small red-and-white striped LIFE RING,
+(4) a small ball of fluffy WHITE WOOL YARN with one loose thread,
+and between them a sprinkle of tiny sparkling white SALT crystals and three short white CHALK sticks.
+Keep the three layers exactly as they are: the pale-yellow top layer, the thin white line, the dark-red bottom layer. Keep the jar's glass, the wall and the table the same. No text, no numbers, no letters anywhere.
+
+[K1] L17b 스페이드 카드 — crop 600 640 1000 980 · zone paste "722,775,805,875" thr 20
+Edit this cartoon picture. Keep exactly the same drawing style: bold black ink outlines, flat colors.
+A small shiny GOLD PADLOCK (closed, with no key) now hangs locked through a small round hole punched in the upper corner of the white playing card with the black spade that the angry man is holding.
+Keep everything else exactly the same: the man, his pink lung-shaped hat, his hand and the card, the cut rope, the black posts, the paving stones, the background. No text, no numbers, no letters anywhere.
+
+[K2] L17b 밧줄 고리 — crop 1640 220 2048 580 · zone paste "1690,380,1800,530" thr 20
+Edit this cartoon picture. Keep exactly the same drawing style: bold black ink outlines, flat colors.
+A small shiny GOLD PADLOCK (closed, with no key) is now locked onto the LEFT group of rope loops that squeeze the grey-blue hose tight, hanging down from those loops.
+Keep everything else exactly the same: the grey-blue hose and its pinched shape, all the rope loops, the brass bell hanging below on its rope at the right, the brick-red square pipe, the wall and floor. No text, no numbers, no letters anywhere.
