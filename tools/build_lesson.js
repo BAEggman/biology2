@@ -61,7 +61,7 @@ const idxHtml = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><met
 <style>body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:#f7f5ef;color:#1b1b1f}.wrap{max-width:900px;margin:0 auto;padding:16px}
 h1{font-size:20px}h2{font-size:15px;margin-top:22px}.sub{color:#4b4b55;font-size:13px}a{color:#0f766e}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #e3e1da;padding:5px 6px;text-align:left}th{color:#4b4b55;font-weight:600}
 .card{display:block;border:1px solid #e3e1da;background:#fff;border-radius:12px;padding:12px 14px;margin:8px 0;text-decoration:none;color:inherit}.card b{color:#0f766e}.bar{height:6px;background:#e3e1da;border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:#0f766e}</style></head><body><div class="wrap">
-<h1>과(lesson) 목록</h1><p class="sub">Sketchy 식 — 한 장면 · 물건 하나 = 사실 하나 · 투어로 듣고 그림만으로 되찾는다. 옛 덱은 과가 다 설 때까지 그대로 — <a href="../sketchy.html">Sketchy 허브</a>(옛 그림 판 · 판마다 「새 과」 단추) · <a href="../index.html">SRS</a>(기출 카드).</p>
+<h1>과(lesson) 목록</h1><p class="sub">Sketchy 식 — 한 장면 · 물건 하나 = 사실 하나 · 투어로 듣고 그림만으로 되찾는다. 옛 덱은 과가 다 설 때까지 그대로 — <a href="../sketchy.html">Sketchy 허브</a>(옛 그림 판 · 판마다 「새 과」 단추) · <a href="symbols.html">기호 사전</a>(같은 물건 = 같은 뜻) · <a href="../index.html">SRS</a>(기출 카드).</p>
 ${all.map(L => `<a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(cardsOf)).size} · ${esc(L.sub || '')}</div></a>`).join('')}
 <h2>갈아엎기 진척 — 행 ${tot.rc}/${tot.r} · 기출 카드 ${tot.cc}/${tot.c}</h2><div class="bar"><i style="width:${(100 * tot.cc / Math.max(1, tot.c)).toFixed(1)}%"></i></div>
 <table><tr><th>묶음</th><th>단원</th><th>카드</th><th>행</th><th>덮인 행</th><th>덮인 카드</th><th>과</th></tr>
@@ -91,4 +91,33 @@ if (fs.existsSync(IX)) {
   const ix = fs.readFileSync(IX, 'utf8');
   const re = /(<a class="badge pic" id="lessonBtn"[^>]*>[\s\S]*?<b>)\d+(개<\/b>)/;
   if (re.test(ix)) { const nx = ix.replace(re, `$1${all.length}$2`); if (nx !== ix) { fs.writeFileSync(IX, nx); console.log(`index.html 「새 Sketchy 과」 배지 → ${all.length}개`); } }
+}
+// ── lesson/symbols.html — 기호 사전: 되풀이되는 물건 = 같은 뜻(tools/hooks.json 「_심볼예약」). 어느 과의 물건 · 고리에 그 물건 이름이 나오는지 함께 보인다(2026-11-11 감사 고침 5 · 심볼).
+{
+  const H = JSON.parse(fs.readFileSync(path.join(__dirname, 'hooks.json'), 'utf8'));
+  const R = H['_심볼예약'] || {};
+  const short = t => {  // 만든 사람의 메모(날짜 꼬리표 · 판 번호 · 【참조】)를 걷어 내고 첫 마디만
+    let s = String(t).split('★')[0].replace(/\[\d{4}-\d{2}-\d{2}[^\]]*\]/g, '').replace(/【[^】]*】/g, '').replace(/\((?:[^()]*?(?:L\d{2}[a-z]?|s\d{2}[pu]\d{2})[^()]*)\)/g, '').replace(/\bs\d{2}[pu]\d{2}[a-z]?\S*/g, '').replace(/\s+/g, ' ').trim();
+    const m = s.match(/^(.{4,80}?)(?:[.。:]\s|\s—\s|$)/); s = (m ? m[1] : s.slice(0, 80)).replace(/[\s·,:—-]+$/, '').trim();
+    s = s.replace(/<[^>]+>/g, '').replace(/⚠+/g, '').replace(/\(\s*[·,\s]*\)/g, '').replace(/\s+/g, ' ').trim();
+    if (s.length > 40) { const c = s.search(/\s[—(]|\s\(/); if (c >= 2) s = s.slice(0, c).trim(); }
+    return s || String(t).slice(0, 60);
+  };
+  const rows = [];
+  for (const [k, v] of Object.entries(R)) {
+    const where = [];
+    for (const L of all) L.stops.forEach((s, i) => { if (((s.obj || '') + ' ' + (s.hook || '')).includes(k)) where.push([L.id, i]); });
+    if (!where.length) continue;
+    rows.push({ k, m: short(v), where, n: new Set(where.map(w => w[0])).size });
+  }
+  rows.sort((a, b) => b.n - a.n || a.k.localeCompare(b.k, 'ko'));
+  const symHtml = `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>기호 사전</title>
+<style>body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:#f7f5ef;color:#1b1b1f}.wrap{max-width:900px;margin:0 auto;padding:16px}h1{font-size:20px}.sub{color:#4b4b55;font-size:13px}a{color:#0f766e}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #e3e1da;padding:6px;text-align:left;vertical-align:top}th{color:#4b4b55;font-weight:600}td.k{font-weight:600;white-space:nowrap}td.w a{margin-right:6px}</style></head><body><div class="wrap">
+<p><a href="index.html">← 과 목록</a></p><h1>기호 사전 — 같은 물건은 어느 과에서나 같은 뜻</h1>
+<p class="sub">Sketchy 의 약속: 되풀이되는 물건은 덱 전체에서 한 뜻만 나른다. 아래는 만든 사람이 정해 둔 예약(${Object.keys(R).length}항) 가운데 지금 과에 나오는 ${rows.length}개 — 많이 나오는 순. 과 번호를 누르면 그 과로 간다.</p>
+<table><tr><th>물건</th><th>뜻</th><th>나오는 과</th></tr>
+${rows.map(r => `<tr><td class="k">${esc(r.k)}</td><td>${esc(r.m)}</td><td class="w">${[...new Set(r.where.map(w => w[0]))].map(id => `<a href="${id}.html">${id}</a>`).join('')}</td></tr>`).join('\n')}
+</table></div></body></html>`;
+  fs.writeFileSync(path.join(ROOT, 'lesson', 'symbols.html'), symHtml);
+  console.log(`lesson/symbols.html · 기호 ${rows.length}/${Object.keys(R).length}`);
 }
