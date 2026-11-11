@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>몸 마을 눈 덮인 산장 — 체온 조절 · 열이 드나드는 네 길 · 피부 혈류 · 역류교환 · 대사율 · 휴면</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+</div>
+<script>
+const L = {"id":"L50b","scene":"s50","part":"b","title":"몸 마을 눈 덮인 산장 — 체온 조절 · 열이 드나드는 네 길 · 피부 혈류 · 역류교환 · 대사율 · 휴면","sub":"앞벽을 뜯은 산장의 방 셋 · 큰 온도계의 초록 띠(정상 범위) + 녹은 버터 / 언 버터(막 유동성) · 배에 무쇠 난로 문을 단 털외투 산장지기(대사열 = 내온) vs 열등 아래 도마뱀(바깥 열 = 외온) · 히터 어항의 열대어(외온인데 항온) · 서리 앉은 박쥐(내온인데 변온 · 휴면) · 벽난로 앞 손바닥에 닿는 주황 물결(복사) · 사우나의 땀 → 김(증발) · 새빨간 살갗과 불룩한 핏줄(혈관 확장) vs 하얗게 질린 등산객(혈관 수축) · 능선의 바람(대류) · 얼음덩이에 앉은 엉덩이(전도) · 거위 다리의 빨강 ↓ 파랑 ↑ 관(역류교환) · 장작을 배 속 난로에 넣기(대사율 ↑) · 불 꺼진 난로의 웅크린 사람(저체온) · 빈 접시 곁에 잠든 사람 + 계기판(기초대사율) · 사육장 온도 다이얼(표준대사율) · 큰 야크 vs 작은 벌새(표면적 비) · 눈 밑 땅굴의 고슴도치(동면)","img":"img/L50b.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"눈 덮인 산장 — 앞벽을 뜯어 방 셋이 보인다 · 왼쪽 방 벽의 큰 온도계 · 빨간 기둥이 가운데 초록 띠 안에 멈췄다 · 위 선반엔 녹아 흐르는 버터 · 아래 선반엔 얼어 고드름 달린 버터 (틀)","fact":"체온조절 = 체온을 정상 범위 안에 유지 · 벗어나면 효소가 느려지고 막 유동성이 바뀐다","hook":"초록 띠 = 정상 범위 · 녹은 버터 / 언 버터 = 막이 너무 묽다 / 너무 굳다","say":"몸 마을의 눈 덮인 산장이다. 앞벽을 뜯어 방 셋이 보인다. 밖은 눈보라인데, 왼쪽 방 벽의 큰 온도계는 빨간 기둥이 가운데 초록 띠 안에 멈춰 있다. 바깥 날씨와 상관없이 몸 안 온도를 정상 범위 안에 붙잡아 두는 것, 체온조절이다. 문제에 「환경과 무관하게 내부 온도를 유지한다」가 나오면 항상성의 체온조절을 떠올린다. 온도계 위 선반에는 녹아 줄줄 흐르는 버터, 아래 선반에는 얼어서 고드름이 달린 버터. 세포막은 버터 같다. 너무 더우면 묽어지고 너무 추우면 굳는다. 체온이 초록 띠를 벗어나면 막의 유동성이 바뀌고, 효소 반응의 효율이 떨어지고, 온도에 민감한 과정이 어긋난다.","box":[[708,342,245,255]],"cards":["G0-56","G0-92","G0-57","G0-88"]},{"sid":"s2","obj":"왼쪽 방 — 털모자 · 털외투 산장지기의 배에 둥근 무쇠 난로 문이 열렸고 속에서 불이 활활 / 가운데 방 위 선반 — 유리 사육장 속 초록 도마뱀이 빨간 열등 아래 엎드렸다","fact":"내온동물 = 제 대사열로 체온 유지 · 외온동물 = 바깥 열원에 기댄다","hook":"배 속 난로 = 제 대사열(내온) · 열등 아래 도마뱀 = 바깥 열(외온)","say":"털모자에 털외투를 입은 산장지기의 배 한가운데에 둥근 무쇠 난로 문이 열렸고, 그 속에서 불이 활활 탄다. 제 몸이 태워 내는 열, 대사열로 체온을 지키는 동물이 내온동물이다. 포유류와 조류가 그렇다. 가운데 방 위 선반의 유리 사육장에서는 초록 도마뱀이 빨간 열등 아래 엎드렸다. 도마뱀의 배에는 난로가 없다. 몸을 데우는 열을 바깥, 햇볕이나 데워진 바위 같은 환경의 열원에서 얻는 동물이 외온동물이다. 대부분의 어류, 양서류, 파충류, 무척추동물이 그렇다. 내온과 외온을 가르는 것은 열이 어디서 오느냐다.","box":[[818,535,230,350],[1068,340,152,195]],"cards":["G0-58","G0-59"]},{"sid":"s3","obj":"가운데 방 위 선반 — 검은 히터가 든 작은 어항에서 주황 열대어가 느긋하게 헤엄친다 · 산장 지붕 왼쪽 처마 밑 — 서리를 뒤집어쓰고 거꾸로 매달려 잠든 박쥐","fact":"내온/외온과 항온/변온은 다른 축 — 열대어는 외온인데 항온 · 휴면 박쥐는 내온인데 변온","hook":"히터 어항의 열대어 = 외온 + 항온 · 서리 앉은 박쥐 = 내온 + 변온","say":"도마뱀 곁의 작은 어항에는 검은 히터가 들었고, 주황 열대어가 느긋하게 헤엄친다. 물고기는 외온동물이다. 그런데 물 온도가 늘 같으니 몸 온도도 늘 같다. 외온인데 항온이다. 산장 지붕 왼쪽 처마 밑에는 박쥐 한 마리가 서리를 뒤집어쓴 채 거꾸로 매달려 잠들었다. 박쥐는 내온동물이지만, 휴면에 들면 체온이 뚝 떨어진다. 내온인데 변온이다. 열이 어디서 오느냐, 곧 내온과 외온. 체온이 얼마나 일정하냐, 곧 항온과 변온. 이 둘은 서로 다른 축이다. 시험이 즐겨 내는 분류어의 함정이다.","box":[[1212,432,125,105],[392,318,100,150]],"cards":["G0-60","G0-93","G0-94","G0-95","G0-179"]},{"sid":"s4","obj":"왼쪽 방 벽난로 곁 — 작은 나무 의자에 앉은 스웨터 차림 사람이 불 쪽으로 두 손바닥을 펴 내밀었다 · 불에 닿지 않았는데 주황 물결선이 공기를 건너 손바닥에 닿는다","fact":"복사 = 닿지 않고 전자기파로 열을 주고받음 · 열이 드나드는 길은 복사 · 증발 · 대류 · 전도","hook":"닿지 않고 건너오는 주황 물결선 = 복사","say":"열이 몸을 드나드는 길은 넷이다. 복사, 증발, 대류, 전도. 첫째, 벽난로 곁 작은 나무 의자에 앉은 사람이 불 쪽으로 두 손바닥을 펴 내밀었다. 손이 불에 닿지 않았는데 주황 물결선이 공기를 건너와 손바닥이 따뜻하다. 복사다. 절대영도보다 따뜻한 물체는 모두 전자기파로 열을 내보내고 받는다. 햇볕을 쬐는 것도, 몸이 차가운 벽 쪽으로 열을 잃는 것도 복사다.","box":[[560,580,275,310]],"cards":["G0-61","G0-62"]},{"sid":"s5","obj":"오른쪽 방 사우나 — 의자에 앉은 사람의 살갗에 굵은 땀방울 · 땀이 김이 되어 피어오르고 · 둘레에 파란 시원한 바람결","fact":"증발 = 액체가 기체가 되며 열을 많이 빼앗는다 · 땀샘은 증발 냉각으로 식힌다","hook":"땀이 김이 되어 날아감 = 증발 냉각","say":"오른쪽 방은 사우나다. 의자에 앉은 사람의 살갗에 굵은 땀방울이 맺히고, 땀이 김이 되어 피어오른다. 둘레에는 파란 시원한 바람결이 돈다. 증발이다. 물이 기체가 될 때는 많은 열을 빼앗아 간다. 땀샘이 몸을 식히는 원리가 바로 이 증발 냉각이다.","box":[[1360,370,280,330]],"cards":["G0-63","G0-70"]},{"sid":"s6","obj":"왼쪽 위 눈 덮인 비탈 — 하얀 바람이 휘몰아쳐 등산객의 목도리가 옆으로 날리고 · 머리 둘레에 빨간 열 김이 흩날린다","fact":"대류 = 몸 표면을 지나는 공기나 물의 흐름이 열을 실어 감","hook":"바람에 흩날리는 빨간 열 김 = 대류","say":"왼쪽 위 눈 덮인 비탈에서는 하얀 바람이 휘몰아친다. 등산객의 목도리가 옆으로 날리고, 머리 둘레에는 빨간 열 김이 흩날린다. 몸이 데운 공기를 바람이 자꾸 쓸어 가는 것, 대류다. 몸 표면을 지나는 공기나 물의 흐름이 열을 실어 간다. 바람이 세면 같은 기온에서도 훨씬 춥다. 등산객의 얼굴은 창백하다. 그 창백함은 뒤에서 다시 본다.","box":[[55,100,230,270],[255,55,430,150]],"cards":["G0-64"]},{"sid":"s7","obj":"왼쪽 가운데 — 맑은 파란 얼음덩이에 걸터앉은 사람 · 엉덩이에서 얼음 속으로 빨간 화살 · 밑에 녹은 물이 고이고 · 얼굴을 찡그린다","fact":"전도 = 맞닿은 물체 사이에서 분자 충돌로 열이 옮겨 감","hook":"엉덩이 → 얼음 속 빨간 화살 = 전도","say":"그 아래, 맑은 파란 얼음덩이에 사람이 걸터앉았다. 엉덩이에서 얼음 속으로 빨간 화살이 내려가고, 밑에는 녹은 물이 고인다. 앉은 사람은 얼굴을 찡그린다. 전도다. 맞닿은 두 물체 사이에서 분자끼리 부딪치며 열이 따뜻한 쪽에서 찬 쪽으로 옮겨 간다. 물은 공기보다 열을 훨씬 잘 전하니, 찬물에 빠지면 찬 공기 속보다 훨씬 빨리 체온을 잃는다.","box":[[78,405,312,355]],"cards":["G0-65"]},{"sid":"s8","obj":"사우나의 사람 — 살갗이 새빨갛고 팔에 붉은 핏줄이 불거졌다 / 비탈의 등산객 — 얼굴이 창백한 청백색","fact":"피부 혈관 확장 → 피부 혈류 ↑ → 열 방출 ↑ · 혈관 수축 → 혈류 ↓ → 열 보존","hook":"새빨간 살갗 · 불거진 핏줄 = 혈관 확장(내보냄) · 창백한 얼굴 = 혈관 수축(지킴)","say":"다시 사우나. 그 사람의 살갗은 새빨갛고 팔에는 붉은 핏줄이 불거졌다. 피부의 혈관이 넓어져 피가 겉으로 많이 몰린 것, 혈관 확장이다. 피부로 온 더운 피가 열을 바깥으로 내보낸다. 비탈의 등산객은 반대로 얼굴이 창백하다. 추우면 피부 혈관이 좁아져 피가 겉으로 덜 온다. 혈관 수축이고, 열을 몸속에 지킨다. 피부와 몸속 사이에서 오가는 열의 양을 핏줄 굵기로 조절하는 것이다. 표면 혈류가 늘면 열 방출이 늘고, 줄면 열 보존이 는다.","box":[[1395,485,240,370],[115,125,115,115]],"cards":["G0-66","G0-67","G0-82","G0-83","G0-84"]},{"sid":"s9","obj":"왼쪽 아래 언 연못가 — 유리 장대처럼 길고 굵은 다리로 선 흰 거위 · 다리마다 빨간 관이 아래로 · 바로 곁 파란 관이 위로 · 빨간 화살 셋이 빨간 관에서 파란 관으로 건너뛴다","fact":"역류교환 — 다리로 내려가는 동맥피가 올라오는 정맥피에 열을 넘겨 열 손실을 줄인다","hook":"엇갈려 흐르는 빨강 ↓ · 파랑 ↑ 관 + 건너뛰는 화살 = 역류교환","say":"왼쪽 아래 언 연못가에 흰 거위가 유리 장대처럼 길고 굵은 다리로 섰다. 다리 속이 다 비친다. 다리마다 빨간 관은 발 쪽으로 내려가고, 바로 곁의 파란 관은 몸 쪽으로 올라온다. 빨간 화살 셋이 빨간 관에서 파란 관으로 건너뛴다. 역류교환이다. 내려가는 따뜻한 동맥피가 올라오는 찬 정맥피에 열을 넘겨주니, 발까지 간 피는 이미 식어 얼음에 열을 덜 잃고, 넘겨준 열은 몸으로 되돌아간다. 반대 방향으로 흐르니 관의 처음부터 끝까지 온도 차가 이어져 교환이 계속된다. 물새의 다리가 나오면 역류교환이다.","box":[[95,755,235,380]],"cards":["G0-68","G0-69","G0-89"]},{"sid":"s10","obj":"털외투 산장지기가 작은 삽으로 장작을 제 배 속 난로에 밀어 넣는다 / 연못가 눈밭에 웅크린 사람 — 푸르스름한 살갗에 서리 · 배의 난로 문은 열렸는데 불이 꺼져 차갑고 어둡다","fact":"내온동물은 잃는 열을 갚아야 한다(대사율 ↑ · 행동 · 형태 조절) · 못 갚으면 저체온","hook":"장작 넣기 = 대사율 ↑ · 털외투 = 형태 · 불 꺼진 난로 = 저체온","say":"내온동물은 늘 바깥보다 따뜻하니, 잃는 열을 계속 갚아야 한다. 산장지기는 작은 삽으로 장작을 제 배 속 난로에 밀어 넣는다. 대사율을 올려 열을 더 만드는 것이다. 두꺼운 털외투와 털모자는 몸의 꼴과 행동으로 열을 지키는 방법이다. 털이나 깃털을 세우고, 웅크리고, 따뜻한 곳을 찾는 것도 여기에 든다. 연못가 눈밭에 웅크린 사람은 배의 난로 불이 꺼져 차갑고 어둡다. 살갗은 푸르스름하고 서리가 앉았다. 잃은 열을 갚지 못하면 체온이 떨어진다. 저체온이다.","box":[[818,535,230,350],[428,900,425,215]],"cards":["G0-71","G0-81","G0-87"]},{"sid":"s11","obj":"가운데 방 — 좁은 침대에서 편히 잠든 사람 · 침대 곁 바닥에 빈 접시 · 코에서 벽의 둥근 계기판까지 가는 관 / 위 선반 도마뱀 사육장 옆면의 온도 조절 다이얼","fact":"기초대사율 = 쉬고 굶고 편안하고 자라지 않는 내온동물 · 표준대사율 = 외온동물 · 정한 온도","hook":"빈 접시 곁에 잠든 사람 + 계기판 = 기초대사율 · 사육장 다이얼 = 표준대사율","say":"가운데 방에서는 한 사람이 좁은 침대에서 편히 잠들었다. 침대 곁 바닥에는 빈 접시, 코에서 나온 가는 관이 벽의 둥근 계기판으로 간다. 숨으로 쓰는 산소를 재어 대사율을 잰다. 쉬고 있고, 굶었고, 스트레스가 없고, 더 자라지 않는 내온동물의 대사율이 기초대사율, BMR 이다. 위 선반 도마뱀 사육장 옆면에는 온도 조절 다이얼이 달렸다. 외온동물은 온도에 따라 대사율이 바뀌니, 특정 온도에 맞춰 놓고 같은 조건, 곧 쉬고 굶고 편안한 상태로 잰다. 이것이 표준대사율, SMR 이다.","box":[[1062,550,292,310],[1158,428,64,55]],"cards":["G0-74","G0-75"]},{"sid":"s12","obj":"오른쪽 눈밭에 느긋하게 누워 건초를 천천히 씹는 큰 야크 / 지붕 오른쪽 처마의 빨간 모이통에서 날개를 떨며 정신없이 빨아 먹는 작은 벌새","fact":"작을수록 부피에 비해 표면적이 커 열을 빨리 잃는다 → 체중당 대사율이 높다","hook":"느긋한 큰 야크 · 정신없이 먹는 작은 벌새 = 체중당 대사율은 작을수록 높다","say":"오른쪽 눈밭에는 덩치 큰 야크가 느긋하게 누워 건초를 천천히 씹는다. 지붕 오른쪽 처마의 빨간 모이통에서는 작은 벌새가 날개를 떨며 정신없이 빨아 먹는다. 몸이 작을수록 부피에 비해 표면적이 크다. 열이 빠져나가는 겉이 넓으니 열을 빨리 잃고, 그만큼 빨리 갚아야 한다. 그래서 체중 1 kg 에 드는 대사율은 작은 동물이 훨씬 높다. 큰 동물은 부피에 비해 표면적이 작아 체중당 에너지가 덜 든다. 벌새나 박새 같은 작은 새가 휴면을 잘 쓰는 까닭도 이것이다.","box":[[1635,505,370,260],[1665,325,170,150]],"cards":["G0-85","G0-86","G0-80"]},{"sid":"s13","obj":"오른쪽 아래 — 눈더미를 잘라 보인 땅굴 속 마른 잎 위에서 줄무늬 수면 모자를 쓰고 웅크려 잠든 고슴도치 · 곁에 빈 밥그릇 / 처마 밑에 매달려 잠든 박쥐","fact":"휴면 = 활동 · 대사가 줄어든 짧은 상태 · 동면 = 추위와 먹이 부족을 견디는 긴 휴면","hook":"처마 밑 잠든 박쥐 = 휴면 · 눈 밑 땅굴의 고슴도치 = 동면","say":"처마 밑에 매달려 잠든 박쥐는 휴면 중이다. 활동과 대사를 확 줄인 짧은 상태다. 박쥐는 밤에 다니고 낮에 휴면해 에너지를 아낀다. 오른쪽 아래, 눈더미를 잘라 보니 땅굴이 나왔다. 마른 잎 위에서 고슴도치가 줄무늬 수면 모자를 쓰고 웅크려 잠들었다. 곁의 밥그릇은 비었다. 추위와 먹이 부족을 몇 달씩 버티는 긴 휴면, 동면이다. 에너지 쓰는 것을 줄여 나쁜 철을 견디는 적응이고, 행동으로 드러난다.","box":[[1625,845,380,270],[392,318,100,150]],"cards":["G0-76","G0-77","G0-78","G0-79"]}],"cq":{"G0-56":["체온조절의 정의는?","내부 온도를 정상 범위 내에서 유지하는 과정"],"G0-92":["문제에서 '환경과 무관하게 내부 온도 유지'가 나오면 먼저 떠올릴 개념은?","항상성적 체온조절"],"G0-57":["정상 범위를 벗어난 체온이 위험한 이유 3가지는?","효소 반응 효율 저하 · 세포막 유동성 변화 · 온도 민감 과정 이상"],"G0-88":["문제에서 '효소 활성이 떨어지고 막 유동성 변화'가 같이 나오면 가장 먼저 떠올릴 개념은?","체온 항상성 붕괴"],"G0-58":["내온동물(endotherm)이란?","대사열에 크게 의존해 체온을 유지하는 동물"],"G0-59":["외온동물(ectotherm)이란?","외부 환경 열원에 크게 의존하는 동물"],"G0-60":["내온/외온과 항온/변온은 같은 개념인가?","아니오, 서로 독립적이다"],"G0-93":["외온동물도 항온일 수 있다는 문장의 의미는?","외부 환경이 일정하면 외온동물도 안정된 체온을 유지할 수 있다는 뜻"],"G0-94":["내온동물도 변온일 수 있다는 문장의 의미는?","예를 들어 휴면 시 체온이 떨어질 수 있다는 뜻"],"G0-95":["문제에서 '분류어의 함정'으로 자주 나오는 조합은?","내온/외온과 항온/변온은 서로 다른 축이라는 점"],"G0-179":["내온/외온과 항온/변온이 독립적임을 보여주는 대표 예는?","열대 물에 사는 외온 물고기는 항온을 유지하고 · 휴면 중 내온 박쥐는 체온이 떨어진다"],"G0-61":["열 손실/획득 방식 4가지는?","복사, 증발, 대류, 전도"],"G0-62":["복사(radiation)란?","절대영도보다 높은 물체가 전자기파 형태로 열을 주고받는 것"],"G0-63":["증발(evaporation)이 체온을 낮추는 이유는?","액체가 기체가 되며 많은 열을 흡수하기 때문이다"],"G0-70":["땀샘의 냉각 원리는?","증발 냉각"],"G0-64":["대류(convection)란?","표면을 지나는 공기나 액체의 흐름에 의한 열 이동"],"G0-65":["전도(conduction)란?","접촉한 물체 사이 분자 충돌에 의한 열 전달"],"G0-66":["혈류 조절이 체온조절에 중요한 이유는?","피부와 몸속 사이 열 이동량을 조절할 수 있기 때문이다"],"G0-67":["vasodilation의 체온조절 효과는?","피부 혈류를 늘려 열 방출을 증가시킨다"],"G0-82":["내온동물이 추울 때 열 방출을 줄이는 대표 혈관 반응은?","혈관수축(vasoconstriction)"],"G0-83":["문제에서 '표면 혈류 증가'가 나오면 체온은 대체로 어느 방향으로 변하는가?","열 방출 증가"],"G0-84":["문제에서 '표면 혈류 감소'가 나오면 체온 보존은 어떻게 되는가?","보존이 증가한다"],"G0-68":["역류교환(countercurrent exchange)의 장점은?","열 손실을 줄이면서 열 교환 효율을 높인다"],"G0-69":["역류교환에서 효율이 큰 이유는?","반대 방향 흐름 전 길이에 걸쳐 지속적으로 열 교환이 일어나기 때문이다"],"G0-89":["문제에서 '수중 조류 다리'가 나오면 함께 떠올릴 개념은?","역류교환"],"G0-71":["내온동물이 열 손실을 보상해야 하는 이유는?","환경보다 높은 체온을 유지하기 때문이다"],"G0-81":["내온동물의 열생산 방식 두 가지는?","대사율 증가 · 행동적/형태적 조절"],"G0-87":["문제에서 '열 손실 보상 실패'가 나오면 가장 먼저 의심할 생리적 결과는?","체온 저하"],"G0-74":["기초대사율(BMR)은 누구에게 쓰는가?","쉬고 있고 공복이며 스트레스 없고 성장하지 않는 내온동물"],"G0-75":["표준대사율(SMR)은 누구에게 쓰는가?","특정 온도에서 쉬고 있고 공복이며 스트레스 없는 외온동물"],"G0-85":["몸집이 큰 동물일수록 체중당 에너지 요구가 상대적으로 낮은 경향이 있는 이유는?","부피 대비 표면적 비가 작아 열 손실이 상대적으로 적기 때문이다"],"G0-86":["몸집이 작은 동물이 체중당 대사율이 높은 경향이 있는 이유는?","표면적 비가 커 열 손실을 더 빠르게 보상해야 하기 때문이다"],"G0-80":["벌새/박새 같은 작은 동물이 휴면을 잘 이용하는 이유는?","체표면적 대비 부피가 커 열 손실이 빠르고 대사 부담이 크기 때문이다"],"G0-76":["휴면(torpor)이란?","활동과 대사가 감소된 단기적 생리 상태"],"G0-77":["동면(hibernation)이란?","추위와 음식 부족에 대한 장기간의 휴면"],"G0-78":["휴면이 행동적 적응과 연결되는 이유는?","에너지 소비를 줄여 불리한 환경을 버티게 하기 때문이다"],"G0-79":["박쥐가 낮에 휴면에 들어가는 이유를 한 문장으로 쓰면?","야행성 생활과 에너지 절약을 위해서"]},"hubPanel":null};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
+$('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
+const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
+const scoreKey = 'lesson_' + L.id;
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+let speakSeq = 0;
+function speak(t) {
+  t = ttsNorm(t);
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
+}
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+// 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
+// SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
+function srsInbox(k, ok) {
+  const cards = [...new Set(stops[k].cards || [])]; if (!cards.length) return;
+  try {
+    const key = 'lesson_srs_inbox', id = sess.id + ':' + sidOf(k);
+    let box = JSON.parse(localStorage.getItem(key) || '[]'); if (!Array.isArray(box)) box = [];
+    box = box.filter(m => m && m.id !== id);
+    if (!ok) box.push({ id, t: Date.now(), lesson: L.id, sid: sidOf(k), cards });
+    localStorage.setItem(key, JSON.stringify(box.slice(-400)));
+  } catch (e) {}
+}
+function judge(ok) {
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  srsInbox(k, ok);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
