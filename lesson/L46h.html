@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>심장 집 동네 — 이웃 동물 집들 · 엄마 배 속 집 · 급수탑</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+</div>
+<script>
+const L = {"id":"L46h","scene":"s46","part":"h","title":"심장 집 동네 — 이웃 동물 집들 · 엄마 배 속 집 · 급수탑","sub":"앞벽을 뜯은 이웃 집들(왼쪽 방 회청 · 오른쪽 방 진홍) · 단칸 오두막 vs 높은 아파트 + 지하 펌프 관(확산 · 순환계가 필요한 까닭) · 물고기 집 위아래 두 방 + 관 한 가닥(1심방 1심실 · 단일순환) · 아가미 빗의 물 → / 피 ← (역류교환 · 젖고 얇고 넓은 호흡 표면) · 개구리 집 세 방 · 아래 큰 방에서 섞임 + 풍선 + 젖은 피부 · 흙 속 지렁이(폐피순환 · 피부호흡) · 도마뱀 집 반쯤 가린 벽(불완전 2심실) · 새와 개의 집 네 방 · 통벽(완전 분리 · 이중순환) · 구리 냄비 달팽이 · 거미의 파란 피 / 무쇠 팬의 붉은 피(헤모시아닌 구리 · 헤모글로빈 철) · 분홍 천막 속 아기 집의 둥근 구멍 · 회청 → 진홍 아치 다리관 · 탯줄이 그냥 지나는 벽돌집(난원공 · 동맥관 · 정맥관) → 태어난 집의 덧댄 둥근 판 · 지붕의 밧줄(흔적) · 급수탑의 가는 관 한 잔 / 두 배 굵은 관 쟁반 가득(푸아죄유 · 반지름⁴)","img":"img/L46h.webp","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"심장 집 동네의 거리 — 이웃 집마다 앞벽을 뜯어 방이 보인다 · 왼쪽 방엔 회청 물 · 오른쪽 방엔 진홍 물 · 지붕마다 집주인 동물 (틀)","fact":"이중순환 = 양서류 · 파충류 · 조류 · 포유류(어류만 단일순환)","hook":"앞벽 뜯은 집 = 심장 · 방 수 = 심방 · 심실 · 지붕의 동물 = 누구의 심장","say":"심장 집 동네로 나왔다. 거리의 이웃 집들은 모두 앞벽을 뜯어 방이 보인다. 우리 심장 집처럼 왼쪽 방엔 회청 물, 오른쪽 방엔 진홍 물이다. 지붕마다 집주인 동물이 앉았다. 물고기, 개구리, 도마뱀, 그리고 새와 개. 집마다 방의 수와 벽이 다르다. 그 다름이 척추동물 심장의 진화다. 미리 말해 두면, 물고기만 단일순환이고 개구리 같은 양서류부터 파충류, 조류, 포유류까지는 모두 이중순환이다.","box":null,"cards":["H0-23"]},{"sid":"s2","obj":"왼쪽 끝 단칸 오두막 — 창으로 들어온 흰 방울이 방 안에 고루 퍼졌다 · 곁의 높은 아파트 — 바깥에서 스며든 흰 방울은 모자라 사람들이 숨이 막혀 헐떡인다 · 지하 펌프에서 오른쪽 줄로 붉은 관이 올라가 그 방들은 흰 방울로 가득하다","fact":"확산 = 열운동으로 농도차를 따라 퍼짐 · 몸이 크면 확산만으론 멀어 순환계가 필요","hook":"단칸 오두막은 퍼지기만 해도 됨 · 큰 아파트는 펌프 관이 있어야 = 순환계","say":"왼쪽 끝 단칸 오두막에는 창으로 들어온 흰 방울이 방 안에 고루 퍼졌다. 분자가 제 열운동으로 진한 곳에서 묽은 곳으로 퍼지는 것, 확산이다. 작은 집은 확산만으로 충분하다. 곁의 높은 아파트는 다르다. 바깥에서 스며든 흰 방울로는 모자라 사람들이 숨이 막혀 헐떡인다. 교환하는 겉면에서 안쪽 세포까지 거리가 멀면 단순확산으로는 너무 느리다. 그래서 지하 펌프에서 붉은 관이 올라가자, 관이 닿은 오른쪽 줄 방들은 흰 방울로 가득하다. 다세포 동물에게 순환계가 필요한 까닭이다.","box":[[30,480,200,220],[245,55,290,640]],"cards":["H0-0","H0-1"]},{"sid":"s3","obj":"물고기 집 — 위에 작은 방 하나(바닥에 얕게 회청 물) · 아래 큰 방 하나(회청 물 가득) · 진홍 물은 없다 · 집에서 나간 관 한 가닥이 위의 아가미 빗으로","fact":"어류 = 1심방 1심실 · 단일순환(한 바퀴에 심장을 한 번 지난다)","hook":"방 둘 = 1심방 1심실 · 관 한 가닥 = 단일순환","say":"물고기가 앉은 집에는 방이 둘뿐이다. 위에 작은 방 하나, 아래 큰 방 하나. 1심방 1심실이다. 두 방에는 회청 물뿐, 진홍 물이 없다. 물고기 심장은 몸을 돌고 온 피만 받아 아가미로 보낸다. 집에서 나간 관 한 가닥이 위의 아가미 빗을 지나고, 거기서 곧장 몸으로 갔다가 집으로 돌아온다. 피가 한 바퀴 도는 동안 심장을 한 번만 지나는 단일순환, 그 대표가 어류다.","box":[[570,300,270,400]],"cards":["H0-16","H0-22"]},{"sid":"s4","obj":"물고기 집 위의 커다란 붉은 아가미 빗 — 아주 얇은 젖은 잎이 수없이 달렸다 · 파란 화살(물)은 왼쪽에서 오른쪽으로 · 붉은 화살(피)은 오른쪽에서 왼쪽으로","fact":"역류교환 — 피가 물과 반대로 흘러 물의 PO₂ 가 늘 더 높다 · 호흡 표면은 젖고 얇고 넓게","hook":"엇갈린 두 화살 = 역류교환 · 수없이 많은 얇은 젖은 잎 = 넓고 얇고 젖은 호흡 표면","say":"물고기 집 위에 커다란 붉은 아가미 빗이 걸렸다. 파란 화살, 물은 왼쪽에서 오른쪽으로 흐르고, 붉은 화살, 피는 오른쪽에서 왼쪽으로 거꾸로 흐른다. 역류교환이다. 반대로 흐르니 아가미 처음부터 끝까지 물의 산소 분압이 늘 피보다 높아 산소를 끝까지 뽑아낸다. 빗에는 아주 얇은 젖은 잎이 수없이 달렸다. 좋은 호흡 표면의 조건 셋이다. 얇고, 넓고, 늘 젖어 있을 것. 기체는 물에 녹아야 막을 쉽게 지나기 때문이다.","box":[[540,60,470,320]],"cards":["H0-292","H0-201","H0-202"]},{"sid":"s5","obj":"젖은 초록 개구리의 집 — 위에 작은 방 둘(회청 · 진홍) · 아래 큰 방 하나에서 회청과 진홍이 섞인다 · 지붕 곁 분홍 풍선 · 집 앞 흙 속에 젖은 지렁이","fact":"양서류 = 2심방 1심실 · 폐와 피부로 가는 폐피순환고리 · 피부호흡(양서류 일부 · 지렁이)","hook":"위 둘 아래 하나 = 2심방 1심실 · 풍선 + 젖은 피부 = 폐피순환 · 지렁이 = 피부호흡","say":"젖은 초록 개구리의 집은 위에 작은 방이 둘, 회청과 진홍이다. 그런데 아래 큰 방은 하나뿐이라 회청과 진홍이 그 방에서 섞인다. 2심방 1심실이다. 지붕 곁 분홍 풍선, 폐로 가는 고리가 개구리의 젖은 피부로도 간다. 폐와 피부로 함께 가는 폐피순환고리다. 개구리는 피부로도 숨을 쉰다. 집 앞 흙 속에 젖은 지렁이가 누웠다. 피부호흡을 하는 대표가 지렁이와 일부 양서류다.","box":[[880,290,300,490]],"cards":["H0-17","H0-26","H0-203"]},{"sid":"s6","obj":"도마뱀의 집 — 위에 작은 방 둘 · 아래층을 가르는 벽이 반쯤만 올라와 그 위로 회청과 진홍이 넘쳐 보랏빛으로 섞인다","fact":"파충류(일반) = 2심방 불완전 2심실 — 심실 사이 벽이 덜 막혔다","hook":"반쯤 올라온 벽 = 불완전 2심실","say":"도마뱀의 집은 위에 작은 방 둘, 아래도 방이 둘인데 가운데 벽이 반쯤만 올라왔다. 그래서 벽 위로 회청과 진홍이 넘쳐 보랏빛으로 섞인다. 파충류의 일반적인 심장, 2심방 불완전 2심실이다. 심실 사이 벽이 덜 막혀 섞임이 조금 남는다. 개구리의 아래 방 하나보다는 낫고, 다음 집의 통벽보다는 못하다.","box":[[1195,320,300,410]],"cards":["H0-18"]},{"sid":"s7","obj":"새와 개가 함께 앉은 집 — 방 넷 · 지붕부터 바닥까지 통벽 · 회청과 진홍이 섞이지 않는다 · 관이 지붕 풍선 고리와 뜰 고리로 두 번 집을 지난다","fact":"조류 · 포유류 = 심방 · 심실 완전 분리 · 이중순환(한 바퀴에 심장 두 번) vs 어류 한 번","hook":"새 + 개 = 조류 · 포유류 · 통벽 = 완전 분리 · 두 고리 = 이중순환","say":"새와 개가 함께 앉은 집에는 방이 넷이고, 지붕부터 바닥까지 통벽이 가른다. 회청과 진홍이 전혀 섞이지 않는다. 심방과 심실이 가장 완전히 나뉜 두 무리, 조류와 포유류다. 우리 심장 집도 이 꼴이다. 관을 따라가 보면 한 고리는 지붕의 풍선으로 갔다 오고, 한 고리는 뜰로 갔다 온다. 피가 한 바퀴 도는 동안 심장을 두 번 지나는 이중순환이다. 물고기 집은 한 번, 이 집은 두 번.","box":[[1505,290,320,430]],"cards":["H0-21","H0-24","H0-282"]},{"sid":"s8","obj":"왼쪽 아래 — 등에 반짝이는 구리 냄비를 진 달팽이와 거미가 파란 피를 뚝뚝 흘린다 · 곁의 사람은 검은 무쇠 프라이팬을 들고 손끝에 붉은 피 한 방울","fact":"호흡색소 = 기체와 결합해 운반을 돕는 단백질 · 헤모시아닌(구리 · 절지 · 연체) vs 헤모글로빈(철)","hook":"구리 냄비 + 파란 피 = 헤모시아닌 · 달팽이 = 연체 · 거미 = 절지 · 무쇠 팬 + 붉은 피 = 헤모글로빈","say":"왼쪽 아래, 등에 반짝이는 구리 냄비를 진 달팽이가 파란 피를 뚝뚝 흘린다. 곁의 거미도 파란 피다. 기체와 결합해 운반을 돕는 단백질을 호흡색소라 한다. 달팽이와 거미의 호흡색소는 헤모시아닌, 가운데 금속이 구리라 산소와 붙으면 파랗다. 절지동물과 많은 연체동물이 쓴다. 곁의 사람은 검은 무쇠 프라이팬을 들고, 손끝에 붉은 피 한 방울. 우리의 헤모글로빈은 철이다. 구리는 파랑, 철은 빨강.","box":[[20,890,470,250],[450,760,330,384]],"cards":["H0-245","H0-246","H0-247","H0-290"]},{"sid":"s9","obj":"분홍 천막(엄마 배) 속 아기 집 — 위층 두 방 사이 벽의 둥근 구멍으로 왼쪽 방의 회청 물이 오른쪽 방으로 쏟아진다 · 태어난 아기 집의 둥근 창은 둥근 판으로 덧대 막혔다","fact":"태아의 세 우회로(난원공 · 동맥관 · 정맥관) · 난원공 = 좌우 심방 사이 → 출생 후 난원와","hook":"위층 두 방 사이 둥근 구멍 = 난원공 · 덧대 막은 둥근 판 = 난원와","say":"분홍 천막, 엄마 배 속에 아기의 작은 심장 집이 있다. 태아에게만 있다가 태어나면 닫히는 우회로가 셋이다. 첫째, 위층 두 방 사이 벽의 둥근 구멍. 왼쪽 방의 회청 물이 그 구멍으로 오른쪽 방에 곧장 쏟아진다. 좌우 심방 사이의 난원공이다. 아직 숨을 쉬지 않는 폐를 건너뛴다. 곁의 태어난 아기 집을 보면 둥근 창이 둥근 판으로 덧대 막혔다. 태어나면 난원공이 닫혀 움푹한 자국, 난원와로 남는다.","box":[[1205,850,230,110],[1640,880,80,75]],"cards":["H2-1","H2-2"]},{"sid":"s10","obj":"아기 집 지붕 위 아치 다리관 — 왼쪽 회청에서 솟아 오른쪽 진홍으로 내려앉아 곁의 바람 빠진 풍선을 건너뛴다 · 태어난 아기가 첫 울음을 터뜨리자 그 집 지붕 풍선은 빵빵하고 아치는 마른 밧줄이 됐다","fact":"동맥관 = 폐동맥 ↔ 대동맥 → 출생 후 동맥관인대 · 닫는 자극 = 동맥혈 PO₂ ↑ · PGE₂ ↓","hook":"아치 다리관 = 동맥관 · 바람 빠진 풍선 = 안 쓰는 폐 · 첫 울음 + 빵빵한 풍선 = 산소 ↑ · 마른 밧줄 = 인대","say":"둘째 우회로, 아기 집 지붕 위의 아치 다리관이다. 왼쪽 회청에서 솟아 오른쪽 진홍으로 내려앉으며, 곁의 바람 빠진 풍선을 건너뛴다. 폐동맥과 대동맥을 잇는 동맥관이다. 태아의 폐는 쭈그러져 있어 피가 폐 대신 이 다리로 몸에 간다. 태어난 아기가 첫 울음을 터뜨리자 그 집 지붕의 풍선은 빵빵해졌다. 숨을 쉬어 동맥혈 산소 분압이 오르고 프로스타글란딘 E₂ 가 줄면 동맥관이 닫힌다. 지붕의 마른 밧줄, 동맥관인대다.","box":[[1225,790,200,215],[1735,755,100,165]],"cards":["H2-3","H2-5"]},{"sid":"s11","obj":"왼쪽에서 들어온 분홍 꼰 탯줄이 작은 붉은 벽돌집 앞을 그냥 지나 천막 속 아기 집 벽으로 곧장 들어간다 · 천막에서 태어난 아기 집까지는 밧줄 한 가닥","fact":"정맥관 = 제대정맥 → 하대정맥, 간을 우회 → 출생 후 정맥관인대 · 흔적 셋: 와 · 인대 · 인대","hook":"벽돌집(간)을 그냥 지나는 탯줄 = 정맥관 · 밧줄 = 인대","say":"셋째 우회로. 왼쪽에서 들어온 분홍 꼰 탯줄이 작은 붉은 벽돌집 앞을 그냥 지나 아기 집 벽으로 곧장 들어간다. 덱에서 붉은 벽돌집은 간이다. 탯줄로 온 엄마의 피가 간을 거치지 않고 하대정맥으로 가는 지름길, 정맥관이다. 태어나면 이것도 닫혀 정맥관인대가 된다. 천막에서 태어난 아기 집까지 이어진 밧줄 한 가닥처럼. 세 우회로의 흔적을 모으면, 난원공은 난원와, 동맥관은 동맥관인대, 정맥관은 정맥관인대다.","box":[[895,935,335,130],[1530,900,100,115]],"cards":["H2-4","H2-6"]},{"sid":"s12","obj":"오른쪽 끝 급수탑 — 가는 관은 졸졸 흘려 잔 하나를 채우고 · 두 배 굵은 관은 콸콸 쏟아 쟁반의 잔을 한꺼번에 가득 채운다","fact":"푸아죄유 — 저항은 반지름의 4제곱에 반비례 · 반지름 2배 → 저항 1/16 · 유량 16배","hook":"두 배 굵은 관 = 반지름 2배 · 쟁반 가득 = 2⁴ = 16배","say":"오른쪽 끝에 급수탑이 섰다. 아래의 가는 관은 졸졸 흘려 잔 하나를 채우고, 바로 곁의 두 배 굵은 관은 콸콸 쏟아 쟁반의 잔을 한꺼번에 가득 채운다. 두 배가 아니라 훨씬 더 많다. 푸아죄유 법칙, 층류에서 흐름의 저항은 관 반지름의 4제곱에 반비례한다. 반지름이 2배면 저항은 2의 4제곱, 16분의 1이 되고, 같은 압력에서 흐르는 양은 16배가 된다. 세동맥이 조금만 좁아지거나 넓어져도 혈류가 크게 바뀌는 까닭이다.","box":[[1815,250,233,510]],"cards":["H2-7","H2-8","H2-9"]}],"cq":{"H0-23":["이중순환을 하는 대표 척추동물은?","양서류 · 파충류 · 조류 · 포유류"],"H0-0":["확산(diffusion)이란?","분자들이 열운동에 의해 농도차를 따라 이동하는 현상"],"H0-1":["다세포 동물에서 순환계가 필요한 이유는?","교환표면과 각 세포 사이 거리가 멀어 단순확산만으로는 물질 이동이 비효율적이기 때문"],"H0-16":["어류의 심장 구조는?","1심방 1심실"],"H0-22":["단일순환을 하는 대표 척추동물은?","어류"],"H0-292":["물고기 아가미의 역류교환(countercurrent exchange)이란?","아가미 모세혈관의 혈액이 물 흐름과 반대 방향으로 흘러, 아가미 전 길이에서 물의 산소분압이 항상 혈액보다 높게 유지 → 산소 추출 효율을 극대화"],"H0-201":["호흡 표면이 항상 습해야 하는 이유는?","기체가 물에 녹아야 막을 통과하기 쉽기 때문"],"H0-202":["효율적인 호흡 표면의 조건 두 가지는?","얇음과 넓은 면적"],"H0-17":["양서류의 심장 구조는?","2심방 1심실"],"H0-26":["양서류의 폐 쪽 순환 고리 이름은?","폐피순환고리"],"H0-203":["피부호흡을 하는 대표 동물은?","지렁이와 일부 양서류"],"H0-18":["파충류의 일반적 심장 구조는?","2심방 불완전 2심실"],"H0-21":["심방과 심실이 가장 완전히 분리된 척추동물 두 무리는?","조류와 포유류"],"H0-24":["이중순환(double circulation)이란?","혈액이 한 바퀴 도는 동안 심장을 두 번 지나는 순환"],"H0-282":["단일순환과 이중순환을 비교하면?","단일순환은 한 바퀴에 심장을 한 번 · 이중순환은 두 번 지난다"],"H0-245":["호흡색소(respiratory pigment)란?","기체와 결합해 운반을 돕는 단백질"],"H0-246":["헤모시아닌의 금속 이온은?","구리"],"H0-247":["헤모시아닌이 주로 발견되는 동물군은?","절지동물과 많은 연체동물"],"H0-290":["헤모시아닌과 헤모글로빈을 비교하면?","헤모시아닌은 구리 기반 · 헤모글로빈은 철 기반"],"H2-1":["태아에게만 있다가 출생 후 닫히는 세 우회로는?","난원공 · 동맥관 · 정맥관"],"H2-2":["난원공(foramen ovale)은 어디와 어디를 잇고 출생 후 무엇으로 남는가?","좌우 심방 사이를 잇고, 출생 후 난원와(fossa ovalis)로 남는다"],"H2-3":["동맥관(ductus arteriosus)은 어디와 어디를 잇고 출생 후 무엇으로 남는가?","폐동맥과 대동맥을 잇고, 출생 후 동맥관인대로 남는다"],"H2-5":["동맥관의 폐쇄를 유도하는 것은?","동맥혈 산소분압 상승(1차 자극)과 프로스타글란딘(PGE₂) 감소"],"H2-4":["정맥관(ductus venosus)은 무엇을 우회하고 출생 후 무엇으로 남는가?","제대정맥과 하대정맥을 이어 간을 우회하고, 출생 후 정맥관인대로 남는다"],"H2-6":["세 태아 우회로가 남기는 흔적을 각각 쓰면?","난원공→난원와 / 동맥관→동맥관인대 / 정맥관→정맥관인대"],"H2-7":["푸아죄유 법칙(Poiseuille) — 혈류 저항은 무엇에 반비례하는가?","혈관 반지름의 4제곱 (층류 조건)"],"H2-8":["혈관 반지름이 2배가 되면 혈류 저항은 몇 배가 되는가?","1/16배"],"H2-9":["혈관 반지름이 2배가 되면 혈류량(유량)은 몇 배가 되는가?","16배"]},"hubPanel":null};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
+$('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
+const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
+const scoreKey = 'lesson_' + L.id;
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+let speakSeq = 0;
+function speak(t) {
+  t = ttsNorm(t);
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
+}
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+// 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
+// SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
+function srsInbox(k, ok) {
+  const cards = [...new Set(stops[k].cards || [])]; if (!cards.length) return;
+  try {
+    const key = 'lesson_srs_inbox', id = sess.id + ':' + sidOf(k);
+    let box = JSON.parse(localStorage.getItem(key) || '[]'); if (!Array.isArray(box)) box = [];
+    box = box.filter(m => m && m.id !== id);
+    if (!ok) box.push({ id, t: Date.now(), lesson: L.id, sid: sidOf(k), cards });
+    localStorage.setItem(key, JSON.stringify(box.slice(-400)));
+  } catch (e) {}
+}
+function judge(ok) {
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  srsInbox(k, ok);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
