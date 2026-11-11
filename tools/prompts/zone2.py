@@ -16,9 +16,12 @@ def paste(base, d, name, gem, out, allow, thr=28):
     orb = cv2.ORB_create(10000)
     k1, d1 = orb.detectAndCompute(cv2.cvtColor(up, cv2.COLOR_BGR2GRAY), keep)
     k2, d2 = orb.detectAndCompute(cv2.cvtColor(g2, cv2.COLOR_BGR2GRAY), None)
-    m = sorted(cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True).match(d2, d1), key=lambda x: x.distance)[:1000]
-    src = np.float32([k2[x.queryIdx].pt for x in m]); dst = np.float32([k1[x.trainIdx].pt for x in m])
-    M, inl = cv2.estimateAffinePartial2D(src, dst, method=cv2.RANSAC, ransacReprojThreshold=2)
+    if d1 is None or len(k1) < 30:
+        M, inl = None, None
+    else:
+        m = sorted(cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True).match(d2, d1), key=lambda x: x.distance)[:1000]
+        src = np.float32([k2[x.queryIdx].pt for x in m]); dst = np.float32([k1[x.trainIdx].pt for x in m])
+        M, inl = cv2.estimateAffinePartial2D(src, dst, method=cv2.RANSAC, ransacReprojThreshold=2)
     if inl is None or int(inl.sum()) < 30 or not (0.4 < abs(M[0, 0]) < 2.5) or abs(M[0, 1]) > 0.05:
         k1, d1 = orb.detectAndCompute(cv2.cvtColor(up, cv2.COLOR_BGR2GRAY), None)
         m = sorted(cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True).match(d2, d1), key=lambda x: x.distance)[:1500]
