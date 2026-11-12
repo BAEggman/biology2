@@ -4,6 +4,7 @@
 // 함께 쓰는 것: lesson/map.js(옛 판 → 새 과 — Sketchy 허브 sketchy.html 이 읽어 판마다 「새 과」 단추를 단다) · index.html(SRS) 「새 Sketchy 과」 배지의 숫자
 //   --standalone DIR : 그림을 data: URI 로 안에 넣은 한 파일 <ID>_standalone.html 을 DIR 에 따로(저장소에는 안 둔다)
 const fs = require('fs'), path = require('path'), { execSync } = require('child_process');
+const { createHash } = require('node:crypto');
 const { ROOT, panelIndex, resolveRef, strip, stopCards, deck } = require('./lesson_lib');
 const tpl = fs.readFileSync(path.join(__dirname, 'lesson_player.html'), 'utf8');
 const argv = process.argv.slice(2); const si = argv.indexOf('--standalone');
@@ -38,9 +39,14 @@ for (const id of ids) {
   L.cq = {};  // 딸린 기출의 물음 · 답(시험 화면에서 답을 본 뒤 채점 기준으로 편다)
   for (const s of L.stops) for (const c of s.cards) { const C = CARDS[c]; if (C && !L.cq[c]) L.cq[c] = [strip(C.q), strip(Array.isArray(C.it) && C.it.length ? C.it.join(' · ') : C.a)]; }
   L.hubPanel = firstPanel(L);  // 「Sketchy 허브(옛 판)」 링크가 이 과의 첫 옛 판으로 간다
-  const html = tpl.replace('__TITLE__', L.title.replace(/[<&]/g, '')).replace('__DATA__', JSON.stringify(L));
-  fs.writeFileSync(path.join(ROOT, 'lesson', id + '.html'), html);
   const imgPath = path.join(ROOT, 'lesson', L.img);
+  const webLesson = { ...L };
+  if (fs.existsSync(imgPath)) {
+    const revision = createHash('sha256').update(fs.readFileSync(imgPath)).digest('hex').slice(0, 12);
+    webLesson.img += '?v=' + revision;
+  }
+  const html = tpl.replace('__TITLE__', L.title.replace(/[<&]/g, '')).replace('__DATA__', JSON.stringify(webLesson));
+  fs.writeFileSync(path.join(ROOT, 'lesson', id + '.html'), html);
   const ncards = new Set(L.stops.flatMap(s => s.cards)).size;
   console.log(`[${id}] lesson/${id}.html · 정거장 ${L.stops.length} · 기출 카드 ${ncards} · 그림 ${fs.existsSync(imgPath) ? 'ok' : '없음: ' + L.img}`);
   if (standaloneDir && fs.existsSync(imgPath)) {

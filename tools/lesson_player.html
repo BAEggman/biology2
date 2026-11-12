@@ -122,7 +122,15 @@ function draw() {
     if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
     if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
   } else if (mode === 'review') {
-    stops.forEach((st, k) => { if (st.box) s += rect(st.box, 'hot', ` data-k="${k}"`); });
+    // 겹친 곳을 누르면 작은 단서를 고른다. 넓이가 같으면 먼저 소개한 정거장이 위에 온다.
+    const hotspots = [];
+    stops.forEach((stop, k) => {
+      if (!stop.box) return;
+      const boxes = Array.isArray(stop.box[0]) ? stop.box : [stop.box];
+      for (const box of boxes) hotspots.push({ box, k, area: box[2] * box[3] });
+    });
+    hotspots.sort((a, b) => b.area - a.area || b.k - a.k);
+    for (const { box, k } of hotspots) s += rect(box, 'hot', ` data-k="${k}"`);
   }
   ov.innerHTML = s;
   ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
