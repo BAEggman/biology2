@@ -1,4 +1,5 @@
 const L=require('./_lib');
+const {JSDOM}=require('jsdom');
 const BL=require('./baseline.json');
 const ge=(a,b,m)=>{ if(!(a>=b)) throw new Error((m||'')+' '+a+' < 기준 '+b+' — 연결이 줄었다(회귀)'); return a; };
 const le=(a,b,m)=>{ if(!(a<=b)) throw new Error((m||'')+' '+a+' > 기준 '+b+' — 고아가 늘었다(회귀)'); return a; };
@@ -133,14 +134,24 @@ T('sketchy.html에 base64 그림이 없다', ()=>{
   if(/const IMG\s*=/.test(sk)) throw new Error('IMG 객체가 되살아났다');
   return (fs.statSync(path.join(L.ROOT,'sketchy.html')).size/1048576).toFixed(2)+'MB';
 });
-T('sketchy.html이 img/ 경로로 그림을 부른다', ()=>{
+T('실제 패널의 그림과 확대 링크가 해당 WebP 버전을 연다', ()=>{
   const sk=fs.readFileSync(path.join(L.ROOT,'sketchy.html'),'utf8');
-  if(!sk.includes('src="img/${p.id}.webp"')) throw new Error('경로 렌더가 없다');
-  return 'img/${p.id}.webp';
+  const page=new JSDOM(sk,{runScripts:'outside-only',url:'https://example.org/biology2/sketchy.html'});
+  try{
+    const doc=page.window.document;
+    for(const script of doc.querySelectorAll('script:not([src])')) page.window.eval(script.textContent);
+    const panels=DATA.flatMap(scene=>scene.panels).filter(p=>!p.svg);
+    for(const p of panels){
+      const expected='img/'+p.id+'.webp'+(p.imgVersion?'?v='+p.imgVersion:'');
+      const shot=doc.getElementById(p.id).querySelector('.shot');
+      eq(shot.querySelector('img').getAttribute('src'),expected,p.id+' 그림');
+      if(p.wide) eq(shot.closest('a').getAttribute('href'),expected,p.id+' 원본');
+    }
+    return panels.length+'장';
+  }finally{ page.window.close(); }
 });
 
 console.log('\n── E. DOM · 회귀 ──');
-const {JSDOM}=require('jsdom');
 let dom;
 T('jsdom 파싱', ()=>{ dom=new JSDOM(h,{runScripts:'outside-only'}); return 'ok'; });
 T('필수 엘리먼트 전부 존재', ()=>{

@@ -14,6 +14,7 @@
      PMAP  카드 → 패널(문자열 또는 배열)     — 「그림으로 보기」와 복구 화면 발동
      PROW  카드 → {패널: [행번호,...]}        — 복구 화면에서 해당 행을 강조
      PTIT  패널 → 제목
+     PIMGREV 버전이 있는 패널 → 이미지 버전
      PBR   패널 → 요약
      PFACT 패널 → 사실표
      PNOIMG 이미지 없는 패널(도해)
@@ -52,7 +53,7 @@ catch(e){ die('CARDS 파싱 실패: '+e.message); }
 const CARD=new Map(CARDS.map(c=>[c.id,c]));
 
 /* ── 2. 순회하며 지도 생성 + 검증 ──────────────────────────────────── */
-const PMAP={}, PROW={}, PTIT={}, PBR={}, PFACT={}, PSVG={};
+const PMAP={}, PROW={}, PTIT={}, PBR={}, PFACT={}, PSVG={}, PIMGREV={};
 const errs=[], warns=[], report=[];
 const seenPanel=new Set();
 let nRowLinks=0, nPanelLinks=0, nRows=0;
@@ -63,6 +64,7 @@ for(const sc of DATA){
     seenPanel.add(p.id);
     PTIT[p.id]=sc.t+' · '+p.t;
     if(p.br) PBR[p.id]=p.br;
+    if(p.imgVersion) PIMGREV[p.id]=p.imgVersion;
     if(p.svg) PSVG[p.id]=p.svg;
     const f=p.f||[];
     if(f.length) PFACT[p.id]=f.map(r=>[r[0],r[1]]);
@@ -131,7 +133,8 @@ if(errs.length){ errs.slice(0,20).forEach(e=>console.error('  ✗ '+e));
 
 /* ── 4. 주입 ───────────────────────────────────────────────────────── */
 const block='/*BUILD:START — build.js 생성물. 손으로 고치지 말 것. 사실표(sketchy.html)를 고치고 다시 돌린다.*/'
- +'var PMAP='+JSON.stringify(PMAP)
+ +'var PIMGREV='+JSON.stringify(PIMGREV)
+ +';var PMAP='+JSON.stringify(PMAP)
  +';var PROW='+JSON.stringify(PROW)
  +';var PTIT='+JSON.stringify(PTIT)
  +';var PBR='+JSON.stringify(PBR)

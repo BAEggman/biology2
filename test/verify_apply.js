@@ -19,8 +19,8 @@ const CARDS=JSON.parse(fs.readFileSync(path.join(R,'index.html'),'utf8')
   .match(/id=["']CARDS["'][^>]*>([\s\S]*?)<\/script>/)[1]);
 const CID=CARDS.map(c=>c.id);
 
-const run=(txt,flags='')=>{
-  fs.writeFileSync(COPY,ORIG); fs.writeFileSync(PICK,txt);
+const run=(txt,flags='',source=ORIG)=>{
+  fs.writeFileSync(COPY,source); fs.writeFileSync(PICK,txt);
   return execSync(`node tools/apply.js ${PICK} ${flags}`,
     {cwd:R,encoding:'utf8',maxBuffer:1e9,env:{...process.env,SKETCHY:COPY,NEEDPIC:NP}});
 };
@@ -199,6 +199,15 @@ T('행 번호가 범위를 넘으면 죽는다', ()=>{
   const e=runFail(`${C1}=${PID}#999`);
   if(!/행이 \d+개뿐/.test(e||'')) throw new Error('안 죽었다');
   return '중단';
+});
+T('그림 또는 원본 링크 앵커가 깨지면 저장하지 않는다', ()=>{
+  for(const anchor of ['<img src="${imageUrl}"','href="${imageUrl}"']){
+    const broken=ORIG.replace(anchor, anchor.replace('imageUrl','staleUrl'));
+    let error;
+    try{ run(`${C1}=${PID}#0`,'',broken); }catch(e){ error=e; }
+    if(!error || !String(error.stderr).includes('그림 렌더 앵커')) throw new Error(anchor);
+    eq(out()===broken,true,'검사 실패 후 파일이 바뀌었다');
+  }
 });
 T('--check는 파일을 안 쓴다', ()=>{
   run(`${C1}=${PID}#0`,'--check');
