@@ -19,6 +19,19 @@ const CARDS = (() => { const m = fs.readFileSync(path.join(ROOT, 'index.html'), 
 // 정거장의 카드 = 옛 판 행(src)에 딸린 카드 + 곧장 건 카드(cards — 옛 판에 없는 카드를 새 과에 걸 때)
 const cardsOf = s => stopCards(s, idx);
 const firstPanel = L => { for (const s of L.stops) for (const r of (s.src || [])) return r.split('#')[0]; return null; };
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+function renderLesson(data, lessonBase = '') {
+  let tourLink = '';
+  if (data.relatedTour) {
+    const { id, label } = data.relatedTour;
+    if (!/^L\d{2}[a-z]?$/.test(id) || !fs.existsSync(path.join(ROOT, 'lessons', id + '.json')) || !label) {
+      throw new Error(`[${data.id}] 연결할 투어를 확인하세요: ${id}`);
+    }
+    tourLink = `<a href="${lessonBase}${id}.html">${esc(label)}</a>`;
+  }
+  return tpl.replace('__TITLE__', data.title.replace(/[<&]/g, ''))
+    .replace('__TOUR_LINK__', () => tourLink).replace('__DATA__', JSON.stringify(data));
+}
 for (const id of ids) {
   const L = JSON.parse(fs.readFileSync(path.join(ROOT, 'lessons', id + '.json'), 'utf8'));
   if (L.id !== id) { console.error(`[${id}] json 의 id 가 ${L.id}`); process.exitCode = 1; continue; }
@@ -45,7 +58,7 @@ for (const id of ids) {
     const revision = createHash('sha256').update(fs.readFileSync(imgPath)).digest('hex').slice(0, 12);
     webLesson.img += '?v=' + revision;
   }
-  const html = tpl.replace('__TITLE__', L.title.replace(/[<&]/g, '')).replace('__DATA__', JSON.stringify(webLesson));
+  const html = renderLesson(webLesson);
   fs.writeFileSync(path.join(ROOT, 'lesson', id + '.html'), html);
   const ncards = new Set(L.stops.flatMap(s => s.cards)).size;
   console.log(`[${id}] lesson/${id}.html · 정거장 ${L.stops.length} · 기출 카드 ${ncards} · 그림 ${fs.existsSync(imgPath) ? 'ok' : '없음: ' + L.img}`);
@@ -53,7 +66,7 @@ for (const id of ids) {
     const ext = path.extname(imgPath).slice(1); const b64 = fs.readFileSync(imgPath).toString('base64');
     const L2 = Object.assign({}, L, { img: `data:image/${ext};base64,${b64}`, home: SITE + 'lesson/index.html', hub: SITE + 'sketchy.html' + (L.hubPanel ? '#' + L.hubPanel : '') });
     const out = path.join(standaloneDir, `${id}_standalone.html`);
-    fs.writeFileSync(out, tpl.replace('__TITLE__', L.title.replace(/[<&]/g, '')).replace('__DATA__', JSON.stringify(L2)));
+    fs.writeFileSync(out, renderLesson(L2, SITE + 'lesson/'));
     console.log(`  standalone → ${out} (${Math.round(fs.statSync(out).size / 1024)} KB)`);
   }
 }
@@ -61,7 +74,6 @@ for (const id of ids) {
 const cover = JSON.parse(execSync('node ' + path.join(__dirname, 'lesson_cover.js') + ' --json', { encoding: 'utf8' }));
 const all = fs.readdirSync(path.join(ROOT, 'lessons')).filter(f => /^L\d{2}[a-z]?\.json$/.test(f)).sort()
   .map(f => JSON.parse(fs.readFileSync(path.join(ROOT, 'lessons', f), 'utf8')));
-const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const tot = cover.reduce((a, x) => ({ r: a.r + x.rows, c: a.c + x.cards, rc: a.rc + x.rowsCovered, cc: a.cc + x.cardsCovered }), { r: 0, c: 0, rc: 0, cc: 0 });
 // SRS 카드 전체(부모 기준)가 어디 있나 — 지은 과 · 과가 아직 없는 옛 s 판 · d 묶음 · 그림이 아무 데도 없음 (GPT 감사: 「67.2%」 하나로는 그림 없는 카드가 안 보인다)
 const cardPlace = (() => {
