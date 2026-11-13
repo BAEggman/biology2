@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>바닷속 버터 부교 ① 부표 사람과 구슬 기둥 — 유동 모자이크 · 막 유동성 · 막단백질</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+</div>
+<script>
+const L = {"id":"L53a","scene":"s53","part":"a","title":"바닷속 버터 부교 ① 부표 사람과 구슬 기둥 — 유동 모자이크 · 막 유동성 · 막단백질","sub":"바닷속을 가로지른 노란 버터 띠(세포막) · 머리는 물에 다리는 버터에 박은 두 줄 부표 사람(인지질 이중층 · 양친매성) · 옆으로 미끄러지는 떨림 선과 오리발 잠수부(측면확산 · 플립페이스 · 비대칭) · 곧은 다리로 빽빽이 언 왼쪽과 꺾인 무릎(포화 · 불포화) · 짧은 다리 · 햇살 · 소 머리와 돼지 머리(유동성 셋 · 스테아르산 · 팔미트산) · 다리 사이 고리 넷 금빛 타일(콜레스테롤 완충) · 얼음에 갇힌 일꾼과 녹은 버터에 가라앉는 기둥(유동성이 필요한 까닭) · 띠에 박힌 구슬 기둥과 사슬에 매달린 구슬 공(내재 · 주변부) · 띠 속에서만 감긴 사슬과 흰 알(막관통 · α나선) · 뚫린 굴 · 작업대 · 우편함(수송 · 효소 · 신호전달) · 막대사탕을 집는 Y 집게와 대갈못(인식 · 결합) · 밧줄 그물과 살구색 구슬 줄(ECM · 세포골격 부착) · 기둥과 부표 머리의 막대사탕(당단백질 · 당지질)","img":"img/L53a.webp?v=b076af8abfa6","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"바닷속을 가로지르는 긴 노란 버터 띠 — 위아래 두 줄로 머리만 물에 내놓은 부표 사람들 · 그 사이사이를 꿰뚫은 알록달록 구슬 기둥들 · 떨림 선을 그리며 옆으로 미끄러지는 부표 사람들 (틀)","fact":"세포막 = 지질 + 단백질의 유동 모자이크 — 유동적인 인지질 이중층에 여러 단백질이 박힘","hook":"버터 띠의 두 줄 부표 사람 = 인지질 이중층 · 구슬 기둥 = 단백질 · 떨림 선 = 유동 · 섞여 박힌 기둥 = 모자이크","say":"바닷속을 긴 노란 버터 띠가 가로지른다. 세포막이다(몸 마을 산장 L50b 의 그 버터 — 막은 버터처럼 굳고 녹는다). 띠 위아래로 두 줄, 머리만 물에 내놓고 다리는 버터에 박은 부표 사람들이 인지질이다. 두 줄이라 인지질 이중층. 그 사이사이를 꿰뚫고 선 알록달록 구슬 기둥이 단백질(이 덱의 구슬 사슬 = 단백질). 세포막의 두 축은 지질과 단백질이다. 부표 사람들은 못 박혀 있지 않고 떨림 선을 그리며 옆으로 미끄러진다 — 「유동」. 서로 다른 기둥들이 그 사이에 섞여 박혔다 — 「모자이크」. 그래서 유동 모자이크 모델: 유동적인 인지질 이중층에서 단백질이 움직이는 모자이크. 띠 위 밝은 물이 세포 밖, 아래 짙은 물이 세포 안이다.","cards":["A1-0","A1-1","A1-4","A1-5","A1-6"],"box":null},{"sid":"s2","obj":"부표 사람 한 쌍 — 줄무늬 둥근 머리는 띠 밖 물에 · 긴 두 다리는 버터 속에 · 윗줄은 머리가 위로 · 아랫줄은 머리가 아래로","fact":"인지질 = 양친매성 — 친수성 머리와 소수성 꼬리를 한 분자에","hook":"물에 뜬 부표 머리 = 친수성 머리 · 버터에 박힌 두 다리 = 소수성 꼬리(지방산 둘)","say":"부표 사람 하나를 보자. 몸통도 팔도 없이 줄무늬 둥근 머리와 긴 다리 둘뿐이다. 머리는 물을 좋아해 띠 밖 물에 내놓고, 두 다리는 물을 싫어해 기름진 버터 속에 박았다. 인지질이 이렇다 — 친수성 머리와 소수성 꼬리(지방산 둘)를 한 분자에 가진 양친매성 분자. 윗줄은 머리를 위로, 아랫줄은 머리를 아래로 두어 다리끼리 띠 속에서 마주 본다. 물속에 넣기만 해도 꼬리는 안으로 숨고 머리는 물과 닿는 이중층이 저절로 선다.","cards":["A1-2","A1-3"],"box":[[615,355,95,215],[600,575,85,205]]},{"sid":"s3","obj":"떨림 선을 그리며 옆으로 미끄러지는 부표 사람들 · 가운데 띠 속에 선 주황 오리발 잠수부가 파란 머리 부표 사람 하나를 두 손으로 들었고 그 오른쪽 아래에 아래로 굽은 검은 화살 · 윗줄 부표 머리는 빨강 · 아랫줄 부표 머리는 파랑","fact":"측면확산은 매우 빠름 · 플립플롭은 드묾 — 플립페이스가 옮겨 두 층은 비대칭","hook":"옆 떨림 선 = 측면확산 · 오리발(flipper) 잠수부 = 플립페이스(flippase) · 빨강 줄 / 파랑 줄 = 비대칭","say":"부표 사람이 움직이는 길은 둘이다. 제 줄에서 옆으로 미끄러지는 것 — 측면확산, 떨림 선이 보이듯 매우 빠르다. 건너편 줄로 넘어가는 것 — 플립플롭. 물을 좋아하는 머리가 기름진 버터 속을 지나야 하니 드물고 느리다. 그래서 일꾼이 필요하다. 가운데 띠 속에 선 주황 오리발 잠수부가 파란 머리 부표 사람 하나를 두 손으로 들었다. 곁의 굽은 화살대로 아랫줄에 내려놓는다. 오리발, 플리퍼 — 플립페이스다. 특정 인지질을 한쪽 층으로 옮겨 놓는다. 그 결과 윗줄 부표 머리는 빨강, 아랫줄은 파랑 — 세포막의 바깥 면과 안쪽 면은 조성이 다르다. 비대칭.","cards":["A1-155","A1-156","A1-39"],"box":[[500,350,395,95],[875,410,200,370],[495,695,395,90]]},{"sid":"s4","obj":"왼쪽 언 곳 — 다리가 곧은 부표 사람들이 어깨를 붙이고 빽빽이 섰다 · 그 오른쪽 — 무릎이 꺾인 부표 사람들은 사이가 벌어지고 얼음 바로 곁에서도 떨림 선을 그린다","fact":"포화 꼬리(곧음) = 조밀 · 덜 유동 / 불포화 꼬리(꺾임) = 유동 ↑ · 저온에도 유지","hook":"곧은 다리 = 포화(빽빽이 쌓임) · 꺾인 무릎 = 불포화(틈) · 얼음 곁에서도 움직임 = 저온에서 유동","say":"막이 얼마나 잘 흐르는가는 두 가지가 정한다 — 다리 꼴(인지질 꼬리의 포화도)과 다리 사이의 금빛 타일(콜레스테롤). 먼저 다리. 왼쪽 언 곳의 부표 사람들은 다리가 곧다. 포화 탄화수소 꼬리다. 곧으니 어깨를 붙이고 빽빽이 쌓여 조밀하고 덜 유동적이다 — 얼어붙었다. 오른쪽 사람들은 무릎이 꺾였다. 불포화 꼬리의 이중결합이 만든 꺾임이다. 꺾인 무릎이 걸려 촘촘히 못 쌓이니 사이가 벌어지고 잘 미끄러진다 — 유동성이 높다. 얼음 바로 곁인데도 떨림 선을 그린다. 불포화 꼬리가 많은 막은 낮은 온도에서도 유동성을 지킨다.","cards":["A1-7","A1-8","A1-9","A1-10"],"box":[[10,445,492,345],[150,350,350,95],[505,350,385,440]]},{"sid":"s5","obj":"꺾인 다리 무리 끝의 다리 짧은 작은 부표 사람 · 오른쪽 끝 햇살 아래 녹아 흐르는 버터 · 언 곳 윗줄의 소 머리(유난히 긴 곧은 다리)와 돼지 머리(그보다 짧은 곧은 다리)","fact":"유동성 ↑ = 불포화 ↑ · 짧은 꼬리 · 온도 ↑ / 소기름 스테아르산 C18 · 돼지기름 팔미트산 C16","hook":"짧은 다리 = 짧은 꼬리 · 햇살에 녹는 버터 = 온도 ↑ · 소(ㅅ) = 스테아르산 긴 다리 18 · 돼지 = 팔미트산 16","say":"유동성을 높이는 셋을 그림에서 모으자. ① 꺾인 무릎 — 불포화 지방산이 많을수록. ② 무리 끝의 작은 부표 사람, 다리가 짧다 — 꼬리 사슬이 짧을수록(서로 붙드는 면이 적다). ③ 오른쪽 끝, 햇살 아래 버터가 녹아 흐른다 — 온도가 높을수록. 언 곳 윗줄엔 부표 대신 소 머리와 돼지 머리가 끼었다. 둘 다 다리가 곧다 — 동물 기름은 포화라 상온에서 굳는다. 소 다리가 유난히 길다. 소기름의 대표 지방산은 스테아르산(C18) — 소의 ㅅ, 스테아르산. 돼지 다리는 그보다 짧다. 돼지기름의 대표는 팔미트산(C16).","cards":["A1-163","A1-18"],"box":[[805,375,85,195],[1870,430,178,480],[268,325,170,280]]},{"sid":"s6","obj":"다리 사이에 낀 금빛 타일 셋(고리 넷이 붙은 문장) — 꺾인 다리 쪽에 둘 · 언 곳의 하나는 둘레만 노랗게 얼지 않았다","fact":"콜레스테롤 = 인지질 사이에 낌 · 체온에선 유동성 ↓ · 저온에선 고체화 방지 = 완충","hook":"고리 넷 금빛 타일 = 콜레스테롤(스테로이드) · 꺾인 쪽 = 옆걸음을 막음 · 언 쪽의 노란 둘레 = 굳지 못하게 함","say":"다리 사이사이에 금빛 타일이 끼었다. 타일에 새긴 고리 넷(육각 셋 + 오각 하나)은 이 덱의 스테로이드 표지 — 콜레스테롤이다. 자리는 인지질 분자들 사이. 하는 일이 온도에 따라 반대다. 따뜻한 쪽(사람 체온 37 ℃)에선 꺾인 다리들 틈에 끼어 옆걸음을 막는다 — 인지질의 이동을 억제해 막을 덜 유동적으로. 추운 쪽에선 곧은 다리들이 빈틈없이 채워지는 것을 가로막는다 — 언 곳의 타일 둘레만 노랗게 얼지 않았다. 고체화를 막는다(굳는 온도를 낮춘다). 높은 온도에선 유동성을 낮추고 낮은 온도에선 굳지 않게 — 그래서 콜레스테롤은 막의 온도 완충장치다.","cards":["A1-11","A1-12","A1-13","A1-148","A1-14"],"box":[[195,445,130,115],[580,455,62,92],[669,594,62,92]]},{"sid":"s7","obj":"왼쪽 끝 — 띠 위 얼음덩이 속에 갇혀 떠는 일꾼 · 오른쪽 끝 — 녹아 흘러내리는 버터 위로 기우뚱 쓰러진 작은 구슬 기둥(아래쪽 구슬은 버터에 묻혀 흐릿하다)","fact":"유동성이 있어야 투과성 · 단백질 이동 유지 / 굳으면 효소 불활성 · 너무 묽으면 못 받침","hook":"얼음에 갇힌 일꾼 = 굳은 막의 효소 불활성 · 녹은 버터에 기우는 기둥 = 너무 묽어 단백질을 못 받침","say":"막은 알맞게 흘러야 한다. 유동성은 막의 투과성과, 막단백질이 일할 자리로 옮겨 가는 능력을 함께 좌우한다. 왼쪽 끝, 띠가 꽁꽁 언 곳 — 일꾼(효소)이 얼음덩이에 갇혀 떨고만 있다. 막이 고체화되면 투과성이 달라지고, 막 위를 돌아다녀야 일하는 효소 단백질이 불활성화된다. 오른쪽 끝은 반대다. 햇살에 버터가 녹아 흘러내리고, 작은 구슬 기둥이 기우뚱 쓰러져 아래쪽 구슬부터 버터에 묻힌다. 막이 너무 유동적이어도 단백질이 제자리에서 안정되게 일하도록 받쳐 주지 못한다. 너무 굳어도, 너무 묽어도 안 된다.","cards":["A1-15","A1-16","A1-17"],"box":[[10,305,140,140],[1895,330,140,250]]},{"sid":"s8","obj":"버터 띠에 박힌 구슬 기둥들 · 아랫줄 파란 머리에 가는 사슬로 매달려 띠에는 닿지 않는 작은 구슬 공","fact":"내재단백질 = 지질 이중층 안에 박힘 / 주변부단백질 = 표면에 느슨히 붙음 · 관통 안 함","hook":"띠에 박힌 구슬 기둥 = 내재단백질 · 사슬에 매달린 구슬 공 = 주변부단백질(느슨 · 관통 ✕)","say":"막단백질은 크게 둘이다. 버터 띠 속까지 박힌 구슬 기둥들 — 내재단백질. 지질 이중층 안에 박혀 있다. 그리고 띠 아래, 파란 머리에 가는 사슬로 매달린 작은 구슬 공 — 주변부단백질. 띠 속에는 들어가지 않고 막 표면에 느슨하게 붙어 있다. 막을 관통하지 않는다(흔히 내재단백질의 튀어나온 곳이나 막 표면에 붙는다). 박혔느냐, 매달렸느냐.","cards":["A1-19","A1-20","A1-22","A1-23"],"box":[[1375,440,50,265],[1295,765,72,168]]},{"sid":"s9","obj":"구슬 기둥 줄의 맨 왼쪽 기둥 — 꼭대기에 맨 흰 알 · 물속에선 곧은 기둥이고 버터 띠 속에서만 구슬 사슬이 꼬불꼬불 감겼다 · 띠 위아래로 끝까지 꿰뚫었다","fact":"막관통단백질 = 이중층을 끝에서 끝까지 관통한 내재단백질 · 소수성 부분 = α나선","hook":"띠를 위아래로 꿰뚫음 = 막관통 · 띠 속에서만 감긴 사슬 = 소수성 α나선 · 맨 흰 알 = α","say":"기둥 줄의 맨 왼쪽 기둥을 보자. 띠 위로도 아래로도 길게 나왔다 — 지질 이중층을 끝에서 끝까지 관통하는 내재단백질, 막관통단백질이다. 내재단백질의 대부분이 이렇다. 물속에 나온 곳은 곧은데, 버터 띠 속에서만 구슬 사슬이 꼬불꼬불 감겼다. 기름진 띠 속을 지나는 부분은 소수성 아미노산이 나선으로 감긴 소수성 α나선이다. 꼭대기의 맨 흰 알이 α(이 덱의 알 = α). 물에 닿는 양 끝은 친수성이다 — 부표 사람과 같은 이치.","cards":["A1-21","A1-24"],"box":[[1052,180,120,845]]},{"sid":"s10","obj":"둘째 기둥 — 두 줄 기둥 사이로 뚫린 굴 · 굴 위아래로 작은 구슬들이 한 줄로 지난다 · 그 오른쪽 곧은 기둥 — 아래 끝 곁 작업대에서 안전모 일꾼이 조각을 맞춘다 · 빨간 우편함을 인 기둥 — 흰 봉투 하나는 물에 떠 오고 하나는 우편함에 꽂혔다 · 아래 끝 노란 등이 켜졌다","fact":"막단백질 기능 여섯 = 수 · 활 · 전 · 인 · 결 · 부 — 수송 · 효소 활성 · 신호전달 …","hook":"뚫린 굴 = 수송 · 작업대 일꾼 = 효소 활성 · 우편함과 켜진 등 = 신호전달 — 수활전인결부의 앞 셋","say":"막단백질이 하는 일은 여섯 — 수 · 활 · 전 · 인 · 결 · 부. 기둥을 왼쪽부터 짚자. 둘째 기둥은 가운데가 뚫렸다. 그 굴 위아래로 작은 구슬들(작은 분자 · 이온)이 한 줄로 지난다 — 수송. 특정 용질만 골라 막을 건네는 선택적 통로다. 그 오른쪽 곧은 기둥은 아래 끝 곁 작업대에서 안전모 일꾼이 조각을 맞춘다 — 효소 활성. 막에 박힌 효소가 곁의 반응물을 만나 반응을 촉진한다. 세포호흡의 전자전달 효소 복합체(L32a 붉은 벽돌 담장의 펌프집)가 이쪽이다. 그 오른쪽, 빨간 우편함을 인 기둥 — 물에 떠 온 흰 봉투가 우편함에 꽂히자 아래 끝 등이 켜졌다. 신호전달(L16 교환국의 봉투와 우편함). 우편함 위에 매달린 빨간 머리는 이웃 부교의 부표 사람이다. 나머지 셋은 다음 정거장.","cards":["A1-25","A1-26","A1-27","A1-32"],"box":[[1198,140,114,835],[1378,290,46,610],[1345,840,185,165],[1465,180,185,145],[1495,840,105,125]]},{"sid":"s11","obj":"분홍 막대사탕 다발을 인 기둥 — 위쪽 이웃 부교에서 내려온 하늘색 Y 집게가 맨 위 사탕을 양옆에서 집는다 · 우편함 기둥 건너 왼쪽 — 이웃 부교에서 내려온 구슬 기둥이 띠 윗면의 큰 회색 대갈못으로 우리 띠의 기둥과 이어졌다","fact":"세포-세포 인식 = 당단백질이 식별 표지(면역글로불린) · 세포 간 결합 = 이웃 막단백질과 연접","hook":"막대사탕 다발 = 식별 표지 · 하늘색 Y 집게 = 면역글로불린 · 대갈못으로 이어진 두 부교의 기둥 = 세포 간 결합(연접)","say":"넷째 일 — 인. 분홍 막대사탕 다발을 인 기둥이다. 사탕(당)을 단 단백질, 당단백질이 다른 세포가 알아보는 식별 표지 노릇을 한다 — 세포-세포 인식. 위쪽 이웃 부교(이웃 세포의 막)에서 내려온 하늘색 Y 집게가 그 사탕을 집어 본다. Y 집게는 이 덱의 면역글로불린(항체 — L46c). 면역글로불린도 당단백질이고, 하는 일이 이 「인식」 쪽이다. 다섯째 — 결. 우편함 기둥 건너 왼쪽, 이웃 부교에서 내려온 구슬 기둥이 띠 윗면의 큰 회색 대갈못으로 우리 띠의 기둥과 이어졌다 — 두 부교를 한 줄로 붙든다. 세포 간 결합 — 인접한 세포의 막단백질끼리 연접(간극연접 · 밀착연접 …)을 이룬다. 대갈못은 L14a 쌍둥이 방의 그 데스모솜이다.","cards":["A1-29","A1-33","A1-30"],"box":[[1632,145,122,195],[1430,148,80,625]]},{"sid":"s12","obj":"기둥 줄의 맨 오른쪽 기둥 — 위 끝은 밧줄 고리로 물 위에 뜬 밧줄 그물에 묶였고 · 아래 끝은 짙은 물속으로 뻗은 살구색 구슬 줄에 이어졌다","fact":"세포골격 · ECM 부착 = 세포 형태 유지 · 막단백질 위치 안정 · 세포 안팎의 변화를 잇는다","hook":"아래 살구색 구슬 줄 = 미세섬유(세포골격) · 위 밧줄 그물 = 세포외기질(ECM) · 둘을 붙든 기둥 = 부착","say":"여섯째 — 부. 맨 오른쪽 기둥은 안팎으로 묶였다. 아래 끝(세포 안)은 살구색 구슬 줄에 이어진다 — 풍선 놀이성(L14b)의 그 줄, 미세섬유다. 세포골격의 섬유가 막단백질에 비공유 결합으로 붙어 세포 형태를 유지하고 그 막단백질의 자리를 안정시킨다. 위 끝(세포 밖)은 밧줄 고리로 물에 뜬 밧줄 그물에 묶였다 — 세포외기질(ECM). ECM 분자에 결합하는 막단백질은 세포 밖의 변화와 세포 안의 변화를 조화롭게 잇는다. 수송 · 효소 활성 · 신호전달 · 인식 · 결합 · 부착 — 수활전인결부, 여섯.","cards":["A1-31","A1-35","A1-36"],"box":[[1795,150,253,300],[1575,835,300,300]]},{"sid":"s13","obj":"막대사탕이 달린 두 가지 — 구슬 기둥 꼭대기의 분홍 막대사탕 다발 · 윗줄 빨간 부표 머리 둘에 하나씩 꽂힌 막대사탕(아랫줄 파란 머리엔 없다)","fact":"당단백질 = 막단백질 + 탄수화물 / 당지질 = 막지질 + 탄수화물 — 세포 바깥 면에","hook":"구슬 기둥의 막대사탕 = 당단백질 · 부표 머리의 막대사탕 = 당지질 · 윗줄에만 = 세포 바깥 면","say":"막대사탕은 이 덱의 당 사슬(L48d 막사에서 구슬 공에 꽂던 그 사탕)이다. 구슬 기둥에 꽂히면 당단백질 — 막단백질에 탄수화물이 결합한 것. 부표 사람 머리에 꽂히면 당지질 — 막지질에 탄수화물이 결합한 것. 사탕은 윗줄, 세포 바깥 면에만 있다. 아랫줄 파란 머리엔 하나도 없다 — 이것도 막의 비대칭이다. 세포마다 사탕의 꼴이 달라 서로를 알아보는 표지가 된다.","cards":["A1-37","A1-38"],"box":[[1632,195,122,140],[1592,295,52,80],[1738,318,50,78]]}],"cq":{"A1-0":["세포막을 한 문장으로 정의하면?","지질과 단백질로 구성된 유동 모자이크이다."],"A1-1":["세포막 구성의 두 축은?","지질 + 단백질"],"A1-4":["유동 모자이크 모델에 따르면 막은 무엇인가?","인지질 이중층에서 단백질이 움직이는 모자이크"],"A1-5":["세포막이 '유동적'이라는 말의 뜻은?","막 분자들이 특정 위치에 고정되지 않고 옆으로 움직인다는 뜻"],"A1-6":["세포막이 '모자이크'라는 말의 뜻은?","여러 종류의 단백질이 인지질 이중층에 섞여 박혀 있다는 뜻"],"A1-2":["인지질의 핵심 화학적 성질은?","양친매성(amphipathic)"],"A1-3":["양친매성이란?","친수성 부분과 소수성 부분을 동시에 가진 성질"],"A1-155":["인지질의 두 이동 방식과 속도 차이는?","측면확산(lateral)은 매우 빠름 · 플립플롭(flip-flop, 층 사이 뒤집기)은 드물고 느림"],"A1-156":["인지질 이중층의 안쪽·바깥쪽 조성이 비대칭으로 유지되는 이유(효소)는?","플립페이스(flippase)가 특정 인지질을 한쪽 층으로 옮겨 비대칭을 유지"],"A1-39":["세포막의 안쪽 면과 바깥쪽 면은 대칭인가?","비대칭"],"A1-7":["막 유동성에 영향을 주는 대표 요인 2가지는?","인지질 꼬리의 포화도 + 콜레스테롤"],"A1-8":["불포화 탄화수소 꼬리가 막 유동성을 높이는 이유는?","꼬리가 꺾여 있어 인지질이 촘촘히 쌓이는 것을 방해하기 때문"],"A1-9":["포화 탄화수소 꼬리가 많은 막의 성질은?","더 조밀하고 덜 유동적이다."],"A1-10":["불포화 꼬리가 풍부한 막은 어떤 온도에서 유동성을 더 잘 유지하는가?","낮은 온도"],"A1-163":["막 유동성을 높이는 요인 3가지는?","불포화 지방산↑ · 꼬리 사슬이 짧을수록 · 온도↑"],"A1-18":["소기름과 돼지기름의 대표 지방산으로 언급된 것은?","소기름=스테아르산(C18) · 돼지기름=팔미트산(C16)"],"A1-11":["콜레스테롤은 상온/체온에서 막에 어떤 효과를 주는가?","인지질 이동을 억제해 막을 덜 유동적으로 만든다."],"A1-12":["콜레스테롤은 낮은 온도에서 막에 어떤 효과를 주는가?","인지질이 정상적으로 채워지는 것을 방해해 고체화를 막는다."],"A1-13":["콜레스테롤을 막의 '완충장치'라고 볼 수 있는 이유는?","높은 온도에선 유동성을 낮추고 낮은 온도에선 고체화를 막기 때문"],"A1-148":["콜레스테롤이 막 유동성에 미치는 효과를 온도별로 정리하면?","상온에선 유동성 감소 · 저온에선 고체화 방지"],"A1-14":["콜레스테롤의 막 내 위치는?","인지질 분자들 사이에 끼어 있음"],"A1-15":["막이 제대로 작동하려면 왜 유동성이 필요한가?","막 투과성과 막 단백질 이동·기능 유지에 필요하기 때문"],"A1-16":["막이 고체화되면 생길 수 있는 문제 2가지는?","투과성 변화 + 효소 단백질 불활성화"],"A1-17":["막이 너무 유동적이어도 문제가 되는 이유는?","막 단백질의 안정적 기능을 지지하지 못하기 때문"],"A1-19":["막 단백질의 큰 두 종류는?","내재단백질 + 주변부단백질"],"A1-20":["내재단백질(integral protein)이란?","지질 이중층 안에 박혀 있는 단백질"],"A1-22":["주변부단백질(peripheral protein)이란?","막 표면에 느슨하게 붙어 있는 단백질"],"A1-23":["주변부단백질은 막을 관통하는가?","아니오"],"A1-21":["막관통단백질(transmembrane protein)이란?","지질 이중층을 끝에서 끝까지 관통하는 내재단백질"],"A1-24":["막관통단백질의 소수성 부분은 주로 어떤 구조를 이루는가?","소수성 알파나선"],"A1-25":["막 단백질의 주요 기능 6가지는?","수송 · 효소 활성 · 신호전달 · 세포-세포 인식 · 세포 간 결합 · 세포골격/ECM 부착"],"A1-26":["막 단백질 기능 중 '수송'이란?","특정 용질에 대해 막을 가로지르는 선택적 통로·운반 기능 제공"],"A1-27":["막 단백질 기능 중 '효소 활성'이란?","막에 내장된 효소가 반응물과 만나 반응을 촉진하는 기능"],"A1-32":["세포호흡 전자전달효소복합체는 막 단백질 기능 중 어디에 해당하는가?","효소 활성"],"A1-29":["막 단백질 기능 중 '세포-세포 인식'이란?","다른 세포가 인식할 수 있는 식별 표지 역할"],"A1-33":["면역글로불린(항체) 당단백질은 막 단백질 기능 중 어디와 관련되는가?","세포-세포 인식"],"A1-30":["막 단백질 기능 중 '세포 간 결합'이란?","인접 세포의 막 단백질끼리 연접을 형성하는 기능"],"A1-31":["막 단백질 기능 중 '세포골격/ECM 부착'이란?","세포 형태를 유지하고 막 단백질 위치를 안정화하는 기능"],"A1-35":["미세섬유가 막단백질에 비공유 결합하는 이유는?","세포 형태 유지와 특정 막 단백질 위치 안정화"],"A1-36":["ECM 분자에 결합하는 막단백질의 의미는?","세포 밖 변화와 세포 안 변화를 조화롭게 연결"],"A1-37":["당단백질(glycoprotein)이란?","막단백질에 탄수화물이 결합한 것"],"A1-38":["당지질(glycolipid)이란?","막지질에 탄수화물이 결합한 것"]},"hubPanel":null};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
+$('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
+const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
+const scoreKey = 'lesson_' + L.id;
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    // 겹친 곳을 누르면 작은 단서를 고른다. 넓이가 같으면 먼저 소개한 정거장이 위에 온다.
+    const hotspots = [];
+    stops.forEach((stop, k) => {
+      if (!stop.box) return;
+      const boxes = Array.isArray(stop.box[0]) ? stop.box : [stop.box];
+      for (const box of boxes) hotspots.push({ box, k, area: box[2] * box[3] });
+    });
+    hotspots.sort((a, b) => b.area - a.area || b.k - a.k);
+    for (const { box, k } of hotspots) s += rect(box, 'hot', ` data-k="${k}"`);
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+let speakSeq = 0;
+function speak(t) {
+  t = ttsNorm(t);
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
+}
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+// 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
+// SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
+function srsInbox(k, ok) {
+  const cards = [...new Set(stops[k].cards || [])]; if (!cards.length) return;
+  try {
+    const key = 'lesson_srs_inbox', id = sess.id + ':' + sidOf(k);
+    let box = JSON.parse(localStorage.getItem(key) || '[]'); if (!Array.isArray(box)) box = [];
+    box = box.filter(m => m && m.id !== id);
+    if (!ok) box.push({ id, t: Date.now(), lesson: L.id, sid: sidOf(k), cards });
+    localStorage.setItem(key, JSON.stringify(box.slice(-400)));
+  } catch (e) {}
+}
+function judge(ok) {
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  srsInbox(k, ok);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
