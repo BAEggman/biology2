@@ -6,6 +6,7 @@
 const fs = require('fs'), path = require('path'), { execSync } = require('child_process');
 const { createHash } = require('node:crypto');
 const { ROOT, panelIndex, resolveRef, strip, stopCards, deck } = require('./lesson_lib');
+const { lessonTopics } = require('./lesson_topics');
 const tpl = fs.readFileSync(path.join(__dirname, 'lesson_player.html'), 'utf8');
 const argv = process.argv.slice(2); const si = argv.indexOf('--standalone');
 const standaloneDir = si >= 0 ? argv[si + 1] : null;
@@ -87,16 +88,40 @@ const cardPlace = (() => {
   for (const c of Object.values(CARDS)) { const st = cls(c.id) || (c.p && c.p !== c.id ? cls(c.p) : null) || 'none'; T.tot++; T[st]++; }
   return T;
 })();
-const idxHtml = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>과(lesson) 목록 — 생물 Sketchy</title>
-<style>body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:#f7f5ef;color:#1b1b1f}.wrap{max-width:900px;margin:0 auto;padding:16px}
-h1{font-size:20px}h2{font-size:15px;margin-top:22px}.sub{color:#4b4b55;font-size:13px}a{color:#0f766e}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #e3e1da;padding:5px 6px;text-align:left}th{color:#4b4b55;font-weight:600}
-.card{display:block;border:1px solid #e3e1da;background:#fff;border-radius:12px;padding:12px 14px;margin:8px 0;text-decoration:none;color:inherit}.card b{color:#0f766e}.bar{height:6px;background:#e3e1da;border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:#0f766e}</style></head><body><div class="wrap">
-<h1>과(lesson) 목록</h1><p class="sub">Sketchy 식 — 한 장면 · 물건 하나 = 사실 하나 · 투어로 듣고 그림만으로 되찾는다. 옛 덱은 과가 다 설 때까지 그대로 — <a href="../sketchy.html">Sketchy 허브</a>(옛 그림 판 · 판마다 「새 과」 단추) · <a href="symbols.html">기호 사전</a>(같은 물건 = 같은 뜻) · <a href="../index.html">SRS</a>(기출 카드).</p>
-${all.map(L => `<a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(cardsOf)).size} · ${esc(L.sub || '')}</div></a>`).join('')}
+const topicGroups = lessonTopics(all);
+const topicCount = topicGroups.reduce((sum, g) => sum + g.topics.length, 0);
+const contents = topicGroups.map(group => `<div class="toc-group"><h3>${esc(group.title)}</h3>
+<ul>${group.topics.map(topic => `<li><a href="#${topic.id}">${esc(topic.title)} <span class="quantity">(${topic.main.length})</span></a></li>`).join('')}</ul></div>`).join('\n');
+function topicSection(topic) {
+  const cards = topic.main.map(L => `<a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(cardsOf)).size} · ${esc(L.sub || '')}</div></a>`).join('\n');
+  const links = topic.related.map(r => `<li><a href="${r.id}.html">${esc(r.id)} · ${esc(r.label)}</a></li>`).join('');
+  const related = links ? `<aside class="related"><h4>함께 볼 그림</h4><ul>${links}</ul></aside>` : '';
+  return `<section class="chapter" aria-labelledby="${topic.id}"><div class="chapter-head"><h3 id="${topic.id}" tabindex="-1">${esc(topic.title)}</h3><a class="back" href="#contents">목차로 ↑</a></div>
+${cards}${related}</section>`;
+}
+const topicSections = topicGroups.map(g => `<section class="unit"><h2>${esc(g.title)}</h2>${g.topics.map(topicSection).join('\n')}</section>`).join('\n');
+const idxHtml = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>생물학 그림 레슨 · 단원 목차</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:#f7f5ef;color:#202823;line-height:1.6}.wrap{max-width:960px;margin:0 auto;padding:24px 18px 48px}
+h1,h2,h3,h4,p{margin:0}h1{font-size:clamp(23px,4vw,32px);letter-spacing:-.055em;line-height:1.3}.sub{color:#4b5250;font-size:13px}a{color:#12645a;text-underline-offset:3px}
+a:focus-visible,summary:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #176eae;outline-offset:3px}
+.page-head{margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 16px}.page-nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}.page-nav a{padding:6px 0}
+.contents{padding:18px 20px;background:#fff;border:1px solid #d8dfd8;border-radius:12px}.contents-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px}.contents-head h2{font-size:22px}.toc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 20px;margin-top:14px}.toc-group{border-top:1px solid #d9dfda;padding-top:8px}.toc-group h3{font-size:15px}.contents ul,.related ul{list-style:none;padding:0;margin:4px 0 0}.toc-group a{display:inline-block;padding:3px 0;font-size:14px;line-height:1.45;text-decoration:none}.quantity{color:#636d67;font-size:.88em;white-space:nowrap}
+.unit{margin-top:36px}.unit>h2{border-bottom:2px solid #255b4c;padding-bottom:6px;font-size:22px;letter-spacing:-.035em}.chapter{margin-top:22px}.chapter-head{display:flex;gap:12px;align-items:baseline;justify-content:space-between}.chapter h3{font-size:18px;scroll-margin-top:12px}.back{font-size:13px;white-space:nowrap;padding:4px 0}
+.card{display:block;border:1px solid #dce1db;background:#fff;border-radius:10px;padding:11px 14px;margin:7px 0;text-decoration:none;color:inherit;overflow-wrap:anywhere}.card b{color:#0f665b}.card:hover{border-color:#87aa9a}.toc-group a:hover,.related a:hover{text-decoration:underline}.related{display:flex;align-items:baseline;gap:3px 12px;flex-wrap:wrap;padding:3px 2px 7px}.related h4{color:#4b5250;font-size:13px}.related ul{display:flex;gap:2px 15px;flex-wrap:wrap;margin:0}.related a{display:inline-block;font-size:13px;padding:3px 0}
+.progress{margin-top:32px;border-top:1px solid #d8dfd8;padding-top:12px}.progress h2{font-size:16px;margin-top:12px}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #e3e1da;padding:5px 6px;text-align:left}th{color:#4b4b55;font-weight:600}.bar{height:6px;background:#e3e1da;border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:#0f766e}
+@media(max-width:700px){.toc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.contents{padding:14px}.wrap{padding:16px 12px 32px}.toc-group a{padding:5px 0}.related a{padding:5px 0}}
+@media(max-width:370px){.toc-grid{gap:12px 9px}.toc-group a{font-size:13px}.quantity{white-space:normal}.page-nav{gap:12px}}
+</style></head><body><main class="wrap">
+<header class="page-head"><h1>생물학 그림 레슨</h1><nav class="page-nav" aria-label="학습 도구"><a href="../sketchy.html">Sketchy 허브</a><a href="symbols.html">기호 사전</a><a href="../index.html">SRS 기출 카드</a></nav></header>
+<nav class="contents" aria-labelledby="contents"><div class="contents-head"><h2 id="contents" tabindex="-1">단원 목차</h2><span class="sub">${topicCount}개 단원 · 그림 레슨 ${all.length}개</span></div>
+<div class="toc-grid">${contents}</div></nav>
+${topicSections}
+<section class="progress">
 <h2>SRS 카드 ${cardPlace.tot}장이 어디 있나</h2><p class="sub">지은 과 <b>${cardPlace.built}</b> · 과가 아직 없는 옛 s 판 <b>${cardPlace.pendS}</b> · d 묶음(도해) <b>${cardPlace.d}</b> · <b>그림이 아무 데도 없음 ${cardPlace.none}</b> — 아래 진척 막대는 옛 판에 딸린 카드만 센다.</p>\n<h2>갈아엎기 진척 — 행 ${tot.rc}/${tot.r} · 기출 카드 ${tot.cc}/${tot.c}</h2><div class="bar"><i style="width:${(100 * tot.cc / Math.max(1, tot.c)).toFixed(1)}%"></i></div>
-<table><tr><th>묶음</th><th>단원</th><th>카드</th><th>행</th><th>덮인 행</th><th>덮인 카드</th><th>과</th></tr>
+<div class="table-scroll"><table><tr><th>묶음</th><th>단원</th><th>카드</th><th>행</th><th>덮인 행</th><th>덮인 카드</th><th>과</th></tr>
 ${cover.map(x => `<tr><td>${x.id}</td><td>${esc(x.unit)}</td><td>${x.cards}</td><td>${x.rows}</td><td>${x.rowsCovered}</td><td>${x.cardsCovered}</td><td>${x.lessons.map(l => `<a href="${l}.html">${l}</a>`).join(' ')}</td></tr>`).join('')}
-</table><p class="sub">d 묶음(도해)은 s 묶음을 다 세운 뒤 결정(2026-11-08).</p></div></body></html>`;
+</table></div><p class="sub">d 묶음(도해)은 s 묶음을 다 세운 뒤 결정(2026-11-08).</p></section></main></body></html>`;
 fs.writeFileSync(path.join(ROOT, 'lesson', 'index.html'), idxHtml);
 console.log(`lesson/index.html · 과 ${all.length} · 덮인 카드 ${tot.cc}/${tot.c}`);
 // ── lesson/map.js — 옛 판(패널) id → 그 판의 행을 정거장 src 로 쓰는 과. Sketchy 허브가 읽는다(2026-11-10 · 사용자 「sketchy 허브에서 찾을 수가 없는데?」).
