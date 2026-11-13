@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>바닷속 버터 부교 ③ 동전 펌프와 짝 손님 — 능동수송 · 막전위 · Na⁺-K⁺ 펌프 · 공동수송</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+</div>
+<script>
+const L = {"id":"L53c","scene":"s53","part":"c","title":"바닷속 버터 부교 ③ 동전 펌프와 짝 손님 — 능동수송 · 막전위 · Na⁺-K⁺ 펌프 · 공동수송","sub":"L53a · L53b 와 같은 버터 띠(세포막) — 왼쪽 큰 놋쇠 펌프 기계: 동전을 넣으면 붉은 도장이 찍히고 유리 문짝이 돌아 흰 소금 자루 셋은 위로 · 칼 둘은 아래로(Na⁺-K⁺ 펌프 · 인산화 · 3 Na⁺ 밖 · 2 K⁺ 안) · 펌프에서 번쩍이는 붉은 전선이 닿은 큰 건전지(막전위 · 안쪽이 음 · 전기발생성 펌프) · ＋ 소금 자루는 안으로 · － 염소는 밖으로 / 오른쪽 회전문 넷: 소금 자루와 포도가 나란히(Na⁺-포도당 공동수송 · 경구수액 컵) · 레몬과 갈색 자루(H⁺-설탕 · 해바라기 = 식물) · 포도 혼자(단일수송) · 소금 자루와 자갈이 엇갈려(역수송 Na⁺/Ca²⁺) / 금색 자물쇠가 채워진 작은 펌프 → 쌓인 소금 자루 → 쌓인 자갈 → 나무집의 알통(우아바인 · 디곡신).","img":"img/L53c.webp?v=0c1889e99807","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"L53a · L53b 와 같은 긴 노란 버터 띠 — 왼쪽에 띠를 꿰뚫어 박힌 큰 놋쇠 펌프 기계 · 가운데 띠를 꿰뚫어 선 큰 건전지 · 오른쪽에 회전문을 품은 구슬 기둥 넷과 금색 자물쇠가 채워진 작은 펌프 (틀)","fact":"능동수송 = 에너지를 써서 농도 기울기를 거슬러 옮김 — 안팎 농도를 다르게 유지","hook":"놋쇠 펌프 기계 + 동전 = 능동수송 · 빽빽한 쪽으로 밀어 올림 = 기울기를 거슬러 · 위아래 물의 다른 손님 = 다른 농도 유지","say":"L53b 의 맨 끝에 있던 놋쇠 펌프가 이번엔 주인공이다. 띠 위 밝은 물이 세포 밖, 아래 짙은 물이 세포 안. L53b 의 손님들은 빽빽한 데서 드문 데로 저절로 갔다. 이 기계는 반대로 한다. 흰 소금 자루를 자루가 이미 빽빽한 위 물로 올리고, 칼을 칼이 이미 빽빽한 아래 물로 내린다. 낮은 농도에서 높은 농도로 옮기는 일이라 저절로는 안 되고 에너지가 든다 — 그래서 동전(ATP). 에너지를 써서 농도 기울기를 거슬러 용질을 옮기는 것이 능동수송이다. 덕분에 세포는 안쪽 농도를 바깥과 다르게 지킨다. 왼쪽 펌프에서 가운데 건전지, 오른쪽 짝 손님 문으로 걷는다.","cards":["A1-88","A1-89","A1-91"],"box":null},{"sid":"s2","obj":"펌프 왼쪽 위 물에 빽빽한 흰 소금 자루 무리 · 펌프 아래 물에 빽빽한 은빛 칼 무리 (위 물의 칼은 둘 · 아래 물의 자루는 셋뿐)","fact":"동물세포 안 = K⁺ 높고 Na⁺ 낮다 — 막이 Na⁺ 는 밖으로 · K⁺ 는 안으로","hook":"아래 물(안)에 빽빽한 칼 = K⁺ 높음 · 위 물(밖)에 빽빽한 흰 소금 자루 = Na⁺ 는 밖이 높음(안은 낮음)","say":"먼저 손님의 분포. 위 물(세포 밖)에는 흰 소금 자루가 빽빽하고 칼은 둘뿐이다. 아래 물(세포 안)에는 은빛 칼이 빽빽하고 자루는 셋뿐이다. 소금 자루는 Na⁺, 칼은 K⁺(L23a 긴 홀의 소금 더미와 칼 걸이 그대로). 동물 세포의 세포질은 세포외액에 견주어 K⁺ 농도가 높고 Na⁺ 농도가 낮다. 가만두면 L53b 의 틈과 문으로 조금씩 새어 같아지려 한다. 그래서 세포막은 쉬지 않고 Na⁺ 를 밖으로, K⁺ 를 안으로 옮겨 이 이온 기울기를 지킨다. 그 일을 하는 것이 가운데 놋쇠 기계다.","cards":["A1-92","A1-93"],"box":[[22,68,345,290],[330,785,400,340],[222,795,150,135],[418,185,112,172]]},{"sid":"s3","obj":"띠를 꿰뚫어 박힌 큰 놋쇠 펌프 기계 — 둥근 창 한가운데 세로로 선 유리 문짝(위아래 놋쇠 마구리 · 가운데 놋쇠 축) · 오른쪽 옆구리의 크랭크(ㄱ자로 꺾인 쇠막대 · 끝에 검은 손잡이) · 밑면 투입구로 ↑ 화살을 따라 오르는 금빛 동전 · 왼쪽 옆구리에 붉은 도장 자국을 찍은 나무 손잡이 도장","fact":"능동수송은 운반단백질이 한다 · 직접 에너지원 = ATP — 운반체를 인산화해 구조를 바꿈","hook":"문짝 도는 기계(뚫린 틈 ✕) = 운반단백질 · 동전 = ATP · 붉은 도장 = 인산기 전달(인산화) → 문짝이 돈다 = 구조 변화","say":"기계를 보자. 둥근 창 한가운데 유리 문짝이 축에 꿰여 섰다. L53b 의 회전문, 운반단백질이다. 능동수송을 하는 수송 단백질은 뚫린 틈(통로)이 아니라 운반 단백질이다. 틈은 열어 주기만 할 뿐 거슬러 밀지 못한다. 거슬러 옮기려면 손님을 붙든 채 모양을 바꿔야 한다. 그 힘은 어디서 오나. 밑면 투입구로 금빛 동전이 올라간다. 동전은 ATP — 능동수송의 직접 에너지원이다. 동전이 들어가자 왼쪽 옆구리에 붉은 도장이 찍혔다. 붉은 도장은 이 덱의 인산화. ATP 는 인산기를 운반 단백질에 넘겨(인산화) 그 구조를 바꾼다 — 문짝이 돈다. 인산화에 따른 구조 변화로 역행 수송을 하는 것이다.","cards":["A1-90","A1-151","A1-94","A1-95"],"box":[[80,296,600,492],[508,772,60,110]]},{"sid":"s4","obj":"펌프의 둥근 창 속 — 세로로 선 유리 문짝의 왼쪽 칸에 흰 소금 자루 셋과 ↑ 화살 · 오른쪽 칸에 날을 아래로 한 칼 둘과 ↓ 화살","fact":"Na⁺-K⁺ 펌프 = 1회에 Na⁺ 3개 밖으로 · K⁺ 2개 안으로 — ATP 를 직접 씀","hook":"왼쪽 칸 자루 셋 ↑ = Na⁺ 3 밖으로 · 오른쪽 칸 칼 둘 ↓ = K⁺ 2 안으로 · 밑의 동전 = ATP 직접","say":"창 속을 센다. 유리 문짝 왼쪽 칸에 흰 소금 자루가 셋, 화살은 위. 오른쪽 칸에 칼이 둘, 날도 화살도 아래. 한 번 돌 때 Na⁺ 3개를 밖으로 내보내고 K⁺ 2개를 안으로 들인다 — 나트륨-칼륨 펌프다. 셋 나가고 둘 들어온다(자루 셋 · 칼 둘). 그리고 이 펌프는 ATP 를 직접 쓴다. 밑의 동전이 바로 이 기계의 투입구로 들어간다. 남이 만든 기울기를 빌려 쓰는 오른쪽의 짝 손님 문들과 갈리는 점이다.","cards":["A1-102","A1-103"],"box":[[204,408,328,322]]},{"sid":"s5","obj":"펌프 아래 물에서 기계 밑으로 다가온 흰 소금 자루 셋 → 왼쪽 옆구리의 도장과 붉은 도장 자국 → 창 왼쪽 칸에 실려 ↑ 오르는 자루 셋 → 기계 위 물의 흰 소금 자루 무리","fact":"① 세포질 Na⁺ 3 결합 → ② ATP 인산화 → ③ 모양 변화 · Na⁺ 친화성 ↓ → ④ 밖으로 방출","hook":"밑에서 타는 자루 셋 = 세포질 Na⁺ 3 결합 · 붉은 도장 = 인산화 · 문짝이 돎 = 모양 변화(Na⁺ 친화성 ↓) · 위로 나감 = 방출","say":"펌프의 앞 걸음을 따라가자. ① 아래 물(세포질)의 흰 소금 자루 셋이 기계 밑으로 다가와 왼쪽 칸에 탄다 — 세포질 쪽 Na⁺ 3개가 펌프에 결합. ② 동전이 들어가고 왼쪽 옆구리에 붉은 도장이 찍힌다 — ATP 에 의한 인산화가 단백질을 자극한다. ③ 문짝이 돈다 — 펌프의 형태가 바뀌고, 바뀐 모양은 Na⁺ 를 붙드는 힘(친화성)이 약하다. ④ 자루 셋이 위로 실려 가 놓여난다 — Na⁺ 가 세포 밖으로 방출된다. 위 물의 자루 무리에 섞인다. 타고, 도장 찍히고, 돌고, 밖에 내린다.","cards":["A1-104","A1-105","A1-106","A1-107"],"box":[[222,795,150,135],[80,448,112,122],[222,418,126,304],[22,68,345,290]]},{"sid":"s6","obj":"기계 위 물에서 다가오는 칼 둘 → 창 오른쪽 칸에 실려 ↓ 내려가는 칼 둘 → 오른쪽 아래 놋쇠 면의 붉은 자국(점선 테가 번졌다)과 기계 밑으로 떨어지는 같은 꼴의 붉은 조각 → 아래 물의 칼 무리","fact":"⑤ K⁺ 친화성 ↑ → K⁺ 2 결합 → ⑥ 인산기 탈리 → 원래 모양 → ⑦ K⁺ 를 세포 안에 방출","hook":"위에서 타는 칼 둘 = K⁺ 2 결합(친화성 ↑) · 떨어지는 붉은 도장 자국 = 인산기 탈리 · 문짝이 되돎 = 원래 모양 · 아래로 내림 = 세포 안","say":"뒷 걸음. ⑤ Na⁺ 를 내려놓은 그 모양은 거꾸로 K⁺ 를 잘 붙든다 — K⁺ 친화성이 높아진다. 기계 위 물의 칼 둘이 다가와 오른쪽 칸에 탄다. ⑥ 그러자 붉은 도장이 떨어진다. 오른쪽 아래 놋쇠 면의 자국은 테가 번지며 들뜨고, 같은 꼴의 붉은 조각 하나가 기계 밑으로 떨어지는 중이다 — 인산기 탈리. 도장이 떨어지면 문짝이 되돌아 원래 모양이 된다. ⑦ 원래 모양은 K⁺ 를 붙드는 힘이 약하다. 칼 둘이 아래로 내려가 놓여난다 — K⁺ 를 세포 안으로. 그리고 다시 소금 자루 셋을 태울 차례다. 한 바퀴에 동전 하나.","cards":["A1-108","A1-109","A1-110"],"box":[[418,185,112,172],[390,418,118,304],[522,684,150,170],[330,785,400,340]]},{"sid":"s7","obj":"펌프 기계의 오른쪽 위 모서리에서 건전지 꼭지로 이어진 붉은 전선 — 전선 위에 번쩍이는 노란 불꽃 둘","fact":"3 내보내고 2 들임 → 순 양전하를 밖으로 → 막전위에 기여 = 전기발생성 펌프","hook":"셋 나가고 둘 들어옴 = 한 바퀴마다 ＋ 하나가 밖으로 · 펌프 → 건전지의 번쩍이는 붉은 전선 = 전기발생성 펌프(전압을 만듦)","say":"펌프 오른쪽 위 모서리에서 붉은 전선이 나와 건전지 꼭지에 닿았고, 전선 위에서 노란 불꽃이 번쩍인다. 펌프가 건전지를 채우는 중이다. 셈을 해 보자. 양전하(＋) 셋을 내보내고 둘을 들인다. 한 바퀴 돌 때마다 ＋ 하나가 밖으로 더 나간다. 순전하를 밖으로 더 많이 옮기니 막 안팎에 전하 차이, 곧 전압이 생긴다. 그래서 나트륨-칼륨 펌프는 막전위를 유지하는 데 기여한다. 이렇게 막을 가로질러 전압을 만들어 내는 수송 단백질을 전기발생성 펌프(electrogenic pump)라 한다. 동물세포의 대표가 이 Na⁺-K⁺ 펌프다.","cards":["A1-111","A1-112"],"box":[[586,158,180,168]]},{"sid":"s8","obj":"버터 띠를 꿰뚫어 세로로 선 큰 건전지 — 주황 윗부분(＋ 표)은 위 물에서 띠 윗자락까지 · 짙은 회색 몸통은 띠 속을 지나 아래 물까지 내려갔고 그 아래 끝에 흰 － 표","fact":"전압 = 반대 전하의 격리에 따른 전기적 위치에너지 · 막전위 = 막을 가로지르는 전압","hook":"띠가 ＋ 와 － 를 갈라 놓음 = 반대 전하의 격리(전압) · 띠를 꿰뚫은 건전지 = 막전위 · 건전지 = 전하 띤 물질 이동의 에너지원","say":"버터 띠를 꿰뚫고 큰 건전지가 섰다. ＋ 극은 위 물에, － 극은 아래 물에 있다. 띠가 ＋ 와 － 를 갈라 놓았다. 반대 전하들을 떼어 놓으면 서로 끌리려는 힘이 쌓인다 — 전압(voltage)은 반대 전하들의 격리에 따른 전기적 위치에너지다. 그 전압이 막을 가로질러 생긴 것이 막전위(membrane potential)다. 모든 세포의 막은 이렇게 작은 건전지다. 건전지처럼 작용한다는 말의 뜻: 막전위는 막을 통과하는 전하 띤 물질(이온)의 이동에 에너지원 노릇을 한다. 꺼내 쓸 수 있게 저장된 에너지다 — 건전지에서 오른쪽 문으로 파란 전선이 간다.","cards":["A1-96","A1-97","A1-100"],"box":[[698,232,106,518]]},{"sid":"s9","obj":"건전지의 흰 － 표가 찍힌 아래 끝이 아래 물에 잠겼다 · 건전지 오른쪽 위 물 — ＋ 표가 붙은 흰 소금 자루와 ↓ 화살 · 아래 물 — － 표가 붙은 흰 염소(뿔 · 턱수염)와 ↑ 화살","fact":"세포 안이 더 음전하(−50 ~ −200 mV) → 양이온은 안으로 · 음이온은 밖으로","hook":"아래 물(안)의 － 극 = 세포 안이 음 · ＋ 소금 자루 ↓ = 양이온은 안으로 · － 염소(Cl⁻) ↑ = 음이온은 밖으로","say":"건전지의 방향을 보자. － 극이 아래 물, 세포 안쪽이다. 세포 내부는 바깥보다 음전하를 띤다. 막전위는 보통 −50 mV 에서 −200 mV(안쪽이 음이라 － 부호). 그러면 전하 띤 손님은 농도만이 아니라 이 전기에도 끌린다. 건전지 오른쪽 위, ＋ 표가 붙은 흰 소금 자루는 화살이 아래 — 양이온은 음인 안쪽으로 끌려 들어간다. 아래 물의 흰 염소는 － 표가 붙었고 화살이 위. 염소는 이 덱의 Cl⁻(염소 이온) — 음이온은 음인 안쪽에서 밀려 밖으로 나간다. 막전위는 양이온을 안으로, 음이온을 밖으로 이끈다. 이온을 움직이는 힘은 농도 기울기와 전기의 힘, 둘의 합(전기화학적 기울기)이다.","cards":["A1-98","A1-99","A1-101"],"box":[[702,652,98,96],[808,284,112,150],[804,712,124,184]]},{"sid":"s10","obj":"건전지에서 파란 전선이 닿은 첫 회전문 기둥 — 굴 속에 흰 소금 자루와 포도가 나란히 · 기운 유리 문짝의 같은 칸(오른쪽 아래)에도 둘이 함께 탔다 · 문 밑에 ↓ 화살 둘 · 문 위쪽 물에는 흰 소금 자루가 여럿 · 문 아래쪽 물에는 포도가 여럿(흰 소금 자루는 하나)","fact":"공동수송 = 한 물질의 기울기로 다른 물질의 수송을 결합 — 이온 기울기로 영양물질을 들임","hook":"함께 탄 소금 자루 + 포도 = 공동수송 · 자루는 내리막 · 포도는 그 힘에 끌려 오르막 · 파란 전선 = 저장된 에너지(막전위 · 이온 기울기)를 씀","say":"건전지에서 나온 파란 전선이 첫 회전문 기둥에 닿았다. 이 문에는 동전 투입구가 없다. 대신 손님이 둘씩 탄다. 흰 소금 자루와 포도가 굴 속에 나란히, 문짝의 같은 칸에도 함께, 화살 둘도 나란히 아래. 위쪽 물에는 소금 자루가 많고 아래쪽 물에는 포도가 많다. 소금 자루는 빽빽한 데서 드문 데로, 내리막이다. 포도는 이미 포도가 많은 아래로 가니 오르막이다. 내리막을 구르는 소금 자루가 포도를 끌고 들어간다. 공동수송(동반수송) — 한 물질의 기울기를 이용해 다른 물질의 수송을 결합한다. 생물은 이렇게 이온 기울기의 에너지로 영양물질을 들인다. 그 기울기는 왼쪽 펌프가 동전으로 쌓아 건전지에 저장해 둔 것이다 — 막전위와 이온 기울기라는 저장된 에너지가 다른 물질의 수송에 쓰인다.","cards":["A1-113","A1-114","A1-150"],"box":[[762,186,240,76],[982,440,106,268],[948,96,190,178],[954,716,164,230]]},{"sid":"s11","obj":"첫 회전문 위 — 빨간 빨대가 꽂힌 유리컵 속에 작은 흰 소금 자루와 포도 / 둘째 회전문 기둥 — 꼭대기에 해바라기 · 굴 속에 레몬과 갈색 자루가 나란히 · 문짝의 같은 칸에도 둘이 함께 · 위 물엔 레몬이 넷(갈색 자루는 하나) · 아래 물엔 갈색 자루가 넷(레몬은 하나)","fact":"동물 = Na⁺ 기울기로 포도당 수송(경구수액 = NaCl + 포도당) / 식물 = H⁺ 와 설탕 공동수송","hook":"소금 자루 + 포도 = Na⁺-포도당(동물) · 빨대 컵 = 경구수액 · 해바라기 문의 레몬 + 갈색 자루 = H⁺-설탕(식물)","say":"짝 손님 문의 예 둘. 첫 문은 방금 본 흰 소금 자루와 포도 — 동물세포는 Na⁺ 기울기를 이용해 포도당을 들인다(L53b 에서 손잡고 걷던 그 둘, SGLT). 문 위에 빨간 빨대가 꽂힌 유리컵이 있고 컵 속에 작은 소금 자루와 포도가 함께 들었다. 경구수액이다. 설사 환자에게 소금(NaCl)과 포도당을 함께 먹이는 까닭 — 둘이 짝이 되어 장에서 같이 흡수되고 물이 따라 들어온다. 둘째 문은 꼭대기에 해바라기가 섰다. 식물세포다. 손님은 레몬과 갈색 자루. 레몬은 H⁺(신 것 = 산), 갈색 자루는 설탕(L22c 체관의 그 자루). 식물은 H⁺ 펌프가 만든 H⁺ 기울기로 설탕을 끌어들인다 — H⁺ 와 설탕의 공동수송.","cards":["A1-115","A1-116","A1-117"],"box":[[944,48,96,124],[982,440,106,268],[1148,70,180,640],[1164,776,150,184]]},{"sid":"s12","obj":"회전문 넷을 나란히 — 첫째 · 둘째는 손님 둘이 기운 문짝의 같은 칸에 함께 타고 ↓ 화살 둘 · 셋째는 포도 혼자 타고 ↓ 화살 하나 · 넷째는 세로로 선 문짝의 왼쪽 칸에 흰 소금 자루 · 오른쪽 칸에 회색 자갈이 따로 타고 ↓ ↑ 화살이 엇갈린다 (되짚기)","fact":"uniport = 한 물질 / symport = 둘이 같은 방향 / antiport = 둘이 반대 방향","hook":"혼자 ↓ = uniport · 함께 ↓↓ = symport(공수송) · 엇갈려 ↓↑ = antiport(역수송) · 소금 자루 ↓ 자갈 ↑ = Na⁺/Ca²⁺ 교환체","say":"회전문 넷을 나란히 놓고 손님 수와 화살만 보자. 셋째 문 — 포도 혼자, 화살 하나. 한 물질만 옮기는 단일수송(uniport), L53b 의 포도 회전문(GLUT)이 이것이다. 첫째 · 둘째 문 — 둘이 같은 칸에 함께, 화살 둘이 같은 쪽. 두 물질을 같은 방향으로 옮기는 공수송(symport). 넷째 문 — 문짝이 세로로 서서 길을 둘로 갈랐다. 왼쪽 길의 흰 소금 자루는 아래로, 오른쪽 길의 회색 자갈은 위로. 화살이 엇갈린다. 두 물질을 반대 방향으로 옮기는 역수송(antiport · 대향수송). 자갈은 이 덱의 Ca²⁺ — Na⁺ 가 들어오는 힘으로 Ca²⁺ 를 내보내는 Na⁺/Ca²⁺ 교환체, 심근에 있다. 또 하나의 예는 Na⁺/H⁺ 교환체(수정란의 pH 를 올린다). 혼자 · 함께 · 엇갈려.","cards":["A1-158","A1-159"],"box":[[982,440,106,268],[1190,440,106,268],[1398,440,106,268],[1606,440,106,268]]},{"sid":"s13","obj":"맨 오른쪽 구슬 기둥의 작은 놋쇠 펌프 상자 — 크랭크에 금색 자물쇠 · 그 아래 물에 쌓인 흰 소금 자루 다섯 · 넷째 회전문 아래 물에 쌓인 회색 자갈 여섯 · 오른쪽 아래 나무집(노란 반달 문) 옆구리에서 솟은 알통 팔이 자갈을 움켜쥐었다","fact":"우아바인 · 디곡신 = 펌프 억제 → Na⁺ ↑ → Na⁺/Ca²⁺ 교환 ↓ → Ca²⁺ ↑ → 수축력 ↑","hook":"금색 자물쇠 = 약(우아바인 · 디곡신) · 쌓인 소금 자루 = 세포내 Na⁺ ↑ · 쌓인 자갈 = Ca²⁺ ↑ · 나무집의 알통 = 심근 수축력 ↑","say":"맨 오른쪽 기둥의 작은 놋쇠 펌프(L53b 끝의 그 상자)는 크랭크에 금색 자물쇠가 채워졌다. 금색 자물쇠는 이 덱의 약 — Na⁺/K⁺ 펌프를 억제하는 강심배당체, 우아바인과 디곡신이다(L23a 의 그 자물쇠). 펌프가 멈추면 Na⁺ 를 못 퍼낸다. 자물쇠 밑 아래 물에 흰 소금 자루가 다섯이나 쌓였다 — 세포 내 Na⁺ 축적. K⁺ 기울기와 막전위도 무너진다. 안에 소금이 쌓이면 넷째 문이 느려진다. 그 문은 소금이 들어오는 힘으로 자갈을 내보내는데, 안팎의 소금 차이가 줄었기 때문이다. 못 나간 자갈이 문 아래에 여섯 쌓였다 — 세포 내 Ca²⁺ 증가. 그 자갈을 나무집(L46 의 심장 집 · 노란 반달 문) 옆구리에서 솟은 알통 팔이 움켜쥐었다. Ca²⁺ 가 늘어 심근 수축력이 커진다. 디곡신이 심장을 세게 뛰게 하는 길이다.","cards":["A1-154","A1-152","A1-153"],"box":[[1802,492,176,158],[1778,730,176,136],[1594,904,136,76],[1752,878,286,250]]}],"cq":{"A1-88":["능동 수송(active transport)이란?","에너지를 사용해 농도 기울기에 거슬러 용질을 이동시키는 수송"],"A1-89":["능동 수송에서 에너지가 필요한 이유는?","낮은 농도에서 높은 농도로 옮겨야 하기 때문"],"A1-91":["능동 수송은 세포에 어떤 이점을 주는가?","바깥과 다른 세포내 농도를 유지하게 해 준다"],"A1-92":["동물 세포질은 세포외액에 비해 K+와 Na+ 농도가 어떻게 다른가?","K+는 높고 Na+는 낮다"],"A1-93":["이온 기울기 유지를 위해 세포막이 하는 일은?","Na+를 밖으로, K+를 안으로 옮긴다"],"A1-90":["능동 수송을 매개하는 수송 단백질은 통로형인가 운반형인가?","운반 단백질"],"A1-151":["왜 많은 능동수송 단백질이 운반단백질이지 통로단백질이 아닌가?","인산화에 따른 구조변화로 역행 수송을 수행해야 하기 때문"],"A1-94":["능동 수송의 직접 에너지원은?","ATP"],"A1-95":["ATP가 능동 수송에 동력을 공급하는 일반적 방법은?","운반 단백질에 인산기를 전달(인산화)"],"A1-102":["나트륨-칼륨 펌프는 1회 작동 시 Na+와 K+를 각각 몇 개 이동시키는가?","Na+ 3개 밖으로 · K+ 2개 안으로"],"A1-103":["나트륨-칼륨 펌프는 직접 ATP를 쓰는가?","예"],"A1-104":["나트륨-칼륨 펌프의 첫 단계는?","세포질 쪽 Na+ 3개가 펌프에 결합"],"A1-105":["나트륨-칼륨 펌프의 두 번째 단계는?","ATP에 의한 인산화가 단백질을 자극"],"A1-106":["인산화 후 펌프에 일어나는 변화는?","형태가 바뀌어 Na+ 친화성이 감소"],"A1-107":["인산화 후 Na+는 어디로 이동하는가?","세포 밖으로 방출"],"A1-108":["Na+ 방출 뒤 펌프가 K+에 대해 갖는 성질은?","K+ 친화성이 높아진다"],"A1-109":["K+가 결합한 뒤 펌프가 원래 모양으로 돌아가는 계기는?","인산기 탈리"],"A1-110":["원래 모양으로 돌아간 펌프는 K+를 어디로 내보내는가?","세포 안"],"A1-111":["나트륨-칼륨 펌프가 막전위 유지에 기여하는 이유는?","3개를 내보내고 2개를 들여보내 순전하를 밖으로 더 많이 이동시키기 때문"],"A1-112":["전하를 만들어내는 이러한 펌프를 무엇이라 하는가?","전기발생성 펌프(electrogenic pump)"],"A1-96":["전압(voltage)이란?","반대 전하들의 격리에 따른 전기적 위치에너지"],"A1-97":["막전위(membrane potential)란?","막을 가로질러 생기는 전압"],"A1-100":["막전위가 배터리처럼 작용한다는 말의 뜻은?","막을 통과하는 전하성 물질 이동에 에너지원 역할을 한다는 뜻"],"A1-98":["세포 내부는 바깥보다 보통 어떤 전하를 띠는가?","더 음전하"],"A1-99":["막전위 범위로 노트에 제시된 값은?","-50 mV ~ -200 mV"],"A1-101":["막전위는 양이온과 음이온의 수동 이동에 각각 어떤 방향성을 주는가?","양이온은 안으로, 음이온은 밖으로"],"A1-113":["동반 수송(cotransport)이란?","한 물질의 기울기를 이용해 다른 물질의 수송을 결합시키는 방식"],"A1-114":["생물체가 동반수송을 이용하는 이유는?","자연적인 이온 기울기의 에너지를 활용해 영양물질을 들이기 위해"],"A1-150":["막전위와 동반수송의 관계는?","막전위·이온기울기라는 저장된 에너지가 다른 물질 수송에 이용될 수 있다."],"A1-115":["식물 세포의 동반수송 예시는?","H+와 설탕의 공동수송"],"A1-116":["동물 세포의 동반수송 예시는?","Na+ 기울기를 이용한 포도당 수송"],"A1-117":["경구수액이 동반수송 예시인 이유는?","NaCl과 포도당을 함께 넣어 흡수를 촉진하기 때문"],"A1-158":["uniport·symport·antiport를 이동 물질과 방향으로 구분하면?","uniport=한 물질만 · symport(공수송)=두 물질 같은 방향 · antiport(역수송·대향수송)=두 물질 반대 방향"],"A1-159":["antiport(역수송)의 예를 들면?","Na⁺/H⁺ 교환체(수정란 pH 상승) · Na⁺/Ca²⁺ 교환체(심근) 등"],"A1-154":["강심배당체(디곡신)가 심근 수축력을 높이는 기전은?","세포내 Na⁺↑ → Na⁺/Ca²⁺ 교환↓ → 세포내 Ca²⁺↑ → 수축력 증가"],"A1-152":["Na⁺/K⁺ 펌프를 억제하는 대표 약물(강심배당체)은?","우아바인(ouabain)·디곡신(digoxin)"],"A1-153":["우아바인으로 Na⁺/K⁺ 펌프를 막으면 세포 내 이온은 어떻게 되는가?","Na⁺를 못 퍼내 세포내 Na⁺가 축적되고 K⁺ 기울기·막전위가 무너진다"]},"hubPanel":null};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
+$('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
+const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
+const scoreKey = 'lesson_' + L.id;
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    // 겹친 곳을 누르면 작은 단서를 고른다. 넓이가 같으면 먼저 소개한 정거장이 위에 온다.
+    const hotspots = [];
+    stops.forEach((stop, k) => {
+      if (!stop.box) return;
+      const boxes = Array.isArray(stop.box[0]) ? stop.box : [stop.box];
+      for (const box of boxes) hotspots.push({ box, k, area: box[2] * box[3] });
+    });
+    hotspots.sort((a, b) => b.area - a.area || b.k - a.k);
+    for (const { box, k } of hotspots) s += rect(box, 'hot', ` data-k="${k}"`);
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+let speakSeq = 0;
+function speak(t) {
+  t = ttsNorm(t);
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
+}
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+// 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
+// SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
+function srsInbox(k, ok) {
+  const cards = [...new Set(stops[k].cards || [])]; if (!cards.length) return;
+  try {
+    const key = 'lesson_srs_inbox', id = sess.id + ':' + sidOf(k);
+    let box = JSON.parse(localStorage.getItem(key) || '[]'); if (!Array.isArray(box)) box = [];
+    box = box.filter(m => m && m.id !== id);
+    if (!ok) box.push({ id, t: Date.now(), lesson: L.id, sid: sidOf(k), cards });
+    localStorage.setItem(key, JSON.stringify(box.slice(-400)));
+  } catch (e) {}
+}
+function judge(ok) {
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  srsInbox(k, ok);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
