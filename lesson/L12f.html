@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>돌 머리의 입과 운하 들머리 — 소화의 길 · 소화 호르몬 · 배고픔과 배부름</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+</div>
+<script>
+const L = {"id":"L12f","scene":"s12","part":"f","title":"돌 머리의 입과 운하 들머리 — 소화의 길 · 소화 호르몬 · 배고픔과 배부름","sub":"빵이 가는 한 줄 길: 큰 돌 머리의 입(돌 이빨 · 레이스 앞치마 일꾼의 가위 · 입천장 주둥이의 침) → 목 방(인두) → 노란 미끄럼 관(식도) → L12a 의 큰 강철 통(위) → 쇠살문(유문) → L12b 의 돌 운하(십이지장). 길목마다 선 초병이 제 발밑에 음식이 왔을 때만 붉은 물길(피)에 흰 봉투(호르몬)를 띄운다 — 통 위의 방독면 병사(가스트린) · 운하 둑의 「쉿」 요원(세크레틴 → 섬 뜬 연못이 흰 분필을) · 감시 카메라(CCK → 주전자 인부와 초록 주머니) · 쇠살문에 줄을 건 지프(GIP). 통 위의 으르렁 도깨비(그렐린) · Y 쌍둥이(PYY) · 랩 싸는 기름 공 사람(렙틴) · 섬의 주사기 든 사람(인슐린)의 봉투는 붉은 관을 타고 돌 머리 꼭대기 관제탑(포만중추)에 모여 입 앞의 차단기(식욕)를 올리고 내린다.","img":"img/L12f.webp?v=5ea65bc1ea39","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"빵이 가는 한 줄 길 — 왼쪽 큰 돌 머리의 벌린 입 → 머리 뒤쪽의 목 방 → 노란 미끄럼 관 → 가운데 큰 강철 통 → 통 오른쪽 아래의 쇠살문 → 오른쪽 끝까지 뻗은 돌 운하 (틀)","fact":"입 → 인두 → 식도 → 위 → 소장 … 항문 · 섭취 → 소화 → 흡수 → 배설","hook":"돌 머리의 입 = 입 · 목 방 = 인두 · 노란 미끄럼 관 = 식도 · 강철 통 = 위 · 돌 운하 = 소장 · 벽돌 곳간 = 간 · 섬 뜬 연못 = 이자","say":"빵 한 덩이가 가는 길을 왼쪽에서 오른쪽으로 걷는다. 돌 머리의 벌린 입(입) → 머리 뒤쪽 목 방(인두) → 노란 미끄럼 관(식도) → 큰 강철 통(위 · L12a 의 그 통) → 쇠살문 너머 돌 운하(소장 · L12b 의 그 운하). 운하는 그림 오른쪽 밖으로 이어져 그 끝이 항문이다. 길 위쪽의 붉은 벽돌 곳간은 간, 섬 뜬 연못은 이자. 포유동물 소화계의 주요 기관이 이것이다 — 입, 인두, 식도, 위, 소장, 간, 이자, 항문. 음식 처리는 네 단계. 입으로 들이는 섭취, 부수고 자르는 소화, 운하 벽으로 받아들이는 흡수, 남은 것을 내보내는 배설. 구간마다 맡은 일이 다르다. 구강은 기계적 소화의 시작, 위는 저장과 단백질 소화, 소장은 대부분의 화학적 소화와 흡수.","cards":["G0-0","G1-1","G1-204"],"box":null},{"sid":"s2","obj":"길에 딸린 샘 넷 — 돌 머리 입천장의 쇠 주둥이 셋 · 운하 위쪽, 우물처럼 높은 둥근 돌 수반의 섬 뜬 연못(홈통 둘이 운하로 내려온다) · 붉은 벽돌 곳간 · 곳간에서 나온 초록 관에 매달린 초록 주머니","fact":"소화계 = 소화관 + 부속샘 넷(침샘 · 췌장 · 간 · 담낭)","hook":"음식이 지나는 한 줄 길 = 소화관 · 입천장 주둥이 = 침샘 · 섬 뜬 연못 = 췌장(이자) · 붉은 벽돌 곳간 = 간 · 초록 주머니 = 담낭","say":"음식이 지나는 한 줄 길이 소화관이고, 길 밖에서 관으로 소화액을 부어 주는 것이 부속샘이다. 포유류 소화계는 이 둘, 소화관과 부속샘으로 이루어진다. 부속샘은 넷이다. ① 돌 머리 입천장의 쇠 주둥이 셋 = 침샘. 입 안에 침을 떨어뜨린다. ② 둥근 돌 수반의 섬 뜬 연못 = 췌장(이자). 홈통 둘로 운하에 붓는다. 가운데 뜬 작은 섬은 이자섬(L49a 의 그 섬)이다. ③ 붉은 벽돌 곳간 = 간(L12b 의 그 곳간). 초록 관으로 초록 즙(담즙)을 내보낸다. ④ 그 초록 관에 매달린 초록 주머니 = 담낭. 간이 만든 초록 즙을 모아 두었다가 짜낸다. 침샘, 췌장, 간, 담낭 — 넷 다 음식이 직접 지나가지는 않고 관으로 길에 이어져 있다.","cards":["G1-5","G1-6"],"box":[[408,544,150,34],[1104,122,352,384],[1452,88,258,416],[1556,628,112,196]]},{"sid":"s3","obj":"돌 머리의 입 안 — 위아래 흰 돌 이빨 사이, 입 앞쪽에 큰 빵 덩이가 걸쳤고 부스러기가 튄다 · 혀 위에 선 일꾼(밀 이삭을 수놓은 흰 레이스 앞치마)이 가위로 흰 실에 꿴 보랏빛 포도알 줄(동글동글한 보라 알 넷)을 끊는다 · 가윗날 사이 실 위에 파란 물방울 하나 · 혀 위에는 두 알씩 끊긴 토막 둘","fact":"기계적 소화 = 부숴서 표면적 ↑ · 화학적 소화 = 효소 가수분해 — 입에서는 아밀레이스","hook":"돌 이빨 = 기계적 소화 · 가위 = 효소가 결합을 끊음 · 물방울 = 물로 끊는 가수분해 · 밀 이삭 + 레이스 = (아)밀레이스 · 실에 꿴 포도 줄 = 녹말","say":"입 안에서 두 가지 소화가 함께 시작된다. 먼저 돌 이빨. 큰 빵 덩이를 물어 부스러기로 만든다. 음식을 잘게 부수어 표면적을 늘리는 것이 기계적 소화다. 다음은 혀 위의 일꾼. 가위로 포도 줄을 끊는다. 큰 분자를 흡수할 수 있는 작은 분자로 가수분해하는 것이 화학적 소화다. 가윗날 사이, 끊기는 자리에 물방울이 떨어졌다. 소화효소는 물을 써서 결합을 끊는다 — 효소 가수분해. 일꾼의 앞치마를 보자. 밀 이삭을 수놓은 레이스 앞치마. 밀, 레이스, 아밀레이스다. 곧은 실에 꿴 포도 줄은 녹말(포도 = 포도당)이고, 끊긴 토막은 포도 두 알씩이다(엿당). 구강에서 시작되는 대표 화학적 소화가 아밀레이스에 의한 탄수화물 소화다.","cards":["G1-2","G1-3","G1-4","G1-76"],"box":[[170,540,422,214]]},{"sid":"s4","obj":"입천장의 쇠 주둥이 셋 밑 — 파란 물방울 셋 · 흰 네모 알갱이 셋(소금) · 금이 가고 작은 조각이 튀는 초록 알약 꼴 세균(눈이 ×) · 분홍 막대사탕 / 머리 뒤쪽의 목 방 — 코끝으로 들어 윗턱 위 콧길을 따라 온 흰 바람과 입에서 온 둥근 빵 덩이가 한 방에 있고 · 방 아래로는 마디마디 고리 진 회색 관(끝이 말린 흰 바람 가닥이 그리로 든다) · 옆으로는 노란 미끄럼 관","fact":"침 = 물 · 염 · 점액성 당단백질 · 세포 · 라이소자임 / 인두 = 음식과 공기가 함께 지남","hook":"물방울 = 물 · 흰 소금 = 염 · 막대사탕 = 당단백질 · 금 간 초록 세균 = 라이소자임 · 바람과 빵이 만나는 목 방 = 인두 · 고리 진 관 = 기관 · 미끄럼 관 = 식도","say":"주둥이 셋(침샘)이 떨어뜨리는 것을 하나씩 본다. 파란 방울은 물 — 침은 거의 물이다. 흰 알갱이는 소금, 곧 염. 분홍 막대사탕은 점액성 당단백질(막대사탕 = 당 사슬이 붙은 단백질)로 음식을 미끄럽게 감싼다. 초록 세균은 껍질에 금이 가 부서진다. 세균의 세포벽을 허무는 효소 라이소자임이다. 여기에 입 안에서 떨어져 나온 세포까지 — 물, 염, 점액성 당단백질, 세포, 라이소자임이 침의 주요 성분이다. 이제 머리 뒤쪽 목 방. 콧구멍으로 든 흰 바람과 입에서 넘어온 빵 덩이가 이 한 방을 함께 지난다. 소화관에서 음식과 공기가 함께 지나가는 부위가 인두다. 여기서 길이 갈린다. 바람은 아래의 고리 진 회색 관(기관 · L46f)으로, 빵 덩이는 옆의 노란 미끄럼 관(식도)으로.","cards":["G1-74","G1-73"],"box":[[372,544,132,118],[588,456,186,300],[586,722,56,170]]},{"sid":"s5","obj":"큰 강철 통 — 통 속의 큰 반죽 덩이에 밀려 통의 오른쪽 벽이 밖으로 불룩 휘었다(벽 밖에 떨림 줄) · 통 가장자리 오른쪽에서 철모와 방독면을 쓴 병사가 흰 봉투를 붉은 물길 쪽으로 내민다 · 통 안벽의 벽돌 인부는 질그릇 항아리를 기울여 맑은 물줄기를 붓고 · 기둥 인부가 든 초록 병 위로 베이지 거품이 뭉게뭉게 솟았다 · 가장자리에 선 불붙은 성냥 위에 위 화살 · 누운 주황 막대(배턴) 위에 아래 화살","fact":"위벽이 늘어나면 G세포의 가스트린 → 위액 ↑ · ECL 히스타민(산 ↑) · D 소마토스타틴(산 ↓)","hook":"방독면 = 가스 → 가스트린 · 불룩한 통 벽 = 위벽이 늘어남 · 붓는 두 인부 = 위액 · 불붙은 성냥 = 히스타민(↑) · 놓인 배턴 = 소마토스타틴(↓)","say":"빵이 미끄럼 관을 타고 통(위)에 들었다. 반죽 덩이가 커서 통의 오른쪽 벽이 불룩 밀려났다. 위벽이 늘어나면 분비되는 호르몬이 가스트린이다. 통 가장자리의 방독면 병사를 보자. 방독면은 가스, 가스트린. 병사가 흰 봉투(호르몬)를 붉은 물길(피)에 띄운다. 봉투는 피를 돌아 통의 두 인부에게 닿는다. 벽돌 인부(벽세포)는 흙 항아리의 염산을, 기둥 인부(주세포)는 초록 병의 펩시노겐을 더 붓는다. 가스트린의 핵심 작용은 위액 생성 촉진이다. 병사가 위샘의 G세포이고, 곁의 둘도 위샘 세포의 것이다. 불붙은 성냥은 ECL세포의 히스타민. 위 화살 — 벽세포를 자극해 위산 분비를 촉진한다. 누운 배턴은 D세포의 소마토스타틴(L49a 풀밭의 그 배턴). 아래 화살 — 위산 분비를 억제한다.","cards":["G1-163","G1-164","G1-215"],"box":[[718,476,388,532],[882,316,228,186]]},{"sid":"s6","obj":"쇠살문 바로 뒤 운하의 초록 물 · 그 둑에 선 검은 정장 · 검은 선글라스의 대머리 요원이 손가락을 입술에 대고(쉿) 다른 손에 흰 봉투를 들었다 · 요원 머리 위쪽으로 흐르는 붉은 물길과 그 너머 둥근 돌 수반의 섬 뜬 연못","fact":"산성 유미즙이 십이지장에 들면 S세포가 세크레틴 분비 → 표적 = 췌장","hook":"초록 물 = 산성 유미즙(낮은 pH) · 「쉿」 비밀 요원 = 시크릿 → 세크레틴 · Secret 의 S = S세포 · 봉투가 가는 섬 뜬 연못 = 췌장","say":"쇠살문(유문)을 지나 통의 것이 운하(십이지장)로 넘어온다. 문 바로 뒤의 물이 초록빛이다. 위에서 온 산성 유미즙이다(L12b 의 그 초록 산). 둑에 선 사람을 보자. 검은 정장에 선글라스, 손가락을 입술에 대고 「쉿」. 비밀(secret) 요원, 세크레틴이다. 요원이 십이지장의 S세포다. 발밑 물의 낮은 pH 를 알아채고 흰 봉투를 붉은 물길에 띄운다. 산성 유미즙이 십이지장에 들어오면 분비되는 대표 호르몬이 세크레틴이다. 봉투는 어디로 가나. 요원 머리 위, 붉은 물길 너머 돌 수반의 섬 뜬 연못 — 세크레틴의 표적기관은 췌장이다. 왜 중요한가. 강한 산이 그대로면 소장의 효소가 일하지 못한다. 세크레틴은 위산성 유미즙을 중화해 소장 효소가 작동할 환경을 만든다. 무엇으로 중화하는지는 다음 정거장에서.","cards":["G1-96","G0-187","G1-97","G1-171"],"box":[[1098,618,214,396],[1104,122,352,384]]},{"sid":"s7","obj":"섬 뜬 연못에서 운하로 내려온 왼쪽 회색 홈통 — 흰 분필 토막들이 줄지어 미끄러져 내려와 초록 물에 떨어진다 · 분필이 떨어진 자리 오른쪽부터 초록이 걷히고 물이 맑은 하늘빛이다","fact":"세크레틴 → 췌장이 중탄산염(HCO₃⁻) 분비 → 산성 유미즙 중화 · 완충","hook":"흰 분필 토막 = HCO₃⁻(중탄산염 = 염기) · 연못의 홈통 = 췌장이 분비 · 초록이 걷혀 맑아진 물 = 중화 · 완충","say":"요원의 봉투를 받은 연못(췌장)이 답한다. 왼쪽 홈통으로 흰 분필 토막이 줄줄이 미끄러져 내려온다. 흰 분필은 이 덱의 HCO₃⁻, 중탄산염이다(분필 = 염기). 세크레틴이 췌장에 유도하는 분비가 중탄산염이고, 세크레틴의 핵심 작용이 바로 이것 — 췌장의 중탄산염 분비 촉진이다. 분필이 초록 물에 떨어지는 자리를 보자. 그 오른쪽부터 초록이 걷히고 물이 맑은 하늘빛으로 바뀐다. 중탄산염은 산성 유미즙을 중화하고 소장 소화의 완충 환경을 만든다. 한 줄로 잇자. 초록 산이 들면 → 「쉿」 요원(세크레틴)이 봉투를 띄우고 → 연못(췌장)이 흰 분필(HCO₃⁻)을 쏟아 → 위산이 중화된다.","cards":["G1-98","G1-167","G1-99","G0-188"],"box":[[1188,322,68,566],[1192,858,356,154]]},{"sid":"s8","obj":"운하 물 맨 윗면에 뜬 노란 기름 웅덩이 · 그것을 내려다보는 기둥 위 감시 카메라(붉은 불 · 웅덩이까지 퍼지는 옅은 빛 · 카메라 왼쪽 위에 뜬 흰 봉투) · 돌 수반 가장자리의 빨간 멜빵바지 인부가 긴 주둥이 주전자를 기울여 오른쪽 홈통으로 베이지 물줄기를 붓는다 · 벽돌 곳간에서 내려온 초록 관의 초록 주머니가 갈색 가죽 띠에 잘록 졸려 초록 방울을 웅덩이에 떨군다","fact":"유미즙(특히 지방)이 십이지장에 들면 CCK → 췌장 소화효소 · 담즙 분비 ↑","hook":"CCTV 카메라 = 씨씨 → CCK · 노란 기름 웅덩이 = 지방 · 드립 주전자 인부 = 췌장 소화효소 · 졸린 초록 주머니 = 담낭이 담즙을 짜냄","say":"운하를 조금 더 가면 물 위에 노란 기름 웅덩이가 떴다. 지방이다. 기둥 위 감시 카메라가 붉은 불을 켜고 웅덩이를 비춘다. CCTV, 씨씨, CCK(콜레시스토키닌)다. 유미즙이 십이지장에 들어오면 두 호르몬이 분비된다 — 앞의 세크레틴과 이 CCK. CCK 는 십이지장에 지방이 많을 때 특히 많이 분비된다. 카메라 곁의 흰 봉투가 붉은 물길을 타고 두 곳에 닿는다. 하나는 연못(췌장). 빨간 멜빵 인부가 드립 주전자를 기울여 오른쪽 홈통으로 붓는다(L12a 의 그 주전자 = 트립신) — 췌장 소화효소 분비 촉진. 또 하나는 초록 주머니(담낭). 띠에 졸려 초록 방울(담즙)을 기름 웅덩이에 짜낸다 — 담즙 분비 촉진. 이 둘이 CCK 의 핵심 작용이다.","cards":["G1-165","G1-170","G1-166"],"box":[[1438,592,274,344],[1342,178,118,706]]},{"sid":"s9","obj":"쇠살문의 고리 둘(요원 발치의 작은 둥근 고리 · 문 가운데의 큰 고리)에 묶인 갈색 줄 셋 — 작은 고리에 따로 매듭지은 두 줄은 요원의 몸통(두 번 감아 옆구리에 매듭)과 감시 카메라 기둥(두 번 감아 매듭)으로 · 큰 고리의 한 줄은 운하 아래 흙바닥에 선 국방색 지프의 꽁무니로 이어졌다 / 운하 바닥 밑을 따라 지그재그로 깔린 검은 전선과 마디마다의 검은 상자","fact":"엔테로가스트론(세크레틴 · CCK · GIP) = 위 활동 억제 / 장신경계 = 분비 · 연동 조절","hook":"줄로 쇠살문을 당김 = 위를 늦춤(줄 · 고삐 = 억제) · 요원 = 세크레틴 · 카메라 = CCK · 지프 = 지아이피 → GIP · 검은 전선 그물 = 장신경계","say":"쇠살문(유문)의 고리에 줄이 셋 걸렸다. 줄 끝을 따라가면 요원의 허리, 카메라 기둥, 그리고 앞쪽의 국방색 지프. 지프는 지아이피, GIP(위 억제 펩타이드)다. 셋이 함께 문을 당겨 통(위)을 늦춘다. 이 덱에서 당기는 줄은 억제다(L49a 의 고삐). 위 활동을 억제하는 십이지장 호르몬을 묶어 엔테로가스트론이라 한다 — CCK, 세크레틴, GIP. 언제 세게 당기나. 유미즙에 지방이 많을 때 위의 연동운동이 억제된다. 지방 소화를 위해 소장에서 더 오래 머물게 하려는 조절이다. 호르몬만 일하는 것은 아니다. 운하 바닥 밑을 따라 검은 전선이 지그재그로 깔렸다. 검은 전선은 신경 — 소화관 벽에 깔린 장신경계다. 장신경계는 소화액 분비와 연동운동을 조절한다.","cards":["G1-217","G1-168","G1-162"],"box":[[1058,762,424,374],[1108,1008,938,44]]},{"sid":"s10","obj":"돌 머리 꼭대기의 유리 관제탑 — 헤드셋을 쓴 관제사 곁에 흰 봉투 둘 · 오른쪽 끝에서 올라와 그림 맨 위를 따라 관제탑으로 드는 붉은 관(흰 꺾쇠가 위로 · 왼쪽으로) · 관제탑 밑에서 나와 얼굴 앞으로 내려온 검은 전선(중간에 노란 불꽃 별 하나)이 닿은 빨강 하양 줄무늬 차단기(비스듬히 올라갔고 팔 끝 위에 두 머리 굽은 화살) · 차단기 곁에서 기다리는 빵 수레 / 연못의 섬 위에서 주사기를 높이 든 흰 가운의 대머리","fact":"포만중추 = 소화계 신호를 통합해 식욕 조절 · 식욕 억제 셋 = 인슐린 · PYY · 렙틴","hook":"머리 꼭대기 관제탑 = 뇌의 포만중추 · 모이는 봉투 = 소화계 신호의 통합 · 차단기 = 식욕(올리면 먹고 내리면 그만) · 검은 전선 = 신경","say":"이제 그림의 맨 위. 붉은 물길은 오른쪽 끝에서 관이 되어 올라가, 맨 위를 따라 돌 머리 꼭대기의 관제탑으로 든다. 흰 꺾쇠가 관제탑 쪽을 가리킨다. 관제탑은 뇌(시상하부 · L07e 의 그 관제탑)의 포만중추다. 통에서, 운하에서, 기름 공 사람에게서, 섬에서 온 봉투가 여기 모인다. 포만중추는 소화계의 신호를 통합해 식욕을 조절한다. 어떻게? 관제탑에서 검은 전선(신경 · 노란 불꽃 = 신호)이 입 앞의 차단기로 내려간다. 차단기가 식욕이다. 올리면 빵 수레가 입으로 들어가고 내리면 멈춘다. 내리라는 봉투를 보내는 이는 셋 — 섬의 주사기 든 사람(인슐린), 운하 둑의 Y 쌍둥이(PYY), 랩 싸는 기름 공 사람(렙틴). 식욕을 억제하는 호르몬 세 가지다. 올리라는 봉투는 통 위의 도깨비가 보낸다.","cards":["G1-194","G1-201"],"box":[[268,18,276,200],[0,498,152,358],[520,16,1528,46],[2004,16,44,536],[1226,120,102,176]]},{"sid":"s11","obj":"큰 강철 통의 가장자리 왼쪽 — 뿔 하나 · 뾰족 귀의 작은 초록 도깨비가 이를 드러내고 으르렁대며 한 손에 빈 흰 그릇을, 다른 손에 숟가락을 치켜들었다 · 바로 곁 가는 붉은 관의 끝 상자에 흰 봉투가 꽂혔고 · 그 관은 위로(흰 꺾쇠) 맨 위의 붉은 관에 이어진다","fact":"그렐린 = 위에서 분비 · 식사 전 ↑ → 허기 · 식욕 증가(식욕 자극 호르몬)","hook":"으르렁 도깨비 = 그르렁 → 그렐린 · 통 위 = 위에서 분비 · 빈 그릇 = 식사 전 · 차단기를 올리는 봉투 = 식욕 ↑","say":"통(위) 가장자리 왼쪽에 작은 초록 도깨비가 있다. 빈 그릇을 숟가락으로 두드리며 으르렁댄다. 그르렁, 그렐린이다. 선 자리가 통 위 — 그렐린의 분비 장소는 위다. 그릇이 비었다 — 식사 전이다. 그렐린은 식사 전에 오른다. 먹이를 기대하게 하여 섭취를 유도하기 위해서다. 도깨비 곁 붉은 관 끝에 흰 봉투가 꽂혔다. 봉투는 가는 관을 타고 위로, 맨 위의 붉은 관을 따라 관제탑에 닿는다. 그러면 차단기가 올라간다. 그렐린의 효과는 허기를 느끼게 하고 식욕을 증가시키는 것. 식욕을 자극하는 대표 호르몬이 그렐린이다. 나머지 셋은 반대로 차단기를 내린다.","cards":["G1-195","G1-203","G1-196","G1-202"],"box":[[738,16,150,478]]},{"sid":"s12","obj":"운하 둑 오른쪽 — 똑같이 생긴 쌍둥이 둘(삐죽 갈색 머리 · 노란 티셔츠 · 파란 반바지)이 저마다 두 팔을 위로 벌린 만세 자세(안쪽 손은 서로 맞닿았다)라 몸이 Y 자가 되었고 웃는다 · 머리 위로 흰 봉투 하나가 붉은 물길 쪽에 떠 있다","fact":"PYY = 소장에서 분비 → 식욕 억제","hook":"Y 자 쌍둥이 둘 = Y Y → PYY · 운하 둑 = 소장에서 분비 · 두 팔 번쩍 = 그만(식욕 억제)","say":"운하(소장) 둑의 오른쪽에 쌍둥이가 섰다. 둘 다 두 팔을 위로 벌려 몸이 Y 자다. Y 가 둘, PYY(펩타이드 YY)다. 선 자리가 운하 둑 — PYY 의 분비 장소는 소장이다. 음식이 여기까지 내려왔다면 먹을 만큼 먹은 것. 쌍둥이가 두 팔을 번쩍 들어 「그만」을 외치고 흰 봉투를 붉은 물길에 띄운다. 봉투가 관제탑에 닿으면 차단기가 내려간다. PYY 의 효과는 식욕 억제다. 도깨비(그렐린)는 통 위에서 식사 전에, 쌍둥이(PYY)는 운하에서 식사 뒤에 — 자리도 때도 하는 일도 반대다.","cards":["G1-197","G1-198"],"box":[[1688,538,304,328]]},{"sid":"s13","obj":"붉은 물길 너머 오른쪽 — 노란 공 여럿으로 된 웃는 사람이 작은 나무 탁자의 음식 접시 위로 두루마리에서 투명한 랩을 당겨 덮는다 · 허리께에 흰 봉투 한 장 · 발밑 붉은 물길 아래로도 봉투 하나","fact":"렙틴 = 지방조직에서 분비 → 장기적 식욕 억제 · 체지방량 조절(그렐린과 반대)","hook":"랩을 씌움 = 랩 → 렙틴 · 노란 기름 공 사람 = 지방조직 · 접시를 덮어 둠 = 오래 식욕 억제 · 도깨비(배고픔) ↔ 기름 공 사람(포만)","say":"물길 너머에 노란 공으로 된 사람이 있다. 노란 공은 기름방울, 온몸이 지방이다 — 지방조직. 이 사람이 음식 접시에 투명한 랩을 씌운다. 랩, 렙틴이다. 렙틴의 분비 장소는 지방조직이다. 접시를 랩으로 덮어 두는 것은 「한동안 안 먹는다」는 뜻. 렙틴은 장기적으로 식욕을 억제하고 체지방량을 조절한다. 몸에 기름 공이 많을수록 랩을 더 당긴다. 저장한 지방이 많으면 렙틴이 늘어 덜 먹고, 지방이 줄면 렙틴도 줄어 더 먹게 된다. 봉투는 붉은 물길을 타고 관제탑으로 가 차단기를 내린다. 도깨비와 견주자. 그렐린은 배고픔을 늘리고, 렙틴은 포만감을 늘린다.","cards":["G1-199","G1-200","G1-211"],"box":[[1768,252,244,334]]},{"sid":"s14","obj":"되짚기 — 봉투를 띄우는 초병 셋의 자리: 통 가장자리의 방독면 병사 / 운하 둑의 「쉿」 요원과 감시 카메라 · 두 홈통 가운데 요원 쪽(왼쪽)에는 흰 분필, 오른쪽에는 주전자 인부의 베이지 물줄기 · 카메라 곁에는 띠에 졸린 초록 주머니","fact":"가스트린 = 위 / CCK · 세크레틴 = 십이지장 · 세크레틴 = 중탄산염 / CCK = 효소 · 담즙","hook":"제 발밑에 음식이 온 초병만 봉투를 띄움 = 단계적 활성 · 통 = 방독면(가스트린) · 운하 = 요원(세크레틴 → 분필) · 카메라(CCK → 주전자 · 초록 주머니)","say":"길을 되짚으며 초병 셋의 자리를 견준다. 방독면 병사(가스트린)는 통 위에 섰다 — 위 중심의 조절. 「쉿」 요원(세크레틴)과 감시 카메라(CCK)는 운하 둑에 섰다 — 십이지장 중심의 조절. 운하의 둘은 하는 일이 다르다. 요원 쪽 홈통에는 흰 분필 — 세크레틴은 중탄산염. 카메라 쪽에는 주전자 인부와 초록 주머니 — CCK 는 소화효소와 담즙 분비 촉진. 그리고 셋 다 제 발밑에 음식이 왔을 때만 봉투를 띄운다. 빵이 통을 불룩하게 해야 병사가, 초록 산이 문을 넘어와야 요원이, 기름이 떠야 카메라가 움직인다. 소화가 이렇게 단계적으로 활성되는 까닭은 음식이 도달한 위치에 맞춰 필요한 소화액만 분비하기 위해서다.","cards":["G1-169","G1-208","G1-161"],"box":[[962,342,150,164],[1098,618,104,244],[1438,592,118,264]]}],"cq":{"G0-0":["포유동물의 소화계 주요 기관은?","입, 인두, 식도, 위, 소장, 간, 이자, 항문"],"G1-1":["음식 처리 과정 4단계는?","섭취, 소화, 흡수, 배설"],"G1-204":["구강, 위, 소장의 소화 역할을 순서대로 비교하면?","구강은 기계적 소화 시작 · 위는 저장·단백질 소화 · 소장은 대부분의 화학적 소화·흡수"],"G1-5":["포유류 소화계는 크게 무엇으로 구성되는가?","소화관과 부속샘"],"G1-6":["포유류 소화계 부속샘 4가지는?","침샘, 췌장, 간, 담낭"],"G1-2":["기계적 소화란?","음식을 잘게 부수어 표면적을 늘리는 과정"],"G1-3":["화학적 소화란?","큰 분자를 흡수 가능한 작은 분자로 가수분해하는 과정"],"G1-4":["효소 가수분해란?","소화효소가 물을 이용해 결합을 끊는 반응"],"G1-76":["구강에서 시작되는 대표 화학적 소화는?","아밀레이스에 의한 탄수화물 소화"],"G1-74":["침의 주요 성분은?","물 · 염 · 점액성 당단백질 · 세포 · 라이소자임"],"G1-73":["소화관에서 음식과 공기가 함께 지나가는 부위는?","인두"],"G1-163":["위벽이 늘어나면 분비되는 호르몬은?","가스트린"],"G1-164":["가스트린의 핵심 작용은?","위액 생성을 촉진한다"],"G1-215":["위샘의 G세포·ECL세포·D세포가 분비하는 것은?","G세포=가스트린 · ECL세포=히스타민(벽세포 자극해 위산 분비 촉진) · D세포=소마토스타틴(위산 분비 억제)"],"G1-96":["위에서 온 산성 유미즙이 십이지장에 들어오면 분비되는 대표 호르몬은?","세크레틴"],"G0-187":["십이지장 S세포가 낮은 pH를 감지해 분비하는 호르몬은?","세크레틴(secretin)"],"G1-97":["세크레틴의 표적기관은?","췌장"],"G1-171":["세크레틴이 특히 중요한 이유는?","위산성 유미즙을 중화해 소장 효소가 작동할 환경을 만들기 때문"],"G1-98":["세크레틴이 췌장에 유도하는 분비는?","중탄산염"],"G1-167":["세크레틴의 핵심 작용은?","췌장의 중탄산염 분비 촉진"],"G1-99":["중탄산염의 역할은?","산성 유미즙을 중화하고 소장 소화의 완충환경을 만든다"],"G0-188":["세크레틴의 작용은?","췌장에서 중탄산염(HCO₃⁻) 분비를 유도해 위산을 중화한다"],"G1-165":["유미즙이 십이지장에 들어오면 분비되는 두 호르몬은?","CCK와 세크레틴"],"G1-170":["CCK가 특히 많이 분비되는 상황은?","십이지장에 지방이 많을 때"],"G1-166":["CCK의 핵심 작용 두 가지는?","췌장 소화효소 분비 촉진 · 담즙 분비 촉진"],"G1-217":["위 활동을 억제하는 십이지장 호르몬(엔테로가스트론)은?","CCK·세크레틴·GIP(위 억제 펩타이드)"],"G1-168":["유미즙에 지방이 많을 때 위 연동운동이 억제되는 이유는?","지방 소화를 위해 소장에서 더 오래 머물게 하려는 조절"],"G1-162":["장신경계의 역할은?","소화액 분비와 연동운동 조절"],"G1-194":["포만중추(satiety center)의 역할은?","소화계 신호를 통합해 식욕을 조절한다"],"G1-201":["식욕을 억제하는 호르몬 세 가지는?","인슐린 · PYY · 렙틴"],"G1-195":["그렐린의 분비 장소는?","위"],"G1-203":["그렐린이 식사 전 상승하는 이유는?","먹이를 기대하게 하여 섭취를 유도하기 위해"],"G1-196":["그렐린의 효과는?","허기를 느끼게 하고 식욕을 증가시킨다"],"G1-202":["식욕을 자극하는 대표 호르몬은?","그렐린"],"G1-197":["PYY의 분비 장소는?","소장"],"G1-198":["PYY의 효과는?","식욕을 억제한다"],"G1-199":["렙틴의 분비 장소는?","지방조직"],"G1-200":["렙틴의 효과는?","장기적으로 식욕을 억제하고 체지방량을 조절한다"],"G1-211":["그렐린과 렙틴을 비교하면?","그렐린은 배고픔 증가 · 렙틴은 포만감 증가"],"G1-169":["가스트린·CCK·세크레틴을 비교하면?","가스트린은 위 · CCK·세크레틴은 십이지장 중심 조절"],"G1-208":["세크레틴과 CCK를 비교하면?","세크레틴은 중탄산염 · CCK는 소화효소와 담즙 분비 촉진"],"G1-161":["소화가 단계적으로 활성되는 이유는?","음식이 도달한 위치에 맞춰 필요한 소화액만 분비하기 위해"]},"hubPanel":null};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
+$('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
+const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
+const scoreKey = 'lesson_' + L.id;
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    // 겹친 곳을 누르면 작은 단서를 고른다. 넓이가 같으면 먼저 소개한 정거장이 위에 온다.
+    const hotspots = [];
+    stops.forEach((stop, k) => {
+      if (!stop.box) return;
+      const boxes = Array.isArray(stop.box[0]) ? stop.box : [stop.box];
+      for (const box of boxes) hotspots.push({ box, k, area: box[2] * box[3] });
+    });
+    hotspots.sort((a, b) => b.area - a.area || b.k - a.k);
+    for (const { box, k } of hotspots) s += rect(box, 'hot', ` data-k="${k}"`);
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+let speakSeq = 0;
+function speak(t) {
+  t = ttsNorm(t);
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
+}
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+// 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
+// SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
+function srsInbox(k, ok) {
+  const cards = [...new Set(stops[k].cards || [])]; if (!cards.length) return;
+  try {
+    const key = 'lesson_srs_inbox', id = sess.id + ':' + sidOf(k);
+    let box = JSON.parse(localStorage.getItem(key) || '[]'); if (!Array.isArray(box)) box = [];
+    box = box.filter(m => m && m.id !== id);
+    if (!ok) box.push({ id, t: Date.now(), lesson: L.id, sid: sidOf(k), cards });
+    localStorage.setItem(key, JSON.stringify(box.slice(-400)));
+  } catch (e) {}
+}
+function judge(ok) {
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  srsInbox(k, ok);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>

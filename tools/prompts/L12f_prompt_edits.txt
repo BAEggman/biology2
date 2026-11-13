@@ -1,0 +1,27 @@
+(L12f 구역 편집 셋 — Gemini 카본 높음 · 조각(zone.py crop 의 up_*.png)을 올리고 보낸 글 · 붙임은 zone3.py paste)
+차례: 바탕(s2 · L12f_prompt_sketch_v2.txt) → 2048x1144 로 키움 → L12f_pil0.py → E2 → E1 → E3 → L12f_pil1.py
+
+── E2 수반 위의 두 사람(조각 1150,120 – 1510,360 · 붙인 곳 1228,122 – 1325,292 · 1362,178 – 1456,358)
+Edit this picture (it is a crop of a larger cartoon illustration). Change ONLY the things described below and keep everything else exactly the same: same positions, same sizes, same drawing style (bold black ink outlines, flat bright colors), same landscape format, same cream background.
+
+1. The worker standing on the right rim of the stone basin: redraw him, in the same place and at about the same size, as a worker wearing bright RED OVERALLS (red dungarees with shoulder straps) over a white shirt, with a friendly face. He tilts a shiny steel DRIP KETTLE with a long thin curved gooseneck spout (a pour-over coffee kettle, not a watering can), and a thin beige stream pours from its spout down to the left, into the gap in the stone rim just below him (where a beige stream already begins at the bottom edge).
+2. The man on the little grass island: keep him in the same place and at the same size, a bald doctor in a white lab coat holding a big SYRINGE high above his head; just draw him a little more clearly.
+
+Keep the stone basin, the blue pond, the round grass island and the red brick building at the right exactly as they are. Do not add anything else. No text, no letters, no numbers.
+  → 돌아온 그림이 1024x765(세로로 더 그림)라 zone3.py 가 가로 배율만 맞춰 정합: python3 zone3.py paste p0.png z E2 gem_E2.png p1.png "1228,122,1325,292;1362,178,1456,358"
+
+── E1 쌍둥이(조각 1640,610 – 2030,870 · 붙인 곳 1700,622 – 1996,864)
+Edit this picture (it is a crop of a larger cartoon illustration). Change ONLY the thing described below and keep everything else exactly the same: same positions, same sizes, same drawing style (bold black ink outlines, flat bright colors), same landscape format, same sand-colored background.
+
+The two little figures in yellow in the middle are meant to be identical TWINS, but they look like stiff box figures. Redraw them, in the same place and at about the same size, as two identical cartoon TWIN boys standing side by side: same round face, same spiky brown hair, same big happy smile, same yellow T-shirt, same blue shorts and white sneakers. Each twin raises BOTH arms straight up and wide apart, so that his body and his two arms form a big Y shape; palms open. Their inner hands may touch.
+
+Keep the white envelope above them, the green thing with the brown strap at the left edge, the gray stone canal with blue water below them, the red vertical pipe at the right edge and the black cable at the bottom exactly as they are. Do not add anything else. No text, no letters, no numbers.
+  → 바깥 특징이 거의 없어 정합 없이(--ident) 상자 옮김만 찾음: python3 zone3.py paste p1.png z E1 gem_E1.png p2.png "1700,622,1996,864" --ident --R=40
+
+── E3 통의 불룩 휜 벽(조각 850,540 – 1110,930 · 붙인 곳 860,562 – 1106,905 · 정합은 860,640 – 1106,905 밖으로)
+Edit this picture (it is a crop of a larger cartoon illustration). Change ONLY the thing described below and keep everything else exactly the same: same positions, same sizes, same drawing style (bold black ink outlines, flat bright colors), same portrait format.
+
+This is the right side of a big gray steel VAT that is cut open, with green bubbly liquid and a big beige ball of bread DOUGH inside. The dough ball is too big for the vat. Redraw the right wall of the vat so that it clearly BULGES outward around the dough ball: one continuous curved steel wall that swells out to the right like an overstuffed belly (NOT a straight wall with a separate gray dome stuck on it). The dough ball fills the bulge and presses against the inside of the curved wall. Draw three small curved stress lines in the air just outside the bulge. Above and below the bulge the wall stays straight, as it is now.
+
+Keep the brown clay jar and the stream of water at the top left, the green bottle at the left edge, the green liquid with its bubbles, the dark iron gate at the bottom right, the white envelopes and the hand at the right edge exactly as they are. Do not add anything else. No text, no letters, no numbers.
+  → python3 zone3.py paste p2.png z E3 gem_E3.png p2b.png "860,562,1106,905" --fit="860,640,1106,905"
