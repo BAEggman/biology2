@@ -2,7 +2,7 @@
 // the same scene teach different chapters. Related links never add to the count.
 const units = [
   { title: '세포생물학', topics: [
-    { id: 'cell-structure', title: '세포 구조·세포골격·막수송', scenes: ['s14','s48'], related: {
+    { id: 'cell-structure', title: '세포 구조·세포골격·막수송', scenes: ['s14','s48','s52','s53'], related: {
       L03c: '세균·고세균·진핵세포 비교', L08b: '액틴과 마이오신이 만드는 근절'
     }},
     { id: 'cell-signaling', title: '수용체와 세포 신호전달', scenes: ['s16'], related: {
@@ -53,6 +53,7 @@ const units = [
     { id: 'circulation', title: '심장·혈관·혈액', scenes: ['s46'], related: {
       L17b: '콩팥을 통한 혈압 조절', L46g: '적혈구의 산소 운반'
     }},
+    { id: 'immune', title: '면역 — 선천 방어와 적응 면역', scenes: ['s13'] },
     { id: 'breathing', title: '호흡과 기체 운반', lessons: ['L46f','L46g'], related: {
       L46a: '폐순환과 체순환', L46h: '아가미 역류교환과 비교순환'
     }},
