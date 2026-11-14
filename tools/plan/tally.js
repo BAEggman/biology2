@@ -1,4 +1,4 @@
-// tally.js — 계획(G1~G5)의 부모 카드가 지금 덱에서 어떤 상태인지 센다: 걸림(새 과) · 옛 s 판만 · 그림 없음. 사용: node tools/plan/tally.js [ch|pic|att|ids <그림 이름 조각>]
+// tally.js — 계획(G1~G5)의 부모 카드가 지금 덱에서 어떤 상태인지 센다: 걸림(새 과) · 옛 s 판만 · 그림 없음. 사용: node tools/plan/tally.js [ch|pic|att|attch [장 이름 조각]|ids <그림 이름 조각>]
 const fs=require('fs'),path=require('path');
 const {deck,lessons}=require(path.join(__dirname,'..','lesson_lib'));
 const s=fs.readFileSync(path.join(__dirname,'..','..','index.html'),'utf8');
@@ -11,7 +11,7 @@ for(const sc of deck()) for(const P of sc.panels){ if(P.retired) continue; P.f.f
 for(const c of direct) (where[c]=where[c]||new Set()).add('built');
 const cls=id=>{const w=where[id]; if(!w) return 'none'; return w.has('built')?'built':w.has('pendS')?'pendS':w.has('d')?'d':'none';};
 const dir=path.join(__dirname,'2026-11-11');
-const pics={}; const chs=[]; const att={};
+const pics={}; const chs=[]; const att={}; const attCh={};
 for(const f of fs.readdirSync(dir).filter(f=>/^G\d.*\.json$/.test(f)).sort()){
   const G=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));
   for(const ch of G.chapters){
@@ -23,11 +23,12 @@ for(const f of fs.readdirSync(dir).filter(f=>/^G\d.*\.json$/.test(f)).sort()){
     for(const p of (ch.pictures||[])){ const P=(pics[p.title]=pics[p.title]||{title:p.title,chs:[],built:0,pendS:0,d:0,none:0,n:0,noneIds:[]});
       P.chs.push(ch.ch.split(' ')[0]);
       for(const nm of p.clusters){ const c=byName[nm]; if(!c){ console.error('? cluster',nm); continue; } for(const id of c.ids){ inPic.add(id); const k=cls(id); P[k]++; P.n++; if(k!=='built') P.noneIds.push(id); } } }
-    for(const a of (ch.attach||[])){ const A=(att[a.lesson]=att[a.lesson]||{lesson:a.lesson,n:0,left:0,items:[]}); let left=0; for(const id of a.ids){ A.n++; if(cls(id)!=='built'){ A.left++; left++; } } if(left) A.items.push(`${ch.ch.split(' ')[0]}장 ${a.what.slice(0,40)} (${left})`); }
+    for(const a of (ch.attach||[])){ const A=(att[a.lesson]=att[a.lesson]||{lesson:a.lesson,n:0,left:0,items:[]}); let left=0; const lid=[]; for(const id of a.ids){ A.n++; if(cls(id)!=='built'){ A.left++; left++; lid.push(id); } } if(left){ A.items.push(`${ch.ch.split(' ')[0]}장 ${a.what.slice(0,40)} (${left})`); (attCh[ch.ch]=attCh[ch.ch]||[]).push({lesson:a.lesson,left,what:a.what,ids:lid}); } }
   }
 }
 const mode=process.argv[2]||'all';
 if(mode==='all'||mode==='ch'){ console.log('== 장별 =='); let T={n:0,built:0,pendS:0,d:0,none:0}; for(const c of chs){ console.log(`${c.ch} | 부모 ${c.n} | 걸림 ${c.built} | 옛 s 판만 ${c.pendS} | 그림 없음 ${c.none}${c.d?` | d ${c.d}`:''}`); for(const k in T) T[k]+=c[k]; } console.log('합', JSON.stringify(T)); }
 if(mode==='all'||mode==='pic'){ console.log('== 새 그림별(남은 것 많은 순) =='); const L=Object.values(pics).sort((a,b)=>(b.none+b.pendS)-(a.none+a.pendS)); for(const p of L) console.log(`${p.none+p.pendS===0?'✅':'  '} ${p.title.split(' — ')[0]} [${[...new Set(p.chs)].join('·')}] 카드 ${p.n} · 그림 없음 ${p.none} · 옛 s 판만 ${p.pendS} · 걸림 ${p.built}`); }
 if(mode==='all'||mode==='att'){ console.log('== 덧붙임(남은 것 많은 순) =='); const L=Object.values(att).filter(a=>a.left).sort((a,b)=>b.left-a.left); let tot=0; for(const a of L){ tot+=a.left; console.log(`${a.lesson} 남음 ${a.left}/${a.n}`); } console.log('덧붙임 남은 합', tot, '· 과', L.length); }
+if(mode==='attch'){ /* 장별 덧붙임 — 과 · 남은 수 · 무엇을 · 카드 id (2026-11-14) */ const want=process.argv[3]; for(const [ch,L] of Object.entries(attCh)){ if(want&&!ch.includes(want)) continue; const by={}; for(const x of L) (by[x.lesson]=by[x.lesson]||[]).push(x); const tot=L.reduce((a,x)=>a+x.left,0); console.log(`== ${ch} — 덧붙임 남음 ${tot} ==`); for(const [les,xs] of Object.entries(by)){ console.log(`  ${les} 남음 ${xs.reduce((a,x)=>a+x.left,0)}`); for(const x of xs) console.log(`     (${x.left}) ${x.what.slice(0,110)}${want?' | '+x.ids.join(' '):''}`); } } }
 if(mode==='ids'){ const p=pics[Object.keys(pics).find(k=>k.includes(process.argv[3]))]; console.log(p.title, p.noneIds.join(' ')); }
