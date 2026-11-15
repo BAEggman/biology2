@@ -74,8 +74,8 @@ const units = [
     { id: 'animals', title: '동물 계통과 비교', scenes: ['s04'], related: {
       L04a: '배엽·난할·원구의 운명', L46h: '동물군별 순환과 호흡', L17c: '동물군별 질소 노폐물'
     }},
-    { id: 'evolution', title: '집단유전학과 진화', scenes: ['s35'], related: {
-      L36a: '식물의 육상 진출'
+    { id: 'evolution', title: '집단유전학 · 진화 · 생명의 역사', scenes: ['s35','s54'], related: {
+      L36a: '식물의 육상 진출', L52a: '세포내 공생 — 미토콘드리아 · 엽록체의 기원', L43e: 'Hox · Ubx — 몸 부위와 곤충의 다리 여섯'
     }}
   ]},
   { title: '식물생물학', topics: [
