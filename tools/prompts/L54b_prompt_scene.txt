@@ -1,0 +1,34 @@
+# L54b 프롬프트 — Gemini 「카본 높음」(2026-11-15 · Opus 5.5)
+# 세계 s54 「지층 절벽의 계단」 둘째 과. 설계 = L54_세계_설계.md · L54b_설계.md · 출연진 = L54a_src/cast_ref.webp(헬멧 없는 차림)
+# 금지(예약): 얼음덩이(전도) · 자갈(Ca²⁺) · 솔 · 망치 · 곡괭이 · 폭죽 · 사다리 · 시계붙이 · 눈금 자 · 줄자 · 섬 · 풍선 · 상자 · 지퍼 · 동전 · 글자 · 숫자
+
+## S1 — 장면 통째로(올린 그림: outputs/L54b/cast_ref.png = L54a C1)
+The attached picture is the character model sheet of a medical mnemonic cartoon (bold black ink outlines, flat bright colors). Using exactly the same drawing style and the same two explorers in their NORMAL clothes (no helmets, no aprons, no air tanks), draw a NEW wide 16:9 cartoon SCENE: a towering sea cliff made of thick horizontal rock layers of different colors, seen from the sea at a slight angle, with a narrow stone staircase carved into its face zigzagging from the beach at the bottom up to a grassy top. It must look like one lively, funny expedition moment, NOT a diagram.
+The cliff layers from the bottom up: a very THICK slate-violet layer (the whole lower half of the cliff); an olive-green layer; a thin black scorched seam; a terracotta-red layer; a very thin glittering silver seam; a thin sandy-yellow layer at the very top under the grass.
+Things happening, from bottom to top:
+1. BOTTOM LEFT, at the foot of the cliff: a muddy river pours out of a gap like a brown waterfall into the shallow clear sea; clouds of mud and sand settle on the sea floor in neat flat layers, burying the skeleton of a dead fish lying on the bottom; under it, older layers have already turned to stone with shells and bones inside.
+2. In the lowest part of the violet layer just above the sea: rounded stone domes with layered stripes, topped with a slimy teal film.
+3. Higher in the violet layer: a little ball of round cells holding hands with each other; and near the top of the violet layer, large soft flat creatures lying on an old sea floor, some like quilted oval pancakes and some like feathery fern fronds.
+4. At the bottom edge of the olive-green layer the rock BURSTS OPEN with big comic burst lines, and a flood of strange sea animals pours out onto the staircase: several trilobites, a small creature with five eyes on stalks and a long nozzle, a spiky worm walking on stilt legs, and a big shrimp-like hunter with two curled grabbing arms. Every animal is neatly mirror-symmetric, left and right.
+5. Just above the burst, the tall bearded explorer pries off chips with a small chisel from a thin BLACK volcanic ash stripe that runs just above and just below a trilobite fossil (not from the fossil itself), dropping glowing yellow-green rock chips into a little glass jar, and he jumps back in surprise at the animals bursting out below him.
+6. On a wide stone landing halfway up on the right, the round woman explorer compares two identical glass jars full of glowing green rock chunks: one jar sits roasting in a crackling campfire, the other is squeezed tight in a heavy iron bench vise, and in BOTH jars exactly half of the chunks have turned dull grey.
+7. In the terracotta layer: a big dinosaur skeleton and a row of identical spiral ammonite shells are preserved in the rock, while a pink jellyfish pressed into the same rock is melting and fading away into nothing.
+8. At the very top, in the thin sandy-yellow layer: a woolly mammoth skull with long curved tusks sticks out of the rock, and next to it stands a small glass jar of navy-blue balls in which half of the balls have turned grey.
+No text, letters or numbers anywhere. No ladders, no clocks, no hourglasses, no rulers, no measuring tapes, no islands, no hammers, no pickaxes, no brushes, no ice, no balloons, no boxes, no zippers, no coins.
+
+## S1 결과(2026-11-15) — **S1b 바탕**(base0 = 1024 → 2048 LANCZOS)
+- S1b: 파란 하늘 · 바다 · 절벽 띠(위에서부터 풀 · 모래 노랑 · 은빛 반짝이는 줄 · 테라코타(공룡 뼈 · 암모나이트 · 녹아 흐려지는 분홍 해파리) · 검은 줄 · 올리브(터지는 바위 · 큰 삼엽충 · 끌과 빛나는 병의 수염 탐험가) · 두꺼운 보랏빛(고리 꼴 세포 · 빵 같은 누비 타원 · 고사리 잎) · 물속 돌 둔덕(청록 막)) · 흙탕물 폭포 · 진흙 더미 위 물고기 뼈 · 계단을 내려오는 다섯 눈 · 가시 다리 벌레 · 새우 · 계단참의 통통한 탐험가(모닥불 병 · 바이스 병) · 매머드 머리뼈와 남색 알 병.
+- S1a(먹구름 없는 빈 크림빛 하늘 · 이음매가 흐림 · 다만 노란 폭발과 손잡은 세포 덩이는 S1a 가 나았다) 버림.
+- 고칠 것: ZU(삼엽충 위아래의 검은 화산재 띠 · 끌은 띠에) · ZM(고리 → 손잡은 세포 덩이) · ZE(빵 같은 타원 → 분홍 물렁 생물) · ZJ(두 병 모두 꼭 반이 잿빛).
+
+## ZU — 삼엽충과 화산재 띠(오림 base0 940,300 ~ 1420,570)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the bearded explorer, his glass jar, the staircase, the pink jellyfish and the rock layers exactly as they are, with only this change: two thin BLACK volcanic ash stripes run horizontally through the green rock, one just ABOVE and one just BELOW the big grey trilobite fossil, so the fossil is sandwiched between them; the tip of the explorer's chisel is stuck into the upper black stripe (not into the fossil), and a few glowing yellow-green chips fly from that black stripe toward his glass jar. No text, letters or numbers anywhere.
+
+## ZE — 에디아카라(오림 base0 1400,600 ~ 2048,964)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the feathery fern fronds, the violet rock, the stone landing at the top, the iron vise and the teal-topped stone domes at the bottom exactly as they are, with only this change: the big round quilted ovals currently look like bread. Turn each of them into a soft living sea creature: a flat, fleshy, pale pink oval body with fine ribs running out from a center line, like a quilted mat, with a tiny head bump at one end, lying on the old sea floor (not bread, no crust, no golden-brown color). No text, letters or numbers anywhere.
+
+## ZM — 다세포(오림 base0 1180,700 ~ 1500,880)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the violet rock, its cracks, the staircase and the shrimp exactly as they are, with only this change: replace the small ring of round shapes with a little ball of about ten round green cells with tiny smiling faces, all holding hands with each other in a tight cluster. No text, letters or numbers anywhere.
+
+## ZJ — 반감기 병 둘(오림 base0 1500,300 ~ 2048,608)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the woman explorer, the campfire, the iron vise, the staircase and the rock exactly as they are, with only this change: in BOTH glass jars (the one roasting in the campfire and the one squeezed in the iron vise) there are about twelve chunks, and exactly HALF of them glow bright green while the other half are dull grey stones, mixed together, the same in both jars. No text, letters or numbers anywhere.
