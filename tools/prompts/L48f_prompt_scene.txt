@@ -1,0 +1,75 @@
+# L48f 장면 프롬프트 — Gemini 「카본 높음」(2026-11-15 · Opus 5.5)
+# 올린 그림 = L48a(다섯 칸 헛간)를 1024 로 줄인 것(outputs/L48f/cast_ref.png) — 화풍 · 소품(가위표 짚단 · 검은 쇠고리와 삼밧줄 · 빨강 흰 줄 둥근 천막)
+# 뜻: 남색 짚단 = 아버지 쪽 · 하늘색 짚단 = 어머니 쪽(옛 s47p01) · 큰 쌍 · 작은 쌍 = 다른 염색체 · 멍석 띠 = 접합사(지퍼 금지) · 은빛 작은 고리 = 코헤신 · 흰 점선 = 중기판
+# 금지: 지퍼 · 동전 · 사다리 · 낫 · 바구니 · 글자 · 숫자
+
+## S1 — 위층 장면(올린 그림: cast_ref)
+The attached picture shows the drawing style and the props of a clean medical mnemonic cartoon (bold black ink outlines, flat bright colors, wooden barn interior): X-shaped straw sheaves (two bundles crossing at a tied waist), black iron rings on the barn walls with hemp ropes, and red-and-white striped round dome tents. Draw ONE wide 16:9 cartoon SCENE in exactly the same drawing style. It must look like one lively, funny, slightly crazy moment in a story — NOT like a diagram and NOT like separate stalls: one big open hayloft (the upper floor of a two-story wooden barn) during a harvest festival, where a "straw-sheaf wedding" is going on and many things happen at once, with people busy everywhere.
+
+THE SHEAVES: every sheaf is an X-shaped straw sheaf exactly like in the attached picture (two bundles crossing, tied at the waist with a small shiny silver ring). The sheaves come in COUPLES: in every couple one sheaf is made of DARK NAVY-BLUE straw and its partner is made of PALE SKY-BLUE straw, the same size. There are two kinds of couples: tall couples and short couples. The sheaves have no faces.
+
+WHAT HAPPENS (left to right across the hayloft):
+1. Far left: a red-and-white striped dome tent whose roof is just starting to tear; inside it, thin loose navy-blue and sky-blue straw strands lie apart from each other, thin like sewing thread.
+2. Next: an old matchmaker woman stands one navy sheaf and one sky-blue sheaf side by side and is winding a flat woven straw mat strip around both of them together, wrapped only halfway up so far.
+3. Next: a navy sheaf and a sky-blue sheaf fully wrapped together into one fat bundle by the woven straw strip; a man with big scissors has snipped off one arm tip of each and is swapping them, so the navy sheaf now ends in a sky-blue tip and the sky-blue sheaf ends in a navy tip.
+4. Next: an unwrapped navy-and-sky-blue couple leaning away from each other like two dancers pulling apart, but two of their arms stay hooked across each other in an X, so they cannot separate.
+5. Middle: a short, thick, tightly bunched couple is being shoved toward the middle of the floor over torn scraps of red-and-white tent cloth lying on the floor.
+6. Center: a white dashed line runs straight down through the middle of the hayloft; on it stand two couples (one tall couple and one short couple) side by side as pairs; hemp ropes from a black iron ring on the LEFT wall are hooked to the waist of the navy sheaves, and hemp ropes from a black iron ring on the RIGHT wall are hooked to the waist of the sky-blue sheaves.
+7. Right: a tug-of-war — two farmers at the left wall and two at the right wall haul on the ropes, and another couple is being pulled apart toward opposite walls; small silver rings that held their arms snap and fly off, while the silver ring at each waist stays on.
+8. Far right: a carpenter hammers a wooden partition wall across the floor, and next to it a square trapdoor in the floor stands open showing the lower floor below.
+
+All people are cheerful farmers in simple clothes. No text, letters or numbers anywhere. No zippers, no coins, no ladders, no sickles, no baskets.
+
+## S1 결과(2026-11-15) — 둘 다 버림
+- S1a: 열린 다락 · 잔치 군중은 좋으나 4 ~ 7 이 **사람 부부**(춤 · 밀기 · 줄다리기)로 그려져 짚단 문법이 깨짐 · 천막에 가는 실 없음 · 가위 사내가 끝을 바꾸지 않음.
+- S1b: 짚단이 주인공(남색 · 하늘색 두 다발 · 허리 은띠)이나 L48a 처럼 **기둥 칸으로 나뉨**(도해 느낌) · 반만 감기 없음 · 가위 사내 얼굴이 가위에 가림 · 복사기(X 걸림) 없음 · 줄다리기 밧줄이 짚단에 안 이어짐 · 끊긴 고리가 **동전**처럼 보임(동전 = ATP 금지).
+- 고친 생각: ① 짝은 「두 다발 + 은빛 고리 셋(허리 · 위 · 아래)」 — 팔 고리가 있어야 후기 I(팔 고리만 끊김)이 그려지고, 끊긴 뒤 X 로 벌어지면 L48a 의 가위표 짚단과 이어진다. ② 전기 I 은 **핵 안**에서 — 커다란 돔 천막(앞을 잘라 낸) 안에 세사기 ~ 복사기, 이동기는 찢어진 천막 옆구리로 실려 나옴(핵막 소실). ③ 중심체 이동 = 굴렁쇠(검은 쇠고리)를 서로 반대로 굴리는 아이 둘(천막 밖 = 세포질). ④ 중기 I · 후기 I · 말기 I = 「이혼 춤판」 한 순간(짝째로 점선 → 줄다리기 → 목수 칸막이 · 뚜껑 문 둘). 큰 쌍은 남색이 왼쪽 · 작은 쌍은 하늘색이 왼쪽(독립 분리 — L48g 제비뽑기로 이어짐).
+
+## S2 — 위층 장면 다시(올린 그림: cast_ref = L48a 1024)
+The attached picture only shows the DRAWING STYLE and PROPS of a medical mnemonic cartoon world (bold black ink outlines, flat bright colors, wooden barn, red-and-white striped dome tents, black iron rings with hemp ropes, straw sheaves). Ignore its stall walls. Draw ONE wide 16:9 cartoon SCENE in exactly that style, NOT divided into stalls or bays: ONE big open hayloft (the upper floor of a two-story wooden barn, front wall cut away so we look straight in), harvest-festival bunting under the roof beams, a crowd of cheering guests along the back wall. It is a funny, slightly crazy "straw-sheaf wedding that ends in a divorce", and everything happens at the same moment.
+
+THE BRIDES AND GROOMS ARE STRAW SHEAVES, NEVER PEOPLE. Each bride or groom is a DOUBLE SHEAF: two identical upright straw bundles standing side by side, clamped together by three small shiny silver metal rings (one around the waist, one around the upper part, one around the lower part). Grooms are DARK NAVY-BLUE straw, brides are PALE SKY-BLUE straw; groom and bride of a couple are the same height. Sheaves have no faces. People are only helpers and guests.
+
+LEFT HALF — inside a HUGE red-and-white striped round dome tent that fills the left half of the hayloft; its whole front is cut away like a dollhouse so we see everything on its floor; from left to right inside it:
+1. At the far left inside the tent: very thin loose navy and sky-blue straw threads lying apart from each other like spilled noodles (no sheaves yet).
+2. A tiny old matchmaker woman in a headscarf stands a navy groom (with a tiny black top hat) next to a sky-blue bride (with a tiny white veil) and winds a long flat woven straw mat strip around both of them from the bottom up — so far it covers only their lower half; the rest of the strip is still a roll in her hands, and above it the two sheaves still lean a little apart.
+3. A couple wrapped by the woven strip from bottom to top into ONE fat bundle, only the straw tips showing. A barber in a striped apron, standing on a stool, has snipped one navy tip and one sky-blue tip and is swapping them: a sky-blue tip is already stuck onto the navy groom's top, and he is pushing the navy tip onto the sky-blue bride's top.
+4. The strip lies unwound on the floor; a navy double sheaf and a sky-blue double sheaf lean away from each other at the bottom like an A-frame, but their tops are crossed in an X and stuck, so they cannot separate; two guests tug at their bottoms in vain.
+5. At the right side of the big tent the canvas is ripping apart and collapsing into torn striped scraps; through the rip a farmhand pushes a wooden wheelbarrow carrying the same kind of couple, now squashed very short and very fat (still crossed at the top), out toward the dance floor, the wheel rolling over the torn scraps.
+Just outside the tent, two children back to back roll two black iron hoops (each trailing a short hemp rope) with sticks in OPPOSITE directions.
+
+RIGHT HALF — the open dance floor, where the divorce happens:
+6. A white dashed line is painted straight down the middle of the dance floor, from the front edge to the back wall. A thick wooden post stands at the left edge of the dance floor and the barn's right wall closes the right edge; each has one big black iron ring bolted on at chest height.
+7. On the dashed line stand two couples, one behind the other: a TALL couple behind and a SHORT couple in front. In the tall couple the navy groom is on the left of the line and the sky-blue bride on the right; in the short couple it is the other way round (sky-blue on the left, navy on the right). One hemp rope runs from the left ring to the waist of each sheaf on the left of the line, and one hemp rope runs from the right ring to the waist of each sheaf on the right of the line.
+8. Tug-of-war: next to the left post two strong farmers lean back hauling the left ropes, and next to the right wall two farmers haul the right ropes. The couples are just being torn apart at the line: the small silver rings around their upper and lower parts snap open and fly off as broken open C-shaped rings, but each waist ring stays on, so each double sheaf's two bundles splay into an X held only at the waist.
+9. In the front, along the dashed line, a carpenter hammers up a low wooden partition wall that will split the dance floor into two rooms; on each side of the partition an open square trapdoor in the floor shows wooden stairs going down to the lower floor.
+
+All people are cheerful farmers in simple clothes. No text, letters or numbers anywhere. No zippers, no coins or round discs, no ladders, no sickles, no baskets.
+
+## S2 결과(2026-11-15) — **S2b 를 바탕**(base0 = 2048 로 키움)
+- S2b: 큰 돔 천막(앞을 잘라 냄) · 왼쪽 앞 바닥에 가는 남색 · 하늘색 실 · 할머니가 멍석 띠를 아랫도리에 한 바퀴(위는 벌어짐) · 띠로 다 감은 부부 + 걸상 위 이발사 가위 · 띠 풀린 부부가 A 자로 벌어지고 꼭대기에서 X 로 걸림 · 찢어진 천막 옆구리로 짧고 뚱뚱한 부부를 실은 외바퀴 수레 · 굴렁쇠 아이 둘(밧줄 토막) · 춤판: 뒤 쌍 남색(모자) 왼쪽 · 앞 쌍 하늘색(면사포) 왼쪽 · 줄다리기 넷 · 끊겨 튀는 C 고리 · 목수 · 뚜껑 문 둘(계단).
+- 고칠 것: ① 목수의 판자가 가로(점선을 가로지름) → 점선 위로 앞뒤로 선 칸막이(ZP). ② 춤판 짚단이 한 다발 모래시계 → 두 다발 X(ZX — 팔 고리가 끊겨 X 로 벌어짐 = L48a 가위표 짚단). ③ 줄다리기 밧줄이 쇠고리에 안 이어짐(ZR — 사내 뒤로 쇠고리에 매기). ④ 이발사 — 남색 · 하늘색 끝 바꿔 꽂기(PIL 빛깔). S2a(칸막이가 점선 위 · 복사기 없음 · 할머니가 안 감음)는 버림.
+
+## ZP — 칸막이(오림 base0 1100,611 ~ 2048,1144)
+Keep the SAME view: do not zoom in, do not crop, do not shift or redraw the scene. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep everything else exactly as it is — the two tug-of-war men, the two straw sheaves with their top hat and veil, the flying broken silver rings, the white dashed line, the wheelbarrow, and the two open trapdoors with wooden stairs — with only this change: remove the long horizontal plank; instead the carpenter kneels beside the white dashed line and hammers nails into a low wooden partition wall of upright planks that stands right ON the dashed line and runs along it from the bottom edge of the picture back toward the sheaves (a short wall seen in perspective, going into the distance), splitting the floor into a left room with the left trapdoor and a right room with the right trapdoor. No text, letters or numbers anywhere.
+
+## ZX — 춤판 짚단을 X 로(오림 base0 1180,340 ~ 2048,828)
+Keep the SAME view: do not zoom in, do not crop, do not shift or redraw the scene. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep everything else exactly as it is — the four tug-of-war men and their ropes, the two black iron rings, the crowd, the white dashed line, the flying broken C-shaped silver rings, the top hats, the veils and the little boots — with only this change: each of the four straw sheaves (navy at back-left, sky-blue at back-right, sky-blue at front-left, navy at front-right) is now clearly made of TWO straw bundles that cross each other at the silver waist ring and spread apart above and below it like the letter X, held together only by that one silver ring at the waist where the rope is tied. Each sheaf keeps its own color, its hat or veil on top and its boots. No text, letters or numbers anywhere.
+
+## ZP · ZX 결과 — ZP1 그대로(칸막이가 점선 위 · 무릎 꿇은 목수 · 못 상자) · ZX1 은 뒤 쌍만 X → 같은 채팅 ZX2(「앞 쌍도 똑같이」) → 넷 다 X. 붙인 뒤 앞 쌍 발이 둘(새 X 다리 끝의 장화 + 오림 밖 옛 장화) → ZF.
+
+## ZR — 줄다리기 밧줄 끝을 쇠고리에(오림 b2 1180,340 ~ 2048,828)
+Keep the SAME view: do not zoom in, do not crop, do not shift or redraw the scene. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep everything else exactly as it is — the four X-shaped straw sheaves with their hats and veils, the men's poses, the crowd, the white dashed line and the flying broken silver rings — with only this change: the tail end of each tug-of-war rope no longer lies loose on the floor; it runs back behind each man and is tied to the black iron ring behind him — the two left men's ropes go to the black iron ring on the wooden post at the left, and the two right men's ropes go to the black iron ring on the right wall. No text, letters or numbers anywhere.
+
+## ZF — 앞 쌍 발(오림 b2 1380,640 ~ 1820,888)
+Keep the SAME view: do not zoom in, do not crop, do not shift or redraw the scene. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep everything else exactly as it is — the two X-shaped straw sheaves (sky-blue on the left, navy on the right), their ropes, the white dashed line, the low wooden wall on the line and the flying broken silver rings — with only this change: each straw sheaf stands on just ONE pair of little boots, at the two bottom ends of its X, with one soft shadow on the floor under it; remove the extra pair of boots and the extra shadow below each sheaf, leaving plain wooden floor there. No text, letters or numbers anywhere.
+
+## ZR · ZF 결과 — ZR1(밧줄 끝이 사내 뒤로 돌아 기둥 · 벽 쇠고리에 매임) · ZF1(앞 쌍 장화 한 켤레 · 그림자 하나 — 살짝 떠 있음). ZF 상자 아래 끝은 875(888 이면 목수 머리 윗동이 잘림).
+
+## 일치 검사 1회(○ 49 · △ 13 · ✕ 0) 뒤
+- 세사기 실이 잿빛이라 두 빛깔이 안 갈림 → ZS. 춤판 X 에 교차 흔적이 없음 → PIL(안쪽 위 다발 끝에 짝의 빛깔 · 부드러운 가장자리).
+
+## ZS — 세사기 실 두 빛깔(오림 b4 0,700 ~ 450,953)
+Keep the SAME view: do not zoom in, do not crop, do not shift or redraw the scene. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep everything else exactly as it is — the old woman, the two straw sheaves and their woven band, the tent cloth and the floor — with only this change: the loose pile of thin straw threads lying on the floor at the bottom becomes clearly TWO colors: about half of the threads are DARK NAVY-BLUE and the other half are PALE SKY-BLUE (exactly the colors of the navy sheaf and the sky-blue sheaf above them), all thin like noodles, lying loose and apart, not tied together. No text, letters or numbers anywhere.
+
+## ZS 결과 — ZS1(실이 남색 · 하늘색으로 또렷) 그대로. 끝 그림 = L48f_build.sh(S1 = S2b · ZP1 · ZX2 · ZR1 · ZF1 · ZS1 · L48f_pil.py). 일치 검사 3회 49·13·0 → 50·3·0 → 끝 53·4·0.
