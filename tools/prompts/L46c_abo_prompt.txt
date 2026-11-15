@@ -1,0 +1,21 @@
+# L46c 면역 덧붙임(ABO 응집 · IM-089 ~ 091) 구역 편집 프롬프트 — Gemini 「카본 높음」(2026-11-15 · Opus 5.5)
+# 오림 GA = 덧붙임 전 L46c(88b71a8) 의 0,0 → 720,405(16:9 · up 1024×576) · 탭 둘에 같은 GA 를 보내 둘 중 GA2 를 골라 같은 채팅에서 GB.
+# 뜻(정확도): 집게(항체) · 딱지(항원 = 막대사탕)는 모두 PIL(L46c_abo_pil.py) — Gemini 는 집게 한 개가 한 원반을 두 팔로 쥐고 깃대를 옆 원반에 꽂았다(GC).
+#            적십자 · 글자 금지 · 피 주머니는 맨 주머니.
+
+## GA(탭 둘 · 새 채팅 · 올린 그림: up_GA)
+This picture is a crop from a larger cartoon. Edit it by ADDING these things in exactly the same drawing style (bold black outlines, flat bright colors):
+1. On the cream wall at the upper left, a small hook holds a hanging clear plastic blood bag that is full of small red blood discs (each disc is red with a pale pink dent in its middle). Plain bag: no label, no text, no cross.
+2. A thin clear plastic tube runs from the bottom of the bag to the tall glass jar; the shiny metal needle at the end of the tube is stuck right through the left glass wall of the jar, a little above the yellow liquid.
+3. Inside the jar, red discs are tumbling out of the needle tip and dropping down toward the yellow liquid.
+4. Floating on top of the yellow liquid in the middle of the jar, five of these red discs (seen from the front, each with a pale pink dent) are stuck tightly together edge to edge into one lumpy clump.
+Keep everything else exactly the same: the jar and its rim, the yellow liquid and everything floating in it (the open photo album, the life ring with the orange drop, the grey smoke puffs), the cream wall, the drawing style and the framing. No text, no numbers, no letters anywhere.
+# → GA1(덩어리가 아주 작음) 버림 · GA2(주머니 · 관 · 바늘 깔끔 · 덩어리 원반이 작다) → 같은 채팅에서 GB.
+
+## GB(GA2 채팅 이어서 — 쓰는 것 · L46c_src/GB.webp)
+Now make the floating clump on the yellow liquid much bigger: five big red discs, each about as wide as the open photo album, three in a front row and two behind them, floating on the surface of the yellow liquid. Hold the neighboring discs a little apart: leave a small gap between each pair of neighboring discs (about a third of a disc wide). Same disc style as before (red disc with a pale pink dent, bold black outline). Keep everything else exactly the same: the blood bag, the tube, the needle, the falling discs, the jar and its rim, the yellow liquid and everything floating in it, the drawing style and the framing. No text, no numbers, no letters anywhere.
+# → 원반 다섯이 커졌다(틈은 안 벌어지고 서로 맞닿음 — 「엉긴 덩어리」에는 오히려 맞다).
+
+## GC(새 채팅 · 올린 그림: GA2 — 버림)
+This picture is a crop from a larger cartoon. Edit only the clump of red discs floating on the yellow liquid inside the jar: make it much bigger, five big red discs (each about as wide as the open photo album), three in a front row and two behind them, held a little apart from each other by small light-blue Y-shaped grabber tools. Each grabber is a light-blue Y with a small two-pronged pincer claw at the tip of each of its two arms: it grips one disc with one arm's claw and the neighboring disc with the other arm's claw, and its straight handle sticks out away from the discs. About five grabbers link the discs together into one raft. Keep everything else exactly the same: the blood bag, the tube, the needle, the falling discs, the jar and its rim, the yellow liquid and everything floating in it, the drawing style and the framing. No text, no numbers, no letters anywhere.
+# → 버림: 집게마다 한 원반을 두 팔로 쥐고 깃대를 옆 원반에 꽂았다(다리 놓기가 아님 — 【Y 자 황토 깃발】 L13f 와 같은 거꾸로) · 원반 가운데가 짙은 빨강(눈 · 핵처럼 보임).
