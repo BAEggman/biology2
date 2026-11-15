@@ -1,0 +1,65 @@
+# L54c 프롬프트 — Gemini 「카본 높음」(2026-11-15 · Opus 5.5)
+# 세계 s54 「지층 절벽의 계단」 셋째 과. 설계 = L54_세계_설계.md · L54c_설계.md · 출연진 = L54a_src/cast_ref.webp(헬멧 없는 차림)
+# 금지(예약): 섬(이자섬 — 대륙은 「떠다니는 두꺼운 판」) · 쥐(【쥐 탈】 Ras) · 박쥐(【서리 앉은 박쥐】 · s21 상동) · 갈색 원숭이(【빨간 유리판을 끼고 달아나는 갈색 원숭이】 결실) · 연못(L35 대립유전자 · 무한 집단) → 바위 웅덩이 · 젖 먹이는 엄마(IgA) · 시계붙이 · 눈금 자 · 사다리 · 상자 · 지퍼 · 동전 · 풍선 · 글자 · 숫자
+
+## S1 — 장면 통째로(올린 그림: outputs/L54c/cast_ref.png = L54a C1)
+The attached picture is the character model sheet of a medical mnemonic cartoon (bold black ink outlines, flat bright colors). Using exactly the same drawing style and the same two explorers in their NORMAL clothes (no helmets, no aprons), draw a NEW wide 16:9 cartoon SCENE: the grassy TOP of a towering cliff, at the end of a stone staircase, looking out over a vast glowing sea of orange lava. It must look like one lively, dramatic moment, NOT a diagram. Far away = long ago, near us = now.
+FAR BACKGROUND, in the glowing orange lava sea:
+1. On the left, a few thick flat continent-shaped slabs of rock (like floating plates with visible layered rock edges, not islands) drift on the lava, pushed by big round swirling currents in the lava beneath them.
+2. In the center, several slabs have crashed together into ONE giant slab with crumpled mountain edges; the shallow strips of sea that were between them have been squeezed out and dried up, with many dead fish and trilobites lying belly-up on the dry sea floor; the middle of the giant slab is a cracked dry desert; a long jagged crack runs across the middle of the giant slab from left to right, as if it will split into a northern half and a southern half.
+3. On the right, one small slab drifts away alone carrying kangaroos with joeys in their pouches; another slab nearby carries deer.
+MIDDLE GROUND, at the far right end of the grassy plateau: a flaming asteroid streaks down from the sky and smashes into the ground with a huge flash and a crater; big dinosaurs topple over; a glittering SILVER dust falls and settles as a thin shiny silver layer on the ground; one small bird flies away safely.
+FOREGROUND, on the grassy plateau near us:
+4. In the center, many small furry mammals of DIFFERENT kinds burst out of one burrow and run off in all directions toward the empty land: one with long claws climbs a tree, one with webbed feet dives into a stream, one with big claws digs, one long-legged grazer runs across the grass (not mice, no bats).
+5. On the right, on a patch of black volcanic soil, a garden of silvery spiky plants grows in many different shapes (a round cushion, a bush, a small tree, a climbing vine), all joined underground by one shared root.
+6. On the left, a chimpanzee mother with a long jutting jaw holds her baby, and a human mother with a flat face holds her baby; the two babies' faces look almost the same (round heads, flat little faces).
+7. Near them, in a shallow rock pool, a big adult axolotl with frilly pink feathery gills on its head watches over its own tiny babies, which look just like it.
+8. At the top of the staircase on the far right, the two explorers have just arrived: the round woman frowns at a compass whose needle spins wildly, and the path ahead splits into many little paths going in every direction; the bearded man looks back over the whole view.
+No text, letters or numbers anywhere. No islands, no clocks, no hourglasses, no rulers, no ladders, no boxes, no zippers, no coins, no bats, no mice, no balloons.
+
+## S1 결과(2026-11-15) — **S1a 바탕**(base0 = 1024 → 2048 LANCZOS)
+- S1a: 용암 바다의 소용돌이 · 떠도는 판(왼쪽) · 부딪쳐 하나가 된 큰 판(산맥 · 갈라진 사막 · 가로지른 금 · 마른 바다 띠에 죽은 물고기 · 삼엽충 몇) · 캥거루와 사슴이 한 판에(✕ — 갈라야 함) · 날아가는 파랑새 · 소행성 · 섬광 · 구덩이 · 은빛 가루 · 목 긴 공룡 · 티라노(놀랐을 뿐 쓰러지지 않음) · 두 탐험가(나침반이 작음) · 땅 위로 나뭇가지처럼 갈라진 길 · 침팬지 엄마(아기 얼굴이 침팬지 꼴) · 사람 엄마와 아기 · 바위 웅덩이의 아홀로틀과 새끼 · 나무 타는 · 물에 뛰어드는 · 땅 파는 · 달리는 털짐승 · 검은 흙 정원의 은빛 식물(땅속 뿌리 단면).
+- S1b(사람 엄마가 원시인 옷 · 북적임) 버림.
+- 고칠 것: ZP(마른 바다 띠의 떼죽음을 크게) · ZK(캥거루만 판에 · 사슴 지움 · 홀로 떠남) · ZB(침팬지 아기 얼굴을 사람 아기처럼 납작하게) · ZD(공룡이 쓰러짐) · ZC(나침반을 크게 · 바늘이 빙빙).
+
+## ZP — 판게아의 떼죽음(오림 base0 400,60 ~ 1240,532)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the giant rock slab, its mountains, its cracked desert, the long crack across it and the lava sea exactly as they are, with only this change: along the dried-up strip of old sea floor where the slabs crashed together, MANY dead sea animals lie belly-up in a mass die-off covering the whole dry strip: lots of dead fish and fish skeletons, trilobites lying on their backs, broken shells and pale bleached corals. No text, letters or numbers anywhere.
+
+## ZK — 캥거루 판(오림 base0 1100,0 ~ 1520,236)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the lava sea, the mountains on the left, the bird and everything else exactly as they are, with only this change: the small slab of land floating on the lava carries ONLY kangaroos (a mother kangaroo with a joey peeking out of her pouch, and a second kangaroo); remove the deer completely. The slab is drifting away alone toward the right, leaving a little wake in the lava behind it. No text, letters or numbers anywhere.
+
+## ZB — 두 아기(오림 base0 280,580 ~ 620,771)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep both mothers (the chimpanzee mother with her long jutting jaw and the human mother) and the human baby exactly as they are, with only this change: the baby in the chimpanzee mother's arms has a round head and a FLAT little face with no jutting snout, almost exactly like the human baby's face next to it, only with dark fur around it, so the two babies' faces look nearly the same. No text, letters or numbers anywhere.
+
+## ZD — 쓰러지는 공룡(오림 base0 1500,40 ~ 2048,348)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the flaming asteroid, the big flash, the crater, the glittering silver dust and the grass exactly as they are, with only this change: both dinosaurs (the long-necked one and the big two-legged one) are knocked off their feet by the blast and are toppling over sideways, falling to the ground with dizzy X-shaped eyes. No text, letters or numbers anywhere.
+
+## ZC — 나침반(오림 base0 1540,360 ~ 1820,518)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the two explorers' bodies, clothes, backpack and the path exactly as they are, with only this change: the round woman holds up her compass in front of her chest, drawn bigger and clearly visible, and its needle spins wildly, shown by curved motion lines circling inside the compass; she frowns at it in confusion. No text, letters, numbers or question marks anywhere.
+
+## 구역 편집 결과(2026-11-15)
+- ZP1 ○(마른 바다 띠 전체에 물고기 뼈 · 삼엽충 · 조개 · 소라 · 바랜 산호) — 판 하나를 상자 하나로 붙이고 restore_poly 로 왼쪽 위 작은 판 · 오른쪽 아래 벼랑을 되돌림.
+- ZK1 ○(캥거루 둘 · 주머니 새끼 · 사슴 없음 · 판 왼쪽에 물결).
+- ZB1 ○(침팬지 아기 얼굴이 둥글고 납작 — 털만 검음).
+- ZD1 ○(목 긴 공룡 벌렁 · 티라노 뒤로 · 둘 다 × 눈) — 상자가 오림 거의 전부라 정합 특징이 없어(inliers 0) --fit 으로 소행성 · 구덩이를 정합에 씀.
+- ZC1 △(찡그림 ○ · 나침반이 조금 큼 · 흔들림 선이 바깥에만) → 같은 채팅 ZC2 ○(두 배 · 둥근 화살표 · 바늘 잔상 별).
+
+## ZC2 — 같은 채팅 둘째
+Good. Keep this picture exactly as it is (same view, same style, same woman, same worried frown, same man, same paths), with only this change: make the compass in her hand about TWICE as big, held up in front of her chest, and inside its round dial draw a bold curved arrow-shaped motion line circling all the way around the needle, plus a blur of several faint needle positions, so it is obvious the needle is spinning round and round and cannot settle on any direction. No text, letters, numbers or question marks anywhere.
+
+## ZR — 굴 하나(오림 base0 690,500 ~ 1310,849) — 「한 계통에서 쏟아져 흩어짐」이 안 보여(가운데가 긴 흙 도랑) 더함
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the tree, the stream, the grass and all the animals (the one hugging the tree, the otter diving into the stream, the big digger with long claws, the grey runner and the long-legged grazer) exactly as they are, with only this change: replace the long dark strip of dug-up dirt in the middle with ONE big round dark burrow hole in the grass, ringed by a mound of fresh dirt, with the small brown animal popping out of it head first; little dust puffs and curved motion lines burst out of the hole in every direction toward the other animals, as if all these different animals have just come rushing out of this one same hole. The big digger keeps digging its own small pile of dirt nearby. No text, letters or numbers anywhere.
+→ ZR1 ○(굴 하나 · 고개 내민 굴짐승 · 사방으로 흙먼지 · 땅 파는 짐승은 제 흙더미).
+
+## ZS — 한 뿌리(오림 base0 1220,780 ~ 1800,1106) — 땅속 뿌리가 식물마다 따로여서 「한 조상」이 안 보여 더함
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep all the silvery plants above the ground (the round cushion, the spiky rosette, the little tree, the small bush and the climbing vine), the black soil and the grey rock exactly as they are, with only this change: underground, in the cut-away black soil, the separate roots now all join together into ONE single shared root: one thick tan root runs along under the whole garden and branches up into the bottom of each plant, so every plant clearly grows from the very same one root. No text, letters or numbers anywhere.
+→ ZS1 ○(가로로 긴 한 뿌리에서 갈라져 식물마다 오름).
+
+## 일치 검사 1회 뒤 — L54c_pil.py(나침반 안쪽을 새로: 굵은 둥근 화살표 · 바늘 잔상)
+- 처음엔 바늘 끝이 휩쓸고 간 부채꼴을 가운데까지 채움 → 빨강 · 파랑 부채꼴이 모래시계(예약) 꼴 ✕ → 판 가장자리 고리 띠의 호 꼬리로 → 빨강 호 + 바늘이 숫자 「7」처럼 ✕ → 바늘 잔상 셋(25° 씩 뒤 · 점점 옅게)으로.
+
+## 일치 검사 2회 뒤 — ZM/ZN(두 엄마 · 두 아기를 「견주는」 사건으로 — (마)에서 왼쪽 가족이 따로 노는 도해 느낌, 두 회 모두) · 오림 b7 262,548 ~ 662,773
+### ZM(탭 B)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep both mothers' faces exactly as they are (the chimpanzee mother with her long jutting jaw, the human mother with her flat face), with only this change: the two mothers lean toward each other and each holds her baby up so the two babies are side by side, cheek to cheek, both babies facing us; the two babies' round flat little faces look almost exactly alike (the chimpanzee baby has NO snout, only dark fur around the same round face); the two mothers look at each other in delighted surprise. No text, letters or numbers anywhere.
+### ZN(탭 A — 같은 오림 · 다른 말)
+Keep the SAME view: do not zoom in, do not crop, do not shift anything. Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep both mothers exactly as they are (the chimpanzee mother with her long jutting jaw, the human mother with her flat face, same poses and places), with only this change: the two babies stretch out their arms toward each other across the gap and press their round flat little faces close together, side by side, both looking out at us, so we can compare them: their faces look almost exactly alike (the chimpanzee baby has NO snout, only dark fur around the same round face); both mothers turn their heads to look at the two babies with wide surprised eyes. No text, letters or numbers anywhere.
