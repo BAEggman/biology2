@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>언덕 끈을 굴러 내려가는 인쇄 기계 — 유전자 발현 · 중심 원리 · RNA · 비들-테이텀 · 1유전자 1폴리펩타이드 · RNA 중합효소 I · III · 주형 · 암호 가닥 · 개시점 · 상부 · 하부 · 종결자</title>
+<style>
+  :root{--ink:#1b1b1f;--ink2:#4b4b55;--line:#e3e1da;--teal:#0f766e;--teal50:#ecfdf5;--gold:#b45309;--bg:#f7f5ef}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
+  h1{font-size:18px;margin:6px 0 2px}
+  .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+  .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
+  .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+  button{font:inherit;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  button:disabled{opacity:.45;cursor:default}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .stage img{display:block;width:100%;height:auto}
+  .stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .cap{margin-top:10px;min-height:76px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+  .cap .n{font-size:11.5px;color:var(--ink2)}
+  .cap .obj{font-weight:700;font-size:15px;margin:2px 0}
+  .cap .fact{font-size:14px;margin:2px 0}
+  .cap .hook{font-size:13px;color:var(--gold);margin-top:4px}
+  .cap.muted{color:var(--ink2);font-size:13px}
+  .recap{margin-top:12px;display:none}
+  .recap ol{padding-left:22px;margin:6px 0}
+  .recap li{margin:4px 0;font-size:13.5px}
+  .recap li b{color:var(--teal)}
+  .score{font-size:13px;color:var(--ink2);margin-left:auto}
+  .hint{font-size:12px;color:var(--ink2);margin-top:8px}
+  .hole{fill:#000}
+  .cur{fill:none;stroke:#f59e0b;stroke-width:6;stroke-dasharray:14 8}
+  .hot{fill:transparent;cursor:pointer}
+  .hot:hover{fill:rgba(245,158,11,.18)}
+  .judge{display:none;gap:6px;margin-top:8px}
+  .judge button{font-size:12.5px}
+  .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
+  .nav a{color:var(--teal);text-decoration:none}
+  .nav a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <button id="bTour" class="on">투어</button>
+    <button id="bRecap">되짚기</button>
+    <button id="bReview">복습 — 그림만</button>
+    <button id="bQuiz">시험</button>
+    <button id="bShuf" title="시험 문항의 차례">순서대로</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="stage" id="stage">
+    <img id="img" alt="">
+    <svg id="ov" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="bar">
+    <button id="bPrev">◀ 이전</button>
+    <button id="bPlay">▶ 시작</button>
+    <button id="bNext">다음 ▶</button>
+    <button id="bVoice" class="on">🔊 음성</button>
+    <button id="bRate">속도 1.0</button>
+    <span class="hint" id="step"></span>
+  </div>
+  <div class="cap" id="cap"></div>
+  <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
+  <div class="recap" id="recap"></div>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+</div>
+<script>
+const L = {"id":"L43f","scene":"s43","part":"f","title":"언덕 끈을 굴러 내려가는 인쇄 기계 — 유전자 발현 · 중심 원리 · RNA · 비들-테이텀 · 1유전자 1폴리펩타이드 · RNA 중합효소 I · III · 주형 · 암호 가닥 · 개시점 · 상부 · 하부 · 종결자","sub":"L43a 의 담장 있는 공장 안마당 — 언덕을 넘는 금빛 · 갈색 두 가닥 끈 위로 인쇄 기계가 굴러 내려가며 종이를 찍는다 · 기계 둘레에서만 두 가닥이 벌어져 한 가닥은 기계 밑으로, 한 가닥은 기계 위로 넘는다 · 비탈 발치의 빨간 띠에선 기계가 튀어 오르고, 종이는 담 구멍으로 나가 구슬 사슬이 된다 · 마당 뒤엔 외발 · 세발자전거 기계, 담 밖 구석엔 엑스선을 맞는 곰팡이 빵","img":"img/L43f.webp?v=f62d3bf09e1c","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"담 안 언덕을 넘는 두 가닥 끈 → 끈 위를 구르며 흰 종이를 찍어 내는 인쇄 기계 → 앞 담 구멍으로 종이 두루마리를 안고 나오는 일꾼(두루마리가 풀려 종이띠로) → 담 밖에서 그 빛깔 네모 종이띠를 손가락으로 짚어 읽는 일꾼 · 곁에서 구슬을 꿰는 일꾼","fact":"유전자 발현 = 전사(DNA → RNA) + 번역(RNA → 폴리펩타이드) · 중심 원리","hook":"끈 → 종이 → 구슬 = DNA → RNA → 단백질 · 담 안에서 찍기 = 전사 · 담 밖에서 꿰기 = 번역 · 벽돌 담 = 핵막(L43a)","say":"L43a 의 담장 있는 공장, 그 안마당이다. 마당 한가운데 언덕 위로 금빛과 갈색 두 가닥을 꼰 짚끈이 넘어간다. 이 덱에서 짚끈은 DNA 다. 인쇄 기계가 그 끈 위를 구르며 흰 종이를 찍어 내고, 일꾼이 종이를 두루마리로 말아 앞 담의 구멍으로 들고 나간다. 담 밖에선 빛깔 네모가 찍힌 종이를 손가락으로 짚어 읽으며 구슬을 꿴다. 구슬 사슬은 단백질이다. DNA 의 정보로 RNA 를 만드는 것이 전사, RNA 의 정보로 폴리펩타이드를 만드는 것이 번역이다. 이 둘을 거쳐 유전자가 단백질을 지정하는 전체 과정을 유전자 발현이라 한다. 끈에서 종이로, 종이에서 구슬로. 유전 정보는 DNA → RNA → 단백질로 흐른다. 이것이 중심 원리다.","cards":["F0-0","F0-1","F0-2","F0-25"],"box":[[440,170,1180,440],[900,700,520,320]]},{"sid":"s2","obj":"앞 담의 둥근 구멍 — 끈은 담 안에만 있고 · 종이 두루마리만 일꾼 품에 안겨 구멍을 지나 담 밖으로 나온다","fact":"RNA = DNA 와 단백질 합성 사이의 다리 · mRNA 가 전사와 번역을 잇는다","hook":"끈은 담 밖으로 못 나감 = DNA 는 핵 안에 · 종이만 구멍을 지남 = mRNA 가 핵공으로 나가 정보를 나름 · 두루마리 = 다리","say":"앞 담의 둥근 구멍을 보자. 끈은 담 안에만 있다. 담 밖으로 나가는 것은 일꾼 품의 종이 두루마리뿐이다. DNA 는 핵 안에 머물고, 그 정보를 베낀 RNA 가 핵공을 지나 세포질로 나간다. 그래서 RNA 는 DNA 와 단백질 합성 사이의 다리다. 그 가운데 전사와 번역을 직접 잇는 분자가 정보를 실어 나르는 mRNA, 전령 RNA 다. 담 안에서 찍힌 종이가 담 밖의 구슬 꿰기로 이어지는 것처럼.","cards":["F0-3","F0-170"],"box":[[900,700,215,310]]},{"sid":"s3","obj":"기계 뒤로 끌려 나온 흰 종이 한 장 — 빛깔 네모 네 가지(초록 · 빨강 · 노랑 · 파랑) / 곁의 두 가닥을 꼰 끈","fact":"RNA 의 염기 A · G · C · U · 일반적으로 단일 가닥","hook":"네모 빛깔 넷 = 염기 넷(초록 A · 빨강 G · 노랑 C · 파랑 U — L10b 객차 창과 같은 빛깔) · 종이 한 장 = 한 가닥 · 꼰 끈 = 두 가닥 DNA","say":"기계 뒤로 끌려 나오는 종이엔 빛깔 네모가 줄지어 찍혔다. 빛깔은 네 가지뿐이다. 초록 A, 빨강 G, 노랑 C, 파랑 U. L10b 객차 창의 빛깔과 같다. RNA 의 염기는 A, G, C, U 다. DNA 의 T 대신 U, 우라실이 들어간다. 그리고 종이는 한 장이다. 두 가닥을 꼰 끈과 달리 RNA 는 보통 한 가닥, 단일 가닥이다.","cards":["F0-4","F0-6"],"box":[[1240,255,225,100]]},{"sid":"s4","obj":"왼쪽 아래 탁자 — 주황 곰팡이가 털처럼 뒤덮인 빵 덩이 · 큰 엑스선 관에 눈을 대고 빛줄기를 쏘는 흰 가운(엑스선 사진처럼 뼈가 비친 팔) · 빛줄기를 맞은 자리만 하얗게","fact":"비들 · 테이텀 — 붉은빵곰팡이에 X선으로 돌연변이 · 반수체라 한 유전자 변화가 바로 드러남","hook":"주황 곰팡이 빵 = 붉은빵곰팡이(Neurospora) · 엑스선 관 · 뼈 비친 팔 = X선 · 맞은 자리만 하얗게 = 유전자 하나가 망가지자 곧장 드러남(반수체)","say":"왼쪽 아래 탁자엔 주황 곰팡이가 털처럼 뒤덮인 빵이 있다. 흰 가운이 커다란 엑스선 관에 눈을 대고 빛줄기를 쏘는데, 제 팔뼈까지 엑스선 사진처럼 비친다. 빛줄기를 맞은 자리만 하얗게 됐다. 비들과 테이텀은 붉은빵곰팡이, 뉴로스포라에 X선을 쬐어 돌연변이를 만들었다. 이 곰팡이는 반수체라 유전자가 한 벌뿐이어서, 유전자 하나가 망가지면 가려 줄 짝이 없어 그 변화가 바로 드러난다. 돌연변이마다 특정 효소 하나를 못 만들어, 그 효소가 만들던 영양소를 넣어 줘야만 자랐다. 여기서 유전자 하나가 효소 하나를 지정한다는 1유전자 1효소설이 나왔다.","cards":["F0-9","F0-10","F0-11"],"box":[[0,800,660,344]]},{"sid":"s5","obj":"담 밖 — 꿴 빨강 구슬 사슬이 풀밭을 지나 선 일꾼 둘의 손으로 · 둘이 빨강 사슬과 파랑 사슬을 함께 꼬아 둥근 구슬 공 하나로 · 그 공을 잡아챈 바나나처럼 휜 빨간 몸 · 공에 박힌 검은 구슬 하나","fact":"1유전자 1효소 → 1폴리펩타이드 · 예 겸상적혈구 · 예외 선택적 스플라이싱 · 기능성 RNA","hook":"빨강 · 파랑 사슬을 꼬아 공 하나 = 단백질 하나가 여러 폴리펩타이드(헤모글로빈) · 바나나 몸 = 겸상적혈구(L10c) · 검은 구슬 하나 = 한 사슬의 아미노산 하나가 바뀜","say":"꿰어진 빨강 구슬 사슬은 풀밭을 지나 선 일꾼 둘의 손으로 간다. 둘은 빨강 사슬과 파랑 사슬을 함께 꼬아 둥근 공 하나를 만든다. 헤모글로빈처럼 단백질 하나가 여러 폴리펩타이드 사슬로 이뤄질 수 있다. 그래서 1유전자 1효소설은 1유전자 1폴리펩타이드설로 고쳐졌다. 그 공을 바나나처럼 휜 빨간 몸, L10c 의 겸상적혈구가 잡아챘다. 공에 검은 구슬 하나가 박혔다. 유전자 하나의 변화가 폴리펩타이드 사슬 하나를 바꿔 놓은 것이니, 폴리펩타이드 하나를 유전자 하나가 지정한다는 증거다. 다만 예외도 있다. 한 유전자가 선택적 스플라이싱으로 여러 폴리펩타이드를 만들기도 하고(L43b), 어떤 유전자는 단백질이 아니라 기능성 RNA 를 만든다. 마당 뒤의 보라 종이와 클로버 종이처럼.","cards":["F0-7","F0-8","F0-12","F0-15"],"box":[[1450,820,570,324]]},{"sid":"s6","obj":"마당 뒤 — 왼쪽은 바퀴가 하나뿐인 외발 기계가 찍는 보라 종이띠 · 선 일꾼이 받쳐 든 그 종이띠가 풀밭을 지나 부채처럼 주름 접혀 둥글게 쌓인 보라 더미(곁에 무릎 꿇은 일꾼) / 오른쪽은 바퀴 셋 세발자전거에 올라탄 기계가 찍어 내는 세 잎 클로버 종이 · 흰 종이 클로버가 쌓이는 바구니","fact":"RNA 를 합성하는 효소 = RNA 중합효소 · 진핵 Pol I = rRNA · Pol III = tRNA","hook":"인쇄 기계 = RNA 중합효소(L43a · L43c) · 바퀴 하나 = I · 바퀴 셋 = III · 보라 종이를 접어 쌓은 더미 = 리보솜의 몸(rRNA · 덱의 보라 = 리보솜) · 세 잎 클로버 = tRNA(L10b)","say":"종이를 찍는 인쇄 기계가 RNA 를 합성하는 효소, RNA 중합효소다. 진핵세포엔 이 기계가 여러 종류다. 마당 왼쪽 뒤의 기계는 바퀴가 하나뿐인 외발이다. 이 기계 I 이 찍은 보라 종이는 풀밭을 지나 부채처럼 주름 접혀 둥근 보라 더미로 쌓인다. 이 덱에서 보라는 리보솜의 빛깔이다. RNA 중합효소 I 은 리보솜의 몸을 이루는 RNA, rRNA 를 주로 만든다. 오른쪽 뒤의 기계는 바퀴가 셋인 세발자전거에 올라탔다. 이 기계 III 이 찍어 내는 것은 세 잎 클로버, L10b 의 tRNA 모양이다. RNA 중합효소 III 은 tRNA 를 주로 만든다. 언덕의 기계들처럼 mRNA 를 만드는 것은 II 다(L43a).","cards":["F0-29","F0-31","F0-32"],"box":[[290,40,380,300],[90,290,280,210],[1630,110,340,300]]},{"sid":"s7","obj":"오른쪽 비탈을 내려가는 기계 — 기계 밑으로 드는 갈색 가닥 한 줄(화살이 비탈 위를 봄) · 기계 뒤로 끌려 나온 종이(화살이 비탈 아래를 봄)","fact":"주형 가닥은 3′→5′ 로 읽고 RNA 는 5′→3′ 로 합성 · 전사 · 번역 모두 5′→3′","hook":"기계 밑 가닥 = 주형 · 화살 = 그 가닥의 5′ → 3′ · 주형의 화살은 기계와 거꾸로(비탈 위) = 3′ → 5′ 로 읽힘 · 종이의 화살은 기계 가는 쪽 = 5′ → 3′ 로 자람","say":"오른쪽 비탈의 기계를 가까이 보자. 기계 밑으로 드는 것은 갈색 가닥 한 줄뿐이다. 기계가 읽는 이 가닥이 주형 가닥이다. 가닥과 종이엔 작은 화살이 그려져 있다. 화살은 그 가닥의 5′ → 3′ 방향이다. 주형 가닥의 화살은 비탈 위, 기계가 가는 쪽과 거꾸로다. 기계는 주형을 3′ → 5′ 방향으로 읽는다. 반대로 종이의 화살은 비탈 아래, 기계가 가는 쪽이다. RNA 는 5′ → 3′ 방향으로 자라고, 새 뉴클레오타이드는 늘 3′ 끝에 붙는다. 주형의 염기와 하나하나 상보적으로 짝지으면서 방향까지 지켜야 바른 RNA 가 나온다. 번역도 같다. 리보솜은 mRNA 를 5′ → 3′ 로 읽는다(L10a 모자에서 오른쪽으로).","cards":["F0-26","F0-27","F0-28","F0-53","F0-169"],"box":[[1330,220,275,320]]},{"sid":"s8","obj":"왼쪽 비탈을 내려가는 기계 — 기계 둘레에서만 두 가닥이 갈라져 · 금빛 가닥은 기계 밑으로(화살이 비탈 위) · 갈색 가닥은 기계 위로 넘고(화살이 종이와 같은 쪽) · 그 밖에선 다시 꼬인 끈 / 오른쪽 기계는 거꾸로 갈색이 밑 · 금빛이 위","fact":"암호 가닥 ≈ mRNA · 유전자마다 주형 가닥이 다를 수 있음 · 10 ~ 20 bp 만 풂","hook":"기계 위로 넘는 가닥 = 암호 가닥 · 화살이 종이와 같은 쪽 = 서열 · 방향이 mRNA 와 같음(T ↔ U) · 두 비탈의 주형이 서로 다른 가닥 · 기계 둘레만 벌어지고 뒤에선 다시 꼬임","say":"왼쪽 비탈의 기계는 거꾸로 왼쪽으로 내려간다. 여기선 금빛 가닥이 기계 밑으로 들고, 갈색 가닥이 기계 위로 넘는다. 읽히지 않고 위로 넘는 가닥이 암호 가닥이다. 그 화살은 종이의 화살과 같은 쪽이다. 암호 가닥과 mRNA 는 둘 다 주형 가닥과 상보적이라 서열이 거의 같다. T 자리에 U 가 들어갈 뿐이다. 한 비탈의 기계는 늘 같은 가닥을 밑에 넣는다. 한 유전자는 항상 같은 가닥을 주형으로 쓴다. 하지만 언덕 너머 다른 비탈, 다른 유전자는 반대 가닥을 주형으로 쓸 수 있다. 그리고 두 가닥은 기계 둘레에서만 벌어졌다가 기계가 지나가면 다시 꼬인다. RNA 중합효소는 약 10 ~ 20 염기쌍만 풀고, 지나간 DNA 는 다시 이중나선이 된다.","cards":["F0-48","F0-50","F0-51","F0-44","F0-45"],"box":[[440,320,290,285]]},{"sid":"s9","obj":"언덕 꼭대기 — 나란히 맞붙은 타탄 깔개 둘과 하나씩 앉은 안전모 일꾼 · 깔개 양쪽 끈에 하나씩 감긴 초록 띠(두 비탈 종이의 첫머리가 저마다 여기서 시작) · 기계들은 깔개에서 멀어지며 비탈을 내려간다","fact":"개시점 = RNA 합성이 시작되는 뉴클레오타이드 · 전사가 가는 쪽 = 하부 · 프로모터 쪽 = 상부","hook":"초록 띠 = 개시점(초록 = 출발) · 비탈 아래 = 하부(downstream) · 깔개(프로모터 · 타탄 = TATA · L43a) 쪽 비탈 위 = 상부(upstream)","say":"언덕 꼭대기엔 타탄 깔개 둘이 나란히 맞붙어 깔렸고, 안전모 일꾼이 하나씩 앉았다. L43a 에서 본 프로모터와 보편전사인자다. 깔개 양쪽 끈엔 초록 띠가 하나씩 감겼고, 두 비탈 종이의 첫머리가 저마다 정확히 여기서 시작한다. RNA 합성이 실제로 시작되는 뉴클레오타이드 자리, 전사 개시점이다. 기계는 깔개를 떠나 비탈 아래로 내려간다. 전사가 진행되는 쪽을 하부, downstream 이라 한다. 거꾸로 프로모터가 있는 쪽, 비탈 위를 상부, upstream 이라 한다. 강물이 위에서 아래로 흐르듯.","cards":["F0-35","F0-36","F0-37"],"box":[[850,80,430,280]]},{"sid":"s10","obj":"오른쪽 비탈 발치 — 끈에 감긴 빨간 띠 · 그 곁에서 끈을 벗어나 바퀴가 들린 채 튀어 오른 기계 · 다 찍은 종이가 나부낀다 · 오른쪽 초록 띠에서 이 빨간 띠까지의 끈 한 토막","fact":"종결자 = 세균의 전사 종결 서열 · 전사 단위 = RNA 분자 하나로 전사되는 DNA 구간","hook":"빨간 띠 = 종결자(빨강 = 멈춤) · 튀어 오른 기계 = 중합효소가 떨어짐 · 나부끼는 종이 = RNA 방출 · 초록 띠 ~ 빨간 띠 = 전사 단위","say":"오른쪽 비탈 발치의 끈엔 빨간 띠가 감겼다. 먼저 내려온 기계는 여기서 끈을 벗어나 바퀴가 들린 채 튀어 올랐고, 다 찍은 종이가 나부낀다. 세균에서 전사가 끝나는 자리를 알리는 DNA 서열이 종결자다. 중합효소가 종결자를 전사하면 RNA 가 풀려나고 효소도 DNA 에서 떨어진다. 진핵의 RNA 중합효소 II 는 조금 달라, 꼬리 신호를 지난 뒤 RNA 가 잘려 나간다(L43b). 그리고 오른쪽 초록 띠에서 이 빨간 띠까지, RNA 분자 하나로 전사되는 DNA 구간을 전사 단위라 한다. 종이 한 장이 덮는 끈의 길이다.","cards":["F0-34","F0-52"],"box":[[1520,370,510,250]]}],"cq":{"F0-0":["유전자가 전사와 번역을 통해 단백질을 지정하는 전체 과정을 무엇이라 하는가?","유전자 발현"],"F0-1":["DNA 정보를 이용해 RNA를 합성하는 과정은?","전사"],"F0-2":["mRNA 정보를 이용해 폴리펩타이드를 합성하는 과정은?","번역"],"F0-25":["유전 정보 흐름의 중심 원리를 쓰면?","DNA → RNA → 단백질"],"F0-3":["DNA와 단백질 합성 사이의 중간 다리 역할을 하는 핵산은?","RNA"],"F0-170":["전사와 번역을 연결하는 핵심 분자는?","mRNA"],"F0-4":["RNA의 염기 4가지는?","A, G, C, U"],"F0-6":["RNA의 일반적인 구조는?","단일 가닥"],"F0-9":["비들과 테이텀이 사용한 실험 생물은?","붉은빵곰팡이 Neurospora"],"F0-10":["비들과 테이텀이 돌연변이를 유도하기 위해 사용한 것은?","X선"],"F0-11":["Neurospora가 유전 연구에 유리한 이유는?","반수체라 단일 유전자 변화가 표현형에 바로 드러나기 때문"],"F0-7":["유전자가 특정 효소 생성을 지시한다는 가설은?","1유전자 1효소설"],"F0-8":["1유전자 1효소설이 1유전자 1폴리펩타이드설로 발전한 이유는?","단백질이 여러 폴리펩타이드로 이루어질 수 있기 때문"],"F0-12":["1유전자 1폴리펩타이드설의 예외 두 가지는?","선택적 스플라이싱과 기능성 RNA"],"F0-15":["겸상적혈구 빈혈증이 보여주는 점은?","단백질의 폴리펩타이드 하나가 유전자 하나에 의해 지정된다는 것"],"F0-29":["RNA를 합성하는 효소는?","RNA 중합효소"],"F0-31":["진핵세포에서 rRNA를 주로 합성하는 효소는?","RNA 중합효소 I"],"F0-32":["진핵세포에서 tRNA를 주로 합성하는 효소는?","RNA 중합효소 III"],"F0-26":["전사에 사용되는 DNA 가닥의 이름은?","주형 가닥"],"F0-27":["주형 가닥은 어떤 방향으로 읽히는가?","3' → 5'"],"F0-28":["RNA는 어떤 방향으로 합성되는가?","5' → 3'"],"F0-53":["전사에서 상보성과 방향성이 모두 중요한 이유는?","주형 가닥을 정확히 읽어 올바른 RNA를 만들어야 하기 때문"],"F0-169":["전사와 번역 모두에 공통적인 방향성은?","핵산 정보는 5' → 3' 방향으로 읽히거나 합성된다"],"F0-48":["암호 가닥의 서열이 mRNA와 거의 같은 이유는?","둘 다 주형 가닥과 상보적이기 때문"],"F0-50":["하나의 유전자는 항상 같은 DNA 가닥을 주형으로 사용하는가?","예"],"F0-51":["서로 다른 유전자는 같은 염색체에서 반대 가닥을 주형으로 쓸 수 있는가?","예"],"F0-44":["RNA 중합효소가 DNA 이중나선을 푸는 범위는 대략 몇 염기쌍인가?","약 10~20개"],"F0-45":["RNA 중합효소가 지나간 뒤 DNA는 어떻게 되는가?","다시 이중나선으로 결합한다"],"F0-35":["전사 개시점은 무엇인가?","RNA 합성이 실제로 시작되는 뉴클레오타이드 위치"],"F0-36":["전사가 진행되는 방향을 무엇이라 하는가?","하부 downstream"],"F0-37":["프로모터 쪽 반대 방향을 무엇이라 하는가?","상부 upstream"],"F0-34":["세균에서 전사 종결을 알리는 DNA 서열은?","종결자"],"F0-52":["전사 단위란?","하나의 RNA 분자로 전사되는 DNA 구간"]},"hubPanel":null};
+const $ = id => document.getElementById(id);
+$('title').textContent = L.title; document.title = L.title;
+// 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
+let subOpen = false;
+function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
+$('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
+$('img').src = L.img; $('img').alt = L.title;
+if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
+const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
+const stops = L.stops;
+subShow();
+const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
+const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // 시험 문항 = 상자가 있는 정거장
+// 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
+//   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
+//   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
+const scoreKey = 'lesson_' + L.id;
+let store = { v: 2, items: {}, sessions: [] };
+try {
+  const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
+  if (raw && raw.v === 2) store = raw;
+  else if (raw && typeof raw === 'object') {
+    localStorage.setItem(scoreKey + '__v1', JSON.stringify(raw));
+    for (const k of Object.keys(raw)) { if (!/^\d+$/.test(k) || !Array.isArray(raw[k])) continue; store.items['s' + (+k + 1)] = raw[k].map(r => ({ t: r.t, ok: !!r.ok, s: 0 })); }
+    localStorage.setItem(scoreKey, JSON.stringify(store));
+  }
+} catch (e) {}
+store.items = store.items || {}; store.sessions = store.sessions || [];
+const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
+try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
+
+function rect(b, cls, extra) { const bs = Array.isArray(b[0]) ? b : [b]; return bs.map(([x, y, w, h]) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="18"${extra || ''}/>`).join(''); }  // 상자 하나 [x,y,w,h] 또는 여럿 [[…],[…]]
+function draw() {
+  let s = '';
+  if (mode === 'tour' || mode === 'quiz') {
+    const upto = mode === 'tour' ? i : -1;
+    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
+    for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
+    if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
+    s += `</mask></defs><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="rgba(20,20,30,.62)" mask="url(#m)"/>`;
+    if (cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'cur');
+    if (mode === 'tour' && (i < 0 || !stops[i].box)) s = '';  // 시작 전 · 틀(상자 없는 정거장): 그림 전체
+  } else if (mode === 'review') {
+    // 겹친 곳을 누르면 작은 단서를 고른다. 넓이가 같으면 먼저 소개한 정거장이 위에 온다.
+    const hotspots = [];
+    stops.forEach((stop, k) => {
+      if (!stop.box) return;
+      const boxes = Array.isArray(stop.box[0]) ? stop.box : [stop.box];
+      for (const box of boxes) hotspots.push({ box, k, area: box[2] * box[3] });
+    });
+    hotspots.sort((a, b) => b.area - a.area || b.k - a.k);
+    for (const { box, k } of hotspots) s += rect(box, 'hot', ` data-k="${k}"`);
+  }
+  ov.innerHTML = s;
+  ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+}
+function capHTML(st, k) {
+  const nc = (st.cards || []).length;
+  return `<div class="n">${k + 1} / ${stops.length}${nc ? ` · 기출 ${nc}` : ''}</div><div class="obj">${st.obj}</div><div class="fact">${st.fact}</div>${st.hook ? `<div class="hook">고리 — ${st.hook}</div>` : ''}`;
+}
+function showCap(k, judge) {
+  const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
+}
+// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
+const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
+  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
+  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
+  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
+  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
+const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+let speakSeq = 0;
+function speak(t) {
+  t = ttsNorm(t);
+  const my = ++speakSeq, at = i;
+  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
+  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
+  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
+  let started = false;
+  u.onstart = () => { started = true; };
+  u.onend = () => { if (started) advance(700); };
+  u.onerror = () => { if (!started) advance(3000); };
+  speechSynthesis.speak(u);
+  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+}
+function go(k) {
+  if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
+  if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
+  i = k; draw(); showCap(i, false);
+  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+}
+function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
+function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
+function recap() {
+  $('recap').style.display = 'block';
+  $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
+  $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+}
+function setMode(m) {
+  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
+  $('recap').style.display = 'none'; $('judge').style.display = 'none';
+  if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
+  if (m === 'review') { $('bReview').classList.add('on'); draw(); $('cap').className = 'cap muted'; $('cap').textContent = '그림만 보고 떠올린 뒤, 물건을 눌러 답을 확인한다.'; }
+  if (m === 'quiz') {
+    $('bQuiz').classList.add('on'); quizOrder = quizItems();
+    if (shuffle) for (let a = quizOrder.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [quizOrder[a], quizOrder[b]] = [quizOrder[b], quizOrder[a]]; }
+    quizPos = 0; sess = { id: Date.now(), t0: Date.now(), n: quizOrder.length, ok: 0, done: 0, ans: {} };  // 시험 한 번 = 세션 하나
+    quizAsk();
+  } else sess = null;
+  showScore();
+}
+function quizAsk() {
+  quizRevealed = false; draw();
+  const st = stops[quizOrder[quizPos]];
+  $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
+  $('judge').style.display = 'flex'; $('jOk').style.display = $('jNo').style.display = 'none'; $('jShow').style.display = '';  // 답을 보기 전에는 채점 단추가 없다
+}
+function cqHTML(st) {
+  const ids = (st.cards || []).filter(c => L.cq && L.cq[c]); if (!ids.length) return '';
+  return `<details class="cq"${ids.length <= 3 ? ' open' : ''}><summary>딸린 기출 ${ids.length}장 — 이것까지 답할 수 있어야 맞음</summary><ul>` + ids.map(c => `<li>${esc(L.cq[c][0])} → <span class="a">${esc(L.cq[c][1])}</span></li>`).join('') + '</ul></details>';
+}
+function quizReveal() { quizRevealed = true; showCap(quizOrder[quizPos], true); $('cap').insertAdjacentHTML('beforeend', cqHTML(stops[quizOrder[quizPos]])); $('jOk').style.display = $('jNo').style.display = ''; $('jShow').style.display = 'none'; }
+// 틀린 정거장의 카드를 SRS 「오답 편지함」에 적는다. SRS 기록(bio_srs_v1)은 SRS 만 고친다 — 여기서 직접 쓰면 열린 SRS 탭이 덮어쓴다.
+// SRS 는 열릴 때 편지함을 읽어, 이미 배운 카드만 벌점 없이 복습일을 오늘로 당긴다. 같은 시험에서 맞음으로 고치면 편지를 거둔다.
+function srsInbox(k, ok) {
+  const cards = [...new Set(stops[k].cards || [])]; if (!cards.length) return;
+  try {
+    const key = 'lesson_srs_inbox', id = sess.id + ':' + sidOf(k);
+    let box = JSON.parse(localStorage.getItem(key) || '[]'); if (!Array.isArray(box)) box = [];
+    box = box.filter(m => m && m.id !== id);
+    if (!ok) box.push({ id, t: Date.now(), lesson: L.id, sid: sidOf(k), cards });
+    localStorage.setItem(key, JSON.stringify(box.slice(-400)));
+  } catch (e) {}
+}
+function judge(ok) {
+  if (!quizRevealed || !sess) return;
+  const k = quizOrder[quizPos], sid = sidOf(k);
+  srsInbox(k, ok);
+  (store.items[sid] = store.items[sid] || []).push({ t: Date.now(), ok, s: sess.id });
+  if (!(sid in sess.ans)) sess.done++; else if (sess.ans[sid]) sess.ok--;   // 되돌아가 다시 채점하면 그 문항만 바뀐다
+  sess.ans[sid] = ok; if (ok) sess.ok++;
+  const rec = { id: sess.id, t0: sess.t0, t1: Date.now(), n: sess.n, ok: sess.ok, done: sess.done };
+  const at = store.sessions.findIndex(x => x.id === sess.id); if (at >= 0) store.sessions[at] = rec; else store.sessions.push(rec);
+  if (store.sessions.length > 30) store.sessions = store.sessions.slice(-30);
+  save(); showScore(); quizNext();
+}
+function quizNext() { if (quizPos + 1 >= quizOrder.length) { $('cap').className = 'cap muted'; $('cap').textContent = '끝. 점수는 위에.'; $('judge').style.display = 'none'; ov.innerHTML = ''; return; } quizPos++; quizAsk(); }
+function quizPrev() { if (quizPos > 0) { quizPos--; quizAsk(); } }
+function showScore() {
+  // 분모는 실제 문항 수(상자 있는 정거장). 「이번 시험」(세션 하나)과 「정거장별 최근」(여러 날에 걸친 가장 최근 답)을 따로 보인다.
+  const items = quizItems(), n = items.length;
+  const last = items.map(k => { const a = store.items[sidOf(k)]; return a && a.length ? a[a.length - 1].ok : null; });
+  const seen = last.filter(x => x !== null).length, ok = last.filter(x => x === true).length;
+  const prevS = store.sessions.length ? store.sessions[store.sessions.length - 1] : null;
+  const one = (lab, x) => `${lab} ${x.ok} / ${x.n}` + (x.done < x.n ? ` (푼 것 ${x.done})` : '');
+  const parts = [];
+  if (mode === 'quiz' && sess) parts.push(one('이번 시험', sess)); else if (prevS) parts.push(one('지난 시험', prevS));
+  if (seen) parts.push(`정거장별 최근 ${ok} / ${n}`);
+  $('score').textContent = parts.join(' · ');
+}
+$('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
+$('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bNext').onclick = next; $('bPrev').onclick = prev;
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
+const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
+$('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
+shufLabel();
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+setMode('tour');
+</script>
+</body>
+</html>
