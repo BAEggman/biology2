@@ -4,6 +4,7 @@
   paste <base.png> <dir> <name> <gem_out.png> <out.png> "ax0,ay0,ax1,ay1[;…]" [thr] [--ident] [--R=14] [--fit="x0,y0,x1,y1[;…]"]
   · Gemini 가 세로로 더 그려 돌려준 경우(예: 1024x683 을 올렸는데 1024x765 가 옴) 크기를 억지로 맞추지 않고 같은 배율로 둔 채 정합한다.
   · --fit = 정합 때만 비워 둘 상자(붙일 상자가 커서 바깥 특징이 모자랄 때 더 작게 준다) · --ident = 정합 없이 같은 자리로 본다.
+  · --affine = 닮음 변환 대신 6 자유도 아핀(가로 · 세로 배율이 따로) — Gemini 가 띠 모양 구역을 세로로 몇 % 늘려 그려 돌려줄 때(2026-11-16 · L22e ZL: 유리 테가 4.5 픽셀 위로 감).
   · 전체 정합(닮음 변환) 뒤, 허용 상자마다 상자 바깥 띠(바뀌면 안 되는 곳)의 차이가 가장 작아지는 옮김(±R)을 따로 찾아 붙인다 — 상자 가장자리에서 선이 어긋나 보이는 것을 줄인다.
 """
 import sys, json, cv2, numpy as np
@@ -17,7 +18,7 @@ def crop(base, d, name, x0, y0, x1, y1):
     json.dump({'box': [x0, y0, x1, y1], 'up': [up.shape[1], up.shape[0]]}, open(f'{d}/crop_{name}.json', 'w'))
     print('crop', c.shape[1], 'x', c.shape[0], '→ up', up.shape[1], 'x', up.shape[0])
 
-def paste(base, d, name, gem, out, allow, thr=28, R=14, ident=False, fit=None):
+def paste(base, d, name, gem, out, allow, thr=28, R=14, ident=False, fit=None, affine=False):
     meta = json.load(open(f'{d}/crop_{name}.json')); x0, y0, x1, y1 = meta['box']
     im = cv2.imread(base); c = im[y0:y1, x0:x1].copy(); h, w = c.shape[:2]
     up = cv2.imread(f'{d}/up_{name}.png'); g = cv2.imread(gem)
@@ -35,7 +36,7 @@ def paste(base, d, name, gem, out, allow, thr=28, R=14, ident=False, fit=None):
     if d1 is not None and d2 is not None and len(k1) >= 12:
         m = sorted(cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True).match(d2, d1), key=lambda x: x.distance)[:800]
         src = np.float32([k2[x.queryIdx].pt for x in m]); dst = np.float32([k1[x.trainIdx].pt for x in m])
-        if len(m) >= 8: M, inl = cv2.estimateAffinePartial2D(src, dst, method=cv2.RANSAC, ransacReprojThreshold=2)
+        if len(m) >= 8: M, inl = (cv2.estimateAffine2D if affine else cv2.estimateAffinePartial2D)(src, dst, method=cv2.RANSAC, ransacReprojThreshold=2)
     if ident or M is None: M = np.float32([[1, 0, 0], [0, 1, 0]]); inl = np.zeros(1)      # 정합할 바깥 특징이 거의 없을 때 — 같은 배율 · 같은 자리로 보고 상자별 옮김만 찾는다
     warp = cv2.warpAffine(g2, M, (up.shape[1], up.shape[0]), borderMode=cv2.BORDER_REFLECT)
     cv2.imwrite(f'{d}/warp_{name}.png', warp)
@@ -74,9 +75,10 @@ def paste(base, d, name, gem, out, allow, thr=28, R=14, ident=False, fit=None):
 if __name__ == '__main__':
     a = sys.argv
     ident = '--ident' in a; a = [x for x in a if x != '--ident']
+    affine = '--affine' in a; a = [x for x in a if x != '--affine']
     R = 14; fit = None
     for x in list(a):
         if x.startswith('--R='): R = int(x[4:]); a.remove(x)
         if x.startswith('--fit='): fit = x[6:]; a.remove(x)
     if a[1] == 'crop': crop(a[2], a[3], a[4], *map(int, a[5:9]))
-    elif a[1] == 'paste': paste(a[2], a[3], a[4], a[5], a[6], a[7], int(a[8]) if len(a) > 8 else 28, R=R, ident=ident, fit=fit)
+    elif a[1] == 'paste': paste(a[2], a[3], a[4], a[5], a[6], a[7], int(a[8]) if len(a) > 8 else 28, R=R, ident=ident, fit=fit, affine=affine)
