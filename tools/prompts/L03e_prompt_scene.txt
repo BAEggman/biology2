@@ -1,0 +1,20 @@
+The attached picture shows the cast of a clean medical mnemonic cartoon (bold black ink outlines, flat bright colors, big clear shapes, cute and funny): capsule-shaped bacteria villagers, golden padlocks, and furnaces. Draw ONE wide 16:9 cartoon SCENE in exactly the same drawing style. It must look like one lively, funny moment in a story at the Bacteria Village Fortress Walls & Four-Room Inn — NOT like a diagram, NOT like characters standing in a row: figures overlap at different depths and everyone is busy.
+
+PLACE: The Bacteria Village Fortress: at the gate stand three differently shaped guards; on the left rise two contrasting fortress walls (`Gram-positive` vs `Gram-negative`); in the center stands a two-by-two Four-Room Nutrition Inn with a steel vault in the lower-right room; on the right are three oxygen rooms and a green bead-chain necklace in the field.
+
+WHAT HAPPENS (one connected story):
+1. THREE GATE GUARDS & TWO FORTRESS WALLS (left):
+   - At the gate stand three tiny guards: a round ball (`coccus`), a straight rod (`bacillus`), and a corkscrew spiral (`spirillum`).
+   - First Wall (`Gram-positive`): A single wall FOUR TIMES thicker than the second wall, pierced vertically by ribbons (`teichoic acid`) and stained deep purple by a painter's bucket; a trowel laying wall blocks is locked by a GOLDEN PADLOCK (`penicillin`) while giant scissors (`lysozyme`) snip the mesh.
+   - Second Wall (`Gram-negative`): A thin inner wall covered by a separate outer membrane where pink dye washes off; spiky capsules (`LPS endotoxin`) are embedded ONLY on the outer surface of the outer membrane (flying out only when a wall section crumbles), while a living bacterium beside it hurls poison bottles (`exotoxin`). Above the wall, slimy jelly coats (`capsule`) and clustered tents (`biofilm`) pass a shield-ring (`R plasmid`) across a bridge.
+2. BINARY FISSION & FOUR-ROOM NUTRITION INN (center):
+   - Above the inn, one bacterium splits into two, four, and a huge crowd with occasional differently colored mutant bacteria popping up.
+   - The Four-Room Inn (2 rows × 2 columns):
+     * Top row rooms have ceiling sun-lamps (`light`) and NO stove; bottom row rooms have roaring stoves (`chemical`) and NO lamp.
+     * Left column workers chisel gray raw stones (`inorganic CO2`) into blocks; right column workers break apart wooden furniture (`organic`).
+     * Top-left room (lamp + stone): a blue-green cyanobacterium worker; bottom-left room (stove burning raw stones + stone): a hydrothermal sulfur worker; bottom-right room (stove burning furniture + furniture, the biggest and most crowded room of all!): busy decomposer bacteria, plus a thick steel VAULT (`endospore`) in the corner where a curled-up bacterium survives a boiling kettle beside a high-pressure cooker!
+3. THREE OXYGEN ROOMS & HETEROCYST NECKLACE (right):
+   - Upper right: three rooms side by side — in the first, a bacterium hugs white oxygen bubbles (`obligate aerobe`); in the second, a bacterium faints from white bubbles and breathes amber liquid and yellow stones instead (`obligate anaerobe`); in the third, a versatile bacterium switches between white bubbles and a fermentation barrel (`facultative anaerobe`).
+   - Bottom right: four bacteria perform recycling, oxygen-bubble making, root-nodule nitrogen fixing, and symbiosis, alongside a green bead-chain necklace (`Anabaena`) where every fifth bead is a thick-walled round chamber (`heterocyst`) that blocks out white oxygen bubbles to fix nitrogen.
+
+No text, letters, numbers, or symbols (+, -, ?) anywhere.
