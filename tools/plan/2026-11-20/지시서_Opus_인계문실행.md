@@ -18,7 +18,7 @@
 1. 저장소: `/tmp/b2` 가 살아 있으면 `git -c credential.helper= fetch https://github.com/BAEggman/biology2.git main` 으로 GitHub 이 움직였는지부터 본다. 없으면 `git -c credential.helper= clone https://github.com/BAEggman/biology2.git /tmp/b2 && cd /tmp/b2 && npm install`.
    ```sh
    git log -1 --oneline -- tools/plan/2026-11-20/   # 아무것도 안 나오면 h98 이 아직 안 올라간 것 →
-   # device_stage_files(["/Users/mac/Downloads/b2_h98.bundle"]) 뒤:  git pull /mnt/user-data/uploads/Downloads/b2_h98.bundle main
+   # device_stage_files(["/Users/mac/Downloads/b2_h98b.bundle"]) 뒤:  git pull /mnt/user-data/uploads/Downloads/b2_h98b.bundle main
    node build.js --check && node test/all.js && node tools/plan/tally.js ch | tail -1
    ```
    GitHub 의 main 이 `2688c16` 보다 앞서 있으면(다른 도구가 또 올림) 무엇이 바뀌었는지부터 읽는다 — `git diff --stat 2688c16..FETCH_HEAD -- lessons lesson/img lesson/audio/manifest.json tools` · 글이 바뀐 구간 수 · 그림 blob · 새로 녹음된 과(`lesson/audio/manifest.json` · `lesson/audio/reviews/`). `lessons/` 가 바뀌었으면 대장의 `quote` 를 `parse_handoff.py --write` 로 새로 고친다.
@@ -32,7 +32,7 @@
 | GitHub main | `2688c16`(11-20 19:08). 인계문의 「언어 복구 포함 main」 `734ec32` 뒤로 다른 도구가 여덟 번 더 올렸다 — **모두 음성과 재생기**이고 `lessons/` 의 글과 그림은 `734ec32` 와 한 글자도 다르지 않다 → 아래 감사와의 대조는 그대로 선다 |
 | 11-20 에 다른 도구가 한 일(커밋 넷) | `say` **1,585 구간**을 반말 서술체로 다시 씀(141과 — **L17e 는 한 글자도 안 바뀜**) · obj · fact · hook · box · cards · 그림은 **불변** · 녹음 둘(`lesson/audio/L03a_s2_v1.mp3` · `s3`) · `lesson/narration-player.js` · `lesson/audio/manifest.json` · 「자동 시작」 단추 · `tools/audio-narration.md` |
 | 그 뒤 다른 도구가 한 일(커밋 여덟 · 16:33 ~ 19:08) | 녹음 **56 구간**을 더 올림 → manifest 58 항목(L03a 2 · L07e 7 · L23c 6 · L14a 8 · L05b 8 · L36d 10 · L49b 8 · L36b 9 · 모두 `ready`) · 검수 기록 `lesson/audio/reviews/` 셋(모두 `human_listening: false` — 묶음 1 은 따로 연 Gemini 가 들음 · 묶음 2 · 3 은 만든 쪽의 자기 검수) · MP3 96 kbps · 되짚기가 녹음을 쓰게 고침(`speakRecap()`) · 사용자가 그 도구에 준 수용 기준 「뜻이 통하는 가벼운 발음 흔들림은 수용」 |
-| 11-19 계획 커밋 | GitHub 에 **없었다**(h97 을 올리지 않음) → `2688c16` 위로 옮겨 실었다. 이 지시서와 함께 번들 **h98**(`2688c16..`). h97 은 버린다 |
+| 11-19 계획 커밋 | GitHub 에 **없었다**(h97 을 올리지 않음) → `2688c16` 위로 옮겨 실었다. 이 지시서와 함께 번들 **h98**(`2688c16..` · 파일은 `b2_h98b.bundle` — 같은 날 한 번 다시 묶었다). h97 은 버린다 |
 | 빌드 · 테스트 | `node build.js --check` · `node test/all.js` 통과 · `tally` 는 그대로 1,847 / 2,434 |
 | 감사의 수 | 과 142(보류 86 · 조건부 56) · 항목 246(미해결 216 = 최우선 8 · 중요 121 · 경미 87 / 언어 복구로 해결 30) — `tools/audit/2026-11-20/parse_handoff.py` 로 다시 세어 **모두 맞음** |
 | 감사의 인용문 ↔ 지금 글 | 미해결 216 가운데 211 은 그 구간에 그대로 있음 · 일부만 2(L13a-03 · L37a-01) · 못 찾음 2(**L54a-04 · L54c-04 — 「일어났는다」는 이미 고쳐져 있다 → `already_fixed` 후보**) |
@@ -182,7 +182,7 @@
 
 ## 8. 올리기와 보류 보고
 - 커밋을 뜻 단위로 가른다: 과학 대본 수정 / 그림 / 발음 사전 · 음성 / 재생기 · 화면 / 대장 · 문서. 되돌릴 때 한 덩이만 빼낼 수 있게.
-- 번들을 만들기 전: fetch(갈라졌으면 옮겨 싣기 — manifest 가 양쪽에서 바뀌었으면 두 쪽의 항목을 모두 살려 합친다) · `node build.js --check` · `node test/all.js` · 문(11-19 §4) · `verify_saytext` · `verify_audio` · 잠금 · 생성기를 다시 돌려도 뜻밖의 변경이 없는지. 번들은 `<바탕>..main` 으로 만들고 `git bundle list-heads` 가 `refs/heads/main` 인지 본다 → `~/Downloads` → `push_b2.sh` 의 줄(토큰 grep 0) → 사용자가 `push_b2.command`.
+- 번들을 만들기 전: fetch(갈라졌으면 옮겨 싣기 — manifest 가 양쪽에서 바뀌었으면 두 쪽의 항목을 모두 살려 합친다) · `node build.js --check` · `node test/all.js` · 문(11-19 §4) · `verify_saytext` · `verify_audio` · 잠금 · 생성기를 다시 돌려도 뜻밖의 변경이 없는지. 번들은 `<GitHub main>..main` **하나로** 만들고 `git bundle list-heads` 가 `refs/heads/main` 인지 본다 → 한 번도 안 쓴 새 파일 이름으로 `~/Downloads` 에 보내고 기기에서 sha256 을 맞춰 본다 → `push_b2.sh` 의 줄을 **기기에서 제자리로** 고친다(백업 · `bash -n` · 토큰 grep 0 — `tools/kit/README.md` 의 ⚠ 두 줄) → 사용자가 `push_b2.command`. 그 스크립트는 이제 GitHub 이 그사이 더 나아가 있어도 번들의 커밋을 지금 main 위로 옮겨 실어 올린다(부딪히면 멈춤).
 - 올라간 뒤: 공개 주소(`https://baeggman.github.io/biology2/lesson/…`)에서 그 과의 글 · 그림 버전 · 음원 주소가 최신인지, 실제로 재생되는지(음소거 재생으로 시간이 흐르고 끝 사건이 나는지) 확인하고 `published` 로 적는다. 「올렸다」와 「공개에서 확인했다」를 따로 센다.
 - **보류 보고** `tools/audit/2026-11-20/보류_보고.md`(세션마다 다시 만든다): 과 · 구간 · 무엇이(글 / 그림 / 음성) · 어느 칸에서 떨어졌는지 · 이유(대장의 근거 · 음성 사유 부호 · 그림 시도별 실패 원인) · 지금 공개본은 무엇인지(옛 그림 그대로 · 기기 음성 · 자동 낭독 제외) · 다음에 할 수.
 - 이미 공개된 사실 오류를 그 세션에 못 고쳤으면: 그 구간을 `lesson/audio/hold.json` 에 올려 자동 낭독에서 빼고(명세 §1.9 의 2) 보류 보고의 맨 위에 적는다.

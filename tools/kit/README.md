@@ -81,6 +81,8 @@ git merge-base --is-ancestor gh/main main && echo 그대로 || echo "갈라짐 �
 git bundle create /mnt/user-data/outputs/b2_hNN.bundle <앞 번들의 끝 커밋 또는 gh/main>..main && git bundle verify /mnt/user-data/outputs/b2_hNN.bundle
 ```
 - 번들은 `device_commit_files` 로 `/Users/mac/Downloads/b2_hNN.bundle` 에. `push_b2.sh`(같은 폴더)의 `BUNDLES=( … )` 에 한 줄을 보탠다 — 먼저 `cp -p push_b2.sh push_b2.sh.bak<날짜>` · 이미 올라간 번들 줄은 지운다(GitHub main 을 ls-remote 로 확인한 뒤) · 끝나면 `bash -n push_b2.sh` 와 `grep -cE "github_pat_[A-Za-z0-9_]{20,}" push_b2.sh` = 0.
+- ⚠ **`push_b2.sh` 는 기기에서 제자리로 고친다**(device_bash 의 python 읽고-고쳐-쓰기). `device_commit_files` 에 `/mnt/user-data/outputs/push_b2.sh` 를 주지 않는다 — 2026-11-20 에 같은 이름의 **옛 출력(9월의 972바이트짜리)이 대신 써졌다**(백업으로 되살림). 번들처럼 꼭 파일로 보내야 하는 것은 **한 번도 안 쓴 새 이름**으로 보내고, 기기에서 `shasum -a 256` 이 컨테이너의 값과 같은지 본다. 같은 이름으로 번들을 다시 보내지 않는다(b2_h98 → b2_h98b).
+- 2026-11-20 부터 `push_b2.sh` 는 **GitHub 이 그사이 더 나아가 있어도** 멈추지 않는다: 번들의 바탕 커밋이 얕은 clone 에 없으면 이력을 300 커밋 더 받고, 번들의 커밋을 지금 main 위로 옮겨 실어(rebase) 올린다. 서로 고친 곳이 부딪히면 아무것도 올리지 않고 멈춘다(강제로 덮지 않는다). 이 길은 **번들이 하나일 때만** 믿는다 — 그래서 번들은 늘 「GitHub main..main」 하나로 만든다(올리지 못한 앞 번들이 있으면 그것을 품어 새 이름으로 다시 만든다).
 - **올리기(push)는 사용자만** 한다(`push_b2.command` 를 두 번 눌러 실행 · 토큰은 사용자가 직접 넣는다). Claude 는 토큰 · 비밀번호를 넣지도 쓰지도 않는다. 토큰을 `.git/config` · 명령줄 · 환경변수 · 스크립트 · 문서에 두지 않는다. 로그를 볼 때는 `sed -E 's/github_pat_[A-Za-z0-9_]+/***/g'`.
 - 문서: `tools/prompts/<ID>_설계.md` · 인계서 §6(한 줄 + 배운 것) · `tools/plan/2026-11-11/새과_장수계획.md`(§0 · §2 의 그 그림 줄) · 지시서의 진행 표 → 프로젝트 문서(`claude/새과_장수계획_2026-11-11.md` · `claude/지시서_Opus_만들것_고칠것_2026-11-14.md`)에도 같은 내용을 올린다(토큰 · 사용자 메일 주소가 없는지 본 뒤).
 - 보고: 무엇을 했나 두세 줄 · 그림 · 커버율(`node tools/plan/tally.js ch` 의 합) · **「다음에 할 일」 표**(사용자 지시 1).
