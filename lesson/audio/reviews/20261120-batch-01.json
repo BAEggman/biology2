@@ -1,0 +1,74 @@
+{
+  "batch": "20261120-first-verified-recordings",
+  "accepted": [
+    {
+      "lesson_id": "L07e",
+      "sid": "s1",
+      "version": "v1",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "401bf155608b3725b7654a72a2f6341af664f59683f4a59cfe9173f72f0f11f8",
+      "wav_sha256": "5335ef69aa90a2ab1fc28b777edbc621832068fb2f95acb6de18e2beb3989f4f",
+      "mp3_sha256": "6c25d6fe2b16284bf9cf4fdfda0e5943723e362dc6dab0d160038e82f6f6bc56",
+      "content_check": "phonetic transcript matches spoken script after spaces and punctuation normalization",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true
+    },
+    {
+      "lesson_id": "L07e",
+      "sid": "s3",
+      "version": "v1",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "7d3f61d548e7c5a30fbe10a90bd401ef454a89ef5294cd06afb13c7cf48658c5",
+      "wav_sha256": "56b836e4ea966f9a18548a2df4e98ac802624a1f42fc0cf81c849d5e542ccf49",
+      "mp3_sha256": "681aadac263559e1eb39f7d864f282120b131ff97a6f3aa81a56628d88a5ebde",
+      "content_check": "phonetic transcript matches spoken script after spaces and punctuation normalization",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true
+    },
+    {
+      "lesson_id": "L07e",
+      "sid": "s4",
+      "version": "v1",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "40fa93fb491da9eb75762b4ef3da89a30f33f5c484706ca60eedf926fa297e10",
+      "wav_sha256": "78575d5e76e3a7a99fa0dfe812f2abda91458a99c491aa7b0411838dd6c4c5aa",
+      "mp3_sha256": "f53ed74b3bae7720e212f064361c7446835bc9f053df5201c70f1b20c2839030",
+      "content_check": "phonetic transcript matches spoken script after spaces and punctuation normalization",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true
+    }
+  ],
+  "not_published": [
+    {
+      "lesson_id": "L07e",
+      "sid": "s2",
+      "version": "v1",
+      "reason": "regeneration and review in progress"
+    },
+    {
+      "lesson_id": "L07e",
+      "sid": "s5",
+      "version": "v1",
+      "reason": "regeneration and review in progress"
+    },
+    {
+      "lesson_id": "L07e",
+      "sid": "s6",
+      "version": "v1",
+      "reason": "regeneration and review in progress"
+    },
+    {
+      "lesson_id": "L07e",
+      "sid": "s7",
+      "version": "v1",
+      "reason": "regeneration and review in progress"
+    }
+  ],
+  "method_limit": "Automated multimodal review plus transcript comparison; no claim of human listening."
+}

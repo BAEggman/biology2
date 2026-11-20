@@ -183,7 +183,23 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
+  if (voice) speakRecap();
+}
+// Keep each stable SID so recap reuses the same reviewed recording as the tour.
+function speakRecap() {
+  const my = ++speakSeq;
+  tourEnded = true; playing = true; $('bPlay').textContent = '❚❚ 멈춤';
+  function read(k) {
+    if (my !== speakSeq || !voice || mode !== 'tour') return;
+    if (k >= stops.length) { playing = false; $('bPlay').textContent = '▶ 다시'; return; }
+    const st = stops[k], text = st.say || (st.obj + '. ' + st.fact);
+    narration.play({sid:st.sid, text, spokenText:ttsNorm(text), rate,
+      onend:() => setTimeout(() => read(k + 1), 700),
+      onstatus:label => { if (my === speakSeq) $('audioStatus').textContent = label + ' · 되짚기 ' + (k + 1) + '/' + stops.length; },
+      onblocked:() => { if (my !== speakSeq) return; playing = false; $('bPlay').textContent = '▶ 시작'; $('audioStatus').textContent = '시작을 눌러 음성을 재생한다'; }
+    });
+  }
+  read(0);
 }
 function setMode(m) {
   mode = m; playing = false; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
@@ -274,4 +290,5 @@ window.addEventListener('pagehide', stopSpeech);
 </script>
 </body>
 </html>
+
 
