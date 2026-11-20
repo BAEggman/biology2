@@ -172,25 +172,31 @@
       "human_listening": false,
       "pronunciation_status": "PASS",
       "structural_decode_pass": true
-    }
-  ],
-  "not_published": [
+    },
     {
       "lesson_id": "L23c",
       "sid": "s2",
       "version": "v3",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "1f045148d540fc9081ea09f295b9a8274beccacb29e6ed8a72a470655c9b53d1",
       "wav_sha256": "e17cf78e8cfbe23676d58c6428c24419d47bcffe307f9a6fe3ae40c6d692e28c",
-      "decision": "HOLD",
-      "reason": "재생성 후에도 평활근과 가죽띠의 발음이 불명확해 공개 연결 보류. 이전 v2는 활성화한의 화 음절 누락 의심으로 거절됨.",
-      "retry_status": "stopped_after_multiple_candidates",
-      "issues": [
+      "mp3_sha256": "1a820323849909ad88ff91f112a755b16a283b6a11d016d3d6f76ea7c37ac7ff",
+      "content_check": "Meaning, mnemonic links, pathway, numbers and directions retained; minor articulation variants explicitly accepted under updated user criterion. Exact phonetic match not claimed.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "ACCEPT_WITH_MINOR_PRONUNCIATION_VARIATION",
+      "original_strict_review_decision": "HOLD",
+      "acceptance_reason": "사용자가 발음 수용 기준을 완화했다. 평활근·가죽띠·칼슘 농도의 경미한 조음 불명확성은 남지만 문맥과 그림으로 뜻을 복원할 수 있고, 신호 전달 경로·숫자·증감 방향·문장 내용은 유지된다. 원음을 완전히 명료하다고 재분류하지 않는다.",
+      "retained_minor_issues": [
         "넷째 문장 전문용어 구간이 원속도·저속 멀티모달 확인에서 모두 '평활근이'보다 '평얼근이'에 가깝게 들림",
         "다섯째 문장 소품명 구간이 원속도에서는 '가죽지로', 저속에서는 '가죽띠로'에 가깝게 들려 '지/띠' 발음이 불명확함",
         "넷째 문장 '칼슘 농도를'이 구간 청취에서는 '농도를'로 들리나 전체 1회차 입력에서는 '능도를'에 가깝게 인지되어 모음 명료성이 다소 약함"
-      ]
+      ],
+      "structural_decode_pass": true
     }
   ],
+  "not_published": [],
   "method_limit": "Automated multimodal review plus transcript comparison; no claim of human listening.",
-  "batch_status": "completed_with_one_hold"
+  "batch_status": "completed_with_minor_pronunciation_variation_accepted",
+  "user_quality_policy": "Accept minor pronunciation variation when meaning is understandable; hold severe ambiguity, content omission, or changed concept, number or direction."
 }
-
