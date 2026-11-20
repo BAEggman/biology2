@@ -17,8 +17,8 @@
 ### 0.1 시작하기 전에(세션마다)
 1. 저장소: `/tmp/b2` 가 살아 있으면 `git -c credential.helper= fetch https://github.com/BAEggman/biology2.git main` 으로 GitHub 이 움직였는지부터 본다. 없으면 `git -c credential.helper= clone https://github.com/BAEggman/biology2.git /tmp/b2 && cd /tmp/b2 && npm install`.
    ```sh
-   git log -1 --oneline -- tools/plan/2026-11-20/   # 아무것도 안 나오면 h98 이 아직 안 올라간 것 →
-   # device_stage_files(["/Users/mac/Downloads/b2_h98b.bundle"]) 뒤:  git pull /mnt/user-data/uploads/Downloads/b2_h98b.bundle main
+   git log -1 --oneline -- tools/plan/2026-11-20/   # 2026-11-20 저녁에 GitHub 에 올라갔다(d35805b · h99). 아무것도 안 나오면 사용자의 Downloads 에 있는 가장 큰 번호의
+   # b2_h*.bundle 을 device_stage_files 로 가져와  git pull /mnt/user-data/uploads/Downloads/<그 번들> main
    node build.js --check && node test/all.js && node tools/plan/tally.js ch | tail -1
    ```
    GitHub 의 main 이 `2688c16` 보다 앞서 있으면(다른 도구가 또 올림) 무엇이 바뀌었는지부터 읽는다 — `git diff --stat 2688c16..FETCH_HEAD -- lessons lesson/img lesson/audio/manifest.json tools` · 글이 바뀐 구간 수 · 그림 blob · 새로 녹음된 과(`lesson/audio/manifest.json` · `lesson/audio/reviews/`). `lessons/` 가 바뀌었으면 대장의 `quote` 를 `parse_handoff.py --write` 로 새로 고친다.
@@ -257,7 +257,7 @@
 | 단계 | 상태 | 날짜 · 커밋 · 번들 | 수(글 / 승급 / 음성 생성 · 기계 · 사람 · 공개 / 보류) |
 |---|---|---|---|
 | 계획 | ✅ | 2026-11-20 · h98 의 커밋들(바탕 `2688c16`) | 대장 뼈대 250(246 + 사용자 4) · 첫 짐작 220 · 복구 목록 44 · 손실 후보 257 · (GPT 의 녹음 58 구간 — 사람 청취 0) |
-| 결정 셋 · 음성 저장소 | ✅ | 2026-11-20 저녁 · Opus 5.5 · h99 | 녹음 = Opus · 음성 저장소 biology2-audio 만듦(58 파일 · Pages) · manifest `src` 새 주소 · L12g 는 기본값 |
+| 결정 셋 · 음성 저장소 | ✅ | 2026-11-20 저녁 · Opus 5.5 · h99(올라감 · 공개 사이트의 manifest 58 항목이 새 주소 · 모두 200 · 옛 자리 404 확인) | 녹음 = Opus · 음성 저장소 biology2-audio 만듦(58 파일 · Pages) · manifest `src` 새 주소 · L12g 는 기본값 |
 | 0 맞추기 | | | |
 | 1 글 | | | |
 | 2 낭독 맞추기 | | | |
@@ -265,3 +265,14 @@
 | 4 그림 | | | |
 | 5 낭독 넓히기 | | | |
 | 6 마감 | | | |
+
+## 14. 새 세션을 열 때 붙여 넣을 말
+사용자가 새 세션(Opus 5.5)을 열어 아래를 그대로 붙여 넣는다. 이 프로젝트에 붙은 세션이면 인계문과 이 지시서를 프로젝트 문서로도 읽을 수 있다.
+```
+biology2 저장소(https://github.com/BAEggman/biology2)의 tools/plan/2026-11-20/지시서_Opus_인계문실행.md 를
+처음부터 끝까지 읽고, §0.1 대로 시작해서 0단계부터 진행해 줘.
+인계문 전문은 프로젝트 문서 claude/인계문_2026-11-20_전문.md 에 있어 — 끝까지 읽고 시작해.
+결정은 §11 대로 가(녹음은 Opus · 음성은 biology2-audio 저장소 · L12g 는 글만 고치고 그림은 둠).
+단계가 끝날 때마다 커밋하고 번들을 내 Downloads 에 넣고 push_b2.sh 를 고친 뒤, 「다음에 할 일」 표로 보고해 줘.
+```
+
