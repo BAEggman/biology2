@@ -66,15 +66,18 @@
     <button id="bNext">다음 ▶</button>
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
+    <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
+    <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
+<script src="narration-player.js?v=20261120a"></script>
 <script>
-const L = {"id":"L07e","scene":"s07","part":"e","title":"관제탑이 파이프로 내려보내는 셋 — 방출호르몬과 음성 피드백","sub":"흰 낙하산 세 짐은 TRH·CRH·GnRH · 나비, 층층 케이크, 묶은 달걀 둘 · 갑상샘호르몬이 돌아오면 시상하부의 TRH와 전엽의 TSH를 모두 줄인다","img":"img/L07a.webp?v=642ee9744519","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"같은 건물의 옥상 관제탑, 전엽 작업대, 외벽을 따라 올라오는 붉은 관","fact":"시상하부 방출호르몬은 전엽을 자극 · 말초 갑상샘호르몬은 피드백으로 그 축을 억제한다","hook":"파란 관은 지시를 아래로 · 붉은 관은 갑상샘호르몬의 되먹임","say":"옥상은 시상하부, 위층은 뇌하수체 전엽이다. 이번에는 굵은 파란 관의 낙하산에 무엇이 실렸는지, 아래에서 돌아온 붉은 관이 어느 두 곳을 조절하는지 보자.","box":null,"src":["s07p05#0"],"cards":["G0-147"]},{"sid":"s2","obj":"옥상의 파란 깔때기 아래, 문맥으로 내려오는 흰 낙하산 세 개와 서로 다른 짐","fact":"TRH·CRH·GnRH는 각각 다른 전엽 세포를 자극하는 시상하부 방출호르몬이다","hook":"같은 낙하산 = 방출호르몬 · 서로 다른 짐 = 별개의 세 호르몬 축","say":"흰 낙하산은 방출호르몬을 뜻한다. 짐은 나비판, 층층 케이크, 묶인 달걀 둘이다. 셋은 서로 다른 조절축의 예이며, 세 단계를 차례로 통과한다는 뜻은 아니다. 시상하부는 성장호르몬 분비도 GHRH와 소마토스타틴으로 조절하며, 프로락틴 분비에는 도파민이 주로 억제 신호를 보낸다.","box":[[521,389,546,173],[1128,229,160,152]],"src":["s07p05#0"],"ask":"세 낙하산은 각각 어느 시상하부 호르몬을 뜻하는가? 셋은 한 경로의 연속 단계인가, 서로 다른 축인가?","cards":["G0-147"]},{"sid":"s3","obj":"흰 낙하산에 매달린 나비 모양 판","fact":"시상하부 TRH → 전엽 TSH → 갑상샘 T3·T4","hook":"낙하산 나비 = TRH · 전엽의 나비 창구 = TSH · 표적은 갑상샘","say":"나비 모양은 갑상샘이다. 옥상에서 파란 문맥으로 내려오는 나비 짐은 갑상샘자극호르몬 방출호르몬인 TRH다. 전엽은 TRH를 받고 TSH를 분비한다. TSH가 갑상샘에 작용해 T3와 T4의 합성·분비를 촉진한다. 낙하산의 나비와 전엽 창구의 나비가 서로 다른 호르몬을 가리키는 이유다.","box":[[597,411,96,135],[318,615,187,57]],"src":["s07p05#1"],"ask":"나비 짐에 해당하는 시상하부 호르몬은 무엇인가? 전엽이 내는 호르몬과 말초 표적샘의 호르몬까지 순서대로 말해 보자.","cards":["G0-147#1","Q0-25#1","G0-162#1"]},{"sid":"s4","obj":"흰 낙하산에 매달린 층층 케이크","fact":"시상하부 CRH → 전엽 ACTH → 부신피질 코르티솔","hook":"층층 케이크 = 층으로 된 부신피질 · CRH는 ACTH 분비를 자극","say":"케이크가 층층이 쌓인 것은 부신피질을 닮았다. 케이크와 코르텍스의 첫소리로 CRH를 떠올리자. 시상하부의 CRH는 전엽을 자극해 ACTH를 내보내게 하고, ACTH가 부신피질에 작용하여 코르티솔 분비를 촉진한다.","box":[[733,407,100,141],[591,678,158,74]],"src":["s07p05#2"],"ask":"케이크 짐에 해당하는 시상하부 호르몬과 전엽 호르몬은? 부신의 어느 부위에서 어떤 호르몬이 증가하는가?","cards":["G0-147#2"]},{"sid":"s5","obj":"흰 낙하산 하나에 함께 매달린 달걀 둘","fact":"맥동성 시상하부 GnRH → 전엽 FSH·LH → 난소 또는 정소","hook":"낙하산 하나와 달걀 둘 = 하나의 방출호르몬이 두 생식샘자극호르몬을 조절","say":"달걀 둘이 같은 낙하산 하나에 매달려 있다. 시상하부에서 맥동성으로 분비되는 GnRH 하나가 전엽의 두 호르몬 FSH와 LH를 조절한다. 생식샘, 곧 고나드를 뜻하는 달걀이다. 두 호르몬은 여성에서는 난소에, 남성에서는 정소에 작용한다.","box":[[892,408,104,139],[902,673,145,77]],"src":["s07p05#3"],"ask":"달걀 둘은 어느 호르몬 한 가지의 지시를 받는가? 전엽 호르몬 둘과 이들이 작용하는 기관은 무엇인가?","cards":["G0-147#3","Q1-20#1"]},{"sid":"s6","obj":"아래쪽에서 외벽을 타고 올라오는 붉은 관과 그 안의 보라 결정","fact":"말초 갑상샘에서 분비된 T3·T4가 전신 혈액을 통해 시상하부와 전엽에 음성 피드백","hook":"보라 결정 = 갑상샘호르몬 · 붉은 관 = 말초에서 돌아오는 피드백","say":"오른쪽 아래 나비가 갑상샘이다. 그곳에서 위로 따라가는 붉은 관 안의 보라 결정은 요오드를 포함하는 갑상샘호르몬을 뜻한다. 갑상샘에서 분비된 T3와 T4의 농도가 높아지면 전신 혈액을 통해 시상하부와 뇌하수체 전엽의 자극을 줄인다. 파란 문맥은 시상하부가 보낸 방출호르몬이 아래로 가는 길이고, 붉은 관은 말초호르몬의 영향을 거슬러 짚는 길이다.","box":[[1847,441,57,539],[1836,944,200,195],[1237,421,615,38],[1072,363,172,90],[470,346,606,36],[1433,51,261,86]],"src":["s07p05#4"],"ask":"외벽을 올라오는 보라 결정의 분비 기관과 호르몬은? 전신 혈액을 통한 이 반응은 어떤 피드백인가?","cards":["Q0-25#4","Q0-14"]},{"sid":"s7","obj":"붉은 관의 두 끝이 옥상과 전엽의 나비 쪽 덧문을 각각 반쯤 닫는다","fact":"T3·T4↑ → 시상하부 TRH↓, 전엽 TSH↓ · 갑상샘호르몬이 낮아지면 억제가 풀린다","hook":"나비 덧문 둘 = 시상하부와 전엽 · 반쯤 닫힘 = 갑상샘 축 자극 감소","say":"붉은 관을 오른쪽에서 따라가자. 위쪽 가지는 옥상의 나비표 덧문에 닿고, 가로로 돌아간 가지는 위층 나비 창구 셔터에 닿는다. 갑상샘호르몬이 충분해지면 시상하부에서는 TRH 분비가 줄고 전엽에서는 TSH 분비가 줄어든다. 그림에서 나비 축의 덧문을 반쯤 닫는 동작이 그 감소다. 갑상샘호르몬 농도가 낮아지면 두 위치의 억제가 풀린다. 다른 낙하산의 CRH와 GnRH에는 각자의 조절축이 있다.","box":[[1169,39,219,100],[286,526,232,94],[1290,44,151,67],[1763,412,126,55],[379,369,56,168]],"src":["s07p05#4"],"ask":"갑상샘호르몬이 높을 때 두 덧문 각각에서 어느 호르몬이 줄어드는가? 갑상샘호르몬 농도가 낮아지면 이 억제는 어떻게 변하는가?","cards":["Q0-25#4","Q0-14"]}],"relatedTour":{"id":"L07a","label":"같은 그림 · 전엽과 후엽의 경로 따라가기"},"cq":{"G0-147":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","TRH · CRH · GnRH"],"G0-147#1":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","TRH"],"Q0-25#1":["갑상선 호르몬 T3·T4의 조절 경로는?","시상하부 TRH"],"G0-162#1":["혈중 갑상샘 호르몬이 낮을 때 활성화되는 축은?","TRH"],"G0-147#2":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","CRH"],"G0-147#3":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","GnRH"],"Q1-20#1":["남성 호르몬 조절 경로는?","시상하부 GnRH"],"Q0-25#4":["갑상선 호르몬 T3·T4의 조절 경로는?","(음성 피드백으로 TRH·TSH 억제)"],"Q0-14":["음성 피드백(negative feedback)의 역할은?","반응이 자극을 줄여 기존 상태 회복(항상성 경로의 기본, 인슐린↔글루카곤)"]},"hubPanel":"s07p05"};
+const L = {"id":"L07e","scene":"s07","part":"e","title":"관제탑이 파이프로 내려보내는 셋 — 방출호르몬과 음성 피드백","sub":"흰 낙하산 세 짐은 TRH·CRH·GnRH · 나비, 층층 케이크, 묶은 달걀 둘 · 갑상샘호르몬이 돌아오면 시상하부의 TRH와 전엽의 TSH를 모두 줄인다","img":"img/L07a.webp?v=642ee9744519","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"같은 건물의 옥상 관제탑, 전엽 작업대, 외벽을 따라 올라오는 붉은 관","fact":"시상하부 방출호르몬은 전엽을 자극 · 말초 갑상샘호르몬은 피드백으로 그 축을 억제한다","hook":"파란 관은 지시를 아래로 · 붉은 관은 갑상샘호르몬의 되먹임","say":"옥상은 시상하부, 위층은 뇌하수체 전엽이다. 이번에는 굵은 파란 관의 낙하산에 어떤 짐이 실려 있는지 보자. 이어서 아래에서 돌아오는 붉은 관이 어느 두 위치를 조절하는지 따라가자.","box":null,"src":["s07p05#0"],"cards":["G0-147"]},{"sid":"s2","obj":"옥상의 파란 깔때기 아래, 문맥으로 내려오는 흰 낙하산 세 개와 서로 다른 짐","fact":"TRH·CRH·GnRH는 각각 다른 전엽 세포를 자극하는 시상하부 방출호르몬이다","hook":"같은 낙하산 = 방출호르몬 · 서로 다른 짐 = 별개의 세 호르몬 축","say":"흰 낙하산은 방출호르몬을 뜻한다. 낙하산에 매달린 짐은 나비판, 층층 케이크, 묶인 달걀 둘이다. 서로 다른 세 조절축의 예이지, 이 셋을 순서대로 통과한다는 뜻은 아니다. 시상하부는 성장호르몬 분비도 GHRH와 소마토스타틴으로 조절한다. 프로락틴 분비에는 도파민이 주로 억제 신호를 보낸다.","box":[[521,389,546,173],[1128,229,160,152]],"src":["s07p05#0"],"ask":"세 낙하산은 각각 어느 시상하부 호르몬을 뜻하는가? 셋은 한 경로의 연속 단계인가, 서로 다른 축인가?","cards":["G0-147"]},{"sid":"s3","obj":"흰 낙하산에 매달린 나비 모양 판","fact":"시상하부 TRH → 전엽 TSH → 갑상샘 T3·T4","hook":"낙하산 나비 = TRH · 전엽의 나비 창구 = TSH · 표적은 갑상샘","say":"나비 모양에서 갑상샘을 떠올리자. 옥상에서 파란 문맥을 따라 내려오는 나비 짐은 갑상샘자극호르몬 방출호르몬, TRH이다. TRH를 받은 전엽은 TSH를 분비하고, TSH는 갑상샘에서 T3와 T4의 합성·분비를 촉진한다. 따라서 낙하산의 나비와 전엽 창구의 나비는 같은 갑상샘 축이지만 서로 다른 호르몬을 가리킨다.","box":[[597,411,96,135],[318,615,187,57]],"src":["s07p05#1"],"ask":"나비 짐에 해당하는 시상하부 호르몬은 무엇인가? 전엽이 내는 호르몬과 말초 표적샘의 호르몬까지 순서대로 말해 보자.","cards":["G0-147#1","Q0-25#1","G0-162#1"]},{"sid":"s4","obj":"흰 낙하산에 매달린 층층 케이크","fact":"시상하부 CRH → 전엽 ACTH → 부신피질 코르티솔","hook":"층층 케이크 = 층으로 된 부신피질 · CRH는 ACTH 분비를 자극","say":"층층이 쌓인 케이크는 부신피질의 층을 닮았다. 케이크와 코르텍스의 첫소리를 CRH와 연결해 보자. 시상하부의 CRH가 전엽을 자극하면 ACTH가 분비된다. 이어서 ACTH가 부신피질에 작용해 코르티솔 분비를 촉진한다.","box":[[733,407,100,141],[591,678,158,74]],"src":["s07p05#2"],"ask":"케이크 짐에 해당하는 시상하부 호르몬과 전엽 호르몬은? 부신의 어느 부위에서 어떤 호르몬이 증가하는가?","cards":["G0-147#2"]},{"sid":"s5","obj":"흰 낙하산 하나에 함께 매달린 달걀 둘","fact":"맥동성 시상하부 GnRH → 전엽 FSH·LH → 난소 또는 정소","hook":"낙하산 하나와 달걀 둘 = 하나의 방출호르몬이 두 생식샘자극호르몬을 조절","say":"달걀 둘은 낙하산 하나에 함께 매달려 있다. 시상하부에서 맥동성으로 분비되는 GnRH 하나가 전엽의 두 호르몬, FSH와 LH를 조절한다는 단서다. 달걀은 생식샘인 고나드를 뜻한다. 두 호르몬은 여성의 난소와 남성의 정소에 작용한다.","box":[[892,408,104,139],[902,673,145,77]],"src":["s07p05#3"],"ask":"달걀 둘은 어느 호르몬 한 가지의 지시를 받는가? 전엽 호르몬 둘과 이들이 작용하는 기관은 무엇인가?","cards":["G0-147#3","Q1-20#1"]},{"sid":"s6","obj":"아래쪽에서 외벽을 타고 올라오는 붉은 관과 그 안의 보라 결정","fact":"말초 갑상샘에서 분비된 T3·T4가 전신 혈액을 통해 시상하부와 전엽에 음성 피드백","hook":"보라 결정 = 갑상샘호르몬 · 붉은 관 = 말초에서 돌아오는 피드백","say":"오른쪽 아래 나비는 갑상샘이다. 여기서 위로 이어지는 붉은 관을 따라가 보자. 관 안의 보라 결정은 요오드를 포함한 갑상샘호르몬이다. 갑상샘에서 분비된 T3와 T4의 농도가 높아지면 전신 혈액을 통해 시상하부와 뇌하수체 전엽의 자극을 줄인다. 파란 문맥은 시상하부의 방출호르몬이 아래로 가는 길이고, 붉은 관은 말초호르몬의 영향을 거슬러 확인하는 길이다.","box":[[1847,441,57,539],[1836,944,200,195],[1237,421,615,38],[1072,363,172,90],[470,346,606,36],[1433,51,261,86]],"src":["s07p05#4"],"ask":"외벽을 올라오는 보라 결정의 분비 기관과 호르몬은? 전신 혈액을 통한 이 반응은 어떤 피드백인가?","cards":["Q0-25#4","Q0-14"]},{"sid":"s7","obj":"붉은 관의 두 끝이 옥상과 전엽의 나비 쪽 덧문을 각각 반쯤 닫는다","fact":"T3·T4↑ → 시상하부 TRH↓, 전엽 TSH↓ · 갑상샘호르몬이 낮아지면 억제가 풀린다","hook":"나비 덧문 둘 = 시상하부와 전엽 · 반쯤 닫힘 = 갑상샘 축 자극 감소","say":"오른쪽의 붉은 관을 따라가면 위쪽 가지는 옥상의 나비표 덧문, 가로 가지는 위층의 나비 창구 셔터에 닿는다. 갑상샘호르몬이 충분해지면 시상하부의 TRH 분비와 전엽의 TSH 분비가 모두 줄어든다. 나비 축의 덧문을 반쯤 닫는 동작이 이 감소를 나타낸다. 반대로 갑상샘호르몬 농도가 낮아지면 두 위치의 억제가 풀린다. 다른 낙하산의 CRH와 GnRH는 각각 자신의 조절축을 따른다.","box":[[1169,39,219,100],[286,526,232,94],[1290,44,151,67],[1763,412,126,55],[379,369,56,168]],"src":["s07p05#4"],"ask":"갑상샘호르몬이 높을 때 두 덧문 각각에서 어느 호르몬이 줄어드는가? 갑상샘호르몬 농도가 낮아지면 이 억제는 어떻게 변하는가?","cards":["Q0-25#4","Q0-14"]}],"relatedTour":{"id":"L07a","label":"같은 그림 · 전엽과 후엽의 경로 따라가기"},"cq":{"G0-147":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","TRH · CRH · GnRH"],"G0-147#1":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","TRH"],"Q0-25#1":["갑상선 호르몬 T3·T4의 조절 경로는?","시상하부 TRH"],"G0-162#1":["혈중 갑상샘 호르몬이 낮을 때 활성화되는 축은?","TRH"],"G0-147#2":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","CRH"],"G0-147#3":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","GnRH"],"Q1-20#1":["남성 호르몬 조절 경로는?","시상하부 GnRH"],"Q0-25#4":["갑상선 호르몬 T3·T4의 조절 경로는?","(음성 피드백으로 TRH·TSH 억제)"],"Q0-14":["음성 피드백(negative feedback)의 역할은?","반응이 자극을 줄여 기존 상태 회복(항상성 경로의 기본, 인슐린↔글루카곤)"]},"hubPanel":"s07p05"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
@@ -85,6 +88,7 @@ $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let tourEnded = false;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
 subShow();
@@ -142,7 +146,7 @@ function capHTML(st, k) {
 }
 function showCap(k, judge) {
   const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
-  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact), st.sid);
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
 // 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
@@ -153,37 +157,36 @@ const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²�
   [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
 const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
-function speak(t) {
-  t = ttsNorm(t);
+const narration = new LessonNarration(L.id);
+function stopSpeech() { speakSeq++; narration.stop(); }
+function speak(t, sid) {
   const my = ++speakSeq, at = i;
-  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
-  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
-  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
-  let started = false;
-  u.onstart = () => { started = true; };
-  u.onend = () => { if (started) advance(700); };
-  u.onerror = () => { if (!started) advance(3000); };
-  speechSynthesis.speak(u);
-  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+  const advance = () => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, 700);
+  narration.play({sid, text:t, spokenText:ttsNorm(t), rate,
+    onend:advance,
+    onstatus:label => { if (my === speakSeq) $('audioStatus').textContent = label; },
+    onblocked:() => { if (my !== speakSeq) return; playing = false; $('bPlay').textContent = '▶ 시작'; $('audioStatus').textContent = '시작을 눌러 음성을 재생한다'; }
+  });
 }
 function go(k) {
+  stopSpeech();
+  tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
   i = k; draw(); showCap(i, false);
-  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+  if (!voice && playing) { const seq = speakSeq; setTimeout(() => { if (playing && seq === speakSeq && mode === 'tour' && i === k) next(); }, 3500); }
 }
 function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
 function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
 function recap() {
+  stopSpeech();
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
 }
 function setMode(m) {
-  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -197,6 +200,7 @@ function setMode(m) {
   showScore();
 }
 function quizAsk() {
+  stopSpeech();
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
@@ -247,10 +251,10 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i < 0 || tourEnded ? 0 : i); else stopSpeech(); };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
-$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
-$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
 const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
 $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
@@ -258,6 +262,16 @@ shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');
+let autoStart = true;
+try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
+function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
+$('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
+autoLabel();
+function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(0); }
+if ($('img').complete && $('img').naturalWidth) beginAutomatically();
+else $('img').addEventListener('load', beginAutomatically, {once:true});
+window.addEventListener('pagehide', stopSpeech);
 </script>
 </body>
 </html>
+

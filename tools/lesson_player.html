@@ -66,13 +66,16 @@
     <button id="bNext">다음 ▶</button>
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
+    <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
+    <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
+<script src="narration-player.js?v=20261120a"></script>
 <script>
 const L = __DATA__;
 const $ = id => document.getElementById(id);
@@ -85,6 +88,7 @@ $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let tourEnded = false;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
 subShow();
@@ -142,7 +146,7 @@ function capHTML(st, k) {
 }
 function showCap(k, judge) {
   const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
-  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact), st.sid);
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
 // 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
@@ -153,37 +157,36 @@ const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²�
   [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
 const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
-function speak(t) {
-  t = ttsNorm(t);
+const narration = new LessonNarration(L.id);
+function stopSpeech() { speakSeq++; narration.stop(); }
+function speak(t, sid) {
   const my = ++speakSeq, at = i;
-  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
-  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
-  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
-  let started = false;
-  u.onstart = () => { started = true; };
-  u.onend = () => { if (started) advance(700); };
-  u.onerror = () => { if (!started) advance(3000); };
-  speechSynthesis.speak(u);
-  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+  const advance = () => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, 700);
+  narration.play({sid, text:t, spokenText:ttsNorm(t), rate,
+    onend:advance,
+    onstatus:label => { if (my === speakSeq) $('audioStatus').textContent = label; },
+    onblocked:() => { if (my !== speakSeq) return; playing = false; $('bPlay').textContent = '▶ 시작'; $('audioStatus').textContent = '시작을 눌러 음성을 재생한다'; }
+  });
 }
 function go(k) {
+  stopSpeech();
+  tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
   i = k; draw(); showCap(i, false);
-  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+  if (!voice && playing) { const seq = speakSeq; setTimeout(() => { if (playing && seq === speakSeq && mode === 'tour' && i === k) next(); }, 3500); }
 }
 function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
 function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
 function recap() {
+  stopSpeech();
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
 }
 function setMode(m) {
-  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -197,6 +200,7 @@ function setMode(m) {
   showScore();
 }
 function quizAsk() {
+  stopSpeech();
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
@@ -247,10 +251,10 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i < 0 || tourEnded ? 0 : i); else stopSpeech(); };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
-$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
-$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
 const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
 $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
@@ -258,6 +262,16 @@ shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');
+let autoStart = true;
+try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
+function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
+$('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
+autoLabel();
+function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(0); }
+if ($('img').complete && $('img').naturalWidth) beginAutomatically();
+else $('img').addEventListener('load', beginAutomatically, {once:true});
+window.addEventListener('pagehide', stopSpeech);
 </script>
 </body>
 </html>
+

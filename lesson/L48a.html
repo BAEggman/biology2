@@ -66,15 +66,18 @@
     <button id="bNext">다음 ▶</button>
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
+    <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
+    <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 음성은 이 기기에 깔린 한국어 목소리를 쓴다(없으면 글만). 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
+<script src="narration-player.js?v=20261120a"></script>
 <script>
-const L = {"id":"L48a","scene":"s48","part":"a","title":"다섯 칸 헛간 — 천막이 무너졌다가 다시 선다","sub":"전기(찢어진 채 선 천막 · 바람 빠진 공 · 묶인 짚단 · 못 닿는 밧줄) → 전중기(무너진 더미 · 걸쇠를 낚은 밧줄) → 중기(한 줄 · 흰 점선 · 사진기) → 후기(넷 · 금 하나 초록 하나씩 양쪽 벽) → 말기(기운 새 천막 둘 · 풀린 짚 · 밧줄 없음)","img":"img/L48a.webp?v=742087dfe95e","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"앞벽을 잘라 낸 긴 헛간 — 칸막이로 다섯 칸 · 칸마다 천막 · 짚 · 쇠고리 밧줄이 저마다 다른 꼴","fact":"유사분열 다섯 단계 — 전기 · 전중기 · 중기 · 후기 · 말기(왼쪽부터)","hook":"다섯 칸 = 다섯 단계 · 왼쪽부터","say":"앞벽을 잘라 낸 긴 헛간이다. 굵은 칸막이로 다섯 칸, 칸마다 양쪽 벽에 검은 쇠고리가 하나씩. 칸마다 천막, 짚, 밧줄 세 가지가 꼴을 바꿔 가며 나온다. 줄무늬 천막은 핵막, 가위표로 묶인 짚단은 염색체, 쇠고리에서 나온 삼밧줄은 방추사. 짚단은 금빛 하나, 초록 하나, 서로 다른 염색체 둘이다. 유사분열의 유사는 실이 있다는 뜻, 이 밧줄이 그 실이다. 왼쪽부터 다섯 칸이 전기, 전중기, 중기, 후기, 말기.","box":null,"src":["s48p01#0"],"cards":["C1-5"]},{"sid":"s2","obj":"첫째 칸 — 천막이 아직 서 있지만 앞이 길게 찢어져 너덜너덜 · 찢긴 틈 안에 바람 빠진 보라 공","fact":"전기 — 핵막과 인이 사라지기 시작한다(아직 서 있다)","hook":"서 있는데 찢어짐 = 사라지기 시작 · 보라 공 = 인","say":"첫째 칸. 천막이 아직 서 있다. 그런데 앞이 길게 찢어져 너덜너덜하고, 그 틈 안의 보라 공은 바람이 빠져 쭈글쭈글하다. 보라 공이 인이다. 전기에 핵막과 인이 사라지기 시작한다. 아직 서 있다는 것이 급소다. 통째로 무너지는 것은 다음 칸이다.","box":[90,590,360,360],"src":["s48p01#1"],"cards":["C1-7"]},{"sid":"s3","obj":"첫째 칸 찢긴 틈 안 — 금빛 짚단 · 초록 짚단이 이미 가위표로 꽉 묶였다","fact":"전기 — 염색질이 응축해 염색체가 보이기 시작한다","hook":"풀린 짚 → 묶인 단 = 응축","say":"찢긴 틈 안을 보면 짚이 벌써 단으로 꽉 묶여 가위표가 됐다. 흩어진 짚 가닥은 풀린 염색질, 꽉 묶인 짚단은 응축된 염색체. 전기에 염색질이 응축해 염색체가 보이기 시작한다. 가위표인 까닭은 이미 복제되어 두 가닥이 허리에서 붙어 있기 때문이다.","box":[200,730,200,210],"src":["s48p01#2"],"cards":["C1-6"]},{"sid":"s4","obj":"첫째 칸 양쪽 벽에 박힌 검은 쇠고리(극) — 짧은 밧줄 토막만 삐죽 나와 허공에서 끝난다","fact":"전기 — 방추사가 만들어지기 시작한다(아직 붙지 않음)","hook":"있는데 못 닿음 = 형성 시작","say":"첫째 칸 양쪽 벽에 박힌 검은 쇠고리를 보자. 밧줄이 나오는 극 자리다. 짚 다발을 끼우는 은빛 고리(코헤신)와는 다른 물건이다. 밧줄 토막이 조금 삐죽 나왔을 뿐, 천막 근처에도 못 간다. 전기에 방추사가 만들어지기 시작한다. 있되 닿지 못한다. 붙는 것은 다음 칸의 일이다.","box":[[90,520,110,100],[385,530,80,90]],"src":["s48p01#3"],"cards":["C1-8"]},{"sid":"s5","obj":"둘째 칸 — 천막이 통째로 무너진 천 더미(부러진 기둥) · 그 위에 짚단이 뒹굴고 양쪽 밧줄 끝이 짚단을 낚았다 · 한 가닥은 아직 늘어짐","fact":"전중기 — 핵막이 완전히 사라지고 방추사가 동원체에 붙는다","hook":"무너져야 밧줄이 닿는다","say":"둘째 칸. 천막이 통째로 무너져 구겨진 천 더미가 됐고 기둥은 부러졌다. 그 위에 짚단 둘이 아무렇게나 뒹군다. 양쪽 쇠고리에서 밧줄이 길게 들어와 짚단 허리의 걸쇠를 낚았고, 한 가닥은 아직 허공에 늘어져 있다. 전중기, 핵막이 완전히 사라지고 방추사가 동원체에 붙는다. 천막이 무너졌기 때문에 밧줄이 안까지 들어온다. 다만 와편모조류, 규조류 같은 원생생물과 일부 효모는 핵막이 남은 채로 분열한다.","box":[490,520,350,460],"src":["s48p01#4"],"cards":["C1-9"]},{"sid":"s6","obj":"셋째 칸 — 두 짚단이 한가운데에 위아래 한 줄로 떴다 · 짚단마다 양쪽 쇠고리에서 온 밧줄 둘이 허리를 잡아 팽팽","fact":"중기 — 염색체가 적도면(한가운데)에 한 줄로 늘어선다","hook":"흩어짐(전중기) → 한 줄(중기)","say":"셋째 칸. 뒹굴던 짚단 둘이 한가운데에 위아래 한 줄로 떠 섰다. 짚단마다 왼쪽 쇠고리와 오른쪽 쇠고리에서 온 밧줄이 하나씩 허리를 잡아 팽팽하다. 중기, 염색체가 세포 한가운데 적도면에 한 줄로 늘어선다. 양쪽에서 똑같이 당기니 가운데에 멈춰 선다.","box":[860,360,340,430],"src":["s48p01#5"],"cards":["C1-12","C1-13"]},{"sid":"s7","obj":"셋째 칸 한가운데를 위아래로 꿰는 흰 점선 — 짚단 허리 묶음 위로도 그어졌고 다섯 칸 중 이 칸에만","fact":"중기판 — 염색체가 늘어서는 가상의 평면(실제 구조물 아님)","hook":"점선 = 가상의 판","say":"셋째 칸 한가운데로 흰 점선 한 줄이 천장부터 바닥까지 지나간다. 짚단의 허리 묶음 위로도 그어졌다. 물건이라면 짚단에 가려졌을 텐데, 가상의 선이라 무엇이든 꿰뚫는다. 중기판, 염색체가 늘어서는 가상의 중앙 평면이다. 점선이 가위표의 두 가닥 사이를 지나는 것도 보아 두자. 다음 칸에서 이 선을 사이에 두고 갈라진다.","box":[995,100,50,760],"src":["s48p01#6"],"cards":["C1-111"]},{"sid":"s8","obj":"셋째 칸 바닥 앞 — 세발 받침 위 주름상자 사진기가 렌즈를 똑바로 위로 들어 두 짚단을 겨눈다","fact":"핵형 분석은 중기에 — 가장 짧고 굵게 한 줄로 섰을 때","hook":"사진은 중기에 찍는다","say":"셋째 칸 바닥에는 세발 받침 위에 주름상자 달린 옛 사진기가 렌즈를 똑바로 위로 들어 두 짚단을 겨누고 있다. 핵형 분석에 가장 좋은 때가 중기다. 가장 짧고 굵게 뭉쳐 한 줄로 늘어섰을 때 사진을 찍어 하나하나 세고 견준다.","box":[970,830,110,290],"src":["s48p01#5"],"cards":["C1-12","C1-13"]},{"sid":"s9","obj":"넷째 칸 — 짚단이 허리에서 갈라져 V 자로 꺾인 짚 넷 · 왼쪽 벽에 금빛 하나 초록 하나 · 오른쪽 벽에도 금빛 하나 초록 하나 · 가운데 텅 빔","fact":"후기 — 자매염색분체가 갈라져 염색체 수 2배 · 동원체 미세소관이 짧아진다","hook":"둘 → 넷 · 양쪽에 금 하나 초록 하나","say":"넷째 칸. 가위표 짚단이 허리에서 갈라져 V 자로 꺾인 짚 넷이 됐다. V 하나가 가위표의 반쪽이다. 왼쪽 벽으로 금빛 하나 초록 하나, 오른쪽 벽으로도 금빛 하나 초록 하나. V 의 꼭짓점, 허리의 걸쇠가 앞장서 제 벽으로 끌려가고 끝은 뒤로 처진다. 가운데는 텅 비었다. 후기, 자매염색분체가 갈라지고 그 하나하나를 염색체로 세니 수가 두 배가 된다. 걸쇠에 걸린 밧줄이 짧아지며 제 벽으로 끌어간다. 가위표의 두 반쪽은 똑같은 복제본이다. 하나씩 반대 벽으로 가니 양쪽이 똑같은 것을 나눠 갖는다.","box":[1225,520,350,320],"src":["s48p01#7"],"cards":[]},{"sid":"s10","obj":"다섯째 칸 — 천 조각을 기운 새 천막 두 채(솔기에 붉은 실 꿴 은빛 바늘) · 열린 문 안엔 묶이지 않은 짚 가닥 · 벽의 검은 쇠고리엔 밧줄이 없다","fact":"말기 — 핵막이 다시 서 핵이 둘 · 염색질로 풀린다 · 방추사 사라짐","hook":"기운 두 채 · 풀린 짚 · 밧줄 없음","say":"다섯째 칸. 새 천막 두 채가 말짱하게 섰다. 자세히 보면 찢긴 천 조각들을 기워 만들었고, 큰 천막의 솔기에는 붉은 실을 꿴 은빛 바늘이 아직 꽂혀 있다. 열린 문 안에는 짚단이 아니라 묶이지 않은 짚 가닥이 흩어져 있는데, 천막마다 금빛과 초록이 다 들어 있다. 쇠고리에는 밧줄이 하나도 없다. 말기, 옛 핵막 조각에서 핵막이 다시 서 핵이 둘이 되고, 염색체는 다시 염색질로 풀리며, 방추사는 사라진다.","box":[1610,640,438,420],"src":["s48p01#8"],"cards":["C1-16"]},{"sid":"s11","obj":"다섯 칸의 천막만 왼쪽부터 — 찢어진 채 섬 → 무너진 더미 → 없음(바닥에 조각만) → 없음 → 기운 새 두 채","fact":"천막의 변화가 곧 차례 · 감수 2분열 전기도 첫째 칸과 같은 꼴","hook":"천막만 따라 읽는다","say":"이제 천막만 왼쪽부터 따라가 보자. 찢어진 채 서 있다, 통째로 무너졌다, 조각만 남고 없다, 또 없다, 그리고 새로 두 채. 이 차례가 그대로 전기, 전중기, 중기, 후기, 말기다. 감수 2분열의 전기도 유사분열의 전기와 같은 꼴이라, 첫째 칸이 그 답이기도 하다.","box":[[90,590,360,360],[500,800,330,180],[860,790,80,150],[1110,790,90,150],[1480,820,100,140],[1610,640,438,420]],"src":["s48p01#9"],"cards":["D0-94"]}],"cq":{"C1-5":["체세포 분열(Mitosis)의 5단계 순서는?","전기 - 전중기 - 중기 - 후기 - 말기"],"C1-7":["핵막과 인이 사라지기 시작하는 시기는?","전기 (Prophase)"],"C1-6":["염색질이 응축되어 염색체가 나타나기 시작하는 시기는?","전기 (Prophase)"],"C1-8":["방추사가 형성되기 시작하는 시기는?","전기 (Prophase)"],"C1-9":["핵막이 완전히 소실되고 방추사가 동원체에 결합하는 시기는?","전중기 (Prometaphase)"],"C1-12":["염색체가 세포의 중앙(적도면)에 배열되는 시기는?","중기 (Metaphase)"],"C1-13":["염색체의 핵형 분석을 하기에 가장 좋은 시기는?","중기 (Metaphase)"],"C1-111":["중기판(Metaphase plate)이란?","염색체들이 배열되는 가상의 중앙 평면"],"C1-16":["염색체가 다시 염색질로 풀리고 핵막이 재형성되는 시기는?","말기 (Telophase)"],"D0-94":["전기 II는 유사분열의 어느 단계와 가장 닮았는가?","전기"]},"hubPanel":"s48p01"};
+const L = {"id":"L48a","scene":"s48","part":"a","title":"다섯 칸 헛간 — 천막이 무너졌다가 다시 선다","sub":"전기(찢어진 채 선 천막 · 바람 빠진 공 · 묶인 짚단 · 못 닿는 밧줄) → 전중기(무너진 더미 · 걸쇠를 낚은 밧줄) → 중기(한 줄 · 흰 점선 · 사진기) → 후기(넷 · 금 하나 초록 하나씩 양쪽 벽) → 말기(기운 새 천막 둘 · 풀린 짚 · 밧줄 없음)","img":"img/L48a.webp?v=742087dfe95e","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"앞벽을 잘라 낸 긴 헛간 — 칸막이로 다섯 칸 · 칸마다 천막 · 짚 · 쇠고리 밧줄이 저마다 다른 꼴","fact":"유사분열 다섯 단계 — 전기 · 전중기 · 중기 · 후기 · 말기(왼쪽부터)","hook":"다섯 칸 = 다섯 단계 · 왼쪽부터","say":"앞벽을 잘라 낸 긴 헛간이 굵은 칸막이로 다섯 칸 나뉘어 있다. 각 칸 양쪽 벽에는 검은 쇠고리가 하나씩 있고, 천막·짚·밧줄의 모습이 차례로 바뀐다. 줄무늬 천막은 핵막, 가위표 모양 짚단은 염색체, 쇠고리에서 나온 삼밧줄은 방추사다. 금빛 짚단과 초록 짚단은 서로 다른 염색체 두 개다. 유사분열의 유사는 실이 있다는 뜻이며, 이 그림에서는 밧줄로 실을 연결한다. 왼쪽부터 전기, 전중기, 중기, 후기, 말기 순서로 보자.","box":null,"src":["s48p01#0"],"cards":["C1-5"]},{"sid":"s2","obj":"첫째 칸 — 천막이 아직 서 있지만 앞이 길게 찢어져 너덜너덜 · 찢긴 틈 안에 바람 빠진 보라 공","fact":"전기 — 핵막과 인이 사라지기 시작한다(아직 서 있다)","hook":"서 있는데 찢어짐 = 사라지기 시작 · 보라 공 = 인","say":"첫째 칸의 천막은 아직 서 있지만 앞면이 길게 찢겨 있다. 틈 안의 보라 공은 바람이 빠져 쭈글쭈글하다. 보라 공은 인이며, 전기에 핵막과 인이 사라지기 시작하는 모습이다. 아직 천막이 서 있다는 점을 기억하자. 완전히 무너지는 것은 다음 칸이다.","box":[90,590,360,360],"src":["s48p01#1"],"cards":["C1-7"]},{"sid":"s3","obj":"첫째 칸 찢긴 틈 안 — 금빛 짚단 · 초록 짚단이 이미 가위표로 꽉 묶였다","fact":"전기 — 염색질이 응축해 염색체가 보이기 시작한다","hook":"풀린 짚 → 묶인 단 = 응축","say":"천막의 찢어진 틈 안에는 짚이 단단히 묶여 가위표 모양을 이루고 있다. 흩어진 짚은 풀린 염색질, 묶인 짚단은 응축된 염색체다. 전기에 염색질이 응축되며 염색체가 보이기 시작한다. 가위표인 것은 이미 복제된 두 가닥이 허리에서 붙어 있기 때문이다.","box":[200,730,200,210],"src":["s48p01#2"],"cards":["C1-6"]},{"sid":"s4","obj":"첫째 칸 양쪽 벽에 박힌 검은 쇠고리(극) — 짧은 밧줄 토막만 삐죽 나와 허공에서 끝난다","fact":"전기 — 방추사가 만들어지기 시작한다(아직 붙지 않음)","hook":"있는데 못 닿음 = 형성 시작","say":"첫째 칸 양쪽 벽의 검은 쇠고리는 방추사가 나오는 극이다. 짚단을 묶는 은빛 코헤신 고리와는 다른 소품이다. 쇠고리에서 나온 밧줄은 짧아 천막 가까이에도 도달하지 못한다. 전기에는 방추사가 만들어지기 시작하지만 아직 염색체에 붙지 못한다는 단서다. 부착은 다음 칸에서 보자.","box":[[90,520,110,100],[385,530,80,90]],"src":["s48p01#3"],"cards":["C1-8"]},{"sid":"s5","obj":"둘째 칸 — 천막이 통째로 무너진 천 더미(부러진 기둥) · 그 위에 짚단이 뒹굴고 양쪽 밧줄 끝이 짚단을 낚았다 · 한 가닥은 아직 늘어짐","fact":"전중기 — 핵막이 완전히 사라지고 방추사가 동원체에 붙는다","hook":"무너져야 밧줄이 닿는다","say":"둘째 칸에서는 천막이 완전히 무너져 천 더미가 되고 기둥도 부러졌다. 위에는 짚단 두 개가 흩어져 있고, 양쪽 쇠고리의 긴 밧줄이 짚단 허리의 걸쇠를 잡는다. 한 밧줄은 아직 허공에 늘어져 있다. 전중기에 핵막이 사라지고 방추사가 동원체에 붙는 모습이다. 천막이 무너져야 밧줄이 안으로 들어올 수 있다. 다만 와편모조류, 규조류 등 일부 원생생물과 일부 효모는 핵막이 남은 상태로 분열한다는 예외도 기억하자.","box":[490,520,350,460],"src":["s48p01#4"],"cards":["C1-9"]},{"sid":"s6","obj":"셋째 칸 — 두 짚단이 한가운데에 위아래 한 줄로 떴다 · 짚단마다 양쪽 쇠고리에서 온 밧줄 둘이 허리를 잡아 팽팽","fact":"중기 — 염색체가 적도면(한가운데)에 한 줄로 늘어선다","hook":"흩어짐(전중기) → 한 줄(중기)","say":"셋째 칸에서는 짚단 두 개가 가운데에서 위아래 한 줄로 정렬한다. 각 짚단의 허리를 왼쪽과 오른쪽 쇠고리에서 온 밧줄이 하나씩 붙어 팽팽하게 잡아당긴다. 중기에 염색체가 세포 중앙의 적도면에 한 줄로 배열되는 모습이다. 양쪽에서 똑같이 당기므로 가운데에 멈추어 정렬한다.","box":[860,360,340,430],"src":["s48p01#5"],"cards":["C1-12","C1-13"]},{"sid":"s7","obj":"셋째 칸 한가운데를 위아래로 꿰는 흰 점선 — 짚단 허리 묶음 위로도 그어졌고 다섯 칸 중 이 칸에만","fact":"중기판 — 염색체가 늘어서는 가상의 평면(실제 구조물 아님)","hook":"점선 = 가상의 판","say":"셋째 칸 중앙의 흰 점선은 천장부터 바닥까지 이어지고, 짚단 허리 위로도 지나간다. 실제 물건이라면 짚단에 가리겠지만 가상의 선이므로 그대로 보인다. 염색체가 정렬하는 가상의 중앙 평면, 중기판이다. 점선이 가위표의 두 가닥 사이를 지난다는 점도 보자. 다음 칸에서는 이 선을 사이에 두고 분리된다.","box":[995,100,50,760],"src":["s48p01#6"],"cards":["C1-111"]},{"sid":"s8","obj":"셋째 칸 바닥 앞 — 세발 받침 위 주름상자 사진기가 렌즈를 똑바로 위로 들어 두 짚단을 겨눈다","fact":"핵형 분석은 중기에 — 가장 짧고 굵게 한 줄로 섰을 때","hook":"사진은 중기에 찍는다","say":"셋째 칸 바닥의 옛 사진기를 보자. 세발 받침과 주름상자가 있고, 렌즈는 위의 두 짚단을 향한다. 핵형 분석에 가장 좋은 시기가 중기라는 단서다. 염색체가 가장 짧고 굵게 응축되어 한 줄로 배열했을 때 사진을 찍어 수와 형태를 비교한다.","box":[970,830,110,290],"src":["s48p01#5"],"cards":["C1-12","C1-13"]},{"sid":"s9","obj":"넷째 칸 — 짚단이 허리에서 갈라져 V 자로 꺾인 짚 넷 · 왼쪽 벽에 금빛 하나 초록 하나 · 오른쪽 벽에도 금빛 하나 초록 하나 · 가운데 텅 빔","fact":"후기 — 자매염색분체가 갈라져 염색체 수 2배 · 동원체 미세소관이 짧아진다","hook":"둘 → 넷 · 양쪽에 금 하나 초록 하나","say":"넷째 칸에서는 가위표 짚단이 허리에서 갈라져 V 자 짚 네 개가 되었다. V 하나가 원래 가위표의 반쪽이다. 금빛 하나와 초록 하나가 각각 왼쪽으로, 같은 구성이 오른쪽으로 간다. V의 꼭짓점인 허리 걸쇠가 앞장서고 끝은 뒤로 처지며, 가운데는 비어 있다. 후기에 자매염색분체가 분리되면 각각을 염색체 하나로 세므로 수가 두 배가 된다. 동원체에 붙은 밧줄이 짧아지며 각 극으로 끌어간다. 두 반쪽은 같은 복제본이므로 하나씩 반대 극으로 가면 양쪽에 같은 구성이 나뉜다.","box":[1225,520,350,320],"src":["s48p01#7"],"cards":[]},{"sid":"s10","obj":"다섯째 칸 — 천 조각을 기운 새 천막 두 채(솔기에 붉은 실 꿴 은빛 바늘) · 열린 문 안엔 묶이지 않은 짚 가닥 · 벽의 검은 쇠고리엔 밧줄이 없다","fact":"말기 — 핵막이 다시 서 핵이 둘 · 염색질로 풀린다 · 방추사 사라짐","hook":"기운 두 채 · 풀린 짚 · 밧줄 없음","say":"다섯째 칸에는 새 천막 두 개가 서 있다. 찢어진 천 조각을 기워 만들었고, 큰 천막 솔기에는 붉은 실을 꿴 은빛 바늘이 아직 꽂혀 있다. 각 천막 안에는 묶이지 않은 금빛과 초록 짚이 함께 흩어져 있다. 쇠고리의 밧줄은 모두 사라졌다. 말기에 옛 핵막 조각에서 핵막이 다시 형성되어 핵 둘이 생기고, 염색체는 염색질로 풀리며 방추사는 사라지는 모습이다.","box":[1610,640,438,420],"src":["s48p01#8"],"cards":["C1-16"]},{"sid":"s11","obj":"다섯 칸의 천막만 왼쪽부터 — 찢어진 채 섬 → 무너진 더미 → 없음(바닥에 조각만) → 없음 → 기운 새 두 채","fact":"천막의 변화가 곧 차례 · 감수 2분열 전기도 첫째 칸과 같은 꼴","hook":"천막만 따라 읽는다","say":"이제 천막의 변화만 따라가 보자. 찢어진 채 서 있는 첫째 칸, 완전히 무너진 둘째 칸, 천 조각만 남은 셋째와 넷째 칸, 새 천막 두 개가 선 다섯째 칸이다. 전기 → 전중기 → 중기 → 후기 → 말기의 순서다. 감수 2분열 전기도 유사분열 전기와 같은 모습이므로 첫째 칸을 연결할 수 있다.","box":[[90,590,360,360],[500,800,330,180],[860,790,80,150],[1110,790,90,150],[1480,820,100,140],[1610,640,438,420]],"src":["s48p01#9"],"cards":["D0-94"]}],"cq":{"C1-5":["체세포 분열(Mitosis)의 5단계 순서는?","전기 - 전중기 - 중기 - 후기 - 말기"],"C1-7":["핵막과 인이 사라지기 시작하는 시기는?","전기 (Prophase)"],"C1-6":["염색질이 응축되어 염색체가 나타나기 시작하는 시기는?","전기 (Prophase)"],"C1-8":["방추사가 형성되기 시작하는 시기는?","전기 (Prophase)"],"C1-9":["핵막이 완전히 소실되고 방추사가 동원체에 결합하는 시기는?","전중기 (Prometaphase)"],"C1-12":["염색체가 세포의 중앙(적도면)에 배열되는 시기는?","중기 (Metaphase)"],"C1-13":["염색체의 핵형 분석을 하기에 가장 좋은 시기는?","중기 (Metaphase)"],"C1-111":["중기판(Metaphase plate)이란?","염색체들이 배열되는 가상의 중앙 평면"],"C1-16":["염색체가 다시 염색질로 풀리고 핵막이 재형성되는 시기는?","말기 (Telophase)"],"D0-94":["전기 II는 유사분열의 어느 단계와 가장 닮았는가?","전기"]},"hubPanel":"s48p01"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
@@ -85,6 +88,7 @@ $('img').src = L.img; $('img').alt = L.title;
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+let tourEnded = false;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
 subShow();
@@ -142,7 +146,7 @@ function capHTML(st, k) {
 }
 function showCap(k, judge) {
   const st = stops[k]; $('cap').className = 'cap'; $('cap').innerHTML = capHTML(st, k);
-  if (voice) speak(st.say || (st.obj + '. ' + st.fact));
+  if (voice) speak(st.say || (st.obj + '. ' + st.fact), st.sid);
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
 // 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
@@ -153,37 +157,36 @@ const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²�
   [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
 const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
 let speakSeq = 0;
-function speak(t) {
-  t = ttsNorm(t);
+const narration = new LessonNarration(L.id);
+function stopSpeech() { speakSeq++; narration.stop(); }
+function speak(t, sid) {
   const my = ++speakSeq, at = i;
-  const advance = (ms) => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, ms);
-  if (!('speechSynthesis' in window)) { if (playing) advance(3500); return; }
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = rate;
-  const v = speechSynthesis.getVoices().find(v => /^ko/i.test(v.lang)); if (v) u.voice = v;
-  let started = false;
-  u.onstart = () => { started = true; };
-  u.onend = () => { if (started) advance(700); };
-  u.onerror = () => { if (!started) advance(3000); };
-  speechSynthesis.speak(u);
-  setTimeout(() => { if (!started && my === speakSeq) { speechSynthesis.cancel(); advance(3000); } }, 2500);  // 목소리가 없으면 글만 3초
+  const advance = () => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, 700);
+  narration.play({sid, text:t, spokenText:ttsNorm(t), rate,
+    onend:advance,
+    onstatus:label => { if (my === speakSeq) $('audioStatus').textContent = label; },
+    onblocked:() => { if (my !== speakSeq) return; playing = false; $('bPlay').textContent = '▶ 시작'; $('audioStatus').textContent = '시작을 눌러 음성을 재생한다'; }
+  });
 }
 function go(k) {
+  stopSpeech();
+  tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
   i = k; draw(); showCap(i, false);
-  if (!voice && playing) setTimeout(() => { if (playing) next(); }, 3500);
+  if (!voice && playing) { const seq = speakSeq; setTimeout(() => { if (playing && seq === speakSeq && mode === 'tour' && i === k) next(); }, 3500); }
 }
 function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
 function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
 function recap() {
+  stopSpeech();
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   if (voice) speak('되짚기. ' + stops.map(st => st.say || (st.obj + '. ' + st.fact)).join(' '));
 }
 function setMode(m) {
-  mode = m; playing = false; speechSynthesis && speechSynthesis.cancel(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -197,6 +200,7 @@ function setMode(m) {
   showScore();
 }
 function quizAsk() {
+  stopSpeech();
   quizRevealed = false; draw();
   const st = stops[quizOrder[quizPos]];
   $('cap').className = 'cap'; $('cap').innerHTML = `<div class="n">${quizPos + 1} / ${quizOrder.length}</div><div class="obj">${st.ask ? st.ask : '이 물건은 무엇을 나르나?'}</div><div class="fact muted">이름만이 아니라 화면 한 줄을 다 떠올린 뒤 「답 보기」 — 하나라도 막히면 틀림</div>`;
@@ -247,10 +251,10 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i + 1); else speechSynthesis && speechSynthesis.cancel(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i < 0 || tourEnded ? 0 : i); else stopSpeech(); };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
-$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) speechSynthesis && speechSynthesis.cancel(); };
-$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); };
+$('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
+$('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
 $('jOk').onclick = () => judge(true); $('jNo').onclick = () => judge(false); $('jShow').onclick = quizReveal;
 const shufLabel = () => { $('bShuf').textContent = shuffle ? '섞어서' : '순서대로'; $('bShuf').classList.toggle('on', shuffle); };
 $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('lesson_shuffle', shuffle ? '1' : '0'); } catch (e) {} shufLabel(); if (mode === 'quiz') setMode('quiz'); };
@@ -258,6 +262,16 @@ shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 setMode('tour');
+let autoStart = true;
+try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
+function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
+$('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
+autoLabel();
+function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(0); }
+if ($('img').complete && $('img').naturalWidth) beginAutomatically();
+else $('img').addEventListener('load', beginAutomatically, {once:true});
+window.addEventListener('pagehide', stopSpeech);
 </script>
 </body>
 </html>
+
