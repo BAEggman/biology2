@@ -3,6 +3,8 @@
 새 세션(새 컨테이너)에서도 그대로 일할 수 있게, 그동안 세션 임시 폴더에만 있던 연장과 순서를 여기에 모았다.
 무엇을 · 어떤 차례로 할지는 `tools/plan/2026-11-14/지시서_Opus_만들것_고칠것.md`, 지난 내력과 배운 것은 `tools/audit/2026-11-10/인계서_새과.md`.
 
+> **2026-11-20 저녁 보탬**: 음성 파일은 음성 전용 저장소 `BAEggman/biology2-audio`(Pages)에 — 올리는 길은 GitHub 웹 올리기(Claude 가 쓰는 Chrome 창 · 토큰 없음)이고 본 저장소에는 manifest 와 검수 기록만(`lesson/audio/README.md`). 녹음은 Opus 가 맡는다.
+>
 > **2026-11-20 보탬**: 지금의 차례는 `tools/plan/2026-11-20/지시서_Opus_인계문실행.md`(감사 246건 고치기 → 과 승급 → Gemini 낭독 → 통과한 것만 올림). 낭독 제작과 검수 = `tools/plan/2026-11-20/명세_낭독_제작_검수.md` · 대장 = `tools/audit/2026-11-20/README.md`. **`gen_<ID>.py --write` 앞에 `python3 tools/kit/gen_sync.py <ID> --check`** — 다른 도구가 JSON 만 고쳐 gen 42과가 낡아 있다.
 >
 > **2026-11-19 보탬**: 고리(소품 · 상황 · 이름 고리 · 그림 간 연결)를 정하는 법 = `tools/cue/README.md`(제안자 여섯 + 심판) · 잣대 = `tools/cue/RUBRIC.md` · 과를 짓거나 고칠 때 도는 문과 눈 검사 셋 = `tools/plan/2026-11-19/지시서_Opus_고리감사_고치기.md` §4. 아래 「과 하나의 길」의 2(사건 짓기)와 7(일치 검사)에 그것이 끼어든다.
