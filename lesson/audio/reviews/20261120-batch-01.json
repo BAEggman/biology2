@@ -42,32 +42,98 @@
       "human_listening": false,
       "pronunciation_status": "CLEAR",
       "structural_decode_pass": true
+    },
+    {
+      "lesson_id": "L07e",
+      "sid": "s5",
+      "version": "v2",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "ef2a38e7e2234a11d157aba44d8472f85966e46885bff1166852fd7377c92d14",
+      "wav_sha256": "f11546e5fd1d7ab791855d4b9ff759795a771bc05ec85928f29c9224ef96b9fc",
+      "mp3_sha256": "9f13e7e65abdff5868c78d4f7565a55d4a9142efee114312e4b42228b93dd46c",
+      "content_check": "Full transcript matches source after explicit pronunciation expansion, punctuation/spacing and Korean near-homophone normalization. Phonetic observations reviewed separately.",
+      "normalization_notes": "G 지/쥐; 베/배 and 중계/중개 vowel merger; alphanumeric spoken equivalents. No concepts or directions dropped.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "ACCEPTED_AFTER_REVIEW",
+      "structural_decode_pass": true
+    },
+    {
+      "lesson_id": "L07e",
+      "sid": "s6",
+      "version": "v2",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "8787c31f6d6dff2ff478fe1faecc841a98d7b38f350d61929c3f0b3ac3153d66",
+      "wav_sha256": "1ab91936e291460635b235849f2b4c035770e4f4f0667bd161872d839485e793",
+      "mp3_sha256": "0b45b271a67847347ee54cd79fde82863c4bf74101947b33e97c687908b2f62c",
+      "content_check": "Full transcript matches source after explicit pronunciation expansion, punctuation/spacing and Korean near-homophone normalization. Phonetic observations reviewed separately.",
+      "normalization_notes": "G 지/쥐; 베/배 and 중계/중개 vowel merger; alphanumeric spoken equivalents. No concepts or directions dropped.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "ACCEPTED_AFTER_REVIEW",
+      "structural_decode_pass": true
+    },
+    {
+      "lesson_id": "L23c",
+      "sid": "s1",
+      "version": "v1",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "9fb6113344efef1a5d524211c085824ac31359466324bb91c0225b4ecbe2d8fa",
+      "wav_sha256": "abd549e1645701fa6bd4450cde83f01621861ea108c54937deea5970891b12c7",
+      "mp3_sha256": "730e5b77cd79a3f7493e2447c51f1f01b84985f728698e56a21f294fcc7b6fdd",
+      "content_check": "Full transcript matches source after explicit pronunciation expansion, punctuation/spacing and Korean near-homophone normalization. Phonetic observations reviewed separately.",
+      "normalization_notes": "G 지/쥐; 베/배 and 중계/중개 vowel merger; alphanumeric spoken equivalents. No concepts or directions dropped.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "ACCEPTED_AFTER_REVIEW",
+      "structural_decode_pass": true
+    },
+    {
+      "lesson_id": "L23c",
+      "sid": "s6",
+      "version": "v1",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "fbd27d00d73c791eb4eaad793feda3cc2484753884899024aa35bd5193aa0eb3",
+      "wav_sha256": "7bbfd31b3f9dc07299c9535cf2502415901b8a86735e299e4b39d95b068eb4bb",
+      "mp3_sha256": "b874f6310a84c20bb466b2c9f8f60b01b32ba197deba6660a29915847fbfdb78",
+      "content_check": "Full transcript matches source after explicit pronunciation expansion, punctuation/spacing and Korean near-homophone normalization. Phonetic observations reviewed separately.",
+      "normalization_notes": "G 지/쥐; 베/배 and 중계/중개 vowel merger; alphanumeric spoken equivalents. No concepts or directions dropped.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "ACCEPTED_AFTER_REVIEW",
+      "structural_decode_pass": true
     }
   ],
   "not_published": [
     {
       "lesson_id": "L07e",
       "sid": "s2",
-      "version": "v1",
-      "reason": "regeneration and review in progress"
-    },
-    {
-      "lesson_id": "L07e",
-      "sid": "s5",
-      "version": "v1",
-      "reason": "regeneration and review in progress"
-    },
-    {
-      "lesson_id": "L07e",
-      "sid": "s6",
-      "version": "v1",
-      "reason": "regeneration and review in progress"
+      "reason": "retry v3 in progress"
     },
     {
       "lesson_id": "L07e",
       "sid": "s7",
-      "version": "v1",
-      "reason": "regeneration and review in progress"
+      "reason": "retry v3 in progress"
+    },
+    {
+      "lesson_id": "L23c",
+      "sid": "s2",
+      "reason": "retry v2 in progress"
+    },
+    {
+      "lesson_id": "L23c",
+      "sid": "s3",
+      "reason": "retry v2 in progress"
+    },
+    {
+      "lesson_id": "L23c",
+      "sid": "s4",
+      "reason": "retry v2 in progress"
+    },
+    {
+      "lesson_id": "L23c",
+      "sid": "s5",
+      "reason": "retry v2 in progress"
     }
   ],
   "method_limit": "Automated multimodal review plus transcript comparison; no claim of human listening."
