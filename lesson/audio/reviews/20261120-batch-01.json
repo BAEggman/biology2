@@ -102,38 +102,84 @@
       "human_listening": false,
       "pronunciation_status": "ACCEPTED_AFTER_REVIEW",
       "structural_decode_pass": true
-    }
-  ],
-  "not_published": [
+    },
     {
       "lesson_id": "L07e",
       "sid": "s2",
-      "reason": "retry v3 in progress"
+      "version": "v3",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "8889c941e8ba6d8901df0ad3d68daf41db4e93886ce98ad58c1d82606043da01",
+      "wav_sha256": "c63fd453fe6c53d52f39e05a664efa8c6552f5305771961bf263455667597126",
+      "mp3_sha256": "09190b3e89b3665c3039b84ba14624ecc2fd14c86379f6ac860ba3bb7d130fe3",
+      "content_check": "Full raw-audio transcript matches approved spoken script after spaces/punctuation and 중계/중개 vowel-merger normalization.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "PASS",
+      "structural_decode_pass": true
     },
     {
       "lesson_id": "L07e",
       "sid": "s7",
-      "reason": "retry v3 in progress"
-    },
-    {
-      "lesson_id": "L23c",
-      "sid": "s2",
-      "reason": "retry v2 in progress"
+      "version": "v3",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "a29896a069997f3c168acb5c583239448712b3717bf4f9d6f2d7be0112a21708",
+      "wav_sha256": "1dabe1acc2d117053aaa74f205c45f0da629aab486011ec404baaba076231e81",
+      "mp3_sha256": "cf4a397a75c2660b5a217fe570ce57695d49aa1fbfde3a1b01b6d44d729e67f5",
+      "content_check": "Full raw-audio transcript matches approved spoken script after spaces/punctuation and 중계/중개 vowel-merger normalization.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "PASS",
+      "structural_decode_pass": true
     },
     {
       "lesson_id": "L23c",
       "sid": "s3",
-      "reason": "retry v2 in progress"
+      "version": "v2",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "80d04c3a56df684a06ee51bb0e04b9bb92d70ed7fd31b74f02d8a2a212dc7ece",
+      "wav_sha256": "28301484a15f6ff08220e65c94478afd91828c95eb9dba0e651df713a201a519",
+      "mp3_sha256": "5296ccb5a135704af54138649b6c5af7666f8948c12dbc51758eebffeb500c02",
+      "content_check": "Full raw-audio transcript matches approved spoken script after spaces/punctuation and 중계/중개 vowel-merger normalization.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "PASS",
+      "structural_decode_pass": true
     },
     {
       "lesson_id": "L23c",
       "sid": "s4",
-      "reason": "retry v2 in progress"
+      "version": "v2",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "a4f4b9dc57d17932bcbb2a5982f1bbfca24057a780d49422a25c5c5d95a41dc5",
+      "wav_sha256": "04c04e83c8947384b1a39ac644c7e64312b84bd2f548957aabc0bb2469e94b7b",
+      "mp3_sha256": "c16fc01f290af3f8cec22babc2da2b22cee0b61ed643ae07e17622bce098565d",
+      "content_check": "Full raw-audio transcript matches approved spoken script after spaces/punctuation and 중계/중개 vowel-merger normalization.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "PASS",
+      "structural_decode_pass": true
     },
     {
       "lesson_id": "L23c",
       "sid": "s5",
-      "reason": "retry v2 in progress"
+      "version": "v2",
+      "source_commit": "734ec323a65e82a7e5924a1114f5b9440d6c0573",
+      "say_sha256": "017a42e4e1965e9c5f4488b665058be5d0fd72294956982cd8fd429a9c62422b",
+      "wav_sha256": "fb7c46ae6b1e9ec48674dc71084f002ace54e4668277a94dfaf05554c2f22c13",
+      "mp3_sha256": "b0df578368fed1eced0c0175bcd1181180b58491c2ab0d25a5e9a0fcae10a781",
+      "content_check": "Full raw-audio transcript matches approved spoken script after spaces/punctuation and 중계/중개 vowel-merger normalization.",
+      "audio_review": "independent Gemini task-mode raw-WAV multimodal review",
+      "human_listening": false,
+      "pronunciation_status": "PASS",
+      "structural_decode_pass": true
+    }
+  ],
+  "not_published": [
+    {
+      "lesson_id": "L23c",
+      "sid": "s2",
+      "version": "v2",
+      "reason": "활성화한 → 활성한: 화 음절 탈락 의심. v3 재생성 중."
     }
   ],
   "method_limit": "Automated multimodal review plus transcript comparison; no claim of human listening."
