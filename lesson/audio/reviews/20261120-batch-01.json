@@ -178,9 +178,19 @@
     {
       "lesson_id": "L23c",
       "sid": "s2",
-      "version": "v2",
-      "reason": "활성화한 → 활성한: 화 음절 탈락 의심. v3 재생성 중."
+      "version": "v3",
+      "wav_sha256": "e17cf78e8cfbe23676d58c6428c24419d47bcffe307f9a6fe3ae40c6d692e28c",
+      "decision": "HOLD",
+      "reason": "재생성 후에도 평활근과 가죽띠의 발음이 불명확해 공개 연결 보류. 이전 v2는 활성화한의 화 음절 누락 의심으로 거절됨.",
+      "retry_status": "stopped_after_multiple_candidates",
+      "issues": [
+        "넷째 문장 전문용어 구간이 원속도·저속 멀티모달 확인에서 모두 '평활근이'보다 '평얼근이'에 가깝게 들림",
+        "다섯째 문장 소품명 구간이 원속도에서는 '가죽지로', 저속에서는 '가죽띠로'에 가깝게 들려 '지/띠' 발음이 불명확함",
+        "넷째 문장 '칼슘 농도를'이 구간 청취에서는 '농도를'로 들리나 전체 1회차 입력에서는 '능도를'에 가깝게 인지되어 모음 명료성이 다소 약함"
+      ]
     }
   ],
-  "method_limit": "Automated multimodal review plus transcript comparison; no claim of human listening."
+  "method_limit": "Automated multimodal review plus transcript comparison; no claim of human listening.",
+  "batch_status": "completed_with_one_hold"
 }
+
