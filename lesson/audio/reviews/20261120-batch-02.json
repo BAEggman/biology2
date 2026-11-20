@@ -1,0 +1,340 @@
+{
+  "batch": "20261120-02",
+  "status": "accepted_for_integration",
+  "new_audio_published": 16,
+  "already_published_previous_batch": 13,
+  "blocker": null,
+  "lessons": {
+    "L14a": {
+      "segments": 8,
+      "zip": "biology_L14a_v1.zip",
+      "download": "ZIP CRC and all WAV SHA256/durations verified locally",
+      "source_script_comparison": "8 exact current say scripts; only explicitly allowed pronunciation expansions",
+      "wav_hashes_and_durations": "matched generator manifest",
+      "mp3_conversion": "8 files, 96kbps mono 24kHz",
+      "review": {
+        "inspection_method": "multimodal_direct_wav_audio_input (not external ASR-only)",
+        "criteria": "HOLD only on content_omission, semantic_reversal, or number/direction error; minor phonetic variation allowed",
+        "results": [
+          {
+            "filename": "biology_L14a_s1_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L14a_s2_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [
+              "'튀어 오를 뿐'의 '튀어'가 빠른 발화로 '티어'에 가깝게 들림"
+            ],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L14a_s3_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L14a_s4_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L14a_s5_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [
+              "첫 문장 '창고에서는'이 경음화되어 '창꼬에서는'에 가깝게 들림"
+            ],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L14a_s6_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L14a_s7_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [
+              "마지막 문장 '두 그림을'의 '그림'이 앞 모음 영향으로 약간 '구림'에 가깝게 들림"
+            ],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L14a_s8_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [
+              "'보호하고'의 어미가 자연 발화 중 '보호하구'에 가깝게 들림"
+            ],
+            "content_omission": false
+          }
+        ]
+      }
+    },
+    "L05b": {
+      "segments": 8,
+      "zip": "biology_L05b_v1.zip",
+      "download": "ZIP CRC and all WAV SHA256/durations verified locally",
+      "review": {
+        "inspection_method": "wav_audio_multimodal_input",
+        "external_asr_used": false,
+        "results": [
+          {
+            "filename": "biology_L05b_s1_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L05b_s2_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L05b_s3_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [
+              "'다를 이 자'와 '두 이 자' 대조 구간의 평이한 억양"
+            ],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L05b_s4_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L05b_s5_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [
+              "'파랑·노랑' 가운뎃점 위치의 짧은 휴지"
+            ],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L05b_s6_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L05b_s7_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          },
+          {
+            "filename": "biology_L05b_s8_v1.wav",
+            "decision": "PASS",
+            "severe_issues": [],
+            "minor_issues": [],
+            "content_omission": false
+          }
+        ]
+      },
+      "source_script_comparison": "8 exact current say scripts; only explicitly allowed pronunciation expansions",
+      "mp3_conversion": "8 files, 96kbps mono 24kHz"
+    }
+  },
+  "review_limit": "Generator-side multimodal audio self-review, not independent human listening. Minor intelligible pronunciation variation allowed per user instruction.",
+  "files": [
+    {
+      "lesson_id": "L14a",
+      "sid": "s1",
+      "path": "lesson/audio/L14a_s1_v1.mp3",
+      "bytes": 563660,
+      "sha256": "447193c4e226284e1f1f97593d933b52b93f567ce58bdd8823361a4928434359",
+      "git_sha": "a8918470730f7775dd1198d8f56a12535eb7e660",
+      "wav_sha256": "4a06d38a9eaefe5aa8f321878bf7fa237229dafde2998e10b96b9df59cbeec13",
+      "duration_s": 46.88,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L14a",
+      "sid": "s2",
+      "path": "lesson/audio/L14a_s2_v1.mp3",
+      "bytes": 282860,
+      "sha256": "d460e915e9ce6b1956ede6c2792d9735aaa9975527084be3efc1a8813f76a973",
+      "git_sha": "c174899fb9f9b28eae1b79d9cdd8f8b64a9234f8",
+      "wav_sha256": "5e06a2845ccd45e40b17883939b4673cb9830f295d83fd0eda6e92f88d3796b2",
+      "duration_s": 23.492,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L14a",
+      "sid": "s3",
+      "path": "lesson/audio/L14a_s3_v1.mp3",
+      "bytes": 402956,
+      "sha256": "8a358b01d660594ad47336fc7a603276f1450b5656bc1153cfdb6a5bb84b0414",
+      "git_sha": "c8cd0427de15f8f2562cb84d02b4ed7dc1659df1",
+      "wav_sha256": "d8124c3c111acd4f8e0c64c1723dfa60928da06009ac178508afba5e1450ff6b",
+      "duration_s": 33.498,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L14a",
+      "sid": "s4",
+      "path": "lesson/audio/L14a_s4_v1.mp3",
+      "bytes": 306188,
+      "sha256": "4238211890b8ce3a8cf9a6f3ef827955e0e5dfc1bc1dd51c78722b58fe54149b",
+      "git_sha": "52ecd5a80f3f9ff3d03ffa802f0bcbb3821fd457",
+      "wav_sha256": "dceed89efcababb599a746e9992b1bd016d434bea3838b2ab27322db67f9ad3b",
+      "duration_s": 25.44,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L14a",
+      "sid": "s5",
+      "path": "lesson/audio/L14a_s5_v1.mp3",
+      "bytes": 413036,
+      "sha256": "a214a922620f9e690f1a6e53bb9107e5c48bdbaa49aecc75c076114165a8fabb",
+      "git_sha": "dec2a93adea47db3693daff851917879c25308bf",
+      "wav_sha256": "4210d1104d3e4a8f62445b524ca81827843d99456d71b819114a5d359faeb1e4",
+      "duration_s": 34.334,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L14a",
+      "sid": "s6",
+      "path": "lesson/audio/L14a_s6_v1.mp3",
+      "bytes": 286316,
+      "sha256": "c1e2ecbb53ae00b874fc5afe697406e0b05640a9e841a76e04a6b6020bcdbd71",
+      "git_sha": "b98b0ad3dad86bd683deec3dac41d9a65871f7be",
+      "wav_sha256": "adfa070ae0f1bfb904ec03133fcb4548fb25378f35b00e7b8c5903d2e014c715",
+      "duration_s": 23.77,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L14a",
+      "sid": "s7",
+      "path": "lesson/audio/L14a_s7_v1.mp3",
+      "bytes": 294668,
+      "sha256": "2ef8d99c729d50be0aaaf9eb65d01753465448d8c16136e8dfb4dc7496d61638",
+      "git_sha": "465bccbfe8d39c93d38b6b165d3ad30506a9cd9c",
+      "wav_sha256": "ce0809e53687f85ce90c8190ef94e02555bf9f10e36ca8c70a6cd12802a4154b",
+      "duration_s": 24.466,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L14a",
+      "sid": "s8",
+      "path": "lesson/audio/L14a_s8_v1.mp3",
+      "bytes": 427724,
+      "sha256": "1d446f9430131a2a271dd291628554ef2f6bdbbefd6c8b8b1e62af36743f8e6f",
+      "git_sha": "85ce44091df4bbfefb224d26cb146299ed9d6947",
+      "wav_sha256": "89c31a84161c8c43750f2258e20a37c7ac14cbc7d828236d1e56ac130a11c2e4",
+      "duration_s": 35.548,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L05b",
+      "sid": "s1",
+      "path": "lesson/audio/L05b_s1_v1.mp3",
+      "bytes": 818540,
+      "sha256": "5d2a026492d30bb602a46df503116c53f0c531bdee79d89c51919496912a7eb9",
+      "git_sha": "6b8e6d5a4e85e94bffd70de272b944abcab0cf36",
+      "wav_sha256": "259858a49ebd5bb4ddf3106b5b5e4091dfc858e579663867ac13e649fb0af274",
+      "duration_s": 68.11845833333334,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L05b",
+      "sid": "s2",
+      "path": "lesson/audio/L05b_s2_v1.mp3",
+      "bytes": 398348,
+      "sha256": "8ab330baea2629078144d683655648d5ec54108e1a96a8050fac9aa040d68e2a",
+      "git_sha": "3fcdfaa51bd41dded456bbf50e77f06ad53458c4",
+      "wav_sha256": "8004e7d3c57533e4bdc95b8ef848f459f1ee77be254a9276e5832756cef4d985",
+      "duration_s": 33.10908333333333,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L05b",
+      "sid": "s3",
+      "path": "lesson/audio/L05b_s3_v1.mp3",
+      "bytes": 448172,
+      "sha256": "186da6ac5b427e58ca7b48b377e381078c334a9774076021a3c3cf1b37899bed",
+      "git_sha": "bdf6e627a78825a8cc84ce8c29f12314a0f4b163",
+      "wav_sha256": "660586537d67a23cea488594fe1473f4188438dc868fa5da3c265119e3b9be32",
+      "duration_s": 37.264291666666665,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L05b",
+      "sid": "s4",
+      "path": "lesson/audio/L05b_s4_v1.mp3",
+      "bytes": 379340,
+      "sha256": "cf9566a21211942c84d5a51f0238319aac590714d7336d10b2aee54246a7b896",
+      "git_sha": "0ebb4917401e608ab10781cbf0653b96b63aa190",
+      "wav_sha256": "7479b3f43afcf6d6d49355eff2e1fbcec9dc7e1a7d3741e8b82312f1af872700",
+      "duration_s": 31.514166666666668,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L05b",
+      "sid": "s5",
+      "path": "lesson/audio/L05b_s5_v1.mp3",
+      "bytes": 355436,
+      "sha256": "7080e7dfd35d7332b1eb7ed80ba2f5e5b746e38131b854ef4185dc6eeb42b53e",
+      "git_sha": "064f0925ff16cf8abcb666eea517570a5c117df3",
+      "wav_sha256": "e5f44c11ac272b9e022f8f2b57d1b2499756e26bf302eb539861a0e7eaaa63eb",
+      "duration_s": 29.536625,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L05b",
+      "sid": "s6",
+      "path": "lesson/audio/L05b_s6_v1.mp3",
+      "bytes": 452204,
+      "sha256": "04511cfa3a3ad822f406a4a96b5fe374a7afbbc5f7af2ae0741d7c20ea3a4d26",
+      "git_sha": "4631cd930c6839898261e65657441a4f7ba8b277",
+      "wav_sha256": "aca41062a3e1bc91e8f9ba739db6b0058cae4d0f1ac6f32ce79c720be9d2f3a8",
+      "duration_s": 37.60429166666667,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L05b",
+      "sid": "s7",
+      "path": "lesson/audio/L05b_s7_v1.mp3",
+      "bytes": 591308,
+      "sha256": "a7dd6bb862f0b18964c5c98413537b8177f5df79cf6bdf781995099d1483d9a5",
+      "git_sha": "0aaadab33be2413e037c51ce194225c1dc4ddf3c",
+      "wav_sha256": "6193aaf48061e4f65e29fc2df87e56186bf702cf08782068db748f7375ba99b5",
+      "duration_s": 49.193583333333336,
+      "source_text_match": true
+    },
+    {
+      "lesson_id": "L05b",
+      "sid": "s8",
+      "path": "lesson/audio/L05b_s8_v1.mp3",
+      "bytes": 385100,
+      "sha256": "3724c51865adf606e9af7d26b22261a81f7cf37f8fb2125eae1a9f55f25d782e",
+      "git_sha": "62f9a612185d251dd6736125a914c66591086f6f",
+      "wav_sha256": "eabf9477cbae6ee666980883552629cf7864ba0f3b89d7588cd2284568866d1f",
+      "duration_s": 32.00033333333333,
+      "source_text_match": true
+    }
+  ],
+  "validation_summary": "All 31 manifest entries passed exact source comparison, SHA256, audio decoding and duration checks."
+}
