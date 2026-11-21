@@ -162,7 +162,7 @@ function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
   const advance = () => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, 700);
-  narration.play({sid, text:t, spokenText:ttsNorm(t), rate,
+  narration.play({sid, text:t, spokenText:ttsNorm(t), rate, auto:playing && mode === 'tour',
     onend:advance,
     onstatus:label => { if (my === speakSeq) $('audioStatus').textContent = label; },
     onblocked:() => { if (my !== speakSeq) return; playing = false; $('bPlay').textContent = '▶ 시작'; $('audioStatus').textContent = '시작을 눌러 음성을 재생한다'; }
@@ -193,7 +193,7 @@ function speakRecap() {
     if (my !== speakSeq || !voice || mode !== 'tour') return;
     if (k >= stops.length) { playing = false; $('bPlay').textContent = '▶ 다시'; return; }
     const st = stops[k], text = st.say || (st.obj + '. ' + st.fact);
-    narration.play({sid:st.sid, text, spokenText:ttsNorm(text), rate,
+    narration.play({sid:st.sid, text, spokenText:ttsNorm(text), rate, auto:true,
       onend:() => setTimeout(() => read(k + 1), 700),
       onstatus:label => { if (my === speakSeq) $('audioStatus').textContent = label + ' · 되짚기 ' + (k + 1) + '/' + stops.length; },
       onblocked:() => { if (my !== speakSeq) return; playing = false; $('bPlay').textContent = '▶ 시작'; $('audioStatus').textContent = '시작을 눌러 음성을 재생한다'; }

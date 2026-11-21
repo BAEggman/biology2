@@ -14,6 +14,7 @@ const SUITES=[
   ['smoke_lessoninbox.js','과 시험 오답 편지함'],
   ['verify_lock.js','그림 · 글 잠금(L17e — 11-19 사용자 만족분)'],
   ['verify_saytext.js','낭독 대본 문(제어문자 · 어미 · 언어 복구 44 · 과 142 / 정거장 1,598)'],
+  ['verify_hold.js','검수 보류 — hold.json 이 대장과 같고 재생기가 보류 구간을 스스로 읽지 않음'],
 ];
 let bad=[];
 for(const [f,label] of SUITES){

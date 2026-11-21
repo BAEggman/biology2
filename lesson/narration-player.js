@@ -9,7 +9,12 @@
       this.timer = null;
       this.manifest = options.manifest || fetch(new URL('audio/manifest.json', document.baseURI), {cache:'no-cache'})
         .then(r => r.ok ? r.json() : {}).catch(() => ({}));
+      // Review hold (tools/audio/mkhold.py): {lesson: {sid: issueId}} — a missing file means nothing is held.
+      this.hold = options.hold || fetch(new URL('audio/hold.json', document.baseURI), {cache:'no-cache'})
+        .then(r => r.ok ? r.json() : {}).catch(() => ({}));
+      this.holdDelay = options.holdDelay ?? 3500;
     }
+    async heldIssue(sid) { const h = await this.hold; return h?.[this.lessonId]?.[sid] || null; }
     stop() {
       this.seq++;
       clearTimeout(this.timer);
@@ -17,12 +22,17 @@
       if (root.speechSynthesis) root.speechSynthesis.cancel();
     }
     setRate(rate) { if (this.audio) this.audio.playbackRate = rate; }
-    async play({sid, text, spokenText, rate = 1, onend, onblocked, onstatus}) {
+    async play({sid, text, spokenText, rate = 1, auto = false, onend, onblocked, onstatus}) {
       this.stop();
       const token = this.seq;
       const alive = () => token === this.seq;
-      const manifest = await this.manifest;
+      const [manifest, held] = await Promise.all([this.manifest, this.heldIssue(sid)]);
       if (!alive()) return;
+      // A held stop is never read on its own; stepping to it by hand reads it with the device voice only.
+      if (held) {
+        if (auto) { onstatus('검수 보류 — 내용 확인 중'); this.timer = setTimeout(() => { if (alive()) onend(); }, this.holdDelay); return; }
+        return device('기기 음성 · 검수 보류');
+      }
       const entry = manifest.lessons?.[this.lessonId]?.[sid];
       // An edited script must never silently play an old recording.
       if (entry?.status === 'ready' && entry.text === text && entry.src) {
@@ -46,10 +56,10 @@
         return;
       }
       return device();
-      function device() {
+      function device(label = '기기 음성') {
         // Use the owning instance; invoked only after asynchronous manifest resolution.
         if (!alive()) return;
-        onstatus('기기 음성');
+        onstatus(label);
         if (!root.speechSynthesis || !root.SpeechSynthesisUtterance) { onblocked(); return; }
         const u = new root.SpeechSynthesisUtterance(spokenText || text);
         u.lang = 'ko-KR'; u.rate = rate;
