@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-20",
+  "updated": "2026-11-21",
   "lessons": {
     "L03a": {
       "s2": {
@@ -246,12 +246,6 @@
         "text": "왼쪽 꽃잎은 셋, 오른쪽은 다섯이다. 꽃 기관의 수는 단자엽식물에서 삼의 배수, 진정쌍자엽식물에서 사 또는 오의 배수라는 특징을 연결하자.",
         "status": "ready",
         "sha256": "5ef7b6158a0a1c515c0f2f5500da06cedd6acb5ebbfaf4cdabbf2da11198971a"
-      },
-      "s9": {
-        "src": "https://baeggman.github.io/biology2-audio/L36d_s9_v1.mp3",
-        "text": "왼쪽 옥수수 낟알 속의 얇은 떡잎 하나를 찾자. 벼과 식물의 이 떡잎은 배반이다. 오른쪽 콩에서는 도톰한 떡잎 둘이 마주 본다. 씨앗 공방의 종자 창고에서도 본 두 예시다. 옥수수는 배젖이 남아 있고 콩은 양분을 주로 떡잎에 저장한다. 하지만 피마자처럼 배젖이 남는 진정쌍자엽식물도 있으므로, 두 무리를 구분할 때는 떡잎 수를 직접 확인하자.",
-        "status": "ready",
-        "sha256": "00769d4dbcfb5211442f038a8b152d92677724404c7cbcbd16ca239f1dd48c60"
       },
       "s10": {
         "src": "https://baeggman.github.io/biology2-audio/L36d_s10_v1.mp3",
