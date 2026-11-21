@@ -1,0 +1,32 @@
+{
+ "lesson": "L43c",
+ "real": {
+  "뉴클레오타이드": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "프로모터": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "보편전사인자": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "사일렌서": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s10"
+  }
+ },
+ "fake": [
+  "UTR",
+  "헬리케이스",
+  "DnaG"
+ ]
+}

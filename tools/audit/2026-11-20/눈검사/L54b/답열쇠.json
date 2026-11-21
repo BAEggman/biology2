@@ -1,0 +1,35 @@
+{
+ "lesson": "L54b",
+ "real": {
+  "Pg": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "반감기": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "탄소-14": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "우라늄-238": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "600만": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "바이로이드",
+  "HTLV",
+  "스트레스"
+ ]
+}
