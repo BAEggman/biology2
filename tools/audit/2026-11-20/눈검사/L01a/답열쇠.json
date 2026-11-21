@@ -1,0 +1,62 @@
+{
+ "lesson": "L01a",
+ "real": {
+  "바이러스": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "헤르페스": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "EBV": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "헤르페스바이러스": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "스트레스": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "복제(아데노": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "아데노바이러스": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "HSV": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "두창바이러스": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "HPV": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "버킷림프종",
+  "Hfr",
+  "시클리드",
+  "플라비",
+  "CRISPR"
+ ]
+}

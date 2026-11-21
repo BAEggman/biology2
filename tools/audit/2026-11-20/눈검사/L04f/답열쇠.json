@@ -1,0 +1,25 @@
+{
+ "lesson": "L04f",
+ "real": {
+  "척삭": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "인두열": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "피낭동물(멍게": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "바이러스",
+  "HTLV",
+  "스크래피"
+ ]
+}

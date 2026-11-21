@@ -1,0 +1,98 @@
+{
+ "lesson": "L05a",
+ "real": {
+  "글로메로균": {
+   "sid": "s1",
+   "cls": "A0",
+   "props": [
+    "글러브",
+    "가죽 글러브"
+   ]
+  },
+  "AM": {
+   "sid": "s2",
+   "cls": "A0",
+   "props": [
+    "가죽 글러브",
+    "파고든",
+    "손가락",
+    "붉은 나뭇가지",
+    "나뭇가지",
+    "수지상"
+   ]
+  },
+  "ECM": {
+   "sid": "s4",
+   "cls": "A1",
+   "props": [
+    "겉만 감고",
+    "겉만",
+    "겉에서 감"
+   ]
+  },
+  "셀룰로오스": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "펩티도글리칸": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null
+  },
+  "오피스토콘타": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "병꼴균": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "접합균": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "자낭균": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "지의류": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "흡수영양": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "담자균": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "외생균근(ECM)": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "자낭": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "스컹크",
+  "PTTH",
+  "신경호르몬",
+  "Cas",
+  "Cas9",
+  "크로이츠펠트",
+  "HIV"
+ ]
+}

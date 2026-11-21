@@ -1,0 +1,43 @@
+{
+ "lesson": "L10c",
+ "real": {
+  "틀이동": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "UV": {
+   "sid": "s10",
+   "cls": "A0",
+   "props": [
+    "해 모양",
+    "그을음"
+   ]
+  },
+  "과오": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "정지": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "삽입": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "결실": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UTR",
+  "헬리케이스",
+  "DnaG"
+ ]
+}

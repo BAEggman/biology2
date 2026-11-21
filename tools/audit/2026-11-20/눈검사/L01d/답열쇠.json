@@ -1,0 +1,82 @@
+{
+ "lesson": "L01d",
+ "real": {
+  "플라비": {
+   "sid": "s2",
+   "cls": "A0",
+   "props": [
+    "노란 깃발",
+    "노란"
+   ]
+  },
+  "오르토믹소": {
+   "sid": "s6",
+   "cls": "A1",
+   "props": [
+    "오르골",
+    "끈적한 점액"
+   ]
+  },
+  "HIV": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "HTLV": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "CD4": {
+   "sid": "s8",
+   "cls": "A1",
+   "props": [
+    "단추가 한 줄에 넷",
+    "한 줄에 넷"
+   ]
+  },
+  "바이러스": {
+   "sid": "s13",
+   "cls": "B",
+   "props": null
+  },
+  "버킷림프종": {
+   "sid": "s14",
+   "cls": "C",
+   "props": null
+  },
+  "EBV": {
+   "sid": "s14",
+   "cls": "B",
+   "props": null
+  },
+  "과)": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "지카": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "HTLV-1": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "파필로마(HPV)": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "스트레스",
+  "PrP",
+  "야코프병",
+  "Cas",
+  "Cas9",
+  "펩티도글리칸"
+ ]
+}

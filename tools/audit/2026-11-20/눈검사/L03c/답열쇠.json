@@ -1,0 +1,67 @@
+{
+ "lesson": "L03c",
+ "real": {
+  "TATA": {
+   "sid": "s4",
+   "cls": "A1",
+   "props": [
+    "타탄"
+   ]
+  },
+  "펩티도글리칸": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "에스테르": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "포르밀메티오닌": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "fMet": {
+   "sid": "s7",
+   "cls": "A1",
+   "props": [
+    "F자",
+    "에프자"
+   ]
+  },
+  "핵막": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "리보솜": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "히스톤": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "오페론": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "막지질": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "버킷림프종",
+  "HTLV",
+  "스트로마톨라이트",
+  "플라스크",
+  "CRISPR"
+ ]
+}

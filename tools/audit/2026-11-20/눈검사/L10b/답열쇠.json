@@ -1,0 +1,40 @@
+{
+ "lesson": "L10b",
+ "real": {
+  "뉴클레오타이드": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "CCA": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "UAG": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "UGA": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "tRNA": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "미토콘드리아": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UV",
+  "헬리케이스",
+  "GATC"
+ ]
+}
