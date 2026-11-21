@@ -126,5 +126,189 @@
  "L19e_s1_v1": {
   "status": "REJECT",
   "review": "필청 A/B — 끝말 '결과다'에 군소리 '드'(결과드다 · 높음)"
+ },
+ "L38a_s1_v1": {
+  "status": "CLEAR",
+  "review": "L38a 받아 적기(9 파일) — 원문과 같음"
+ },
+ "L38a_s4_v1": {
+  "status": "CLEAR",
+  "review": "L38a 받아 적기(9 파일) — 원문과 같음"
+ },
+ "L38a_s5_v1": {
+  "status": "CLEAR",
+  "review": "L38a 받아 적기(9 파일) — 원문과 같음"
+ },
+ "L38a_s6_v1": {
+  "status": "CLEAR",
+  "review": "L38a 받아 적기(9 파일) — 원문과 같음"
+ },
+ "L38a_s8_v1": {
+  "status": "CLEAR",
+  "review": "L38a 받아 적기(9 파일) — 원문과 같음"
+ },
+ "L38a_s9_v1": {
+  "status": "CLEAR",
+  "review": "L38a 받아 적기(9 파일) — 원문과 같음"
+ },
+ "L38a_s10_v1": {
+  "status": "CLEAR",
+  "review": "L38a 받아 적기(9 파일) — 원문과 같음"
+ },
+ "L38a_s12_v1": {
+  "status": "CLEAR",
+  "review": "L38a — 원문과 같음(숫자를 한글로 적음 · '-OH'를 '오에이치')"
+ },
+ "L38a_s3_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L38a — 받아 적기 '이웃'→'이온' · 필청 A/B 에서 '이웃'(중간 · [이운 뉴]로 비음화) · '앞의'→[에]"
+ },
+ "L13c_s8_v1": {
+  "status": "CLEAR",
+  "review": "L13c 받아 적기(4 파일) — 원문과 같음"
+ },
+ "L13c_s9_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L13c — 첫 낱말 '대장'을 '제장'으로 적음(가벼운 흔들림)"
+ },
+ "L13c_s10_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L13c — '뒤의'를 [에]로(허용)"
+ },
+ "L13c_s12_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L13c — '자연살해세포'가 '자연 사례 세포'로 · '유핵'이 '유엑'으로 들림 · 사용자 지시(2026-11-21 「큰 문제 아니면 일단 녹음 완료, 피드백은 나중에」)로 통과 — 청취 때 확인할 곳"
+ },
+ "L43b_s6_v1": {
+  "status": "CLEAR",
+  "review": "L43b 받아 적기(5 파일) — 원문과 같음"
+ },
+ "L43b_s8_v1": {
+  "status": "CLEAR",
+  "review": "L43b 받아 적기(5 파일) — 원문과 같음"
+ },
+ "L43b_s12_v1": {
+  "status": "CLEAR",
+  "review": "L43b 받아 적기(5 파일) — 원문과 같음"
+ },
+ "L43b_s13_v1": {
+  "status": "CLEAR",
+  "review": "L43b 받아 적기(5 파일) — 원문과 같음"
+ },
+ "L43b_s4_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L43b — '에스 엔 알 엔 피'의 '피'를 '에피'로 적음(가벼운 흔들림)"
+ },
+ "L43f_s2_v1": {
+  "status": "CLEAR",
+  "review": "L43f 받아 적기(4 파일) — 원문과 같음"
+ },
+ "L43f_s8_v1": {
+  "status": "CLEAR",
+  "review": "L43f — 원문과 같음('10 ~ 20'을 '십에서 이십'으로)"
+ },
+ "L43f_s3_v1": {
+  "status": "CLEAR",
+  "review": "L43f — 원문과 같음(받아 적기가 문장을 끊어 적음)"
+ },
+ "L43f_s1_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L43f — '안마당'을 '앞마당'으로 적음(가벼운 흔들림)"
+ },
+ "L49a_s1_v1": {
+  "status": "CLEAR",
+  "review": "L49a 받아 적기(8 파일) — 원문과 같음"
+ },
+ "L49a_s12_v1": {
+  "status": "CLEAR",
+  "review": "L49a 받아 적기 — 원문과 같음"
+ },
+ "L49a_s2_v1": {
+  "status": "CLEAR",
+  "review": "L49a — 원문과 같음('%'를 '퍼센트'로)"
+ },
+ "L49a_s7_v1": {
+  "status": "CLEAR",
+  "review": "L49a — 원문과 같음('~'를 '에서'로)"
+ },
+ "L49a_s4_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L49a — '베'를 '배'로(ㅐ/ㅔ) · '낱포도'를 '납포도'로(비음화)"
+ },
+ "L49a_s10_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L49a — '호르몬'을 '호르문'으로(가벼운 흔들림)"
+ },
+ "L49a_s6_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L49a — '췌장'이 '최장'으로 들림 · 사용자 지시(2026-11-21 「큰 문제 아니면 일단 녹음 완료, 피드백은 나중에」)로 통과 — 청취 때 확인할 곳"
+ },
+ "L49a_s11_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L49a — '잔기'가 '장기'로 들림 · 사용자 지시(2026-11-21 「큰 문제 아니면 일단 녹음 완료, 피드백은 나중에」)로 통과 — 청취 때 확인할 곳"
+ },
+ "L46c_s4_v1": {
+  "status": "CLEAR",
+  "review": "L46c 받아 적기(4 파일) — 원문과 같음"
+ },
+ "L46c_s2_v1": {
+  "status": "CLEAR",
+  "review": "L46c — 원문과 같음(숫자를 한글로)"
+ },
+ "L46c_s1_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L46c — '원심분리해'를 '원심 분리에'로 적음(가벼운 흔들림)"
+ },
+ "L46c_s5_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L46c — '원반을'을 '원반에'로 적음(가벼운 흔들림)"
+ },
+ "L04c_s9_v2": {
+  "status": "CLEAR",
+  "review": "다시 만든 판(7 파일) 받아 적기 — 원문과 같음"
+ },
+ "L04d_s10_v2": {
+  "status": "CLEAR",
+  "review": "다시 만든 판 — 원문과 같음('지 자' 바르게)"
+ },
+ "L31d_s8_v2": {
+  "status": "CLEAR",
+  "review": "다시 만든 판 — 원문과 같음('일 삼 비 피 지' 바르게)"
+ },
+ "L19e_s1_v2": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "다시 만든 판 — 군소리 없음 · '아폽토시스'를 '아포토시스'로(흔한 발음)"
+ },
+ "L13c_s1_v2": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "다시 만든 판 — '그림과' 바르게 · '그림의'를 [에]로 · '유핵'이 '유액'으로(가벼운 흔들림)"
+ },
+ "L04c_s7_v2": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "다시 만든 판 — '두족류'를 또 '두종류'로 적음 = 표준 발음 [두종뉴]와 같은 소리 · '마개'→'막이' · 사용자 지시(2026-11-21 「큰 문제 아니면 일단 녹음 완료, 피드백은 나중에」)로 통과 — 청취 때 확인할 곳"
+ },
+ "L04d_s9_v2": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "다시 만든 판 — '더듬이' 바르게 · '갑옷'을 '가복'으로([가볻]에 가까움) · '결합강'이 '결악광'으로 · 사용자 지시(2026-11-21 「큰 문제 아니면 일단 녹음 완료, 피드백은 나중에」)로 통과 — 청취 때 확인할 곳"
+ },
+ "L46c_s8_v1": {
+  "status": "CLEAR",
+  "review": "L46c 받아 적기(4 파일) — 원문과 같음"
+ },
+ "L46c_s11_v1": {
+  "status": "CLEAR",
+  "review": "L46c 받아 적기 — 원문과 같음"
+ },
+ "L46c_s7_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "L46c — '조직액의'를 '조직에게'로 적음(가벼운 흔들림)"
+ },
+ "L46c_s10_v1": {
+  "status": "REJECT",
+  "review": "필청 A/B — '남의 원반이'가 '아흔아홉 마리의 원반이'로(높음 · 없는 말)"
+ },
+ "L46c_s10_v2": {
+  "status": "CLEAR",
+  "review": "다시 만든 판 받아 적기 — '남의 원반이' 바르게 · 원문과 같음"
  }
 }
