@@ -1,0 +1,21 @@
+{
+ "lesson": "L22c",
+ "real": {
+  "압류설": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s7"
+  },
+  "열매": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "앱시스산",
+  "니트로게나아제",
+  "젤라틴"
+ ]
+}

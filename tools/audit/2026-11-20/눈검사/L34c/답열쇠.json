@@ -1,0 +1,25 @@
+{
+ "lesson": "L34c",
+ "real": {
+  "배우체형": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "포자체형": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "꺾꽂이": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "앱시스산",
+  "니트로게나아제",
+  "젤라틴"
+ ]
+}

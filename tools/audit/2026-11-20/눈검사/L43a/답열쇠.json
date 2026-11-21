@@ -1,0 +1,55 @@
+{
+ "lesson": "L43a",
+ "real": {
+  "폴리펩타이드": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "폴리시스트론": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "모노시스트론": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "프로모터": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "TATA": {
+   "sid": "s7",
+   "cls": "A0",
+   "props": [
+    "타탄"
+   ]
+  },
+  "원핵": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "폴리시스트론성": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "모노시스트론성": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UV",
+  "DnaG",
+  "뉴클레오타이드",
+  "크리스탈린"
+ ]
+}

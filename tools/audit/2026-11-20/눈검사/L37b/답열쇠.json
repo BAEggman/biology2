@@ -1,0 +1,41 @@
+{
+ "lesson": "L37b",
+ "real": {
+  "뉴클레오솜": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s5"
+  },
+  "프로그램": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "진정염색질": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "이질염색질": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "탈아세틸화": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "후성유전": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UTR",
+  "헬리케이스",
+  "DnaG"
+ ]
+}

@@ -30,6 +30,19 @@ for s in d['stops']:
     h = s['fact'].split(' — ')[0].strip()
     for part in re.split(r'\s*[·,]\s*', h):
         if 2 <= len(part) <= 12 and part not in real and not re.search(r'\s', part): real[part] = {'sid': s['sid'], 'cls': 'fact', 'props': None}
+# (2026-11-21 넷째 묶음) 답 열쇠 고침 — ① 정거장 번호를 카드가 아니라 이 과의 stops 에서 다시 잡는다(그 낱말이 hook · fact · obj · say 에 처음 나오는 정거장) · ② 군더더기 낱말(괄호 짝 안 맞음 · 화살표 · 「/」 · 한 글자 · 흔한 말)을 뺀다.
+JUNK = {'생산', '바이러스', '세균', '세포', '단백질', '효소', '호르몬', '물', '빛'}
+def _clean(t):
+    return not (len(t) < 2 or t in JUNK or t.count('(') != t.count(')') or re.search(r'[↑↓→←/]', t))
+def _home(t):
+    for f in ('hook', 'fact', 'obj', 'say'):
+        for s in d['stops']:
+            if t in (s.get(f) or ''): return s['sid']
+    return None
+for t in list(real):
+    if not _clean(t): real.pop(t); continue
+    h = _home(t)
+    if h and h != real[t]['sid']: real[t]['sid_card'] = real[t]['sid']; real[t]['sid'] = h
 src = open(f'{ROOT}/tools/lesson_topics.js', encoding='utf-8').read()
 scene = d.get('scene', '')
 # 같은 단원: lesson_topics.js 의 단원 덩어리에서 이 과의 장면(sNN)이나 id 가 든 덩어리
