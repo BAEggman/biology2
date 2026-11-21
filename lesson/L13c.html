@@ -230,9 +230,10 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
     const W = (lex && lex.words) || {};
     let t = String(text);
     // ① 과 번호
-    t = t.replace(/L(\d{2})([a-z]?)(?![A-Za-z0-9])/g, (all, n, c) => {
+    t = t.replace(/L(\d{2})([a-z]?)(?![A-Za-z0-9])((?:으로|로|가|이|를|을|는|은|와|과)(?=[\s,.·)」'"!?:;]|$))?/g, (all, n, c, pp) => {
       const id = 'L' + n + c; const title = order && order[id];
-      return title ? `「${title}」 그림` : '다른 그림';
+      const w = title ? `「${title}」 그림` : '다른 그림';
+      return pp ? w + particle('그림', pp) : w;   // 「… 그림」 뒤 조사는 받침에 맞춤(그림와 → 그림과)
     });
     // ② 로마 숫자(문맥) — 볼티모어 군 · 부두 번호는 한자어 수, 나머지는 영어 수. 대 · 자 · 선 · 기가 붙으면 글자
     const baltimore = /^L01/.test(lesson || '');
