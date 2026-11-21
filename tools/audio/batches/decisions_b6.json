@@ -129,5 +129,152 @@
   "status": "CLEAR",
   "review": "rv_b6g2",
   "note": "1.2초 넘는 쉼 3곳(45초) — 받아쓰기는 온전 · 청취 때 확인할 곳"
+ },
+ "L51a_s9_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g3"
+ },
+ "L51a_s2_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "'의'→[에] · 숫자 · 띄어쓰기 · 표준 발음(걷힌=[거친])"
+ },
+ "L51a_s5_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "'의'→[에] · 숫자 · 띄어쓰기 · 표준 발음(걷힌=[거친])"
+ },
+ "L51a_s8_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "'의'→[에] · 숫자 · 띄어쓰기 · 표준 발음(걷힌=[거친])"
+ },
+ "L54a_s2_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "'의'→[에] · 숫자 · 띄어쓰기 · 표준 발음(걷힌=[거친])"
+ },
+ "L54a_s3_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "'의'→[에] · 숫자 · 띄어쓰기 · 표준 발음(걷힌=[거친])"
+ },
+ "L54a_s8_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "'의'→[에] · 숫자 · 띄어쓰기 · 표준 발음(걷힌=[거친])"
+ },
+ "L51a_s1_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "'둘을 잇'→받아쓰기 '두룰 있' — 소리 같음"
+ },
+ "L51a_s7_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "뮐러→받아쓰기 '뮬러' — 청취 때 확인할 곳"
+ },
+ "L51a_s12_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "'모기 둘은'=[모기두른]"
+ },
+ "L54a_s6_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "출현→받아쓰기 '출연'(ㅎ 약화) — 청취 때 확인할 곳"
+ },
+ "L54a_s10_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g3",
+  "note": "녹슨→받아쓰기 '녹순' — 청취 때 확인할 곳"
+ },
+ "L51a_s6_v1": {
+  "status": "REDO",
+  "review": "rv_b6g3",
+  "note": "부정소→'부종소'"
+ },
+ "L54a_s1_v1": {
+  "status": "REDO",
+  "review": "rv_b6g3",
+  "note": "생기지→'생리지' · 파스퇴르→'파스테루'"
+ },
+ "L12g_s3_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g4"
+ },
+ "L12g_s8_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g4"
+ },
+ "L12g_s13_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g4"
+ },
+ "L12g_s15_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g4"
+ },
+ "L54b_s2_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g4"
+ },
+ "L54b_s3_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g4"
+ },
+ "L54b_s7_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g4"
+ },
+ "L12g_s1_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g4",
+  "note": "문장부호 차이"
+ },
+ "L12g_s2_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g4",
+  "note": "네모→받아쓰기 '네무'"
+ },
+ "L12g_s4_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g4",
+  "note": "오므린→'오무린'"
+ },
+ "L12g_s5_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g4",
+  "note": "배 속=[뱃속]"
+ },
+ "L12g_s7_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g4",
+  "note": "배 속=[뱃속]"
+ },
+ "L12g_s11_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g4",
+  "note": "ㄱ자=기역자"
+ },
+ "L12g_s12_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g4",
+  "note": "살며→받아쓰기 '설며' — 청취 때 확인할 곳"
+ },
+ "L12g_s14_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g4",
+  "note": "흰 옷→받아쓰기 '흰 오' — 청취 때 확인할 곳"
+ },
+ "L12g_s6_v1": {
+  "status": "REDO",
+  "review": "rv_b6g4",
+  "note": "벌집위·주름위·겹주름위의 '위'가 '이'로 — 용어가 바뀜"
+ },
+ "L12g_s9_v1": {
+  "status": "REDO",
+  "review": "rv_b6g4",
+  "note": "이소류신→'소류신' · 옥수수→'오수수' · 콩 장수→'콩장소'"
  }
 }
