@@ -276,5 +276,47 @@
   "status": "REDO",
   "review": "rv_b6g4",
   "note": "이소류신→'소류신' · 옥수수→'오수수' · 콩 장수→'콩장소'"
+ },
+ "L43d_s1_v2": {
+  "status": "CLEAR",
+  "review": "rv_redo1"
+ },
+ "L46d_s3_v2": {
+  "status": "CLEAR",
+  "review": "rv_redo1"
+ },
+ "L51a_s6_v2": {
+  "status": "CLEAR",
+  "review": "rv_redo1"
+ },
+ "L12g_s9_v2": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_redo1",
+  "note": "'는 류신'=[는 뉴신] 표준 · 이소류신 · 옥수수 고쳐짐"
+ },
+ "L43d_s9_v2": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_redo1",
+  "note": "되돌린→받아쓰기 '되돌인' — 청취 때 확인할 곳"
+ },
+ "L54a_s1_v2": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_redo1",
+  "note": "솥으로=[소트로] 표준"
+ },
+ "L12g_s6_v2": {
+  "status": "HOLD",
+  "review": "rv_redo1",
+  "note": "벌집위·주름위 → 「이」 두 번째(사전 붙임)"
+ },
+ "L46d_s6_v2": {
+  "status": "HOLD",
+  "review": "rv_redo1",
+  "note": "호스→「호수」 두 번째(사전 붙임) · 불명확 한 곳"
+ },
+ "L46d_s11_v2": {
+  "status": "HOLD",
+  "review": "rv_redo1",
+  "note": "호스→「호수」 두 번째(사전 붙임)"
  }
 }

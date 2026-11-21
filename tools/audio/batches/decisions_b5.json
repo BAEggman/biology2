@@ -184,5 +184,22 @@
   "status": "REDO",
   "review": "rv_b5g3",
   "note": "입력 잘못(mktts 사전 빠짐) — v2"
+ },
+ "L20b_s5_v2": {
+  "status": "CLEAR",
+  "review": "rv_redo1"
+ },
+ "L43a_s5_v2": {
+  "status": "CLEAR",
+  "review": "rv_redo1"
+ },
+ "L43a_s7_v2": {
+  "status": "CLEAR",
+  "review": "rv_redo1"
+ },
+ "L20b_s9_v2": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_redo1",
+  "note": "빳빳이=[빧빠시]"
  }
 }

@@ -13,12 +13,12 @@ for b, (n, v) in sorted(best.items()):
     i = f'{b}_v{n}'
     if v['status'] in ('CLEAR', 'CLEAR_ALLOWED_VARIANT'):
         r = '원문과 같음' if v['status'] == 'CLEAR' else '경미한 차이 허용'
-        acc.append({'id': i, 'review': f"{v['review']} 받아 적기 — {r}" + (f" · {v['notes']}" if v.get('notes') else '')})
+        acc.append({'id': i, 'review': f"{v['review']} 받아 적기 — {r}" + (f" · {v.get('notes') or v.get('note')}" if (v.get('notes') or v.get('note')) else '')})
     else: hold.append((i, v))
 spec = {'batch': batch, 'date': '2026-11-21',
         'by': 'Claude Opus 5.5 — Gemini 작업 모드(Kore) 녹음 · 따로 연 Gemini 작업 대화의 받아 적기(원문 없음) · 다른 곳만 필청 A/B · 사람은 듣지 않음',
         'hashes': 'tools/audio/batches/hashes_20261121.txt', 'accepted': acc,
-        'rejected_attempts': rej + [{'id': i, 'reason': f"{v['status']} — {v.get('notes','')}"} for i, v in hold], 'extra': {}}
+        'rejected_attempts': rej + [{'id': i, 'reason': f"{v['status']} — {(v.get('notes') or v.get('note',''))}"} for i, v in hold], 'extra': {}}
 json.dump(spec, open(f'/tmp/work/{batch}.json', 'w'), ensure_ascii=False, indent=1)
 json.dump([a['id'] for a in acc], open(f'/tmp/work/{batch}_ids.json', 'w'))
 pri = [a for a in acc if '청취 때 확인' in a['review'] or not a['id'].endswith('_v1')]
