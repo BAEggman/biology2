@@ -1,0 +1,43 @@
+{
+ "batch": "20261121-batch-14",
+ "date": "2026-11-21",
+ "by": "Claude Opus 5.5 — Gemini 작업 모드(Kore) · 방법 바꿈(천천히 · 어려운 낱말 앞뒤 쉼 · 사전 강화) · 따로 연 작업 대화의 받아 적기 · 사람은 듣지 않음",
+ "hashes": "tools/audio/batches/hashes_20261121.txt",
+ "accepted": [
+  {
+   "id": "L05a_s1_v3",
+   "review": "rv_hold3 받아 적기 — 원문과 같음"
+  },
+  {
+   "id": "L05a_s5_v3",
+   "review": "rv_hold3 받아 적기 — 원문과 같음"
+  },
+  {
+   "id": "L05a_s10_v3",
+   "review": "rv_hold3 받아 적기 — 원문과 같음"
+  },
+  {
+   "id": "L12d_s6_v3",
+   "review": "rv_hold3 받아 적기 — 원문과 같음"
+  },
+  {
+   "id": "L13a_s1_v3",
+   "review": "rv_hold3 받아 적기 — 경미한 차이 허용 · 잠옷=[자몯] 표준 · 왼쪽 위 · 이 성은 고쳐짐"
+  }
+ ],
+ "rejected_attempts": [
+  {
+   "id": "L12g_s6_v3",
+   "reason": "HOLD — 벌집위·주름위 → 받아쓰기 '이'(세 번째) · 받아쓰기 쪽 착오일 수 있음 — 사람 청취 필요"
+  },
+  {
+   "id": "L46d_s6_v3",
+   "reason": "HOLD — 호스 → 받아쓰기 '호수'(세 번째) · 사람 청취 필요"
+  },
+  {
+   "id": "L46d_s11_v3",
+   "reason": "HOLD — 호스 → 받아쓰기 '호수'(세 번째) · 사람 청취 필요"
+  }
+ ],
+ "extra": {}
+}

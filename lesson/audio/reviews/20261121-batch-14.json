@@ -1,0 +1,121 @@
+{
+  "batch": "20261121-batch-14",
+  "status": "accepted_for_integration",
+  "date": "2026-11-21",
+  "by": "Claude Opus 5.5 — Gemini 작업 모드(Kore) · 방법 바꿈(천천히 · 어려운 낱말 앞뒤 쉼 · 사전 강화) · 따로 연 작업 대화의 받아 적기 · 사람은 듣지 않음",
+  "clips": 5,
+  "accepted": [
+    {
+      "lesson_id": "L05a",
+      "sid": "s1",
+      "version": "v3",
+      "source_commit": "cd79ec6425acfe04748d5039064e192a87039d5c",
+      "say_sha256": "74af17f666f182620d6541242cd627cb607c6e09ba5356e898f7cf5adff2baee",
+      "spoken_sha256": "74af17f666f182620d6541242cd627cb607c6e09ba5356e898f7cf5adff2baee",
+      "wav_sha256": "b195601263f79087ea4374347620fea91137555163c5231989155c1e0563376d",
+      "mp3_sha256": "a44be2b8e215260f5f6d3174beeefee8d1c4755f8a5062b68a03d0aa348d032c",
+      "duration_sec": 46.128,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "rv_hold3 받아 적기 — 원문과 같음",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L05a",
+      "sid": "s5",
+      "version": "v3",
+      "source_commit": "cd79ec6425acfe04748d5039064e192a87039d5c",
+      "say_sha256": "a1724f2c73166b7892942d5a15f2725db6609e217e8076d1f08ab716443947ca",
+      "spoken_sha256": "a1724f2c73166b7892942d5a15f2725db6609e217e8076d1f08ab716443947ca",
+      "wav_sha256": "088c2f594e4549057aaa636a4b297bff429d238bd101ba41e3848abc1f6c7ba0",
+      "mp3_sha256": "53b716d678c615f9ee10dc17f75357c02143ab5108913330a8d25d3d5d35b4c4",
+      "duration_sec": 48.864,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "rv_hold3 받아 적기 — 원문과 같음",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L05a",
+      "sid": "s10",
+      "version": "v3",
+      "source_commit": "cd79ec6425acfe04748d5039064e192a87039d5c",
+      "say_sha256": "d08502cdcb4f7031bda5021c8a33dc0ac17301d039e61fce1b35c5fd6ddac568",
+      "spoken_sha256": "e0e904f15f258417810c7413934dbc752753682c3cdd0ce0b0e8daec1276f51d",
+      "wav_sha256": "52c6cbd327709b75f63d81dabd6ba181ed215d1a6b9f2b236bcd478382ec3374",
+      "mp3_sha256": "09c3afb8941ea1eefc7292bbb3a4ad439fe03227c16e4bd7258d2e1824181d61",
+      "duration_sec": 45.504,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "rv_hold3 받아 적기 — 원문과 같음",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L12d",
+      "sid": "s6",
+      "version": "v3",
+      "source_commit": "cd79ec6425acfe04748d5039064e192a87039d5c",
+      "say_sha256": "703b67c1f6e90de7078d95b7cee5207f936c307ec6da9febfeb4dad4e1420916",
+      "spoken_sha256": "001fdc8c50c468f9202a50281ed683774a932d64c365e6a4ec2553d587de3bad",
+      "wav_sha256": "60dca976353f8b6ba7fa1797923553cb7330630fcfd8881b2d9a0dd2990314ad",
+      "mp3_sha256": "6592630a953bd3f3f252b5fbc8bf81895a755e4b959a67112883cd5fa11676ae",
+      "duration_sec": 30.024,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "rv_hold3 받아 적기 — 원문과 같음",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L13a",
+      "sid": "s1",
+      "version": "v3",
+      "source_commit": "cd79ec6425acfe04748d5039064e192a87039d5c",
+      "say_sha256": "66cd7e8186e4944d78a60e582da8a2c48a930222f42ac1d45a53ca43f79b5101",
+      "spoken_sha256": "66cd7e8186e4944d78a60e582da8a2c48a930222f42ac1d45a53ca43f79b5101",
+      "wav_sha256": "afc1a2939774ed27a2456e02348d816813bdf23db01ce03c762107116ddac383",
+      "mp3_sha256": "76217b9df7afd408a6ff5c4904bd6ada39f8410839359b3a57ee99973185c161",
+      "duration_sec": 66.768,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "rv_hold3 받아 적기 — 경미한 차이 허용 · 잠옷=[자몯] 표준 · 왼쪽 위 · 이 성은 고쳐짐",
+      "notes": ""
+    }
+  ],
+  "rejected_attempts": [
+    {
+      "id": "L12g_s6_v3",
+      "reason": "HOLD — 벌집위·주름위 → 받아쓰기 '이'(세 번째) · 받아쓰기 쪽 착오일 수 있음 — 사람 청취 필요"
+    },
+    {
+      "id": "L46d_s6_v3",
+      "reason": "HOLD — 호스 → 받아쓰기 '호수'(세 번째) · 사람 청취 필요"
+    },
+    {
+      "id": "L46d_s11_v3",
+      "reason": "HOLD — 호스 → 받아쓰기 '호수'(세 번째) · 사람 청취 필요"
+    }
+  ],
+  "reviews": {},
+  "acceptance_policy": "뜻이 통하는 가벼운 발음 흔들림은 수용 · 누락/뜻 뒤집힘/수 · 방향 · 부정의 잘못은 다시(사용자 기준)",
+  "method_limit": "AI 검수(따로 연 Gemini 대화가 MP3 를 원문 없이 받아 적고, 다른 곳은 A/B 필청으로 다시 확인). 사람이 듣지 않았다 — human_listening false."
+}
