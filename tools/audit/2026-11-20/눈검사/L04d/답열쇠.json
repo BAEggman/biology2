@@ -1,0 +1,106 @@
+{
+ "lesson": "L04d",
+ "real": {
+  "신경호르몬": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null
+  },
+  "엑디스테로이드": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "PTTH": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "절지동물": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "관절지": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "갑각류": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "곤충(육각류)": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "협각류(거미": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "전갈": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "진드기": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "투구게)": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "말피기관(배설)": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "노래기": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "지네": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "곤충": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "협각": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "다지": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "유충호르몬(JH)": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "바이로이드",
+  "HTLV",
+  "스트레스",
+  "플라비",
+  "CRISPR",
+  "Cas",
+  "점박이스컹크",
+  "EBV",
+  "스컹크"
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "lesson": "L13c",
+ "real": {
+  "펩티드": {
+   "sid": "s2",
+   "cls": "C",
+   "props": null
+  },
+  "MHC": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "CD8": {
+   "sid": "s3",
+   "cls": "A0",
+   "props": [
+    "넷씩 두 줄",
+    "단추가 넷씩 두 줄"
+   ]
+  },
+  "APC": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "CD4": {
+   "sid": "s3",
+   "cls": "A0",
+   "props": [
+    "단추가 한 줄에 넷",
+    "한 줄에 넷"
+   ]
+  },
+  "TCR": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "IL": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "CD3": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "수지상세포": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "유세포분석": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "SGLT1",
+  "Gs",
+  "nAChR",
+  "칼모듈린",
+  "B6"
+ ]
+}

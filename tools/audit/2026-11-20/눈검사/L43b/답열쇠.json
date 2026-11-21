@@ -1,0 +1,75 @@
+{
+ "lesson": "L43b",
+ "real": {
+  "스플라이싱": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "UTR": {
+   "sid": "s2",
+   "cls": "C",
+   "props": null
+  },
+  "뉴클레오타이드": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "AAUAAA": {
+   "sid": "s3",
+   "cls": "C",
+   "props": null
+  },
+  "스플라이소좀": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "프로모터": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "GU": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "AG": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "라리아트": {
+   "sid": "s6",
+   "cls": "A0",
+   "props": [
+    "올가미"
+   ]
+  },
+  "폴리펩타이드": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null
+  },
+  "아데닌만)": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "도메인": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "ncRNA",
+  "Hox",
+  "리게이스",
+  "틀이동",
+  "CCA",
+  "CRP"
+ ]
+}

@@ -1,0 +1,45 @@
+{
+ "lesson": "L43f",
+ "real": {
+  "드러나기": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "폴리펩타이드": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "스플라이싱": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "뉴클레오타이드": {
+   "sid": "s9",
+   "cls": "B",
+   "props": null
+  },
+  "비들": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "테이텀": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "전사": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UTR",
+  "DnaG",
+  "뉴클레오솜"
+ ]
+}

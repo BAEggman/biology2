@@ -1,0 +1,35 @@
+{
+ "lesson": "L38a",
+ "real": {
+  "뉴클레오타이드": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "디옥시리보스": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "인산이에스터": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "피리미딘": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "리보스": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UTR",
+  "DnaG",
+  "뉴클레오솜"
+ ]
+}

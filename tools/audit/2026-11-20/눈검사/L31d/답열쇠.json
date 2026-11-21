@@ -1,0 +1,67 @@
+{
+ "lesson": "L31d",
+ "real": {
+  "PFK": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "시트르산": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "G3P": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "DHAP": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "BPG": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "피루브산": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "PG": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "PEP": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "인산글리세르산": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "에놀레이스": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "6BP": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "메스꺼움",
+  "P680",
+  "아스코르브산",
+  "CAM",
+  "CN"
+ ]
+}

@@ -1,0 +1,20 @@
+{
+ "lesson": "L46c",
+ "real": {
+  "헤모글로빈": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "혈소판": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2"
+ ]
+}
