@@ -1,0 +1,565 @@
+{
+  "batch": "20261121-batch-04",
+  "status": "accepted_for_integration",
+  "date": "2026-11-21",
+  "by": "Claude Opus 5.5 — Gemini 작업 모드(Kore)로 녹음 · 따로 연 Gemini 작업 대화가 원문 없이 MP3 를 받아 적음 · 다른 곳은 A/B 필청으로 다시 확인 · 사람은 듣지 않음",
+  "clips": 14,
+  "accepted": [
+    {
+      "lesson_id": "L20f",
+      "sid": "s3",
+      "version": "v1",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "2d0151d6dde27e256104f3b117fbff31afb05a97a702b623906fc131a4fa2208",
+      "spoken_sha256": "2d0151d6dde27e256104f3b117fbff31afb05a97a702b623906fc131a4fa2208",
+      "wav_sha256": "dc69abbecc812b511ad3c22836bf48eeb29d6a0b6f10cfc55157da7431e6150f",
+      "mp3_sha256": "efefbeebb3cf1b6449810127aa917ddf6b169e23ad6b8f1d8bc4389042deed6d",
+      "duration_sec": 21.288,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "L20f 받아 적기 1차(10 파일) — 원문과 같음",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L20f",
+      "sid": "s4",
+      "version": "v1",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "f56f894fe75a83ddfb698f6a6c7c54003f471602f1e0f5d56d7144d2c6844505",
+      "spoken_sha256": "f56f894fe75a83ddfb698f6a6c7c54003f471602f1e0f5d56d7144d2c6844505",
+      "wav_sha256": "6230bddbe8fece784d83c4e91c3780b658c8b9d5e27287c48aeef5e955c5c1f6",
+      "mp3_sha256": "96b7a31ede21704404a251123c5dee5945db8ca87b2c19ce7107dcfcb3e0cb88",
+      "duration_sec": 13.128,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "L20f 받아 적기 1차(10 파일) — 원문과 같음",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L20f",
+      "sid": "s5",
+      "version": "v1",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "5382afb48a65130a8fd3cea0ceb5a0396212a45ad8df85fcb7ae1f02c711c875",
+      "spoken_sha256": "5382afb48a65130a8fd3cea0ceb5a0396212a45ad8df85fcb7ae1f02c711c875",
+      "wav_sha256": "3b79cdb273e06cbf7c01495180cd6a8244badae631c2f2c6e06da853033d1dde",
+      "mp3_sha256": "995c4eed72ad411718b6abfa0d52e8d2de3a433b621ef692a6af3e558a579d42",
+      "duration_sec": 14.928,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "L20f 받아 적기 1차(10 파일) — 원문과 같음",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L20f",
+      "sid": "s7",
+      "version": "v1",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "19dbf5f9311ac3e1749b82888ca704795334f8c7c00e907320c07c9145cf8c5b",
+      "spoken_sha256": "19dbf5f9311ac3e1749b82888ca704795334f8c7c00e907320c07c9145cf8c5b",
+      "wav_sha256": "0d17243bc6a010074c8bccf5b720fc964c904bd999aa0eda0a4111dcf2b79df3",
+      "mp3_sha256": "a0271bac57503e87eef6c5573357a564043424646d06ddd59a6cea5d8f2ee356",
+      "duration_sec": 16.176,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "L20f 받아 적기 1차(10 파일) — 원문과 같음",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L20f",
+      "sid": "s6",
+      "version": "v1",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "b25bba347822a3d9dc83b3d9e2783166399a285ed9f37bcf86bdb03cdf1114ab",
+      "spoken_sha256": "b25bba347822a3d9dc83b3d9e2783166399a285ed9f37bcf86bdb03cdf1114ab",
+      "wav_sha256": "4b8ff0303477d9e4eb6d1efb5c31e57d27067f616d22a5ed7ca9af3eadcf951d",
+      "mp3_sha256": "40ef0d3f385b8f6144b2bdc9f04fb450884a80696b7423f879395e0299d22761",
+      "duration_sec": 18.216,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "L20f 1차 — '오른쪽의'를 [에]로(표준 발음 허용) · 필청 확인",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L20f",
+      "sid": "s8",
+      "version": "v1",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "26f3f08ba0244abb130a617eaf120a49e82ed04ad56955976ca49d17f9f34b4c",
+      "spoken_sha256": "26f3f08ba0244abb130a617eaf120a49e82ed04ad56955976ca49d17f9f34b4c",
+      "wav_sha256": "9c5146fdf15cb37dec52ef71c121114fac13e5689f94b8e7f0be930f9c3d72c4",
+      "mp3_sha256": "4d76426a1dd5816baf733f2b945ce5cd6fdca8f66931f9c2781a598ec6c7e1d6",
+      "duration_sec": 25.488,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "L20f 1차 — 낟알을 '낱알'로 적었으나 소리 [나다른] — 같은 소리",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L20f",
+      "sid": "s1",
+      "version": "v2",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "c16244aefd0bedba68fffda3e22cb07eb84c5a768ba0011e13d78c3eb35aaf42",
+      "spoken_sha256": "c16244aefd0bedba68fffda3e22cb07eb84c5a768ba0011e13d78c3eb35aaf42",
+      "wav_sha256": "0ff55eca6825a9a25b6a8a12db485ed08480fedd183509aab34d6384f99b59d0",
+      "mp3_sha256": "e534516c508535f54ad2fc6930aa448f51bff15d45ad6613581d658c745f6307",
+      "duration_sec": 27.576,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "L20f v2 받아 적기 — '오른쪽의'를 [에]로(허용)",
+      "notes": "v1 은 '오른쪽엔'(낱말 바뀜) — 버림"
+    },
+    {
+      "lesson_id": "L20f",
+      "sid": "s2",
+      "version": "v2",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "caaa2b7ecf4f32792531b45a3cbd02efbd4ec2200ee2eab478e227080bcb1b98",
+      "spoken_sha256": "caaa2b7ecf4f32792531b45a3cbd02efbd4ec2200ee2eab478e227080bcb1b98",
+      "wav_sha256": "3f01de1e49dcfb50d63a9271d510d3dac42bd17191ca7c374b562ad33874e201",
+      "mp3_sha256": "133d769b79562c6825d831493df2aa7be1ca68488a7f10067063d9a570136e20",
+      "duration_sec": 21.888,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "L20f v2 받아 적기 — 원문과 같음",
+      "notes": "v1 '옥소수' — 버림"
+    },
+    {
+      "lesson_id": "L20f",
+      "sid": "s9",
+      "version": "v2",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "20d7a5c3abdeea919b075c25031801475b5e83ab1e67fdb432edab8551511096",
+      "spoken_sha256": "20d7a5c3abdeea919b075c25031801475b5e83ab1e67fdb432edab8551511096",
+      "wav_sha256": "e95924065e9a38db0555a63881d1cc59ef5992e81c7b952fdf4cf554ca4c3de0",
+      "mp3_sha256": "13ca537c41151e377be33417f01edc0367425f16f625d26f554b324487d9d33b",
+      "duration_sec": 33.888,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "L20f v2 받아 적기 — 원문과 같음",
+      "notes": "v1 '훠신' — 버림"
+    },
+    {
+      "lesson_id": "L20f",
+      "sid": "s10",
+      "version": "v2",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "ee470899256b7979cbb825449d7d7244cd0dffd00a8f92263ca6c14cbb6c0ac0",
+      "spoken_sha256": "ee470899256b7979cbb825449d7d7244cd0dffd00a8f92263ca6c14cbb6c0ac0",
+      "wav_sha256": "d54a06919e78b70c98999607dc4fff6c28976d0bfa9103288a1434ad2106d017",
+      "mp3_sha256": "b20efbbdc418ef1f2e37e4fe1778549186fc5390562fb31a4fd8c6d0554761c9",
+      "duration_sec": 26.328,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "L20f v2 받아 적기 — 원문과 같음",
+      "notes": "v1 '길어주고'·'욕신' — 버림"
+    },
+    {
+      "lesson_id": "L13d",
+      "sid": "s7",
+      "version": "v2",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "b2b6c6011dfda3cae6175a0da883f21c627fd5f9c779fe92e172d90ddd28701d",
+      "spoken_sha256": "61ab9baba9272f2f818272b506c9e3d5b233a6d9e77108cc598ff95f2cfce0ff",
+      "wav_sha256": "38c5bdf49ea6d83b5582b6ca231846cf390b6a3d4b9d86bcea4ba0d641d9de41",
+      "mp3_sha256": "3e01d0d648a8a0ec18b2d838a6c41f7aba87c62221bd6447b2e14535dd5dd698",
+      "duration_sec": 32.616,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "묶음 B 받아 적기(7 파일) — 원문과 같음",
+      "notes": "v1 은 생성 요청 대본이 한 글자 달랐음(낀→낌) — 쓰지 않음"
+    },
+    {
+      "lesson_id": "L01b",
+      "sid": "s1",
+      "version": "v1",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "7fc82dda0c73679c05f097c1d8b75105c9b50d9e9fbc439ca6b59cec5e7cf896",
+      "spoken_sha256": "70659eeac4a3ea55419fcdf3edd89b2c2e02b55809932f0409915ba6f3a82097",
+      "wav_sha256": "757678a4212a0184c17f95d698b43f9ff924f8309891a7c6b1bef42f42613b50",
+      "mp3_sha256": "1577004f530c2f57353dfe41ebc069bf1284adce1d95220f7939ed54513384ff",
+      "duration_sec": 34.776,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "묶음 B — '0 걸음'을 사전대로 '영 걸음' · '의'→[에] 허용 · '에이이다'→'에이다' 축약",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L01b",
+      "sid": "s2",
+      "version": "v2",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "299e871561df3741e4228402b26988903c7936668322af48a1f409cc04506644",
+      "spoken_sha256": "aec03a0f40c511e627c10da9bde97d7300dadf8f4fda4b9d1332c2ecb04c80fa",
+      "wav_sha256": "f76a97f7c7646d75dc5f87d6d1ba8157360a9e97bbb700bf9893b5dee159735c",
+      "mp3_sha256": "cbce9f73a08fffeb1da60a37bbd2e5aa7b6fe6cacc8d248c6e301f4fee467d9a",
+      "duration_sec": 20.568,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "묶음 B — '에이이고'→'에이고' 축약",
+      "notes": "v1 은 생성 요청 대본이 한 글자 달랐음(쇠말뚝→쇠말뚱) — 쓰지 않음"
+    },
+    {
+      "lesson_id": "L01b",
+      "sid": "s5",
+      "version": "v1",
+      "source_commit": "556205f693c348a21a92adf0e1b12bfba807234e",
+      "say_sha256": "f83c30d9514e6b3853e1dd7c72537e9591455d2446b325ae2d4c6800689be493",
+      "spoken_sha256": "e931fa1f4d1e23d984bed3b2e08abf869cb26f5f9616c38def25304321fecd41",
+      "wav_sha256": "c573b0d48e66b36e2afeeefd105f7ceb23115fded001d6f3bd072e676a809de5",
+      "mp3_sha256": "f3c4c2e3ce0ba30836aff412dc8c02de8782848c30d4787e357bbe3158e9387b",
+      "duration_sec": 39.528,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "묶음 B — '0 걸음'을 사전대로 '영 걸음'",
+      "notes": ""
+    }
+  ],
+  "rejected_attempts": [
+    {
+      "id": "L20f_s1_v1",
+      "why": "'오른쪽의'→'오른쪽엔'(필청 B · 높음)"
+    },
+    {
+      "id": "L20f_s2_v1",
+      "why": "'옥수수'→'옥소수'"
+    },
+    {
+      "id": "L20f_s9_v1",
+      "why": "'훨씬'→'훠신'"
+    },
+    {
+      "id": "L20f_s10_v1",
+      "why": "'길어지고'→'길어주고' · '옥신'→'욕신'"
+    },
+    {
+      "id": "L13d_s7_v1",
+      "why": "생성 요청 대본 오타(낀→낌) — 내가 손으로 옮긴 실수 · 해시 대조로 찾음"
+    },
+    {
+      "id": "L01b_s2_v1",
+      "why": "생성 요청 대본 오타(쇠말뚝→쇠말뚱) — 같은 실수"
+    },
+    {
+      "id": "L36d_s9_v2",
+      "why": "생성 요청 대본 오타(배젖→배젌) — 같은 실수 · 내려받지 않음"
+    }
+  ],
+  "reviews": {
+    "L20f_v1": {
+      "reviewer": "Gemini 태스크(별도 대화) · view_file 로 MP3 원시 오디오를 멀티모달 모델이 입력받음 · 사람 청취 아님 · 독립 ASR 없음",
+      "files": {
+        "s1": {
+          "heard": "같은 작업실을 두 칸으로 나누었다. 왼쪽 파란 창 앞에는 방 높이만 하고 앞면을 위아래로 길게 자른 큰 줄기 하나가 있고 세로 틀선 너머 오른쪽엔 창도 빛줄기도 없는 구석에는 유리 화분이 옆으로 누워 있다. 왼쪽은 빛에 대한 반응, 오른쪽은 중력에 대한 반응이다. 둘 다 옥신의 비대칭 분포로 굽는다.",
+          "anomalies": []
+        },
+        "s2": {
+          "heard": "큰 줄기 속의 노란 옥소수 알갱이는 창 반대편인 오른쪽 안벽을 따라 모여 있다. 굽은 꼭대기에서도 바깥쪽 벽을 따라 눈알 아래까지 이어지고 창쪽 벽에는 없다. 옥수수는 옥신이다. 옥신은 빛 반대편인 그늘 쪽에 모이므로 빛 쪽에 모인다고 쓰면 방향이 반대가 된다.",
+          "anomalies": [
+            "옥소수"
+          ]
+        },
+        "s3": {
+          "heard": "옥수수가 모인 오른쪽 벽의 세포는 세로로 길게 늘어나 있고 창쪽 왼쪽 세포는 짧고 납작하다. 옥신이 많은 쪽에서 신장이 더 일어난다. 호르몬 온실의 지퍼 줄기를 떠올리자. 수소 이온을 세포벽 쪽으로 내보내 벽을 느슨하게 하는 산 생장설과 연결된다.",
+          "anomalies": [],
+          "note": "피크 클리핑 3샘플(14.86s) · 들리는 왜곡 없음"
+        },
+        "s4": {
+          "heard": "큰 줄기는 왼쪽 창을 향해 휘고 끝의 눈알도 창을 본다. 줄기가 빛 쪽으로 굽는 것은 빛이 잡아당겨서가 아니다. 그늘 쪽이 더 길어지면서 반대편인 빛 쪽으로 굽는 것이다.",
+          "anomalies": []
+        },
+        "s5": {
+          "heard": "옥신이 모인 쪽은 오른쪽이고 굽은 쪽은 왼쪽으로 서로 반대다. 그늘 쪽으로 옥신이 이동하고 그쪽 세포가 더 빨리 신장하므로 결과적으로 빛 쪽으로 굽는다. 굴광성을 이 세 단계로 연결하자.",
+          "anomalies": []
+        },
+        "s6": {
+          "heard": "오른쪽에 누운 유리 화분에는 창도 빛줄기도 없다. 화분 입구로 나온 줄기의 잘린 속에는 노란 알갱이가 아래쪽 안벽에만 한 줄로 모였다. 한쪽 빛이 없는 상황에서는 중력이 방향을 정한다. 줄기를 눕히면 옥신이 아래쪽으로 모인다.",
+          "anomalies": []
+        },
+        "s7": {
+          "heard": "누운 줄기의 아래쪽 세포가 더 길고 위쪽은 짧아 끝이 위로 휜다. 빛 반응이 아니라 중력 반응이어서 끝에 눈알은 없다. 줄기의 음성 굴중성이다. 옥신이 많은 쪽이 더 길어진다는 원리는 왼쪽 굴광성 장면과 같다.",
+          "anomalies": []
+        },
+        "s8": {
+          "heard": "유리 너머 흙 속의 흰 뿌리 끝은 은빛 바느질 골무에 들어 있다. 점점이 파인 쇠 골무의 앞면을 잘라 열면 안의 짙은 회색 둥근 낱알은 아래에 가라앉아 있고 위쪽은 비었다. 골무는 뿌리골무, 가라앉은 알갱이는 평형석이다. 뿌리골무 세포의 녹말체, 즉 녹말을 담은 색소체가 무거워 아래로 가라앉아 중력 방향을 알린다.",
+          "anomalies": []
+        },
+        "s9": {
+          "heard": "같은 화분에서 줄기 끝은 위로, 뿌리 끝은 아래로 굽는다. 뿌리 아래쪽에도 노란 알갱이가 한 줄로 있다. 옥신이 아래쪽에 모이지만 줄기와 달리 알갱이가 있는 쪽으로 휜다. 뿌리는 옥신에 [불명확: 훠신] 더 민감하여 옥신이 많은 쪽의 생장이 억제되기 때문이다. 뿌리의 양성 굴중성이다. 줄기와 뿌리에서 옥신이 모이는 방향이 다르다고 설명하지 말자. 둘 다 아래쪽에 모이되 생장 반응이 반대다.",
+          "anomalies": [
+            "[불명확: 훠신]"
+          ]
+        },
+        "s10": {
+          "heard": "큰 줄기와 누운 화분 모두 옥신이 한쪽에만 모여 있다. 굴광성과 굴중성은 모두 옥신의 비대칭 분포와 연결된다. 줄기는 옥신이 많은 쪽이 더 길어주고 뿌리는 그쪽이 덜 자란다. 욕신은 줄기 끝과 어린잎에서 만들어진다. 호르몬 온실 꼭대기의 옥수수 자루가 곁눈을 억제했던 정단 우성도 함께 떠올리자.",
+          "anomalies": [
+            "길어주고",
+            "욕신"
+          ]
+        }
+      },
+      "end_truncation": 0,
+      "extra_utterances": 0,
+      "timbre": "10개 같은 여성 화자로 일관",
+      "must_hear": [
+        {
+          "sid": "s1",
+          "spot": "세로 틀선 너머 ___ 창도",
+          "A": "오른쪽의",
+          "B": "오른쪽엔",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s2",
+          "spot": "노란 ___ 알갱이는",
+          "A": "옥수수",
+          "B": "옥소수",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s9",
+          "spot": "옥신에 ___ 더 민감하여",
+          "A": "훨씬",
+          "B": "훠신",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s10",
+          "spot": "더 ___ 뿌리는",
+          "A": "길어지고",
+          "B": "길어주고",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s10",
+          "spot": "___은 줄기 끝과",
+          "A": "옥신",
+          "B": "욕신",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s6",
+          "spot": "___ 누운 유리 화분에는",
+          "A": "오른쪽의",
+          "B": "오른쪽에",
+          "heard": "B([오른쪼게])",
+          "conf": "중간",
+          "판정": "조사 '의'의 [에] 발음은 표준발음법 허용 — 통과"
+        }
+      ],
+      "판정": {
+        "통과": [
+          "s3",
+          "s4",
+          "s5",
+          "s6",
+          "s7",
+          "s8"
+        ],
+        "재녹음": [
+          "s1",
+          "s2",
+          "s9",
+          "s10"
+        ]
+      }
+    },
+    "L20f_v2": {
+      "reviewer": "Gemini 태스크(새 대화, 원문 없음) · MP3 원시 오디오 멀티모달 입력 · 사람 청취 아님",
+      "observed_mode": "Neon",
+      "files": {
+        "s1": {
+          "mp3_sha16": "e534516c508535f5",
+          "dur": 27.576,
+          "heard": "같은 작업실을 두 칸으로 나누었다. 왼쪽 파란 창 앞에는 방 높이만 하고 앞면을 위아래로 길게 자른 큰 줄기 하나가 있고, 세로 틀선 너머 오른쪽에 창도 빛줄기도 없는 구석에는 유리 화분이 옆으로 누워 있다. 왼쪽은 빛에 대한 반응, 오른쪽은 중력에 대한 반응이다. 둘 다 옥신의 비대칭 분포로 굽는다.",
+          "anomalies": [],
+          "판정": "통과 — '오른쪽의'를 [에]로 발음(표준발음 허용)"
+        },
+        "s2": {
+          "mp3_sha16": "133d769b79562c68",
+          "dur": 21.888,
+          "heard": "큰 줄기 속의 노란 옥수수 알갱이는 창 반대편인 오른쪽 안벽을 따라 모여 있다. 굽은 꼭대기에서도 바깥쪽 벽을 따라 눈알 아래까지 이어지고, 창 쪽 벽에는 없다. 옥수수는 옥신이다. 옥신은 빛 반대편인 그늘 쪽에 모이므로 빛 쪽에 모인다고 쓰면 방향이 반대가 된다.",
+          "anomalies": [],
+          "판정": "통과"
+        },
+        "s9": {
+          "mp3_sha16": "13ca537c41151e37",
+          "dur": 33.888,
+          "heard": "같은 화분에서 줄기 끝은 위로, 뿌리 끝은 아래로 굽는다. 뿌리 아래쪽에도 노란 알갱이가 한 줄로 있다. 옥신이 아래쪽에 모이지만 줄기와 달리 알갱이가 있는 쪽으로 휜다. 뿌리는 옥신에 훨씬 더 민감하여 옥신이 많은 쪽의 생장이 억제되기 때문이다. 뿌리의 양성 굴중성이다. 줄기와 뿌리에서 옥신이 모이는 방향이 다르다고 설명하지 말자. 둘 다 아래쪽에 모이되 생장 반응이 반대다.",
+          "anomalies": [],
+          "판정": "통과"
+        },
+        "s10": {
+          "mp3_sha16": "b20efbbdc418ef1f",
+          "dur": 26.328,
+          "heard": "큰 줄기와 누운 화분 모두 옥신이 한쪽에만 모여 있다. 굴광성과 굴중성은 모두 옥신의 비대칭 분포와 연결된다. 줄기는 옥신이 많은 쪽이 더 길어지고, 뿌리는 그쪽이 덜 자란다. 옥신은 줄기 끝과 어린잎에서 만들어진다. 호르몬 온실 꼭대기의 옥수수 자루가 곁눈을 억제했던 정단 우성도 함께 떠올리자.",
+          "anomalies": [],
+          "판정": "통과"
+        }
+      },
+      "end_truncation": 0,
+      "extra_utterances": 0
+    },
+    "batchB": {
+      "reviewer": "Gemini 태스크(별도 대화, 원문 없음) · MP3 원시 오디오 멀티모달 입력 · 사람 청취 아님",
+      "observed_mode": "Neon",
+      "heard": {
+        "L01b_s1_v1": "바이러스 항구로 다시 왔다. 같은 크림빛 창고의 선반에 놓인 흰 종이 두루마리는 엠 알 엔 에이다. 이번에는 삼번과 사번 부두를 보자. 왼쪽 삼번 부두에는 돌판이 한 장 있다. 한 걸음을 뜻한다. 오른쪽 사번에는 부두 자체가 없고 창고 문이 물가에 바로 붙어 있다. 이쪽은 영 걸음이다. 두 부두에 배를 매어 놓은 줄도 달라졌다. 밧줄 대신 흰 종이 리본을 썼다. 종이는 엠 알 엔 에이와 같은 재료인 알 엔 에이를 뜻하므로 여기부터는 알 엔 에이 바이러스다.",
+        "L01b_s2_v2": "왼쪽 큰 배를 쇠말뚝에 맨 줄을 보자. 흰 종이 리본 두 가닥이 서로 꼬여 있다. 종이 리본은 알 엔 에이고 두 가닥이므로 이중 가닥이다. 삼군, 이중 가닥 알 엔 에이 바이러스를 나타낸다. 세포의 유전물질은 늘 이중 가닥 디 엔 에이이므로 세포에서는 볼 수 없는 유전체 형태다.",
+        "L01b_s5_v1": "오른쪽에는 부두가 없다. 작은 배들이 부두 없이 창고 문 앞 물가에 매여 있고 배에 매인 외겹 흰 종이 리본이 그대로 문 안으로 들어가 선반의 두루마리가 된다. 사군. 플러스 가닥 단일 가닥 알 엔 에이 바이러스다. 유전체 자체가 이미 엠 알 엔 에이이므로 세포에 들어오자마자 번역할 수 있다. 그래서 영 걸음이다. 다음 부두의 오군은 플러스 가닥을 먼저 만들어야 한다. 모든 알 엔 에이 바이러스가 곧바로 번역되는 것은 아니다. 마이너스 가닥은 플러스 가닥을 합성한 뒤에 레트로바이러스는 역전사를 거친 뒤에야 번역된다.",
+        "L01b_s6_v1": "작은 배에서 피코로나를 떠올려 보자. 피코는 작다는 뜻이다. 이 배에 있는 세 단서는 모두 피코로나 바이러스과를 나타낸다. 재채기하는 코뿔소, 라이노는 감기를 일으키는 리노바이러스다. 소년의 다리 보조기는 소아마비를 일으키는 폴리오 바이러스와 연결한다. 소년이 간 모양 접시에서 조개를 집어 먹는 동작은 분변, 경구로 전파되는 에이형 간염 바이러스, 에이치 에이 브이를 뜻한다. [불명확: 세청/쇠청] 모두 사군이지만 왕관 배와 노란 깃발 배는 각각 다른 과라는 점을 구분하자.",
+        "L01b_s7_v1": "작은 배 한 촉에 금빛 왕관을 쓴 왕이 앉아 있다. 왕관을 뜻하는 라틴말이 코로나이므로 코로나 바이러스와 연결한다. 바이러스 입자 표면의 돌기가 왕관처럼 보여 붙은 이름이다. 코로나 바이러스도 사군에 속한다.",
+        "L13d_s7_v2": "흙덩이 위의 병정이 외눈 안경을 끼고 여자 가슴의 파란 배지를 살펴본다. 조끼 단추가 네 개씩 두 줄이므로 세포독성 티 세포다. 외눈 안경은 손에 든 돋보기가 아니라 자기 눈에 낀 것이며 티 세포 자신의 수용체인 티 씨 알을 나타낸다. 그 수용체가 읽는 배지는 엠 에이치 씨이다. 이식 거부에 관련된 엠 에이치 씨, 세포독성 티 세포, 티 씨 알을 한 장면에 연결하자. 약화한 미생물이나 외독소를 고르는 문제가 아니라는 점도 구분해 두자.",
+        "L36d_s9_v3": "왼쪽 옥수수 나달 속에 떡잎 하나를 찾자. 벽과 식물의 이 떡잎은 배반이다. 오른쪽 콩에서는 도토우만 떡잎 둘이 마주 본다. 씨앗 공방의 종자 창고에서도 본 두 예시다. 옥수수는 배젖이 남아 있고 콩은 양분을 주로 떡잎에 저장한다. 하지만 피마자처럼 배젖이 남는 진정 쌍자엽 식물도 있으므로 두 무리를 구분할 때는 떡잎 수를 직접 확인하자."
+      },
+      "must_hear": [
+        {
+          "L": "L01b",
+          "sid": "s6",
+          "spot": "작은 배에서 ___를",
+          "A": "피코르나",
+          "B": "피코로나",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "L": "L01b",
+          "sid": "s6",
+          "spot": "모두 ___바이러스과",
+          "A": "피코르나",
+          "B": "피코로나",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "L": "L01b",
+          "sid": "s6",
+          "spot": "___ 모두 사군이지만",
+          "A": "세 척",
+          "B": "쇠청/세청",
+          "heard": "B",
+          "conf": "중간"
+        },
+        {
+          "L": "L01b",
+          "sid": "s7",
+          "spot": "작은 배 한 ___에",
+          "A": "척",
+          "B": "촉",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "L": "L36d",
+          "sid": "s9",
+          "spot": "콩에서는 ___ 떡잎",
+          "A": "도톰한",
+          "B": "도토우만",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "L": "L36d",
+          "sid": "s9",
+          "spot": "___ 식물의",
+          "A": "벼과[벼꽈]",
+          "B": "벽과",
+          "heard": "B",
+          "conf": "높음"
+        }
+      ],
+      "판정": {
+        "통과": [
+          "L01b_s1_v1",
+          "L01b_s2_v2",
+          "L01b_s5_v1",
+          "L13d_s7_v2"
+        ],
+        "재녹음": [
+          "L01b_s6",
+          "L01b_s7",
+          "L36d_s9"
+        ]
+      },
+      "minor_not_blocking": [
+        "0 걸음 → '영 걸음'(사전대로)",
+        "'의'→[에] 허용",
+        "엠 알 엔 에이이다 → 에이다(축약)"
+      ]
+    }
+  },
+  "acceptance_policy": "뜻이 통하는 가벼운 발음 흔들림은 수용 · 누락/뜻 뒤집힘/수 · 방향 · 부정의 잘못은 다시(사용자 기준)",
+  "method_limit": "AI 검수(따로 연 Gemini 대화가 MP3 를 원문 없이 받아 적고, 다른 곳은 A/B 필청으로 다시 확인). 사람이 듣지 않았다 — human_listening false.",
+  "publish": {
+    "repo": "BAEggman/biology2-audio",
+    "commit": "06145a0",
+    "pages_check": "14 파일 HEAD 200 audio/mp3 · 내려받은 sha256 = 위 mp3_sha256 (2026-11-21)"
+  },
+  "generation": {
+    "tool": "Gemini 웹 · 작업(태스크) 모드 · 목소리 Kore · 모드 표시 '카본'",
+    "format": "WAV 24 kHz mono 16-bit → MP3 mono 24 kHz 96 kbps (ffmpeg, 메타데이터 없음)"
+  },
+  "lesson_note": "생성 요청 대본은 tools/tts_norm.js 의 ttsNorm(say) — 보낸 글의 sha256 을 브라우저 안에서 원문과 맞춘 뒤에만 보냄(오타 3건 뒤로 이 검사를 넣음)"
+}
