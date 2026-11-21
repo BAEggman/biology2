@@ -1,0 +1,182 @@
+{
+ "batch": "20261121-batch-08",
+ "date": "2026-11-21",
+ "by": "Claude Opus 5.5 — Gemini 작업 모드(Kore)로 녹음 · 따로 연 Gemini 작업 대화가 원문 없이 MP3 를 받아 적음 · 다른 곳은 필청 A/B 로 다시 확인(L19e) · 사람은 듣지 않음",
+ "hashes": "tools/audio/batches/hashes_20261121.txt",
+ "accepted": [
+  {
+   "id": "L04c_s1_v1",
+   "review": "L04c 받아 적기(9 파일) — 원문과 같음"
+  },
+  {
+   "id": "L04c_s3_v1",
+   "review": "L04c 받아 적기(9 파일) — 원문과 같음"
+  },
+  {
+   "id": "L04c_s4_v1",
+   "review": "L04c 받아 적기(9 파일) — 원문과 같음"
+  },
+  {
+   "id": "L04c_s10_v1",
+   "review": "L04c 받아 적기(9 파일) — 원문과 같음"
+  },
+  {
+   "id": "L04c_s5_v1",
+   "review": "L04c — '알록달록'을 '알룩달록'으로(가벼운 모음 흔들림 · 뜻 같음)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L04c_s8_v1",
+   "review": "L04c — '소시지'를 '소세지'로(흔한 입말 · 뜻 같음)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L04c_s11_v1",
+   "review": "L04c — '창고는'의 '고'가 된소리 [창꼬](뜻 같음)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L04d_s4_v1",
+   "review": "L04d 받아 적기(7 파일) — 원문과 같음"
+  },
+  {
+   "id": "L04d_s5_v1",
+   "review": "L04d 받아 적기 — 원문과 같음('범갑각류' 띄어 적음)"
+  },
+  {
+   "id": "L04d_s3_v1",
+   "review": "L04d — '소시지'를 '소세지'로(흔한 입말)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L04d_s6_v1",
+   "review": "L04d — '책허파'를 '체커파'로 적음(표준 발음 [채커파] · ㅐ/ㅔ 같은 소리)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L04d_s11_v1",
+   "review": "L04d — '전흉선'의 ㅎ 약화 [전융선] · '육각'→'육곽' · '덱'→'댁'(ㅐ/ㅔ) · '뒤의'→'뒤에'(허용)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L13c_s5_v1",
+   "review": "L13c 받아 적기(5 파일) — 원문과 같음"
+  },
+  {
+   "id": "L13c_s6_v1",
+   "review": "L13c 받아 적기(5 파일) — 원문과 같음"
+  },
+  {
+   "id": "L13c_s3_v1",
+   "review": "L13c — 원문과 같음(숫자를 한글로 적음)"
+  },
+  {
+   "id": "L13c_s7_v1",
+   "review": "L13c — '위의'를 [에]로(허용) · 숫자를 한글로 적음",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L13c_s2_v1",
+   "review": "L13c — '덱의'를 [불명확: 대게]로 적음 = 표준 발음 [데게]",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L31d_s1_v1",
+   "review": "L31d 받아 적기(3 파일) — 원문과 같음(숫자를 한글로 적음)"
+  },
+  {
+   "id": "L31d_s2_v1",
+   "review": "L31d 받아 적기 — 원문과 같음"
+  },
+  {
+   "id": "L19e_s3_v1",
+   "review": "L19e 받아 적기(8 파일) — 원문과 같음"
+  },
+  {
+   "id": "L19e_s7_v1",
+   "review": "L19e — 받아 적기는 '캐스페이지'였으나 필청 A/B 에서 '캐스페이즈'(높음)"
+  },
+  {
+   "id": "L19e_s9_v1",
+   "review": "L19e — 필청 A/B '캐스페이즈'(높음) · '-8'을 '팔'로"
+  },
+  {
+   "id": "L19e_s8_v1",
+   "review": "L19e — '위의'를 [에]로(허용) · 필청 A/B '캐스페이즈'(높음)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L19e_s4_v1",
+   "review": "L19e — '아폽토시스'를 '아포토시스'로(흔한 발음)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L19e_s6_v1",
+   "review": "L19e — '프로캐스페이즈-9'의 9를 영어 '나인'으로(글에 숫자로 적힌 곳 · 뜻 같음)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  },
+  {
+   "id": "L19e_s11_v1",
+   "review": "L19e — 필청 A/B '캐스페이즈'(높음) · '점판'이 '전판'에 가깝게(중간 · ㅍ 앞 동화)",
+   "status": "CLEAR_ALLOWED_VARIANT"
+  }
+ ],
+ "rejected_attempts": [
+  {
+   "id": "L04c_s7_v1",
+   "reason": "'두족류'가 '두 종류'로 들림(뜻 바뀜) · '연제동물' · '피에쇄'"
+  },
+  {
+   "id": "L04c_s9_v1",
+   "reason": "'편형동물'이 '편용동물'로 들림(용어)"
+  },
+  {
+   "id": "L04d_s9_v1",
+   "reason": "'더듬이'→'더더미' · '갑옷'→'감옥'(낱말 바뀜) · '긴'→'기인'"
+  },
+  {
+   "id": "L04d_s10_v1",
+   "reason": "'지 자'(Z 꼴)를 '지읒자'로 읽음(뜻 바뀜)"
+  },
+  {
+   "id": "L31d_s8_v1",
+   "reason": "'1,3-'을 '일 콤마 삼'으로 읽음 → 낭독 입력을 고쳐 다시(일 삼) · '효소'가 '요소'로"
+  },
+  {
+   "id": "L19e_s1_v1",
+   "reason": "필청 A/B — 끝말 '결과다'에 군소리 '드'(결과드다 · 높음)"
+  },
+  {
+   "id": "L13c_s1_v1",
+   "reason": "생성 뒤 낭독 입력이 바뀜(그림와 → 그림과) — 검수하지 않고 다시 만듦"
+  }
+ ],
+ "reviews": {
+  "L04c_v1": {
+   "reviewer": "Gemini 태스크(새 대화, 원문 없음) · 9 파일"
+  },
+  "L04d_v1": {
+   "reviewer": "Gemini 태스크(새 대화, 원문 없음) · 7 파일"
+  },
+  "L13c_a": {
+   "reviewer": "Gemini 태스크(새 대화, 원문 없음) · 5 파일(s2 s3 s5 s6 s7)"
+  },
+  "L19e_v1": {
+   "reviewer": "Gemini 태스크(새 대화, 원문 없음) · 8 파일 + 같은 대화에서 필청 A/B 5 항목"
+  },
+  "L31d_v1": {
+   "reviewer": "Gemini 태스크(새 대화, 원문 없음) · 3 파일"
+  }
+ },
+ "extra": {
+  "publish": {
+   "repo": "BAEggman/biology2-audio",
+   "commit": "2f775fc",
+   "pages_check": "26 파일 200 · 브라우저에서 잰 sha256 = 해시 표 (2026-11-21)"
+  },
+  "tts_fixes": [
+   "71fdc405 「… 그림」 뒤 조사(그림와 → 그림과) — L13c s1 v1 은 옛 글이라 쓰지 않음",
+   "309549c9 「1,3-」 → 「일 삼」 — L31d s8 v1 은 '일 콤마 삼'으로 읽어 버림"
+  ]
+ }
+}
