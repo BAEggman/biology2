@@ -1,0 +1,87 @@
+{
+ "lesson": "L51a",
+ "real": {
+  "테스토스테론": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null,
+   "sid_card": "s2"
+  },
+  "세르톨리세포": {
+   "sid": "s2",
+   "cls": "C",
+   "props": null
+  },
+  "FSH": {
+   "sid": "s3",
+   "cls": "A1",
+   "props": [
+    "달걀 둘"
+   ]
+  },
+  "쿠퍼선": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "융모성선자극호르몬": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "프로게스테론": {
+   "sid": "s10",
+   "cls": "A1",
+   "props": [
+    "이부자리"
+   ],
+   "sid_card": "s9"
+  },
+  "hCG": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "에스트로겐": {
+   "sid": "s10",
+   "cls": "A1",
+   "props": [
+    "빨대"
+   ],
+   "sid_card": "s9"
+  },
+  "꼬리(편모)": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "안드로겐(테스토스테론)": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "전립선": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "임신": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "무성생식": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "ROMK",
+  "Gi",
+  "Va",
+  "카르복실화효소",
+  "B5",
+  "CD4"
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "lesson": "L54a",
+ "real": {
+  "파스퇴르": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "플라스크": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "오파린": {
+   "sid": "s2",
+   "cls": "C",
+   "props": null
+  },
+  "몬모릴로나이트": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "스트로마톨라이트": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "밀러-유리": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "바이로이드",
+  "HTLV",
+  "스트레스"
+ ]
+}

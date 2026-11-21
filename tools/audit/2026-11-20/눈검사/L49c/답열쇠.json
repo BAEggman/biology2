@@ -1,0 +1,29 @@
+{
+ "lesson": "L49c",
+ "real": {
+  "인슐린": {
+   "sid": "s3",
+   "cls": "A0",
+   "props": [
+    "주사기",
+    "주사기를 치켜든"
+   ],
+   "sid_card": "s1"
+  },
+  "자가면역": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "요당": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2"
+ ]
+}

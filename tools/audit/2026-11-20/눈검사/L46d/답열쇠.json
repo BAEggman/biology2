@@ -1,0 +1,26 @@
+{
+ "lesson": "L46d",
+ "real": {
+  "운동": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "판막": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s11"
+  },
+  "림프절": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2"
+ ]
+}

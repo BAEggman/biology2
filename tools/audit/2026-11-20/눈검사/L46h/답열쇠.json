@@ -1,0 +1,65 @@
+{
+ "lesson": "L46h",
+ "real": {
+  "헤모글로빈": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "프로스타글란딘": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "PGE2": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "파충류": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "조류": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "역류교환": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "절지": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "동맥관": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s9"
+  },
+  "인대": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s11"
+  },
+  "푸아죄유": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "ROMK",
+  "GPCR",
+  "Va",
+  "자극호르몬",
+  "B5"
+ ]
+}

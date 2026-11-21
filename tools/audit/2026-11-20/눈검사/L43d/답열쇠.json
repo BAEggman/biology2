@@ -1,0 +1,40 @@
+{
+ "lesson": "L43d",
+ "real": {
+  "하우스키핑": {
+   "sid": "s2",
+   "cls": "C",
+   "props": null
+  },
+  "크리스탈린": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "프로그램": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "재프로그래밍": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "배아줄기세포": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "성체줄기세포": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UTR",
+  "DnaG",
+  "뉴클레오솜"
+ ]
+}
