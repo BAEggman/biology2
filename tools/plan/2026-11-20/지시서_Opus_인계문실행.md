@@ -312,3 +312,4 @@ biology2 저장소(https://github.com/BAEggman/biology2)의 tools/plan/2026-11-2
 - **교훈 3 — 받아 적는 Gemini 는 꼼꼼하다(포먼트 수치까지 댐).** 뜻이 바뀌는 것(방향 · 낱말 · 용어)만 다시 만들고, 표준 발음이 허용하는 것('의'→[에] · 된소리 · 축약)은 통과 — 검수 기록의 `CLEAR_ALLOWED_VARIANT`.
 - 발음 사전을 대본 위에 붙이면(「옥수수 → [옥쑤수] (옥소수 아님)」 꼴) 다음 판에서 대개 고쳐졌다. 다만 퍼포린 · 피코르나처럼 Gemini 가 비슷한 낱말로 끌려가는 용어는 두세 번 걸렸다.
 - 원본(WAV · MP3 · 검수 ZIP)은 사용자 컴퓨터 `~/Downloads/b2audio/raw/<과>/` · 해시 `~/Downloads/b2audio/hashes_20261121.txt`(저장소 사본 `tools/audio/batches/`). 지울 수 없는 곳에서 생긴 군더더기는 `raw/_to_delete/` · `raw/L20f/_to_delete/`.
+- (덧붙임) L13d s3 v3 은 사용자가 「심각하지 않다, 통과」로 정해 올렸다(묶음 07 · `USER_ACCEPTED_KNOWN_ISSUE` — 마지막 '퍼포린은'이 [포포린]). 잠긴 23 구간 모두 녹음됨 · manifest 80.

@@ -1,0 +1,67 @@
+{
+  "batch": "20261121-batch-07",
+  "status": "accepted_for_integration",
+  "date": "2026-11-21",
+  "by": "Claude Opus 5.5 — 사용자 판단으로 통과(듣지 않고 보고를 보고 정함: 「심각한 문제는 아닌 거 같아, 통과」)",
+  "clips": 1,
+  "accepted": [
+    {
+      "lesson_id": "L13d",
+      "sid": "s3",
+      "version": "v3",
+      "source_commit": "7b253847a5128b6f01287035737bf5e006a0f5b9",
+      "say_sha256": "e1d65d6d2012e363d12021a8e281952d6809fdb335055c7a5ef4391c62466094",
+      "spoken_sha256": "e1d65d6d2012e363d12021a8e281952d6809fdb335055c7a5ef4391c62466094",
+      "wav_sha256": "062e4d62d59935ea65324379400289fc5e91309755e0b78398b3df754e9eb217",
+      "mp3_sha256": "a434e4f1732c2ca2f39228e7a2d17616e7118b31dd330aed6ff952d8f454f459",
+      "duration_sec": 41.616,
+      "content_check": "blind transcript compared with spoken script; one known term mispronunciation left in place by user decision",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "USER_ACCEPTED_KNOWN_ISSUE",
+      "structural_decode_pass": true,
+      "review": "fix5 받아 적기 — 첫 '퍼포린이'는 바르게 · 마지막 문장 첫머리 '퍼포린은'이 [포포린]으로 들림 · '후추'를 [후쭈]",
+      "notes": "v1 '보낀'·'포포린' · v2 '버포린' — 버림 · v3 를 사용자가 통과시킴(다른 길: 대본을 'Perforin' 으로 바꿔 영어로 읽히기 — 글을 고치면 잠금이 풀려 택하지 않음)"
+    }
+  ],
+  "rejected_attempts": [],
+  "reviews": {
+    "fix5": {
+      "reviewer": "Gemini 태스크(새 대화, 원문 없음) · MP3 멀티모달 입력 · 사람 청취 아님",
+      "observed_mode": "카본",
+      "files": {
+        "L13d_s2_v3": {
+          "mp3": "056949e4338e",
+          "heard": "앞쪽 병정이 망토를 숨긴 주민의 배에 커다란 펀치를 대고 누른다. 종이에 구멍을 뚫듯 둥근 구멍이 나고 잘려 나온 파란 원판은 바닥으로 떨어진다. 펀치 퍼포의 소리를 이어 퍼포린을 떠올리자. 영어 퍼포레이트는 구멍을 뚫는다는 뜻이다. 세포독성 티세포가 분비하는 퍼포린은 표적 세포막에 구멍을 만들며 보체의 막공격 복깝체 씨 나인과 닮은 단백질이다. 구멍이 생기는 것은 첫 단계다. 그 안으로 무엇이 들어가는지는 옆 장면에서 확인하자.",
+          "anomalies_reported": [
+            "복깝체(된소리)",
+            "둥군",
+            "티세포가",
+            "씨 나인과"
+          ],
+          "end_truncation": false,
+          "판정": "통과(가벼운 흔들림) — 병정 · 뚫듯 · 퍼포린 바르게"
+        },
+        "L13d_s3_v3": {
+          "mp3": "a434e4f1732c",
+          "heard": "옆에 대머리 주민 배에도 같은 구멍이 있다. 병정이 키 큰 후쭈 그라인더를 돌리자 검은 알갱이가 구멍으로 떨어진다. 그라인더에서 그랜자임을 떠올린다. 갈아 부수는 효소로 연결되는 그랜자임은 단백질 분해 효소로 과립에 저장되어 있다가 퍼포린이 만든 구멍으로 들어간다. 주민의 허리 아래가 끈으로 묶인 작은 주머니들로 깔끔하게 나뉘었고 피나 얼룩은 없다. 터져버리는 괴사가 아니라 스스로 정리되는 세포 사멸, 아폽토시스다. 포포리는 구멍을 만들고 그랜자임은 들어가 작용하며 결과는 세포 사멸이라는 순서를 기억하자.",
+          "anomalies_reported": [
+            "포포리는(퍼포린은)",
+            "후쭈"
+          ],
+          "end_truncation": false,
+          "판정": "버림 — 마지막 문장 첫머리 '퍼포린은'이 또 '포포린' · 같은 용어 잘못 세 번째(v1 포포린 · v2 버포린 · v3 포포린) → 규칙대로 멈추고 보고"
+        }
+      }
+    }
+  },
+  "acceptance_policy": "뜻이 통하는 가벼운 발음 흔들림은 수용 · 누락/뜻 뒤집힘/수 · 방향 · 부정의 잘못은 다시(사용자 기준)",
+  "method_limit": "AI 검수(따로 연 Gemini 대화가 MP3 를 원문 없이 받아 적고, 다른 곳은 A/B 필청으로 다시 확인). 사람이 듣지 않았다 — human_listening false.",
+  "publish": {
+    "repo": "BAEggman/biology2-audio",
+    "commit": "dd7a4b8",
+    "pages_check": "200 audio/mp3 · sha256 같음 (2026-11-21)"
+  },
+  "known_issue": "L13d s3 마지막 문장 '퍼포린은' → [포포린] — 사용자가 알고 통과"
+}
