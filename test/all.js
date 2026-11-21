@@ -12,6 +12,7 @@ const SUITES=[
   ['verify_hooks.js',  '음성 후크 사전'],
   ['verify_srslink.js','카드 ↔ 그림 링크 이음매'],
   ['smoke_lessoninbox.js','과 시험 오답 편지함'],
+  ['verify_lock.js','그림 · 글 잠금(L17e — 11-19 사용자 만족분)'],
   ['verify_saytext.js','낭독 대본 문(제어문자 · 어미 · 언어 복구 44 · 과 142 / 정거장 1,598)'],
 ];
 let bad=[];
