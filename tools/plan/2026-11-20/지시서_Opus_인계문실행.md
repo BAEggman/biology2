@@ -313,3 +313,11 @@ biology2 저장소(https://github.com/BAEggman/biology2)의 tools/plan/2026-11-2
 - 발음 사전을 대본 위에 붙이면(「옥수수 → [옥쑤수] (옥소수 아님)」 꼴) 다음 판에서 대개 고쳐졌다. 다만 퍼포린 · 피코르나처럼 Gemini 가 비슷한 낱말로 끌려가는 용어는 두세 번 걸렸다.
 - 원본(WAV · MP3 · 검수 ZIP)은 사용자 컴퓨터 `~/Downloads/b2audio/raw/<과>/` · 해시 `~/Downloads/b2audio/hashes_20261121.txt`(저장소 사본 `tools/audio/batches/`). 지울 수 없는 곳에서 생긴 군더더기는 `raw/_to_delete/` · `raw/L20f/_to_delete/`.
 - (덧붙임) L13d s3 v3 은 사용자가 「심각하지 않다, 통과」로 정해 올렸다(묶음 07 · `USER_ACCEPTED_KNOWN_ISSUE` — 마지막 '퍼포린은'이 [포포린]). 잠긴 23 구간 모두 녹음됨 · manifest 80.
+
+## 19. 2단계 — 둘째 묶음(2026-11-21 · Opus 5.5)
+- 눈 검사: §5 의 1 남은 10과(L04c L04d L13c L19e L31d L38a L43b L43f L46c L49a) · 독자 30(sonnet) → **71 구간 잠금**(쪽지 `승급/<과>.md` · 원문 `눈검사/<과>/`). ③ 이름 인출의 답 열쇠 정거장은 카드에서 와 틀린 것이 섞임 — 손 판정. ④ 는 덮어쓰지 않음(ㄱ ✕ · ㄷ 어긋남이면 잠그지 않음).
+- 낭독 입력 고침 둘: 「… 그림」 뒤 조사(71fdc40) · 「1,3-」 → 「일 삼」(309549c).
+- 녹음: 6과 생성 · 5과 검수 → **26 구간 공개**(묶음 08 · manifest 106 · 음성 저장소 2f775fc). 버림 7(사유는 `tools/audio/batches/decisions_20261121b.json`).
+- **멈춘 까닭: Google 「비정상 트래픽」 확인 화면** — Gemini 탭을 여섯까지 동시에 열고 새 대화를 빠르게 만들다 걸림. 확인 화면은 사용자 몫. 다음부터 **탭 둘 · 새 대화 사이 1 분 이상**.
+- 남은 녹음(잠긴 71 가운데 45): ① 검수만 남음 — L13c s8 s9 s10 s12(`raw/L13c/review_L13c_b.zip`) · L38a 9(`raw/L38a_v1/review_L38a_v1.zip`) ② 생성은 요청했으나 결과를 못 받음 — L43b 5 · L43f 4(Gemini 기록에서 찾거나 다시 요청) ③ 아직 안 만듦 — L46c 8 · L49a 8 ④ 다시 만들기 — L04c s7 s9 · L04d s9 s10 · L19e s1 · L31d s8 · L13c s1(사전에 두족류 · 편형동물 · 더듬이 · 갑옷 · 「지 자 = 알파벳 Z」 넣기).
+- 연장: 생성 요청은 `tools/audio/gemini_gen_template.js`(브라우저 localStorage 의 `b2tts2`(대본 + sha256) · `b2dict2`(사전)에서 글을 만들어 넣고 블록마다 sha256 을 잰 뒤에만 보냄). 대본 묶음은 사용자 컴퓨터 `~/Downloads/b2audio/` 의 JSON 을 페이지에 만든 file input 으로 올려 읽음(손으로 옮기지 않음). 검수 결과는 답의 `<pre>` 에서 JSON 을 꺼내 문장 단위로 대조.
