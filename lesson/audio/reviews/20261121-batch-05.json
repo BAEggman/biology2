@@ -1,0 +1,416 @@
+{
+  "batch": "20261121-batch-05",
+  "status": "accepted_for_integration",
+  "date": "2026-11-21",
+  "by": "Claude Opus 5.5 — Gemini 작업 모드(Kore)로 녹음 · 따로 연 Gemini 작업 대화가 원문 없이 MP3 를 받아 적음 · 다른 곳은 A/B 필청 · 사람은 듣지 않음",
+  "clips": 7,
+  "accepted": [
+    {
+      "lesson_id": "L13d",
+      "sid": "s1",
+      "version": "v3",
+      "source_commit": "a4a780f97c1b4e3c2c8f1ae8889fda62230f8825",
+      "say_sha256": "9b16374b6c1cb150a238e4f84543c93565bb724aff4b6d2c2adb61fe0d4d3ef8",
+      "spoken_sha256": "3a6fec37ea3bd71f8e084c117057b84aa069773b250a3d67d16e8615ff5da11a",
+      "wav_sha256": "80397b6aca7426b194de8853d4ae395f75497095947e7c2d32b935ad9487fcd6",
+      "mp3_sha256": "e1f53806c7c6886597fa97326e933a484a0d7e56ff45188ed1c1a7be7dd92ea8",
+      "duration_sec": 44.904,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "fix3 받아 적기 — 과 이름(「성문 신분증 검사」 그림) 그대로 · '에이트'→'에잇' · '암을 [라]타낸다' 등 가벼운 흔들림",
+      "notes": "v1 '초형장' · v2 는 과 이름 대신 '다른 그림'으로 읽힌 대본(내 실수) — 버림"
+    },
+    {
+      "lesson_id": "L13d",
+      "sid": "s5",
+      "version": "v3",
+      "source_commit": "a4a780f97c1b4e3c2c8f1ae8889fda62230f8825",
+      "say_sha256": "ad7d8bb1da26c8ed232124f88cf6f3c0eccbe42afff499642d4dbff2d07816f2",
+      "spoken_sha256": "678942d63d47c924c84368221f7ece93a66625229f36e54c705f67492f4dc9b3",
+      "wav_sha256": "28495f076ab878313429f2272a1d0eaad6ff3187ee4f9b6a1d8b37d8b1121d0b",
+      "mp3_sha256": "4eba993ff9916c0f14400c339982283a4a6bbcc7eaf9fb96daa6889800251079",
+      "duration_sec": 44.496,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "fix3 받아 적기 — 과 이름(「뼈 공방과 터진 호스 수리」 그림) 그대로 · '아래의' 의 '의' 약함",
+      "notes": "v1 '펴' · v2 는 '다른 그림' 대본 — 버림"
+    },
+    {
+      "lesson_id": "L13d",
+      "sid": "s4",
+      "version": "v2",
+      "source_commit": "a4a780f97c1b4e3c2c8f1ae8889fda62230f8825",
+      "say_sha256": "cbcb8894452c984656b02d6c0a4523f8ffa6d7ddf2332cbe97b004953bbeb857",
+      "spoken_sha256": "980c8e0d60a297cdf27693377ea7c91eb3fba151632646d3a380642cb1e4c974",
+      "wav_sha256": "95e2bf565f502589f681c02be6ead6c0efa727bbcd2a02dd40a5b1181505ec75",
+      "mp3_sha256": "acbd9098dd48e678b28627fb5c173f562254923da9a7327d5954efc7767a2f0e",
+      "duration_sec": 38.328,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "L13d v2 받아 적기 — '황토빛'을 '황톳빛'으로 적음(같은 소리)",
+      "notes": "v1 '왼쪽 위'→'왼쪽이'(방향) — 버림"
+    },
+    {
+      "lesson_id": "L13d",
+      "sid": "s6",
+      "version": "v2",
+      "source_commit": "a4a780f97c1b4e3c2c8f1ae8889fda62230f8825",
+      "say_sha256": "601807cd85e2196c51e5770f51594ce12811dd5b6db55d47e698290eb1349a10",
+      "spoken_sha256": "7e50f00701efbd4a8c8194c942dfee5e9cf95e0b13e8603a631a5ff4b7448b98",
+      "wav_sha256": "cf2163b148d8f466fd452f91c2a6c36f6a7546d050c26e6d99ad60734ece13d1",
+      "mp3_sha256": "55bae20721a16cd259066c0d14adb99b85d3f009fb3877934a145d1233af7531",
+      "duration_sec": 28.344,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "L13d v2 받아 적기 — 원문과 같음",
+      "notes": "v1 '파란색'→'파랑색' · '떠 와'→'또와' — 버림"
+    },
+    {
+      "lesson_id": "L01b",
+      "sid": "s6",
+      "version": "v3",
+      "source_commit": "a4a780f97c1b4e3c2c8f1ae8889fda62230f8825",
+      "say_sha256": "587d92f9823d7f729ee783e680a40be52fffb42d4e32ebd50a73aca8e173bf62",
+      "spoken_sha256": "4005100d8b90d68613671f20f3f8b839028f58336c6b9115e1ab2ce42effb704",
+      "wav_sha256": "2917ec162accbccd53bc206f7abf5143a0b90c74655471397a958256e7860e37",
+      "mp3_sha256": "1228590f8ab2708d220d5116ca9c0d66ae2d1ea19a1d1db9363d44bd00f4a009",
+      "duration_sec": 38.088,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "fix4 받아 적기 — 피코르나 · 세 척 · 배 바르게 · '폴리오'→'폴리어' · '에이형'→'에이영' 가벼운 흔들림",
+      "notes": "v1 · v2 '피코로나'(두 번) · '세 총' · '패' — 버림 · 세 번째 시도"
+    },
+    {
+      "lesson_id": "L01b",
+      "sid": "s7",
+      "version": "v2",
+      "source_commit": "a4a780f97c1b4e3c2c8f1ae8889fda62230f8825",
+      "say_sha256": "921899d114051823ee10757258eea91072fe771cb7efe1f012e5ed6359b9184a",
+      "spoken_sha256": "0d362b5e13be4e8c1c530e3b95d9e86268f9e4ff3fbb614a17f591cd7dd9d93b",
+      "wav_sha256": "aca3e280d78be9def93b1690a763b249c73534b9b5af246427a5804332862bc7",
+      "mp3_sha256": "d011eb83be0dca2c6e856eb92b28604c819d631d3e648e3a3f812f3ec6aaef6c",
+      "duration_sec": 15.144,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "fix2 받아 적기 — 원문과 같음",
+      "notes": "v1 '한 척'→'한 촉' — 버림"
+    },
+    {
+      "lesson_id": "L36d",
+      "sid": "s9",
+      "version": "v4",
+      "source_commit": "a4a780f97c1b4e3c2c8f1ae8889fda62230f8825",
+      "say_sha256": "03dba3ce31c7a576a11ffd95c47e5d55cdaadeb0ca5463178076b9a959ee731c",
+      "spoken_sha256": "03dba3ce31c7a576a11ffd95c47e5d55cdaadeb0ca5463178076b9a959ee731c",
+      "wav_sha256": "a783490636c6403909ff778e1d89effbaea782620a241135c3a277e5c00b2860",
+      "mp3_sha256": "107dc79f15aed7224e1551c3523e166c4ab0964d354291d3efb9092785bdb6ff",
+      "duration_sec": 26.088,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "fix2 받아 적기 — '벼과'를 '벽과'로(된소리 [벼꽈] 앞 막힘) · '배젖이'를 [배저치](흔한 입말)",
+      "notes": "v1 은 글 고침(N-L36d-02)으로 물러남 · v2 생성 대본 오타 · v3 '도토우만' — 버림"
+    }
+  ],
+  "rejected_attempts": [
+    {
+      "id": "L13d_s1_v1",
+      "why": "'처형장'→'초형장'"
+    },
+    {
+      "id": "L13d_s2_v1",
+      "why": "'뚫듯' 불명확"
+    },
+    {
+      "id": "L13d_s3_v1",
+      "why": "'묶인'→'보낀' · '퍼포린'→'포포린'"
+    },
+    {
+      "id": "L13d_s4_v1",
+      "why": "'왼쪽 위'→'왼쪽이'"
+    },
+    {
+      "id": "L13d_s5_v1",
+      "why": "'뼈'→'펴'"
+    },
+    {
+      "id": "L13d_s6_v1",
+      "why": "'파란색'→'파랑색' · '떠 와' 불명확"
+    },
+    {
+      "id": "L13d_s1_v2",
+      "why": "대본이 과 이름 대신 '다른 그림'(내 실수 — tts_order 를 함수째 넘김)"
+    },
+    {
+      "id": "L13d_s5_v2",
+      "why": "같은 까닭"
+    },
+    {
+      "id": "L13d_s2_v2",
+      "why": "'병정'→'뱅정'"
+    },
+    {
+      "id": "L13d_s3_v2",
+      "why": "'퍼포린'→'버포린'"
+    },
+    {
+      "id": "L01b_s6_v1",
+      "why": "'피코르나'→'피코로나' ×2 · '세 척' 불명확"
+    },
+    {
+      "id": "L01b_s6_v2",
+      "why": "'피코로나' ×2 · '세 총' · '패'"
+    },
+    {
+      "id": "L01b_s7_v1",
+      "why": "'한 척'→'한 촉'"
+    },
+    {
+      "id": "L36d_s9_v3",
+      "why": "'도톰한'→'도토우만'"
+    }
+  ],
+  "reviews": {
+    "L13d_v1": {
+      "reviewer": "Gemini 태스크(별도 대화, 원문 없음) · MP3 원시 오디오 멀티모달 입력 · 사람 청취 아님",
+      "observed_mode": "카본",
+      "heard": {
+        "L13d_s1_v1": "다른 그림에서 보았던 성의 초형장이다. 조끼 단추가 네 개씩 두 줄인 병정들은 씨 디 에이트 세포 독성 티 세포다. 이들이 공격하는 표적 세 가지를 찾아보자. 셔츠 깃 안에 보라 망토를 숨긴 주민은 바이러스 감염 세포다. 어깨에 작은 검은 게가 붙은 대머리 주민은 종양 세포다. 이 덱에서 검은 게는 암을 나타낸다. 오른쪽 위, 이웃 성에서 옮겨온 집 문간의 여자는 붉은색 대신 파란 뱃지를 달고 있다. 다른 몸에서 온 이식 세포다. 세포성 면역의 주역인 세포 독성 티 세포를 감염 세포, 종양 세포, 이식 세포라는 세 표적과 연결하자.",
+        "L13d_s2_v1": "앞쪽 병정이 망토를 숨긴 주민의 배에 커다란 펀치를 대고 누른다. 종이에 구멍을 [불명확: 뚤투] 둥근 구멍이 나고, 잘려 나온 파란 원판은 바닥으로 떨어진다. 펀치, 퍼포의 소리를 이어 퍼포린을 떠올리자. 영어 퍼포레이트는 구멍을 뚫는다는 뜻이다. 세포 독성 티 세포가 분비하는 퍼포린은 표적 세포막에 구멍을 만들며, 보체의 막공격 복합체 씨 나인과 닮은 단백질이다. 구멍이 생기는 것은 첫 단계다. 그 안으로 무엇이 들어가는지는 옆 장면에서 확인하자.",
+        "L13d_s3_v1": "옆의 대머리 주민 배에도 같은 구멍이 있다. 병정이 키 큰 후추 그라인더를 돌리자 검은 알갱이가 구멍으로 떨어진다. 그라인더에서 그랜자임을 떠올린다. 갈아 부수는 효소로 연결되는 그랜자임은 단백질 분해 효소로, 과립에 저장되어 있다가 퍼포린이 만든 구멍으로 들어간다. 주민의 허리 아래가 끈으로 [불명확: 보낀] 작은 주머니들로 깔끔하게 나뉘었고, 피나 얼룩은 없다. 터져 버리는 괴사가 아니라 스스로 정리되는 세포 사멸, 아폽토시스다. 포포린은 구멍을 만들고, 그랜자임은 들어가 작용하며, 결과는 세포 사멸이라는 순서를 기억하자.",
+        "L13d_s4_v1": "왼쪽이 성벽에서는 다른 방식으로 싸우고 있다. 태엽 벌 둘이 깃발 다발을 끼고 다트처럼 깃발을 던지며, 성벽을 넘는 초록 세균에는 황토빛 깃발이 꽂혀 있다. 벌은 비 세포, 깃발을 쏟아내는 벌은 형질 세포, 깃발은 항체다. 체액성 면역이다. 세포 밖에 있는 세균에는 항체가 닿지만, 주민의 셔츠 속 망토에는 닿지 않는다. 그래서 병정은 감염된 주민 자체를 펀치로 공격한다. 세포 밖 병원체에 작용하는 항체와 이미 감염된 세포에 작용하는 세포 독성 티 세포의 퍼포린, 그랜자임을 구분하자.",
+        "L13d_s5_v1": "왼쪽 아래 큰 뼈가 길게 갈라져 붉은 스펀지 같은 속이 드러나 있다. 다른 그림의 골수 공방이다. 줄무늬 벌은 완성된 모습으로 뼈에서 곧장 날아오른다. 비 세포는 골수에서 만들어지고 골수에서 성숙한다. 같은 펴에서 나온 인형들은 아직 색칠도 얼굴도 없는 맨나무이며, 줄지어 돌집 학교로 들어간다. 종탑에 타이머가 있던 이 학교는 흉선이다. 타이머스와 타이머를 연결하자. 학교를 나오는 병정은 붉은 옷과 긴 털모자, 단쭈까지 갖추었다. 티 세포는 골수에서 유래해 흉선에서 성숙한다.",
+        "L13d_s6_v1": "오른쪽 위에서는 이웃 성의 오두막 한 채를 삼베로 싼 흙덩이째 [불명확: 또와] 구덩이에 옮겨 심었다. 이식이다. 문간의 여자와 창가의 아이도 뱃지를 달았지만, 이 성 주민의 붉은 뱃지와 달리 파랑색이다. 모양은 같고 색이 다른 뱃지는 엠 에이치 씨를 나타낸다. 엠 에이찌 씨는 사람마다 조금씩 다르므로, 받는 사람의 면역계가 다른 엠 에이치 씨를 비자기로 인식하고 공격한다. 흙덩이 위로 올라온 병정이 이식 거부를 보여준다."
+      },
+      "s7_v1": "생성 요청 대본이 한 글자 달랐음(낀→낌) — 판정 대상 아님 · v2 로 다시",
+      "must_hear": [
+        {
+          "sid": "s1",
+          "spot": "보았던 성의 ___이다",
+          "A": "처형장",
+          "B": "초형장",
+          "heard": "B",
+          "conf": "중간"
+        },
+        {
+          "sid": "s2",
+          "spot": "종이에 구멍을 ___",
+          "A": "뚫듯",
+          "B": "뚤투",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s3",
+          "spot": "끈으로 ___ 작은 주머니",
+          "A": "묶인",
+          "B": "보낀",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s3",
+          "spot": "___은 구멍을 만들고",
+          "A": "퍼포린",
+          "B": "포포린",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s4",
+          "spot": "왼쪽 ___ 성벽에서는",
+          "A": "위",
+          "B": "이",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s5",
+          "spot": "같은 ___에서 나온",
+          "A": "뼈",
+          "B": "펴",
+          "heard": "B",
+          "conf": "높음"
+        },
+        {
+          "sid": "s6",
+          "spot": "흙덩이째 ___ 구덩이에",
+          "A": "떠 와",
+          "B": "또와",
+          "heard": "B",
+          "conf": "중간"
+        },
+        {
+          "sid": "s6",
+          "spot": "붉은 배지와 달리 ___이다",
+          "A": "파란색",
+          "B": "파랑색",
+          "heard": "B",
+          "conf": "높음"
+        }
+      ],
+      "판정": {
+        "통과": [],
+        "재녹음": [
+          "s1",
+          "s2",
+          "s3",
+          "s4",
+          "s5",
+          "s6"
+        ]
+      },
+      "minor_not_blocking": [
+        "배지→[배찌] 표준 발음",
+        "엠 에이찌 — 경음화"
+      ]
+    },
+    "L13d_v2": {
+      "reviewer": "Gemini 태스크(새 대화, 원문 없음) · MP3 멀티모달 입력 · 사람 청취 아님",
+      "observed_mode": "Neon",
+      "files": {
+        "L13d_s2_v2": {
+          "heard_anomaly": "앞쪽 뱅정이(병정)",
+          "must_hear": "B 뱅정 · 높음",
+          "판정": "재녹음(v3) — 뜻은 통하나 함께 다시"
+        },
+        "L13d_s3_v2": {
+          "heard_anomaly": "버포린이(퍼포린이)",
+          "must_hear": "B 버포린 · 높음",
+          "판정": "재녹음(v3) — 핵심 용어"
+        },
+        "L13d_s4_v2": {
+          "mp3": "acbd9098dd48",
+          "heard": "왼쪽 위 성벽에서는 다른 방식으로 싸우고 있다. 태엽 벌 둘이 깃발 다발을 끼고 다트처럼 깃발을 던지며, 성벽을 넘는 초록 세균에는 황톳빛 깃발이 꽂혀 있다. 벌은 비 세포, 깃발을 쏟아내는 벌은 형질 세포, 깃발은 항체다. 체액성 면역이다. 세포 밖에 있는 세균에는 항체가 닿지만, 주민의 셔츠 속 망토에는 닿지 않는다. 그래서 병정은 감염된 주민 자체를 펀치로 공격한다. 세포 밖 병원체에 작용하는 항체와, 이미 감염된 세포에 작용하는 세포 독성 티 세포의 퍼포린 그랜자임을 구분하자.",
+          "판정": "통과"
+        },
+        "L13d_s6_v2": {
+          "mp3": "55bae20721a1",
+          "heard": "오른쪽 위에서는 이웃 성의 오두막 한 채를 삼베로 싼 흙덩이째 떠와 구덩이에 옮겨 심었다. 이식이다. 문간의 여자와 창가의 아이도 배지를 달았지만, 이 성 주민의 붉은 배지와 달리 파란색이다. 모양은 같고 색이 다른 배지는 엠 에이치 씨를 나타낸다. 엠 에이치 씨는 사람마다 조금씩 다르므로, 받는 사람의 면역계가 다른 엠 에이치 씨를 비자기로 인식하고 공격한다. 흙덩이 위로 올라온 병정이 이식 거부를 보여 준다.",
+          "판정": "통과"
+        },
+        "L13d_s1_v2": {
+          "판정": "쓰지 않음 — 생성 대본이 과 이름 대신 「다른 그림」으로 읽힘(ttsNorm 의 과 이름 표를 넘기지 않은 내 실수) · v3 로 다시"
+        },
+        "L13d_s5_v2": {
+          "판정": "쓰지 않음 — 같은 까닭 · v3 로 다시"
+        }
+      }
+    },
+    "fix2": {
+      "reviewer": "Gemini 태스크(새 대화, 원문 없음) · MP3 멀티모달 입력 · 사람 청취 아님",
+      "observed_mode": "Neon",
+      "files": {
+        "L01b_s6_v2": {
+          "mp3_sha12": "4770db3af68c",
+          "heard": "작은 배에서 피코로나를 떠올려 보자. 피코는 작다는 뜻이다. 이 배에 있는 세 단서는 모두 피코로나 바이러스과를 나타낸다. 재채기하는 코뿔소 라이노는 감기를 일으키는 리노바이러스다. 소년의 다리 보조기는 소아마비를 일으키는 폴리오바이러스와 연결한다. 소년이 간 모양 접시에서 조개를 집어먹는 동작은 분변 경구로 전파되는 에이형 간염 바이러스, 에이치 에이 브이를 뜻한다. 세 총 모두 사군이지만, 왕관 배와 노란 깃발 패는 각각 다른 과라는 점을 구분하자.",
+          "anomalies": [
+            "피코로나 ×2",
+            "세 총",
+            "패"
+          ],
+          "판정": "재녹음(같은 잘못 두 번째 — 피코르나→피코로나)"
+        },
+        "L01b_s7_v2": {
+          "mp3_sha12": "d011eb83be0d",
+          "heard": "작은 배 한 척에 금빛 왕관을 쓴 왕이 앉아 있다. 왕관을 뜻하는 라틴 말이 코로나이므로 코로나바이러스와 연결한다. 바이러스 입자 표면의 돌기가 왕관처럼 보여 붙은 이름이다. 코로나바이러스도 사군에 속한다.",
+          "anomalies": [],
+          "판정": "통과"
+        },
+        "L36d_s9_v4": {
+          "mp3_sha12": "107dc79f15ae",
+          "heard": "왼쪽 옥수수 낟알 속에 떡잎 하나를 찾자. 벽과 식물의 이 떡잎은 배반이다. 오른쪽 콩에서는 도톰한 떡잎 둘이 마주 본다. 씨앗 공방의 종자 창고에서도 본 두 예시다. 옥수수는 배저치 남아 있고, 콩은 양분을 주로 떡잎에 저장한다. 하지만 피마자처럼 배저치 남는 진정 쌍자엽 식물도 있으므로 두 무리를 구분할 때는 떡잎 수를 직접 확인하자.",
+          "anomalies": [
+            "벽과",
+            "배저치 ×2"
+          ],
+          "판정": "통과(가벼운 흔들림) — 벼과 [벼꽈]의 된소리 앞 막힘이 ㄱ 받침처럼 들림 · 젖이 [저지]를 [저치]로(흔한 입말) · 뜻 바뀜 없음"
+        }
+      }
+    },
+    "fix3": {
+      "reviewer": "Gemini 태스크(새 대화, 원문 없음) · MP3 멀티모달 입력 · 사람 청취 아님",
+      "observed_mode": "카본",
+      "files": {
+        "L13d_s1_v3": {
+          "mp3": "e1f53806c7c6",
+          "heard": "성문 신분증 검사 그림에서 보았던 성의 처형장이다. 조끼 단추가 네 개씩 두 줄인 병정들은 씨 디 에잇 세포 독성 티 세포다. 이들이 공격하는 표적 세 가지를 찾아보자. 셔츠 깃 안에 보라 망토를 숨긴 주민은 바이러스 감염 세포다. 어깨에 작은 검은 게가 붙은 대머리 주민은 종양 세포다. 이 덱에서 검은 게는 암을 나타낸다. 오른쪽 위, 이웃 성에서 옮겨온 집 문간의 여자는 붉은색 대신 파란 배지를 달고 있다. 다른 몸에서 온 이식 세포다. 세포성 면역의 주역인 세포 독성 티 세포를 감염 세포, 종양 세포, 이식 세포라는 세 표적과 연결하자.",
+          "anomalies_reported": [
+            "씨 디 에잇",
+            "암을 [라]타낸다(유음화처럼)",
+            "[배찌] [세뽀성] 된소리"
+          ],
+          "end_truncation": false,
+          "extra": "없음 — 끝 50 ms 의 -27 dB 작은 소리도 보고 없음",
+          "판정": "통과(가벼운 흔들림)"
+        },
+        "L13d_s5_v3": {
+          "mp3": "4eba993ff991",
+          "heard": "왼쪽 아래 큰 뼈가 길게 갈라져 붉은 스펀지 같은 속이 드러나 있다. 뼈 공방과 터진 호스 수리 그림의 골수 공방이다. 줄무늬 벌은 완성된 모습으로 뼈에서 곧장 날아오른다. 비 세포는 골수에서 만들어지고 골수에서 성숙한다. 같은 뼈에서 나온 인형들은 아직 색칠도 얼굴도 없는 맨나무이며 줄지어 돌집 학교로 들어간다. 종탑에 타이머가 있던 이 학교는 흉선이다. 타이머스와 타이머를 연결하자. 학교를 나오는 병정은 붉은 옷과 긴 털모자, 단추까지 갖추었다. 티 세포는 골수에서 유래해 흉선에서 성숙한다.",
+          "anomalies_reported": [
+            "비 세포·티 세포 운율"
+          ],
+          "end_truncation": false,
+          "판정": "통과 — '아래의'의 '의'가 약함"
+        }
+      }
+    },
+    "fix4": {
+      "reviewer": "Gemini 태스크(새 대화, 원문 없음) · MP3 멀티모달 입력 · 사람 청취 아님",
+      "observed_mode": "카본",
+      "files": {
+        "L01b_s6_v3": {
+          "mp3": "1228590f8ab2",
+          "heard": "작은 배에서 피코르나를 떠올려 보자. 피코는 작다는 뜻이다. 이 배에 있는 세 단서는 모두 피코르나바이러스과를 나타낸다. 재채기하는 코뿔소 라이노는 감기를 일으키는 리노바이러스다. 소년의 다리 보조기는 소아마비를 일으키는 폴리어바이러스와 연결한다. 소년이 간 모양 접시에서 조개를 집어 먹는 동작은 분변 경구로 전파되는 에이형 간염 바이러스, 에이치 에이 브이를 뜻한다. 세 척 모두 사군이지만 왕관 배와 노란 깃발 배는 각각 다른 과라는 점을 구분하자.",
+          "anomalies_reported": [
+            "폴리어바이러스(폴리오)",
+            "피코르나바이러스[꽈]를 [라]타낸다",
+            "[소와]마비",
+            "에이[영]"
+          ],
+          "end_truncation": false,
+          "extra": [],
+          "판정": "통과(가벼운 흔들림) — v1 · v2 의 '피코로나'·'세 총'·'패' 는 고쳐짐 · 세 번째 시도"
+        }
+      }
+    }
+  },
+  "acceptance_policy": "뜻이 통하는 가벼운 발음 흔들림은 수용 · 누락/뜻 뒤집힘/수 · 방향 · 부정의 잘못은 다시(사용자 기준)",
+  "method_limit": "AI 검수(따로 연 Gemini 대화가 MP3 를 원문 없이 받아 적고, 다른 곳은 A/B 필청으로 다시 확인). 사람이 듣지 않았다 — human_listening false.",
+  "publish": {
+    "repo": "BAEggman/biology2-audio",
+    "commit": "462bf5a",
+    "pages_check": "7 파일 200 audio/mp3 · 내려받은 sha256 = mp3_sha256 (2026-11-21)"
+  },
+  "generation": {
+    "tool": "Gemini 웹 · 작업(태스크) 모드 · 목소리 Kore · 모드 표시 '카본'",
+    "format": "WAV 24 kHz mono 16-bit → MP3 mono 24 kHz 96 kbps"
+  }
+}
