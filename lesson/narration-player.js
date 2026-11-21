@@ -13,6 +13,9 @@
       this.hold = options.hold || fetch(new URL('audio/hold.json', document.baseURI), {cache:'no-cache'})
         .then(r => r.ok ? r.json() : {}).catch(() => ({}));
       this.holdDelay = options.holdDelay ?? 3500;
+      // Segments the user has listened to (lesson/audio/heard.json — {lesson: [sid…]}); a missing file means none.
+      this.heard = options.heard || fetch(new URL('audio/heard.json', document.baseURI), {cache:'no-cache'})
+        .then(r => r.ok ? r.json() : {}).catch(() => ({}));
     }
     async heldIssue(sid) { const h = await this.hold; return h?.[this.lessonId]?.[sid] || null; }
     stop() {
@@ -26,7 +29,7 @@
       this.stop();
       const token = this.seq;
       const alive = () => token === this.seq;
-      const [manifest, held] = await Promise.all([this.manifest, this.heldIssue(sid)]);
+      const [manifest, held, heard] = await Promise.all([this.manifest, this.heldIssue(sid), this.heard]);
       if (!alive()) return;
       // A held stop is never read on its own; stepping to it by hand reads it with the device voice only.
       if (held) {
@@ -45,9 +48,11 @@
         const fallback = () => { if (!alive() || settled) return; settled = true; audio.pause(); audio.onended = audio.onerror = null; clearTimeout(this.timer); audio.remove(); this.audio = null; device(); };
         audio.onended = () => { if (!alive() || settled) return; settled = true; clearTimeout(this.timer); onend(); };
         audio.onerror = fallback;
-        onstatus('Gemini 녹음');
+        // Say only what is true: every published recording was AI-checked; 「들어 봄」 only when the user reported listening.
+        const label = (heard?.[this.lessonId] || []).includes(sid) ? 'Gemini 녹음 · 들어 봄' : 'Gemini 녹음 · AI 검수';
+        onstatus('준비 중');
         this.timer = setTimeout(fallback, 12000);
-        try { await audio.play(); if (alive()) clearTimeout(this.timer); }
+        try { await audio.play(); if (alive()) { clearTimeout(this.timer); onstatus(label); } }
         catch (error) {
           if (!alive() || settled) return;
           if (error.name === 'NotAllowedError') { settled = true; clearTimeout(this.timer); onblocked(); }

@@ -40,7 +40,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
     ok(log.status[0] === '기기 음성 · 검수 보류', '보류 + 손으로 — 상태 「기기 음성 · 검수 보류」'); }
   { const { N, log } = sandbox(); const n = new N('L99a', { manifest, hold, holdDelay: 20 });
     await n.play({ sid: 's2', text: '둘', auto: true, onend() {}, onblocked() {}, onstatus: s => log.status.push(s) });
-    ok(log.audio === 1 && log.status[0] === 'Gemini 녹음', '보류 아님 · 글 같음 — 녹음을 튼다'); n.stop(); }
+    await wait(5); ok(log.audio === 1 && log.status.includes('Gemini 녹음 · AI 검수'), '보류 아님 · 글 같음 — 녹음을 튼다'); n.stop(); }
   { const { N, log } = sandbox(); const n = new N('L99a', { manifest, hold, holdDelay: 30 }); let ended = 0;
     await n.play({ sid: 's1', text: '하나', auto: true, onend: () => ended++, onblocked() {}, onstatus: s => log.status.push(s) });
     n.stop(); await wait(60);

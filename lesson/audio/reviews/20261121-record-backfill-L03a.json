@@ -1,0 +1,26 @@
+{
+ "batch": "20261121-record-backfill-L03a",
+ "status": "record_only",
+ "date": "2026-11-21",
+ "by": "Claude Opus 5.5 — 2단계(낭독 맞추기)",
+ "why": "L03a s2 · s3 는 2026-11-20 오전에 처음 실린 두 녹음이라 reviews/ 에 기록 파일이 없었다. 새로 검수한 것이 아니라, 이미 있는 사실(tools/audio-narration.md 의 기록 · manifest)을 검수 기록 꼴로 옮겨 적는다 — test/verify_audio.js 가 모든 녹음에 기록을 요구한다.",
+ "source_note": "tools/audio-narration.md — 「46.44초 원본의 22.47225~23.18850초 무음 내부인 22.83초에서 나누어 MP3로 압축했다. 원본 음절을 잘라내지 않았다.」",
+ "human_listening": false,
+ "independent_ai_review": "기록 없음(이 파일이 새로 주장하지 않는다)",
+ "clips": [
+  {
+   "lesson": "L03a",
+   "sid": "s2",
+   "src": "https://baeggman.github.io/biology2-audio/L03a_s2_v1.mp3",
+   "sha256": "ae847268b90450e5834425b2e1bab1c85e641b607e6b4811630039337bfb334c",
+   "text_matches_say": true
+  },
+  {
+   "lesson": "L03a",
+   "sid": "s3",
+   "src": "https://baeggman.github.io/biology2-audio/L03a_s3_v1.mp3",
+   "sha256": "466a13aebd7d7684a57b118fbe4219454a3b329c2cb79f724c05dee9eefd9406",
+   "text_matches_say": true
+  }
+ ]
+}
