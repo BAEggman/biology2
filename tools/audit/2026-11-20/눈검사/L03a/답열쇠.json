@@ -1,0 +1,76 @@
+{
+ "lesson": "L03a",
+ "real": {
+  "플라스미드": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "Hfr": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "CRISPR": {
+   "sid": "s7",
+   "cls": "A0",
+   "props": [
+    "크리스마스 화환",
+    "머그샷"
+   ]
+  },
+  "Cas": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "Cas9": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "형질도입": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "접합)": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "제한효소": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "CRISPR)": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "형질전환": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "접합": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "CRISPR-Cas": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "스컹크",
+  "PrP",
+  "신경호르몬",
+  "EBV",
+  "ECM",
+  "칙술루브"
+ ]
+}

@@ -1,0 +1,84 @@
+{
+ "lesson": "L23c",
+ "real": {
+  "노르에피네프린": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "아세틸콜린": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "ACh": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "에피네프린": {
+   "sid": "s1",
+   "cls": "A1",
+   "props": [
+    "뚜껑이 터진 드럼통",
+    "뚜껑이 터져 날아간 드럼통",
+    "드럼통"
+   ]
+  },
+  "Gq": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "Gs": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "Gi": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "글리코젠": {
+   "sid": "s4",
+   "cls": "A1",
+   "props": [
+    "가지가 갈라지고 또 갈라지며",
+    "가지마다 포도가 붙어 있다",
+    "큰 나무"
+   ]
+  },
+  "PLC": {
+   "sid": "s6",
+   "cls": "A1",
+   "props": [
+    "C자",
+    "크랭크가 큰 C자"
+   ]
+  },
+  "cAMP↓": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "cAMP↑": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "수축력↑": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "SGLT",
+  "GnRH",
+  "nAChR",
+  "크레아틴인산",
+  "B6",
+  "CD8"
+ ]
+}

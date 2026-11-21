@@ -1,0 +1,25 @@
+{
+ "lesson": "L36b",
+ "real": {
+  "세대교번": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "정자)": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "수정": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "앱시스산",
+  "니트로게나아제",
+  "젤라틴"
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "lesson": "L14a",
+ "real": {
+  "데스모솜": {
+   "sid": "s1",
+   "cls": "A0",
+   "props": [
+    "대갈못",
+    "꿰어 박"
+   ]
+  },
+  "케라틴": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "밀착연접": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "간극연접": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "원형질연락사": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "마걸리스",
+  "Gt",
+  "인산이에스테르"
+ ]
+}
