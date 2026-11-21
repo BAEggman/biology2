@@ -1,0 +1,188 @@
+{
+ "L20a_s2_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g1"
+ },
+ "L20a_s3_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g1"
+ },
+ "L20a_s4_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g1"
+ },
+ "L20a_s7_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g1"
+ },
+ "L20a_s8_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g1"
+ },
+ "L20b_s1_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g1"
+ },
+ "L20b_s4_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g1"
+ },
+ "L20a_s1_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g1",
+  "notes": "의→에"
+ },
+ "L20b_s5_v1": {
+  "status": "REDO",
+  "review": "rv_b5g1",
+  "notes": "필청 — '앱시스산'→'앱시시산'(높음) · '갓'→'각'(중간)"
+ },
+ "L20b_s9_v1": {
+  "status": "REDO",
+  "review": "rv_b5g1",
+  "notes": "필청 — '셔터'→'혀터' ×2(높음)"
+ },
+ "L22c_s2_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L22c_s3_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L22c_s5_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L34c_s10_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L34c_s11_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L34c_s1_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L34c_s4_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L34c_s7_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L34c_s8_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L34c_s9_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g2"
+ },
+ "L22c_s1_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g2",
+  "notes": "받아 적기 흔들림(자루→자류 · 대립→대림 · 수용부→수영부)"
+ },
+ "L22c_s6_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g2",
+  "notes": "받아 적기 흔들림(자루→자류 · 대립→대림 · 수용부→수영부)"
+ },
+ "L22c_s7_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g2",
+  "notes": "받아 적기 흔들림(자루→자류 · 대립→대림 · 수용부→수영부)"
+ },
+ "L22c_s9_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g2",
+  "notes": "받아 적기 흔들림(자루→자류 · 대립→대림 · 수용부→수영부)"
+ },
+ "L23b_s1_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g2",
+  "notes": "받아 적기 흔들림(자루→자류 · 대립→대림 · 수용부→수영부)"
+ },
+ "L23b_s3_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g2",
+  "notes": "받아 적기 흔들림(자루→자류 · 대립→대림 · 수용부→수영부)"
+ },
+ "L34c_s3_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g2",
+  "notes": "받아 적기 흔들림(자루→자류 · 대립→대림 · 수용부→수영부)"
+ },
+ "L34c_s5_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g2",
+  "notes": "받아 적기 흔들림(자루→자류 · 대립→대림 · 수용부→수영부)"
+ },
+ "L34c_s2_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g2",
+  "notes": "대립→대림 · 청취 때 확인할 곳: '씨앗 공방'이 '시약 공방'으로 적힘"
+ },
+ "L37b_s1_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g3"
+ },
+ "L37b_s3_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g3"
+ },
+ "L37b_s6_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g3"
+ },
+ "L37b_s7_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g3"
+ },
+ "L37b_s8_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g3"
+ },
+ "L43a_s6_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g3"
+ },
+ "L43a_s8_v1": {
+  "status": "CLEAR",
+  "review": "rv_b5g3"
+ },
+ "L37b_s2_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g3",
+  "note": "'의'→[에]"
+ },
+ "L43a_s3_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g3",
+  "note": "'의'→[에]"
+ },
+ "L43a_s4_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g3",
+  "note": "'의'→[에]"
+ },
+ "L43a_s2_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b5g3",
+  "note": "받아쓰기 '일꾼은'→'일꾼을' 한 곳 — 조사 흔들림, 청취 때 확인할 곳"
+ },
+ "L43a_s5_v1": {
+  "status": "REDO",
+  "review": "rv_b5g3",
+  "note": "'해 도안'→'핵 도안' — 뜻이 바뀜"
+ },
+ "L43a_s7_v1": {
+  "status": "REDO",
+  "review": "rv_b5g3",
+  "note": "입력 잘못(mktts 사전 빠짐) — v2"
+ }
+}

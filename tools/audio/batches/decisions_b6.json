@@ -1,0 +1,133 @@
+{
+ "L43d_s6_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g1"
+ },
+ "L43d_s10_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g1"
+ },
+ "L43d_s8_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g1"
+ },
+ "L46d_s2_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g1"
+ },
+ "L46d_s8_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g1"
+ },
+ "L43d_s2_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g1",
+  "note": "분수 읽기 — 표준"
+ },
+ "L43d_s3_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g1",
+  "note": "'의'→[에]"
+ },
+ "L43d_s4_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g1",
+  "note": "'발현하지'→받아쓰기 '발현하기' 한 곳 — 청취 때 확인할 곳"
+ },
+ "L46d_s5_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g1",
+  "note": "반듯이=[반드시] 표준 발음"
+ },
+ "L46d_s9_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g1",
+  "note": "4~8 → '4에서 8' 표기 차이"
+ },
+ "L46d_s13_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g1",
+  "note": "'덱의'→[데게]·받아쓰기 '대개' — 청취 때 확인할 곳"
+ },
+ "L43d_s1_v1": {
+  "status": "REDO",
+  "review": "rv_b6g1",
+  "note": "짚끈→'직근' · 이것이→'이곳이'"
+ },
+ "L43d_s9_v1": {
+  "status": "REDO",
+  "review": "rv_b6g1",
+  "note": "'해 팻말'→'햇펜말'"
+ },
+ "L46d_s3_v1": {
+  "status": "REDO",
+  "review": "rv_b6g1",
+  "note": "호스→'혼수' · 평활근을→'평활구는'"
+ },
+ "L46d_s6_v1": {
+  "status": "REDO",
+  "review": "rv_b6g1",
+  "note": "심장→'힘장'"
+ },
+ "L46d_s11_v1": {
+  "status": "REDO",
+  "review": "rv_b6g1",
+  "note": "끝이→'꽃이' · 호스→'호수'"
+ },
+ "L46h_s1_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g2"
+ },
+ "L46h_s7_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g2"
+ },
+ "L46h_s11_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g2"
+ },
+ "L49c_s6_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g2"
+ },
+ "L46h_s3_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g2",
+  "note": "'의'→[에] · 숫자 읽기"
+ },
+ "L46h_s4_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g2",
+  "note": "'의'→[에] · 숫자 읽기"
+ },
+ "L46h_s5_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g2",
+  "note": "'의'→[에] · 숫자 읽기"
+ },
+ "L46h_s6_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g2",
+  "note": "'의'→[에] · 숫자 읽기"
+ },
+ "L49c_s2_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g2",
+  "note": "'의'→[에] · 숫자 읽기"
+ },
+ "L49c_s8_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g2",
+  "note": "'의'→[에] · 숫자 읽기"
+ },
+ "L49c_s4_v1": {
+  "status": "CLEAR_ALLOWED_VARIANT",
+  "review": "rv_b6g2",
+  "note": "받아쓰기 '인슐린을'→'인슐린은' 한 곳 — 청취 때 확인할 곳"
+ },
+ "L49c_s5_v1": {
+  "status": "CLEAR",
+  "review": "rv_b6g2",
+  "note": "1.2초 넘는 쉼 3곳(45초) — 받아쓰기는 온전 · 청취 때 확인할 곳"
+ }
+}
