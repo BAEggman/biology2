@@ -1,0 +1,35 @@
+{
+ "lesson": "L13d",
+ "real": {
+  "MHC": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "TCR": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "IL": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "퍼포린": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "그랜자임": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RyR1",
+  "GPCR",
+  "hCG"
+ ]
+}
