@@ -1,0 +1,114 @@
+{
+ "lesson": "L12f",
+ "real": {
+  "아밀레이스": {
+   "sid": "s3",
+   "cls": "C",
+   "props": null
+  },
+  "가스트린": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "히스타민": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "소마토스타틴": {
+   "sid": "s5",
+   "cls": "A1",
+   "props": [
+    "아무도 들지 않은 배턴",
+    "끈 두 가닥을 고삐처럼",
+    "놓인 짧은 배턴",
+    "두 고삐"
+   ]
+  },
+  "ECL": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "세크레틴": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "CCK": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "펩타이드": {
+   "sid": "s9",
+   "cls": "B",
+   "props": null
+  },
+  "GIP": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "인슐린": {
+   "sid": "s10",
+   "cls": "A0",
+   "props": [
+    "주사기",
+    "주사기를 치켜든"
+   ]
+  },
+  "PYY": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "췌장": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "담낭)": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "세포": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "완충": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "엔테로가스트론(세크레틴": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "렙틴": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "담즙": {
+   "sid": "s14",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "SCN",
+  "Gq",
+  "mAChR",
+  "콘드로이틴황산염",
+  "B5",
+  "CD8",
+  "스트레스",
+  "DAG",
+  "TSH"
+ ]
+}

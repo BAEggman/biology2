@@ -1,0 +1,45 @@
+{
+ "lesson": "L17c",
+ "real": {
+  "글루타민": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "암모니아": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "요소": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "요산": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "독성": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "사람": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "통풍": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2"
+ ]
+}

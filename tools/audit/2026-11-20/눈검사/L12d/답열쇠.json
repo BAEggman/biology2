@@ -1,0 +1,93 @@
+{
+ "lesson": "L12d",
+ "real": {
+  "비오틴": {
+   "sid": "s1",
+   "cls": "A0",
+   "props": [
+    "양철",
+    "빗방울"
+   ]
+  },
+  "글리코젠": {
+   "sid": "s1",
+   "cls": "A1",
+   "props": [
+    "가지가 갈라지고 또 갈라지며",
+    "가지마다 포도가 붙어 있다",
+    "큰 나무"
+   ]
+  },
+  "피루브산": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "카르복실화효소": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "B5": {
+   "sid": "s6",
+   "cls": "A1",
+   "props": [
+    "널빤지"
+   ]
+  },
+  "뉴클레오타이드": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "메스꺼움": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "시스테인": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null
+  },
+  "삼투압": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "산염기": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "나트륨": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "칼륨": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "수분": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "심부전)": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "루비스코",
+  "N3",
+  "아세트알데하이드",
+  "CAM",
+  "CN",
+  "DNP",
+  "수크로스"
+ ]
+}

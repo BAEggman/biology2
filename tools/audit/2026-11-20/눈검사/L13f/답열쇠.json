@@ -1,0 +1,62 @@
+{
+ "lesson": "L13f",
+ "real": {
+  "알레르겐": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "히스타민": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "알레르기": {
+   "sid": "s14",
+   "cls": "B",
+   "props": null
+  },
+  "IgD": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "IgG": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "IgE": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "IgM": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "IgA": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "중화": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  },
+  "옵소닌화": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2",
+  "전신홍반루푸스",
+  "B5"
+ ]
+}

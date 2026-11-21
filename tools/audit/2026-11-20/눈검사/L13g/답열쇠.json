@@ -1,0 +1,93 @@
+{
+ "lesson": "L13g",
+ "real": {
+  "스스로생": {
+   "sid": "s3",
+   "cls": "C",
+   "props": null
+  },
+  "알레르겐": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "히스타민": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "에피네프린": {
+   "sid": "s6",
+   "cls": "A0",
+   "props": [
+    "뚜껑이 터진 드럼통",
+    "뚜껑이 터져 날아간 드럼통",
+    "드럼통"
+   ]
+  },
+  "아드레날린": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "전신홍반루푸스": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "류머티스": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "항독소": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "항독소)": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "1형(즉시형)": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "2형": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "3형": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "면역관용": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "자가면역": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "4형(지연형)": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2",
+  "카바미노헤모글로빈",
+  "B5",
+  "CD4",
+  "세르톨리세포"
+ ]
+}

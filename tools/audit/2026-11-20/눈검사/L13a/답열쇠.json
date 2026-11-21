@@ -1,0 +1,45 @@
+{
+ "lesson": "L13a",
+ "real": {
+  "PAMP": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "TLR": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "플라젤린": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "바이러스": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "CpG": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "비특이": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "특이": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RyR1",
+  "Gi",
+  "hCG"
+ ]
+}
