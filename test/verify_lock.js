@@ -14,5 +14,18 @@ for(const line of r.stdout.trim().split('\n')){
   console.log(`  ${t1?'✓':'✕'} ${g.id} 글  ${t2?'✓':'✕'} 원본 잠긴 구역(${g['픽셀수']} px)  ${t3?'✓':'✕'} 공개 그림의 그 구역(평균 차 ${g['공개그림차']})`);
   if(!(t1&&t2&&t3)) bad++;
 }
+/* 녹음 잠금 목록(tools/audio/locked.json) — 잠긴 구간의 글(say) 해시 · 그림 blob 이 지금과 같은가. 글을 고쳤으면 그 구간을 잠금에서 빼고(다시 판정) 녹음도 다시. */
+{ const crypto=require('crypto');
+  const A=JSON.parse(fs.readFileSync(path.join(ROOT,'tools/audio/locked.json'),'utf8')); let n=0, b0=bad;
+  for(const [id,e] of Object.entries(A['잠김']||{})){
+    const d=JSON.parse(fs.readFileSync(path.join(ROOT,'lessons',id+'.json'),'utf8'));
+    const buf=fs.readFileSync(path.join(ROOT,'lesson',d.img));
+    const blob=crypto.createHash('sha1').update('blob '+buf.length+'\0').update(buf).digest('hex');
+    if(blob!==e['그림']){ console.log(`  ✕ 녹음 잠금 ${id} — 그림이 바뀜`); bad++; }
+    for(const [sid,h] of Object.entries(e['구간'])){ n++;
+      const s=d.stops.find(x=>x.sid===sid);
+      const g=s?crypto.createHash('sha256').update(s.say,'utf8').digest('hex').slice(0,12):'(없음)';
+      if(g!==h){ console.log(`  ✕ 녹음 잠금 ${id} ${sid} — 글이 바뀜(잠금에서 빼고 다시 판정 · 녹음도 다시)`); bad++; } } }
+  if(bad===b0) console.log(`  ✓ 녹음 잠금 ${Object.keys(A['잠김']||{}).length}과 ${n} 구간 — 글 · 그림 그대로`); }
 console.log(bad?`\n❌ 잠금 깨짐 ${bad} — 사용자가 허락한 손질이면 lock.json 의 「까닭」에 그 말을 더하고 lockhash.py --write`:'\n✅ 잠금 그대로');
 process.exit(bad?1:0);
