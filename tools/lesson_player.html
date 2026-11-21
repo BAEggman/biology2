@@ -149,13 +149,9 @@ function showCap(k, judge) {
   if (voice) speak(st.say || (st.obj + '. ' + st.fact), st.sid);
   $('judge').style.display = judge && mode === 'quiz' ? 'flex' : 'none';
 }
-// 낭독용 치환 — 화면 글은 그대로 두고, 읽을 때만 첨자 · 그리스 글자 · 기호를 말로 바꾼다
-const TTS = [[/Na⁺/g, '나트륨 이온'], [/K⁺/g, '칼륨 이온'], [/Ca²⁺/g, '칼슘 이온'], [/Mg²⁺/g, '마그네슘 이온'], [/H⁺/g, '수소 이온'], [/Cl⁻/g, '염소 이온'],
-  [/HCO₃⁻/g, '중탄산 이온'], [/NH₄⁺/g, '암모늄 이온'], [/NADP⁺/g, '엔에이디피 플러스'], [/NAD⁺/g, '엔에이디 플러스'], [/FADH₂/g, '에프에이디에이치 투'],
-  [/CO₂/g, '이산화탄소'], [/H₂O/g, '물'], [/O₂/g, '산소'], [/5′/g, '오 프라임'], [/3′/g, '삼 프라임'], [/2′/g, '이 프라임'], [/′/g, ' 프라임'],
-  [/α/g, '알파'], [/β/g, '베타'], [/γ/g, '감마'], [/δ/g, '델타'], [/ε/g, '엡실론'], [/₁/g, '1'], [/₂/g, '2'], [/₃/g, '3'], [/₄/g, '4'], [/⁺/g, ' 플러스'], [/⁻/g, ' 마이너스'], [/²/g, '2'],
-  [/→/g, ', '], [/≈/g, '약 '], [/↑/g, ' 증가'], [/↓/g, ' 감소']];
-const ttsNorm = t => TTS.reduce((x, [a, b]) => x.replace(a, b), String(t));
+// 낭독용 치환 — 화면 글은 그대로 두고 읽을 때만 푼다. 함수 · 사전 · 과 제목은 빌드가 tools/tts_norm.js · tools/tts_lexicon.json 에서 끼워 넣는다(한 군데서만 정한다)
+__TTS__
+const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
 const narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }

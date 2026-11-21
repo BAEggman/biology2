@@ -8,6 +8,13 @@ const { createHash } = require('node:crypto');
 const { ROOT, panelIndex, resolveRef, strip, stopCards, deck } = require('./lesson_lib');
 const { lessonTopics } = require('./lesson_topics');
 const tpl = fs.readFileSync(path.join(__dirname, 'lesson_player.html'), 'utf8');
+// 낭독 입력(보기 화면 명세 §2.4) — ttsNorm 함수 · 사전 · 과 짧은 제목을 과 화면에 끼워 넣는다
+const TTS_BLOCK = (() => {
+  const lex = JSON.parse(fs.readFileSync(path.join(__dirname, 'tts_lexicon.json'), 'utf8'));
+  const order = require('./tts_order')();
+  const src = fs.readFileSync(path.join(__dirname, 'tts_norm.js'), 'utf8').replace(/<\/script/gi, '<\\/script');
+  return `const TTS_LEX = ${JSON.stringify({ fixed: lex.fixed, words: lex.words })};\nconst TTS_ORDER = ${JSON.stringify(order)};\n${src}`;
+})();
 const argv = process.argv.slice(2); const si = argv.indexOf('--standalone');
 const standaloneDir = si >= 0 ? argv[si + 1] : null;
 let ids = si >= 0 ? argv.filter((_, k) => k !== si && k !== si + 1) : argv;
@@ -30,7 +37,7 @@ function renderLesson(data, lessonBase = '') {
     }
     tourLink = `<a href="${lessonBase}${id}.html">${esc(label)}</a>`;
   }
-  return tpl.replace('__TITLE__', data.title.replace(/[<&]/g, ''))
+  return tpl.replace('__TITLE__', data.title.replace(/[<&]/g, '')).replace('__TTS__', () => TTS_BLOCK)
     .replace('__TOUR_LINK__', () => tourLink).replace('__DATA__', JSON.stringify(data));
 }
 for (const id of ids) {
