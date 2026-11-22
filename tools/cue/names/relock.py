@@ -52,7 +52,7 @@ def eye_dir(L):
 
 def gone(L, w):
     g = (G.get(f'{L}|{w}') or {}).get('갈래')
-    return g == '㉮' or not clean(w) or PASS.get(f'{L}|{w}', {}).get('판정') == '○'
+    return g in ('㉮', '㉳') or not clean(w) or PASS.get(f'{L}|{w}', {}).get('판정') == '○'
 
 
 out = {}
