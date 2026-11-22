@@ -15,6 +15,7 @@ const H = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/hooks.json'), 'utf8'
 const HOOKS = H.hooks || {};
 const list = k => Object.keys((H[k] || {})['목록'] || {});
 const FREE = new Set(list('_외래어면제')), MISS = new Set(list('_음차오탐')), MEAN = new Set(list('_뜻이있는약어')), ANSF = new Set(list('_답면제')), MANF = new Set(list('_인명면제'));
+const NAMEX = new Set(list('_이름장부면제')); // 이름 장부의 ㉮(2026-11-22 · tools/cue/names) — 일상어 · 연장 흠
 const ALIAS = {}; for (const [k, v] of Object.entries((H['_표기별칭'] || {})['목록'] || {})) ALIAS[k] = v['이름'];
 const ph = fs.readFileSync(path.join(ROOT, 'tools/audit_phonetics.js'), 'utf8');
 const KNOWN = new Set((ph.match(/const KNOWN = new Set\(`([\s\S]*?)`/) || [, ''])[1].split(/\s+/).filter(Boolean));
@@ -37,7 +38,7 @@ for (const L of lessons()) { const objAll = L.stops.map(s => strip(s.obj || ''))
   const terms = new Set();
   for (const id of ids) { const c = CARDS[id.replace(/#\d+$/, '')] || CARDS[id]; if (!c) continue;
     const ans = strip((c.a || '') + ' ' + (Array.isArray(c.it) ? c.it.join(' ') : ''));
-    for (let t of (ans.match(/[가-힣]{2,}/g) || [])) { t = t.replace(JOSA, ''); if (isLoan(t) && !MISS.has(t)) terms.add(t); }
+    for (let t of (ans.match(/[가-힣]{2,}/g) || [])) { t = t.replace(JOSA, ''); if (isLoan(t) && !MISS.has(t) && !NAMEX.has(t)) terms.add(t); }
     for (let t of (ans.match(/[A-Za-z][A-Za-z0-9₀-₉]*[A-Za-z0-9₀-₉]/g) || [])) { t = t.replace(/[₀-₉]/g, ch => SUB[ch]); if (!KNOWN.has(t) && !/^[a-z]+$/.test(t) && !/^[A-Z][a-z]{3,}$/.test(t)) terms.add(t); }
   }
   for (const t of terms) {

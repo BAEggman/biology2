@@ -22,27 +22,11 @@ sm = im.resize((780, round(im.height * 780 / im.width)), Image.LANCZOS)
 for r in 'ㄱㄴ': sm.save(f'{out}/{r}/small.jpg', quality=88)
 os.remove(f'{out}/ㄴ/stops.tsv')
 open(f'{out}/ㄷ/stops.tsv', 'w', encoding='utf-8').write('\n'.join(f"{s['sid']}\t{s['obj']}\t{s['fact']}" for s in d['stops']) + '\n')
-rows = json.loads(subprocess.check_output(['node', f'{ROOT}/tools/audit/2026-11-19/lesson_names.js', '--json'], cwd=ROOT))
-real = {}
-for r in rows:
-    if r['lesson'] == lid: real.setdefault(r['term'], {'sid': r['sid'], 'cls': r['cls'], 'props': r['props']})
-for s in d['stops']:
-    h = s['fact'].split(' — ')[0].strip()
-    for part in re.split(r'\s*[·,]\s*', h):
-        if 2 <= len(part) <= 12 and part not in real and not re.search(r'\s', part): real[part] = {'sid': s['sid'], 'cls': 'fact', 'props': None}
-# (2026-11-21 넷째 묶음) 답 열쇠 고침 — ① 정거장 번호를 카드가 아니라 이 과의 stops 에서 다시 잡는다(그 낱말이 hook · fact · obj · say 에 처음 나오는 정거장) · ② 군더더기 낱말(괄호 짝 안 맞음 · 화살표 · 「/」 · 한 글자 · 흔한 말)을 뺀다.
-JUNK = {'생산', '바이러스', '세균', '세포', '단백질', '효소', '호르몬', '물', '빛'}
-def _clean(t):
-    return not (len(t) < 2 or t in JUNK or t.count('(') != t.count(')') or re.search(r'[↑↓→←/]', t))
-def _home(t):
-    for f in ('hook', 'fact', 'obj', 'say'):
-        for s in d['stops']:
-            if t in (s.get(f) or ''): return s['sid']
-    return None
-for t in list(real):
-    if not _clean(t): real.pop(t); continue
-    h = _home(t)
-    if h and h != real[t]['sid']: real[t]['sid_card'] = real[t]['sid']; real[t]['sid'] = h
+# 답 열쇠는 tools/cue/answerkey.py 한곳(2026-11-22 · 이름 장부 ㉮ — 「 — 」 없는 fact 의 낱말 · 일상어 · 수 · 표기 겹침을 뺀다)
+sys.path.insert(0, f'{ROOT}/tools/cue')
+from answerkey import make_key, name_rows
+rows = name_rows()
+real = make_key(lid, d, rows)
 src = open(f'{ROOT}/tools/lesson_topics.js', encoding='utf-8').read()
 scene = d.get('scene', '')
 # 같은 단원: lesson_topics.js 의 단원 덩어리에서 이 과의 장면(sNN)이나 id 가 든 덩어리
