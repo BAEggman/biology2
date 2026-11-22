@@ -1,0 +1,23 @@
+{
+ "batch": "20261122-batch-22",
+ "date": "2026-11-22",
+ "by": "Claude Sonnet 5.5 — Opus 글 고침 2차(L13b s4 고무호스→고무관 · L53b s3 과 번호→앞 그림) 뒤 새 녹음 · AI 검수(Gemini 받아 적기, 원문 없이) · 사람 청취 없음",
+ "hashes": "tools/audio/batches/hashes_20261121.txt",
+ "accepted": [
+  {
+   "id": "L13b_s4_v5",
+   "status": "CLEAR",
+   "review": "받아 적기가 대본과 문장 단위 완전 일치 · 고무관 · 투과성 정상 · 끝 음량 −63 dB · 침묵 0"
+  },
+  {
+   "id": "L53b_s3_v5",
+   "status": "CLEAR",
+   "review": "받아 적기가 대본과 문장 단위 완전 일치 · 사람→사랑 오독 사라짐(제목구가 들어가지 않음) · 끝 음량 −63 dB · 침묵 0"
+  }
+ ],
+ "rejected_attempts": [],
+ "extra": {
+  "note": "HOLD 2 해소 — Opus 글 고침 2차(커밋 0a386e8f) 뒤 첫 시도에서 통과",
+  "dictionary": "고무관 · 투과성 · 기둥 · 탄화수소 사전 줄 사용"
+ }
+}

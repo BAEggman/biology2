@@ -1,0 +1,53 @@
+{
+  "batch": "20261122-batch-22",
+  "status": "accepted_for_integration",
+  "date": "2026-11-22",
+  "by": "Claude Sonnet 5.5 — Opus 글 고침 2차(L13b s4 고무호스→고무관 · L53b s3 과 번호→앞 그림) 뒤 새 녹음 · AI 검수(Gemini 받아 적기, 원문 없이) · 사람 청취 없음",
+  "clips": 2,
+  "accepted": [
+    {
+      "lesson_id": "L13b",
+      "sid": "s4",
+      "version": "v5",
+      "source_commit": "0a386e8fd14e80fc12f07cab1f3826197da3e1da",
+      "say_sha256": "459aafeb894f2a4592a79dfe8f6696bc7606fbff97353661a17a93b3dd708f3f",
+      "spoken_sha256": "459aafeb894f2a4592a79dfe8f6696bc7606fbff97353661a17a93b3dd708f3f",
+      "wav_sha256": "4312be425e7eb2c8371fbd18575d297fe4440c7e9bbb8c2309d45a67d7a3e4da",
+      "mp3_sha256": "9e50ce499a2f388ca0e72e7de5c23e5bfc1af187ff7777ddc4f342f4c652222c",
+      "duration_sec": 30.624,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "받아 적기가 대본과 문장 단위 완전 일치 · 고무관 · 투과성 정상 · 끝 음량 −63 dB · 침묵 0",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L53b",
+      "sid": "s3",
+      "version": "v5",
+      "source_commit": "0a386e8fd14e80fc12f07cab1f3826197da3e1da",
+      "say_sha256": "1deba236399e17f39c22e8ed186c4a61377454a41e1482cb4b1bfc39ffc42746",
+      "spoken_sha256": "ee6da00a70b8dea5194695ab95b473e541eb6e8c0c1ad1e8b0d4193368a74887",
+      "wav_sha256": "cc55c2725abfb672395953e3df44d844ab007460c896ac0f1dcbb4eb557de8ed",
+      "mp3_sha256": "9ed2caff6cb72b18a250f108a45e51d8f82c8f5931ea6bd37c1f5c1fcef617da",
+      "duration_sec": 42.336,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "받아 적기가 대본과 문장 단위 완전 일치 · 사람→사랑 오독 사라짐(제목구가 들어가지 않음) · 끝 음량 −63 dB · 침묵 0",
+      "notes": ""
+    }
+  ],
+  "rejected_attempts": [],
+  "reviews": {},
+  "acceptance_policy": "뜻이 통하는 가벼운 발음 흔들림은 수용 · 누락/뜻 뒤집힘/수 · 방향 · 부정의 잘못은 다시(사용자 기준)",
+  "method_limit": "AI 검수(따로 연 Gemini 대화가 MP3 를 원문 없이 받아 적고, 다른 곳은 A/B 필청으로 다시 확인). 사람이 듣지 않았다 — human_listening false.",
+  "note": "HOLD 2 해소 — Opus 글 고침 2차(커밋 0a386e8f) 뒤 첫 시도에서 통과",
+  "dictionary": "고무관 · 투과성 · 기둥 · 탄화수소 사전 줄 사용"
+}
