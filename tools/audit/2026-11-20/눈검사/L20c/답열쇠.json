@@ -1,0 +1,52 @@
+{
+ "lesson": "L20c",
+ "real": {
+  "플로리겐": {
+   "sid": "s7",
+   "cls": "A0",
+   "props": [
+    "편지",
+    "쪽지"
+   ]
+  },
+  "FT": {
+   "sid": "s7",
+   "cls": "A0",
+   "props": [
+    "편지",
+    "쪽지"
+   ]
+  },
+  "Pr": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "Pfr": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "피토크롬": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s11"
+  },
+  "광주기성": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "광중단": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "브라시노스테로이드",
+  "UV",
+  "수베린"
+ ]
+}

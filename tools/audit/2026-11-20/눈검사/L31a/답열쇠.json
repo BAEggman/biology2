@@ -1,0 +1,66 @@
+{
+ "lesson": "L31a",
+ "real": {
+  "피루브산": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "TCA": {
+   "sid": "s12",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "ETS": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "시트르산": {
+   "sid": "s12",
+   "cls": "B",
+   "props": null
+  },
+  "PFK": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "G3P": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "BPG": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s7"
+  },
+  "PG": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "PEP": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "크리스테": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  }
+ },
+ "fake": [
+  "모노뉴클레오타이드",
+  "P680",
+  "아자이드",
+  "CAM",
+  "CN"
+ ]
+}
