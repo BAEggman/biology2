@@ -2501,6 +2501,26 @@
         "status": "ready",
         "sha256": "86822ddfa75598e36afdfe04603ed11f2da1f0892269113b949e515bbb2fad24"
       }
+    },
+    "L48b": {
+      "s3": {
+        "src": "https://baeggman.github.io/biology2-audio/L48b_s3_v1.mp3",
+        "text": "별 가운데의 꼭지는 중심체다. 안에는 속이 빈 원통 둘이 있는데 하나는 누워 있고 하나는 서 있어 서로 직각이다. 중심체의 중심립 두 개와 직각 배열을 연결하자. 기출에서는 개수가 둘이라는 점과 직각이라는 점을 각각 묻는다.",
+        "status": "ready",
+        "sha256": "37a4203fd590f130ca53020f120404ea870d8c78738721289fd9dd0e742f540a"
+      },
+      "s5": {
+        "src": "https://baeggman.github.io/biology2-audio/L48b_s5_v2.mp3",
+        "text": "두 별에서 나온 긴 대롱은 가운데에서 서로 겹치지만 어떤 걸쇠에도 붙지 않는다. 염색체에 결합하지 않고 세포를 길게 만드는 극성 미세소관이다. 방추사를 모두 같은 역할로 외우지 말고, 염색체에 붙은 대롱과 구분하자.",
+        "status": "ready",
+        "sha256": "5f10efed9f4363364449c0e7b89961423101ea8e7dcdf86e35b5d456b0257744"
+      },
+      "s7": {
+        "src": "https://baeggman.github.io/biology2-audio/L48b_s7_v3.mp3",
+        "text": "나무 창고에는 별이나 빛나는 구조가 없지만 대롱은 있다. 벽에서 바로 뻗어 짚을 잡고 있다. 모든 진핵세포가 중심체를 가지는 것은 아니다. 식물세포에는 중심체와 성상체가 없지만, 별 없이도 방추사를 형성한다.",
+        "status": "ready",
+        "sha256": "0dafb6be6c8d34ea113c095f2887427d21f5193ae0642a95e78ed5bd7ecc57fb"
+      }
     }
   }
 }

@@ -1,0 +1,83 @@
+{
+  "batch": "20261122-batch-18",
+  "status": "accepted_for_integration",
+  "date": "2026-11-22",
+  "by": "Claude Sonnet 5.5 — 눈 검사 4과(L48a L48b L48c L48f) · L48b 잠금 3구간 · Gemini 작업 모드 Kore · 원문 없는 받아 적기 대조",
+  "clips": 3,
+  "accepted": [
+    {
+      "lesson_id": "L48b",
+      "sid": "s3",
+      "version": "v1",
+      "source_commit": "02f1d2e7b32459d182cfc5c5cd65fadf661cabab",
+      "say_sha256": "846f601a7719543bd97b56c0a79404d6853947b9b9063cd7bf95360f85f0b3f3",
+      "spoken_sha256": "846f601a7719543bd97b56c0a79404d6853947b9b9063cd7bf95360f85f0b3f3",
+      "wav_sha256": "e952941b599d70ad7fac7ba38749404934b715773d545c740b3e7e829bb790f9",
+      "mp3_sha256": "37a4203fd590f130ca53020f120404ea870d8c78738721289fd9dd0e742f540a",
+      "duration_sec": 21.216,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "받아 적기 대조 — 문장 모두 일치",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L48b",
+      "sid": "s5",
+      "version": "v2",
+      "source_commit": "02f1d2e7b32459d182cfc5c5cd65fadf661cabab",
+      "say_sha256": "d5507bfca5a02710b172759374c9ae4282feb0badaa7a275bd25166345bf7679",
+      "spoken_sha256": "d5507bfca5a02710b172759374c9ae4282feb0badaa7a275bd25166345bf7679",
+      "wav_sha256": "c6aaa53f2c0bb1af8110e2eb49d27e27b2aaa19b7186462486f3c476dab03be7",
+      "mp3_sha256": "5f10efed9f4363364449c0e7b89961423101ea8e7dcdf86e35b5d456b0257744",
+      "duration_sec": 19.056,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "v1 의 '걸쇠' → '걸수'(A/B 확신 높음) → 사전 줄을 붙인 v2 에서 문장 모두 일치",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L48b",
+      "sid": "s7",
+      "version": "v3",
+      "source_commit": "02f1d2e7b32459d182cfc5c5cd65fadf661cabab",
+      "say_sha256": "777a7d31676ce09efc598b21867e5f2df91743d41880d2a6567fdb728c18abce",
+      "spoken_sha256": "777a7d31676ce09efc598b21867e5f2df91743d41880d2a6567fdb728c18abce",
+      "wav_sha256": "db4a0bac6eba456038cf743f359f0b4e92add28d464bb158f400df8414a87263",
+      "mp3_sha256": "0dafb6be6c8d34ea113c095f2887427d21f5193ae0642a95e78ed5bd7ecc57fb",
+      "duration_sec": 19.368,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "v1 '대롱' → '대룽' · v2 '창고' → '천고'(각각 A/B 확신 높음) → 사전 줄을 붙인 v3 에서 문장 모두 일치",
+      "notes": ""
+    }
+  ],
+  "rejected_attempts": [
+    {
+      "id": "L48b_s5_v1",
+      "why": "'걸쇠' 를 '걸수' 로 읽음(A/B 확인)"
+    },
+    {
+      "id": "L48b_s7_v1",
+      "why": "'대롱' 을 '대룽' 으로 읽음(A/B 확인)"
+    },
+    {
+      "id": "L48b_s7_v2",
+      "why": "'창고' 를 '천고' 로 읽음(A/B 확인)"
+    }
+  ],
+  "reviews": {},
+  "acceptance_policy": "뜻이 통하는 가벼운 발음 흔들림은 수용 · 누락/뜻 뒤집힘/수 · 방향 · 부정의 잘못은 다시(사용자 기준)",
+  "method_limit": "AI 검수(따로 연 Gemini 대화가 MP3 를 원문 없이 받아 적고, 다른 곳은 A/B 필청으로 다시 확인). 사람이 듣지 않았다 — human_listening false."
+}

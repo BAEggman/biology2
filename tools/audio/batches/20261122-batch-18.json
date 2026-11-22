@@ -1,0 +1,35 @@
+{
+ "batch": "20261122-batch-18",
+ "date": "2026-11-22",
+ "by": "Claude Sonnet 5.5 — 눈 검사 4과(L48a L48b L48c L48f) · L48b 잠금 3구간 · Gemini 작업 모드 Kore · 원문 없는 받아 적기 대조",
+ "hashes": "tools/audio/batches/hashes_20261121.txt",
+ "accepted": [
+  {
+   "id": "L48b_s3_v1",
+   "review": "받아 적기 대조 — 문장 모두 일치"
+  },
+  {
+   "id": "L48b_s5_v2",
+   "review": "v1 의 '걸쇠' → '걸수'(A/B 확신 높음) → 사전 줄을 붙인 v2 에서 문장 모두 일치"
+  },
+  {
+   "id": "L48b_s7_v3",
+   "review": "v1 '대롱' → '대룽' · v2 '창고' → '천고'(각각 A/B 확신 높음) → 사전 줄을 붙인 v3 에서 문장 모두 일치"
+  }
+ ],
+ "rejected_attempts": [
+  {
+   "id": "L48b_s5_v1",
+   "why": "'걸쇠' 를 '걸수' 로 읽음(A/B 확인)"
+  },
+  {
+   "id": "L48b_s7_v1",
+   "why": "'대롱' 을 '대룽' 으로 읽음(A/B 확인)"
+  },
+  {
+   "id": "L48b_s7_v2",
+   "why": "'창고' 를 '천고' 로 읽음(A/B 확인)"
+  }
+ ],
+ "extra": {}
+}
