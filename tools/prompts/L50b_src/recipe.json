@@ -1,0 +1,5 @@
+{"lesson": "L50b", "base": "8a07ae4d",
+ "why": "L50b-02 — 기초대사율(BMR)은 깨어 있는 공복 · 안정 상태에서 잰다. 침대에서 옆으로 잠든 사람을 눈을 뜨고 반듯이 누워 쉬는 사람으로(코의 관 · 벽의 계기판 · 빈 접시는 그대로).",
+ "prompt": "Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors), the same framing and the same image size, and keep the narrow bed, the pillow, the thin tube that goes from the man's nose up to the round gauge on the wall, the round gauge, the empty plate on the floor, the walls, the shelf and everything else exactly as they are, with only this change: the man on the bed is AWAKE — he lies calmly on his back, resting and relaxed, with his eyes clearly OPEN, looking quietly up at the ceiling, arms resting at his sides. He is not sleeping. No text, letters or numbers anywhere.",
+ "model": "Gemini 웹 · 모드 알약 「카본 높음」",
+ "steps": [ {"zone": "A", "crop": [1040, 610, 1360, 850], "gem": "gem_A1.webp", "allow": "1060,620,1350,845"} ]}

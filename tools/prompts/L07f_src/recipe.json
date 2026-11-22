@@ -1,0 +1,34 @@
+{
+ "lesson": "L07f",
+ "base": "8a07ae4d",
+ "why": "L07f-01(칼슘바구니 묶음) — 바구니 높이 = 혈중 Ca(L07c 의 규칙 · L07c 는 그대로). 높이 매달린 바구니가 자갈 둘(저칼슘) · 바닥의 바구니가 넘침(고칼슘)으로 뒤집혀 있던 것을: ① 도르래 바구니를 높이 끌어올려 자갈이 넘쳐 아래 관 앞 더미로 쏟아지게(고칼슘 → 인산칼슘 침전 · 관 막힘) ② 바닥의 넘어진 바구니를 똑바로 세우고 자갈 둘만(저칼슘 · 곁의 테타니 사람), 거기서 흘러나오던 자갈 · 성냥 자국은 풀밭으로. 하시모토 · 그레이브스 · 테타니 손 · 성냥 = 인산은 그대로. ③ 뒤처리(독자 ㄱ · ㄷ 둘 다 「자갈 둘이 바구니 겉면에 붙어 보임」): PIL 로 앞면 자갈을 엮은 무늬로 덮고 입구 안쪽 바닥에 자갈 둘.",
+ "prompt": "A: … the basket hanging from the pulley rope is now pulled UP high … heaped FULL of many white pebbles, overflowing its rim. A thick stream of white pebbles keeps falling straight down from the overflowing basket onto the white crusty pile in front of the pipe … / B: … the wicker basket lying tipped over on the ground at the lower left now STANDS UPRIGHT on the grass, and it holds only TWO small white pebbles … Remove all the white pebbles and red-tipped matchsticks that were spilled from that basket across the grass toward the man's feet …",
+ "model": "Gemini 웹 · 모드 알약 「카본 높음」",
+ "steps": [
+  {
+   "zone": "A",
+   "crop": [
+    1680,
+    560,
+    2048,
+    1050
+   ],
+   "gem": "gem_A1.webp",
+   "allow": "1790,560,2010,1050"
+  },
+  {
+   "zone": "B",
+   "crop": [
+    1300,
+    874,
+    1780,
+    1144
+   ],
+   "gem": "gem_B1.webp",
+   "allow": "1305,880,1780,1144"
+  },
+  {
+   "pil": "pil_pebbles.py"
+  }
+ ]
+}

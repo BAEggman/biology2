@@ -1,0 +1,5 @@
+{"lesson": "L36a", "base": "8a07ae4d",
+ "why": "L36a-02 — 자루 수 = n 의 유일한 표식. 오른쪽 큰 사람(종자식물 포자체 2n)의 자루가 어깨 · 아래 혹으로 넷처럼 읽히던 것을 어깨 양쪽의 따로 묶인 자루 정확히 둘로. 가슴주머니의 작은 사람 · 연줄은 그대로(연줄이 주머니에 닿음).",
+ "prompt": "Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors), the same framing and the same image size, and keep the man's head, face, hair, blue T-shirt, the breast pocket with the tiny smiling person sitting in it, the thin kite string that reaches down to the pocket, his arms, hands, legs and the ground exactly as they are, with only this change: the man carries exactly TWO big burlap sacks on his back — one sack sticking out behind his LEFT shoulder and one sack sticking out behind his RIGHT shoulder. The two sacks are clearly separate, each with its own outline and its own tied top, and there are NO other sacks, bundles or bulges anywhere below or beside them. No text, letters or numbers anywhere.",
+ "model": "Gemini 웹 · 모드 알약 「카본 높음」",
+ "steps": [ {"zone": "A", "crop": [1290, 575, 1670, 860], "gem": "gem_A1.webp", "allow": "1310,600,1650,836"} ]}

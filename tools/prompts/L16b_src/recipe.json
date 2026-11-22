@@ -1,0 +1,9 @@
+{"lesson": "L16b", "base": "8a07ae4d",
+ "why": "L16b-02 — IP3 의 3 을 세어 되살림. ① 날아가는 피자 조각 끝의 작은 넷째 구멍을 치즈로 메움(구멍 정확히 셋 · PIL) ② 소포 상자 뚜껑: 구멍 셋인 피자 조각의 구멍마다 나무 돌기가 하나씩 꽂힘(돌기 정확히 셋 · Gemini). 상자 · 끈 · 쏟아지는 자갈은 그대로.",
+ "prompt": "Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors), the same framing and the same image size, and keep the brown cardboard box, its string, the grass, the wooden stand at the top, the yellow rings on the left and everything else exactly as they are, with only this change: the yellow pizza slice lying on the lid has exactly THREE round holes (no more), and there are exactly THREE thin wooden pegs standing upright on the lid, each peg sticking up THROUGH one of the three holes of the pizza slice (one peg in each hole). No other pegs anywhere. No text, letters, numbers or signatures anywhere.",
+ "tries": "1회: 1024x704 를 올렸더니 1024x765 로 틀을 다시 짜고 구멍 넷(빈 구멍 하나) · 서명 낙서 → 같은 대화의 고침도 틀이 달라 정합 실패(inliers 8). 2회: 4:3(1024x768)로 다시 올림 → 틀 그대로 · 구멍 셋 · 돌기 셋.",
+ "model": "Gemini 웹 · 모드 알약 「카본 높음」",
+ "steps": [
+  {"pil": "pil_hole.py"},
+  {"zone": "B", "crop": [1690, 670, 2010, 910], "gem": "gem_B1.webp", "allow": "1735,690,1968,850"}
+ ]}

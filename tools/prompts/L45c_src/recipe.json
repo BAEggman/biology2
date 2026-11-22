@@ -1,0 +1,5 @@
+{"lesson": "L45c", "base": "8a07ae4d",
+ "why": "L45c-01 — 물 → PSII → PQ 의 차례. 굵은 초록 선이 물통에서 사발(PSII 반응중심)을 건너뛰고 곧장 여왕 카드(PQ) 계단으로 가던 것을: 물통에서 곧장 위의 사발로 · 사발에서 여왕 카드로 이어지는 한 줄로. 퀸 · 컴퓨터 · 플로피(사용자가 고른 소품)는 그대로.",
+ "prompt": "1회: (같은 대화) Edit the attached picture … the thick green line now runs in ONE continuous path: it starts at the split wooden bucket, goes straight UP to the bowl … then continues from that bowl to the right … up to the queen card … → 고리 · 갈래가 생기고 쿠션 소품이 늘어 버림. 2회(같은 대화): Start again from the ORIGINAL picture …, keep its exact framing and size, … ONE single thick green line with no loops and no branches. Segment 1: from the top edge of the split wooden bucket straight UP to the bottom of the brown bowl held by the twins. Segment 2: from the right rim of that same bowl … directly to the queen card on the stairs. Erase every other piece of green line … Do not add any new objects. No text, letters or numbers anywhere.",
+ "model": "Gemini 웹 · 모드 알약 「카본 높음」",
+ "steps": [ {"zone": "A", "crop": [380, 380, 980, 830], "gem": "gem_A2.webp", "allow": "385,385,978,830"} ]}

@@ -1,0 +1,7 @@
+{"lesson": "L36c", "base": "8a07ae4d",
+ "why": "L36c-01(최우선) — 다배현상은 한 밑씨 안의 일. 세로로 가른 솔방울(씨 셋 가운데 하나만 싹)을 크림 보자기 두른 큰 알(= 나무의 밑씨) 하나를 갈라 보인 것으로 바꿈: 알 속 싹 셋 가운데 하나만 꼿꼿 · 둘은 시듦. 거미줄 솔방울 · 화분 넷 · 나무 · 사람은 그대로.",
+ "prompt": "Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors) and keep the potted plants, the tree trunk, the grass, and the brown pinecone on the left that is covered with a white spider web and has a yellow dot exactly as they are, with only this change: replace the cut-open pinecone on the right (the one that shows three chambers) with ONE single large egg that is wrapped in a cream-colored cloth and is cut open lengthwise so that we can look inside it. The egg stands upright in the grass at the same place and has about the same size as the cut pinecone it replaces. The outside of the egg is a smooth beige eggshell wrapped in a cream cloth. Inside this ONE egg, on a plain pale background, there are exactly three tiny baby plants side by side: in the middle ONE healthy bright green sprout with two small leaves, standing tall and fresh, and on each side of it ONE small brown shriveled, dried-up, withered sprout drooping limply. There is no pinecone scale texture on this egg. No text, letters or numbers anywhere.",
+ "model": "Gemini 웹 · 모드 알약 「카본 높음」(메뉴: 코드 및 복잡한 작업 4 카본 · 사고 수준 높음 — 메뉴에 보인 가장 높은 값)",
+ "steps": [
+  {"zone": "A", "crop": [850, 870, 1190, 1144], "gem": "gem_A1.webp", "allow": "1010,940,1150,1144"}
+ ]}

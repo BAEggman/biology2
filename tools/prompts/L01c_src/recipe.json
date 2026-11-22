@@ -1,0 +1,33 @@
+{
+ "lesson": "L01c",
+ "base": "8a07ae4d",
+ "why": "L01c-01 — VII군 HBV 의 부분 이중가닥 DNA. 벽돌배 안에 작게 겹쳐 사려 있던 밧줄을 L01d 의 HBV 밧줄과 같은 금빛 꼰(두 가닥) 밧줄 고리 하나로 — 한 토막(위쪽 약 1/4)만 가는 외겹. 간 · 핏방울 · 흰 리본과 실패 둘은 그대로.",
+ "prompt": "Edit the attached picture. Keep exactly the same drawing style (bold black ink outlines, flat bright colors), the same framing and the same image size, and keep the small brick boat, the water, the red liver with the blood drop, the two white spools with the white ribbon between them, and everything else exactly as they are, with only this change: replace the coiled rope in the boat with ONE large, clearly visible ring made of a thick golden TWISTED two-strand rope, lying flat in the boat to the right of the liver, not overlapping anything. The ring is almost closed, but on one part of the ring (about a quarter of its length) only ONE thin single strand continues — the second strand is missing there, so that stretch is clearly thinner than the rest. No text, letters or numbers anywhere.",
+ "model": "Gemini 웹 · 모드 알약 「카본 높음」",
+ "steps": [
+  {
+   "zone": "A",
+   "crop": [
+    630,
+    874,
+    1110,
+    1144
+   ],
+   "gem": "gem_A1.webp",
+   "allow": "850,935,1035,1090"
+  },
+  {
+   "zone": "B",
+   "crop": [
+    630,
+    874,
+    1110,
+    1144
+   ],
+   "gem": "gem_B1.webp",
+   "allow": "850,935,1035,1090"
+  }
+ ],
+ "tries": "1회(A): 외겹 토막이 5~8배 확대해야 보임 — 독자 ㄱ · ㄷ 「780 px 에서 안 보임」 → 2회(B · 새 대화 · A 의 결과를 올림): 위쪽 1/3 을 꼬임 없는 가는 한 가닥 · 양 끝에 끊긴 둘째 가닥의 뭉툭한 끝",
+ "prompt_B": "… along the whole TOP part of the ring (from the 10 o'clock to the 2 o'clock position, about one third of the ring) only ONE thin, smooth, untwisted single cord continues. At both ends of that thin stretch, the second strand clearly stops with a visible blunt cut end. The thin stretch must be less than half as thick as the twisted part …"
+}
