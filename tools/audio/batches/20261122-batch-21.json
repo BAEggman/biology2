@@ -1,0 +1,89 @@
+{
+ "batch": "20261122-batch-21",
+ "date": "2026-11-22",
+ "by": "Claude Sonnet 5.5 — Opus 글 고친 11구간 + L04a s5 + L04a s13 + L53b s3 녹음 · AI 검수(Gemini) · 사람 청취 없음",
+ "hashes": "tools/audio/batches/hashes_20261121.txt",
+ "accepted": [
+  {
+   "id": "L04a_s5_v4",
+   "status": "CLEAR",
+   "review": "글 그대로 · 세 번째 시도에서 낱말 오류 없이 통과"
+  },
+  {
+   "id": "L04a_s8_v4",
+   "status": "CLEAR",
+   "review": "빗해파리 무리인 · 유즐동물 문맥 보강 뒤 통과"
+  },
+  {
+   "id": "L19d_s12_v4",
+   "status": "CLEAR",
+   "review": "「제 기능을 잃으면」 통과"
+  },
+  {
+   "id": "L31c_s4_v4",
+   "status": "CLEAR",
+   "review": "「동전 구멍」 통과"
+  },
+  {
+   "id": "L35a_s1_v4",
+   "status": "CLEAR",
+   "review": "「여기는 와인 테라스다」 통과"
+  },
+  {
+   "id": "L45c_s13_v4",
+   "status": "CLEAR",
+   "review": "「바깥 천」 통과"
+  },
+  {
+   "id": "L13b_s9_v4",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "덩어리 통과 · 경미한 흔들림만 남음"
+  },
+  {
+   "id": "L17f_s3_v4",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "헨레→[헬레] 유음화 — 사용자 수용(2026-11-22 21:06)"
+  },
+  {
+   "id": "L19d_s14_v4",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "고무호스→[고모오스] 경계선 흔들림(뜻 유지) · 울타리 통과"
+  },
+  {
+   "id": "L35a_s12_v4",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "유전자좌→[유전자자] 경미한 흔들림 · 유전자 자리 통과"
+  },
+  {
+   "id": "L35b_s6_v4",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "기출→[기촐] 경미한 흔들림 · 사내아이 통과"
+  },
+  {
+   "id": "L04a_s13_v5",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "쟁반 정상(사전 줄 강화) · 난할→[나날] 사용자 수용 · 의→에 · 끝 잘림 없음(마지막 문장까지 전사)"
+  }
+ ],
+ "rejected_attempts": [
+  {
+   "id": "L04a_s13_v4",
+   "why": "쟁반→챙고반(낱말이 다른 낱말로 바뀜)",
+   "status": "REDO"
+  },
+  {
+   "id": "L13b_s4_v4",
+   "why": "고무호스→고무호수/고무오수 — 사전 줄을 넣어도 같은 낱말 되풀이 오류 → HOLD(글 손질 필요)",
+   "status": "HOLD"
+  },
+  {
+   "id": "L53b_s3_v4",
+   "why": "제목구 「부표 사람과 구슬 기둥」 사람→사랑 — 세 번째 시도 → HOLD",
+   "status": "HOLD"
+  }
+ ],
+ "extra": {
+  "retained_minor_issues": "L19d s14 고무호스→[고모오스](경계) · L35a s12 유전자좌→[유전자자] · L35b s6 기출→[기촐] · L17f s3 헨레→[헬레](사용자 수용) · L04a s13 난할→[나날](사용자 수용)",
+  "hold": "L13b s4 · L53b s3 → Opus 쪽지"
+ }
+}
