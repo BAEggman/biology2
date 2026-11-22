@@ -1,0 +1,44 @@
+{
+ "lesson": "L48a",
+ "real": {
+  "전기": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s2"
+  },
+  "전중기": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s5"
+  },
+  "중기": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "중기판": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "후기": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s9"
+  },
+  "말기": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s10"
+  }
+ },
+ "fake": [
+  "들이마시",
+  "Gs",
+  "유비퀴틴"
+ ]
+}

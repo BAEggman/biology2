@@ -1,0 +1,54 @@
+{
+ "lesson": "L48f",
+ "real": {
+  "세사기(細絲期)": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "접합기": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "접합사": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s4"
+  },
+  "태사기(太絲期)": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "교차": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "복사기(複絲期)": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "이동기(移動期)": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "세포질분열": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "들이마시",
+  "Gs",
+  "유비퀴틴",
+  "CDK"
+ ]
+}
