@@ -358,6 +358,7 @@ biology2 저장소(https://github.com/BAEggman/biology2)의 tools/plan/2026-11-2
 - **3단계보다 4단계(그림 고침)를 먼저.** 대장(`tools/audit/2026-11-20/issues.json`)의 열린 항목(state = reproduced · changed) 가운데 **sev = critical(1) · major(59)** 부터. minor(52) · user(4) 는 그 뒤.
 - 과마다: 항목의 scope · keep 확인 → 그림 고침(§11 · 인계문의 그림 방법) → 독자 ㄱ · ㄷ 눈 검사 → 대장 verified → 녹음 잠금(`locked.json`)이 있는 과는 그림 blob 변화 확인(§16).
 - 닫힌 과는 2단계 방법대로 잠그고 녹음(`tools/audio/README.md`).
+- **차례와 역할은 2026-11-22 덧붙임 지시를 따른다** — `tools/plan/2026-11-22/지시서_Opus_녹음넓히기_고침차례.md`(묶음 0 · 가 · … · 녹음은 Sonnet).
 
 ## 25. 새 세션에서 이어 갈 때 붙여 넣을 말(4단계 먼저)
 ```
