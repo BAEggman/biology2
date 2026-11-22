@@ -353,3 +353,17 @@ biology2 저장소(https://github.com/BAEggman/biology2)의 tools/plan/2026-11-2
 먼저 L12f s1 글 일감(「배설」)을 닫고, 3단계(화면)를 시작해 줘. 결정은 §11 대로.
 단계가 끝날 때마다 커밋하고 새 이름 번들을 내 Downloads 에 넣고 push_b2.sh 를 고친 뒤 「다음에 할 일」 표로 보고해 줘.
 ```
+
+## 24. 순서 바꿈(2026-11-22 · 사용자 결정)
+- **3단계보다 4단계(그림 고침)를 먼저.** 대장(`tools/audit/2026-11-20/issues.json`)의 열린 항목(state = reproduced · changed) 가운데 **sev = critical(1) · major(59)** 부터. minor(52) · user(4) 는 그 뒤.
+- 과마다: 항목의 scope · keep 확인 → 그림 고침(§11 · 인계문의 그림 방법) → 독자 ㄱ · ㄷ 눈 검사 → 대장 verified → 녹음 잠금(`locked.json`)이 있는 과는 그림 blob 변화 확인(§16).
+- 닫힌 과는 2단계 방법대로 잠그고 녹음(`tools/audio/README.md`).
+
+## 25. 새 세션에서 이어 갈 때 붙여 넣을 말(4단계 먼저)
+```
+biology2 저장소(https://github.com/BAEggman/biology2)의 tools/plan/2026-11-20/지시서_Opus_인계문실행.md 를
+처음부터 끝까지 읽고(특히 §13 표 · §16 · §22 ~ §24), 인계문 전문(프로젝트 문서 claude/인계문_2026-11-20_전문.md)도 읽어.
+§24 대로 4단계(그림 고침)를 먼저 해 줘 — 대장의 critical 1 · major 59 부터. 결정은 §11 대로.
+L12f s1 글 일감(「배설」)도 그 과를 열 때 같이 닫아 줘. 낭독 보류 3 은 내가 들은 뒤 알려 줄게.
+과 묶음이 끝날 때마다 커밋하고 새 이름 번들을 내 Downloads 에 넣고 push_b2.sh 를 고친 뒤 「다음에 할 일」 표로 보고해 줘.
+```
