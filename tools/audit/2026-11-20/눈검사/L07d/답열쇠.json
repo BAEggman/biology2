@@ -1,0 +1,103 @@
+{
+ "lesson": "L07d",
+ "real": {
+  "무기질코르티코이드": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "알도스테론": {
+   "sid": "s3",
+   "cls": "A1",
+   "props": [
+    "알갱이를 쓸어 도로 통에",
+    "도로 통에 담",
+    "알갱이를 건져 도로 자루에"
+   ]
+  },
+  "코르티솔": {
+   "sid": "s4",
+   "cls": "A0",
+   "props": [
+    "코르크 마개"
+   ],
+   "sid_card": "s3"
+  },
+  "안드로겐": {
+   "sid": "s5",
+   "cls": "A0",
+   "props": [
+    "로봇"
+   ],
+   "sid_card": "s3"
+  },
+  "DHEA": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "당질코르티코이드": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "ACTH": {
+   "sid": "s2",
+   "cls": "A1",
+   "props": [
+    "층층 케이크"
+   ],
+   "sid_card": "s3"
+  },
+  "염류코르티코이드": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "에피네프린": {
+   "sid": "s7",
+   "cls": "A0",
+   "props": [
+    "뚜껑이 터진 드럼통",
+    "뚜껑이 터져 날아간 드럼통",
+    "드럼통"
+   ]
+  },
+  "노르에피네프린": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "SCN": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "안드로겐(DHEA)": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "송과선": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "멜라토닌": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RyR1",
+  "GnRH",
+  "hCG",
+  "크레아티닌",
+  "B6",
+  "CD8",
+  "스스로생"
+ ]
+}

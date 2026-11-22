@@ -1,0 +1,79 @@
+{
+ "lesson": "L12b",
+ "real": {
+  "라이페이스": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null
+  },
+  "폴리펩타이드": {
+   "sid": "s12",
+   "cls": "B",
+   "props": null
+  },
+  "뉴클레오타이드": {
+   "sid": "s12",
+   "cls": "B",
+   "props": null
+  },
+  "뉴클레오사이드": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "킬로미크론": {
+   "sid": "s13",
+   "cls": "C",
+   "props": null,
+   "sid_card": "s8"
+  },
+  "트리글리세리드": {
+   "sid": "s13",
+   "cls": "C",
+   "props": null
+  },
+  "모노글리세리드": {
+   "sid": "s13",
+   "cls": "C",
+   "props": null
+  },
+  "브루너샘": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "파네트세포": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "M세포": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "지방산": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  },
+  "쿠퍼세포": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "이토세포": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2",
+  "카르복실화",
+  "B5",
+  "CD4"
+ ]
+}

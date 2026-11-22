@@ -1,0 +1,54 @@
+{
+ "lesson": "L04a",
+ "real": {
+  "낭배형성": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "심장": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "콩팥": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "분열체강(선구)": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  },
+  "장체강(후구)": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  },
+  "결정": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s13"
+  },
+  "부정": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s13"
+  },
+  "장체강": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s13"
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2",
+  "인슐린"
+ ]
+}

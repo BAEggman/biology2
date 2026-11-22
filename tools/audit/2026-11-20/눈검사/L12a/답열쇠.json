@@ -1,0 +1,88 @@
+{
+ "lesson": "L12a",
+ "real": {
+  "펩시노겐": {
+   "sid": "s3",
+   "cls": "A1",
+   "props": [
+    "초록 유리 콜라 병",
+    "콜라 병"
+   ]
+  },
+  "엔테로펩티데이스": {
+   "sid": "s12",
+   "cls": "B",
+   "props": null
+  },
+  "엔테로키네이스": {
+   "sid": "s12",
+   "cls": "B",
+   "props": null
+  },
+  "트립시노겐": {
+   "sid": "s12",
+   "cls": "B",
+   "props": null
+  },
+  "키모트립시노겐": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "라이페이스": {
+   "sid": "s13",
+   "cls": "B",
+   "props": null
+  },
+  "모노글리세리드": {
+   "sid": "s13",
+   "cls": "C",
+   "props": null
+  },
+  "주세포": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "벽세포": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "내인자": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "레닌(키모신)": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "펩신": {
+   "sid": "s14",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s9"
+  },
+  "트립신": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "키모트립신": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2",
+  "카르복실화",
+  "B5",
+  "CD4",
+  "세크레틴"
+ ]
+}
