@@ -1,0 +1,32 @@
+{
+ "batch": "20261122-batch-20",
+ "date": "2026-11-22",
+ "by": "Claude Sonnet 5.5 — 사용자 판단으로 「가벼운 흔들림 수용」(2026-11-22 21:06: 「이 정도 drift 는 괜찮아」) · 기존 파일 재판정 · 사람 청취 없음",
+ "hashes": "tools/audio/batches/hashes_20261121.txt",
+ "accepted": [
+  {
+   "id": "L04a_s2_v3",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "난할→[나날] 흔들림만 남음(ㄴ 뒤 ㅎ 약화) · 사용자 수용"
+  },
+  {
+   "id": "L04a_s9_v3",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "나선난할·방사난할 → [나날] 흔들림만 남음 · 사용자 수용"
+  },
+  {
+   "id": "L31c_s5_v2",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "피루브산→[피루부산] 흔들림만 남음 · 사용자 수용"
+  },
+  {
+   "id": "L31c_s6_v2",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "피루브산→[피루부산] 흔들림만 남음(양조장 통과) · 사용자 수용"
+  }
+ ],
+ "rejected_attempts": [],
+ "extra": {
+  "user_acceptance": "사용자: 「가벼운 흔들림 수용이라고 할 수 있어, 이 정도 drift 는 괜찮아」 — L04a s2 · s9 · s13 · L17f s3 · L31c s5 · s6 이 대상. L04a s13 은 글이 바뀌어 새로 녹음 · L17f s3 은 v2(집합건) · v3(헨네)가 수용 범위 밖이라 새로 녹음."
+ }
+}
