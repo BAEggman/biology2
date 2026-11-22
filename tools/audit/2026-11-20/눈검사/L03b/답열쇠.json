@@ -1,0 +1,46 @@
+{
+ "lesson": "L03b",
+ "real": {
+  "바이로이드": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "뉴클레오티드": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "PrP": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "스크래피": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "크로이츠펠트": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "야코프병": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "CJD": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  }
+ },
+ "fake": [
+  "스컹크",
+  "Hfr",
+  "아홀로틀"
+ ]
+}

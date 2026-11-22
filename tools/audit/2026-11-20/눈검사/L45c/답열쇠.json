@@ -1,0 +1,135 @@
+{
+ "lesson": "L45c",
+ "real": {
+  "틸라코이드막": {
+   "sid": "s1",
+   "cls": "A0",
+   "props": [
+    "납작한 주머니",
+    "포개 쌓은 납작한 주머니 더미",
+    "쿠션"
+   ]
+  },
+  "틸라코이드": {
+   "sid": "s1",
+   "cls": "A0",
+   "props": [
+    "납작한 주머니",
+    "포개 쌓은 납작한 주머니 더미",
+    "쿠션"
+   ]
+  },
+  "스트로마": {
+   "sid": "s1",
+   "cls": "A0",
+   "props": [
+    "깔개"
+   ]
+  },
+  "스펙트럼": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null
+  },
+  "카로티노이드": {
+   "sid": "s2",
+   "cls": "A1",
+   "props": [
+    "당근빛 사람",
+    "당근 잎"
+   ]
+  },
+  "P680": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "P700": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "사이토크롬": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "PSII": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "Pq": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "Pc": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "PSI": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "Fd": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "플라스토퀴논": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "플라스토시아닌": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "b6f": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "G3P": {
+   "sid": "s14",
+   "cls": "B",
+   "props": null
+  },
+  "집광복합체": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "화학삼투": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  },
+  "ATP": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s14"
+  }
+ },
+ "fake": [
+  "수크로스",
+  "푸마르산",
+  "CHO",
+  "PLP",
+  "피루브산",
+  "B5",
+  "B6",
+  "카르복실화효소",
+  "디니트로페놀",
+  "C4"
+ ]
+}

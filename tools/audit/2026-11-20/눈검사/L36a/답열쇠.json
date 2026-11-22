@@ -1,0 +1,39 @@
+{
+ "lesson": "L36a",
+ "real": {
+  "UV": {
+   "sid": "s5",
+   "cls": "A1",
+   "props": [
+    "해 모양",
+    "그을음"
+   ]
+  },
+  "선태": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "관속식물": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "종자식물": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "헛뿌리": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "어린잎",
+  "레그헤모글로빈",
+  "지베렐린"
+ ]
+}

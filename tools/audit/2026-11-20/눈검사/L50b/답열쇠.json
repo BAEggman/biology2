@@ -1,0 +1,43 @@
+{
+ "lesson": "L50b",
+ "real": {
+  "스트레스": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null
+  },
+  "증발": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s4"
+  },
+  "대류": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s4"
+  },
+  "전도": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s4"
+  },
+  "역류교환": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "행동": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2"
+ ]
+}
