@@ -1,0 +1,76 @@
+{
+ "lesson": "L14b",
+ "real": {
+  "필라멘트": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "튜불린": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "플러스": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "마이너스": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "네트워크": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "케라틴": {
+   "sid": "s12",
+   "cls": "B",
+   "props": null
+  },
+  "미세섬유": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "지름": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "중심립": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "섬모": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s7"
+  },
+  "미세융모": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  },
+  "장력": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s12"
+  }
+ },
+ "fake": [
+  "디아실글리세롤",
+  "Gs",
+  "인산이에스테르",
+  "CDK",
+  "Cdc6",
+  "DAG"
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "lesson": "L13b",
+ "real": {
+  "히스타민": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "MAC": {
+   "sid": "s9",
+   "cls": "B",
+   "props": null
+  },
+  "펩타이드": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null
+  },
+  "호중구(중성구)": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "단핵구": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "보체": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s9"
+  }
+ },
+ "fake": [
+  "ROMK",
+  "GPCR",
+  "Va"
+ ]
+}

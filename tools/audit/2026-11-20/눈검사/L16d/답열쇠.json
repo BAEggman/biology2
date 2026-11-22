@@ -1,0 +1,106 @@
+{
+ "lesson": "L16d",
+ "real": {
+  "호르몬신호": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "신경호르몬": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "ADH": {
+   "sid": "s5",
+   "cls": "A1",
+   "props": [
+    "V자",
+    "이음쇠",
+    "수도꼭지"
+   ]
+  },
+  "NO": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "프로스타글란딘": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "폴리펩타이드": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null
+  },
+  "스테로이드": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null
+  },
+  "펩티드": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "폴리펩티드": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "조절": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "세포체": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "축삭": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "절연": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "보조": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "산화질소(NO)": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "염증": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s7"
+  },
+  "아스피린": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "마걸리스",
+  "Gt",
+  "인테그린",
+  "CENP",
+  "Cdk1",
+  "DEAB",
+  "시토크롬",
+  "CaM"
+ ]
+}
