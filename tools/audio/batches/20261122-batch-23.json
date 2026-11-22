@@ -1,0 +1,155 @@
+{
+ "batch": "20261122-batch-23",
+ "date": "2026-11-22",
+ "by": "Claude Sonnet 5.5 — 이름 고리 2 로 새로 잠긴 17구간 녹음 · AI 검수(Gemini) · 사람 청취 없음",
+ "hashes": "tools/audio/batches/hashes_20261121.txt",
+ "accepted": [
+  {
+   "id": "L01a_s2_v1",
+   "status": "CLEAR",
+   "review": "받아 적기가 대본과 문장 단위 완전 일치 · 끝 음량 −66 dB"
+  },
+  {
+   "id": "L01d_s13_v1",
+   "status": "CLEAR",
+   "review": "완전 일치 · 에이치 피 브이 · 피 오십삼 · 종양억제 정상"
+  },
+  {
+   "id": "L04a_s6_v1",
+   "status": "CLEAR",
+   "review": "완전 일치"
+  },
+  {
+   "id": "L04d_s1_v1",
+   "status": "CLEAR",
+   "review": "완전 일치 · 갑옷 · 더듬이 · 지 자 정상"
+  },
+  {
+   "id": "L13g_s3_v1",
+   "status": "CLEAR",
+   "review": "완전 일치"
+  },
+  {
+   "id": "L17c_s8_v1",
+   "status": "CLEAR",
+   "review": "완전 일치 · 요소(urea) 정상"
+  },
+  {
+   "id": "L16c_s6_v1",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "앞의→앞에 · 스캐폴드→스케폴드(소리 가까움) · 효소 정상"
+  },
+  {
+   "id": "L16d_s4_v1",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "의→에 두 곳 · 나머지 일치(뿜는 · 위쪽 · 화살표 정상)"
+  },
+  {
+   "id": "L19d_s5_v1",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "「패 둘에는」→[두리에는] — 둘+에는 연음 흔들림 · 다시 물어도 같은 소리 · 사람 청취 때 확인할 것"
+  },
+  {
+   "id": "L53b_s8_v1",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "제목 따옴표 낭독 생략 · 의→에 · 놋쇠 · 기둥 정상"
+  },
+  {
+   "id": "L12f_s4_v2",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "v1 의 세포이 · 지붕이 오독이 사전 줄(세포 · 지붕 위)로 해소 · 아래의→아래에"
+  },
+  {
+   "id": "L14b_s2_v2",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "v1 의 미세섬이다 오독이 사전 줄로 해소 · 수 읽는 법 흔들림(8~12 → 팔에서 십이 / 8에서 12)"
+  },
+  {
+   "id": "L19d_s3_v2",
+   "status": "CLEAR_ALLOWED_VARIANT",
+   "review": "v1 의 인사화 오독이 사전 줄(인산화)로 해소 · 오·삼 읽기 흔들림(소리 같음)"
+  }
+ ],
+ "rejected_attempts": [
+  {
+   "id": "L01d_s1_v1",
+   "status": "REDO",
+   "why": "거꾸로 댄 배→된 배"
+  },
+  {
+   "id": "L12f_s4_v1",
+   "status": "REDO",
+   "why": "세포→세포이 · 지붕 위→지붕이"
+  },
+  {
+   "id": "L14b_s2_v1",
+   "status": "REDO",
+   "why": "미세섬유→미세섬"
+  },
+  {
+   "id": "L16a_s12_v1",
+   "status": "REDO",
+   "why": "창구→창고 두 곳"
+  },
+  {
+   "id": "L19d_s3_v1",
+   "status": "REDO",
+   "why": "인산화→인사화"
+  },
+  {
+   "id": "L43d_s7_v1",
+   "status": "REDO",
+   "why": "분화→분할"
+  },
+  {
+   "id": "L50b_s11_v1",
+   "status": "REDO",
+   "why": "내온동물→냉온동물"
+  },
+  {
+   "id": "L01d_s1_v2",
+   "status": "REDO",
+   "why": "사전 줄을 붙여도 댄→된(A/B 필청도 '된')"
+  },
+  {
+   "id": "L16a_s12_v2",
+   "status": "REDO",
+   "why": "창구는 해소됐으나 흘러→불러"
+  },
+  {
+   "id": "L43d_s7_v2",
+   "status": "REDO",
+   "why": "분화는 해소됐으나 호스→호수(A/B 필청도 '호수')"
+  },
+  {
+   "id": "L50b_s11_v2",
+   "status": "REDO",
+   "why": "사전 줄을 붙여도 내온→냉온(A/B 필청도 '냉온')"
+  },
+  {
+   "id": "L01d_s1_v3",
+   "status": "HOLD",
+   "why": "방법을 바꿔(천천히 · 앞뒤 쉼) 세 번째 시도에도 댄→된"
+  },
+  {
+   "id": "L16a_s12_v3",
+   "status": "HOLD",
+   "why": "세 번째 시도에도 흘러→풀러"
+  },
+  {
+   "id": "L43d_s7_v3",
+   "status": "HOLD",
+   "why": "세 번째 시도에도 호스→호수"
+  },
+  {
+   "id": "L50b_s11_v3",
+   "status": "HOLD",
+   "why": "세 번째 시도에도 내온→냉온"
+  }
+ ],
+ "extra": {
+  "note": "17구간 중 13 통과 · 4 HOLD(L01d s1 · L16a s12 · L43d s7 · L50b s11 — 사전 줄 · 천천히 · 앞뒤 쉼을 써도 같은 낱말 되풀이 오류 → 글 손질 필요, Opus 쪽지)",
+  "dictionary": "세포 · 지붕 위 · 미세섬유 · 인산화 · 분화 · 창구 · 댄 · 내온동물 · 호스 · 흘러 사전 줄 사용",
+  "publish": "13 모두 GitHub Pages 200 · sha256 일치"
+ }
+}
