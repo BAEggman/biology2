@@ -1,0 +1,21 @@
+{
+ "lesson": "L31c",
+ "real": {
+  "피루브산": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "아세트알데하이드": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  }
+ },
+ "fake": [
+  "글리코젠",
+  "H2O2",
+  "사이토크롬"
+ ]
+}

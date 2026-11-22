@@ -1,0 +1,81 @@
+{
+ "lesson": "L32a",
+ "real": {
+  "피루브산": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "시트르산": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "FADH2": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "플라빈": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "모노뉴클레오타이드": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "FMN": {
+   "sid": "s4",
+   "cls": "A0",
+   "props": [
+    "노란"
+   ]
+  },
+  "플라보단백질": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "c1": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "a3": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "III": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "화학삼투": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s10"
+  },
+  "2.5ATP": {
+   "sid": "s14",
+   "cls": "fact",
+   "props": null
+  },
+  "1.5ATP": {
+   "sid": "s14",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "리보플라빈",
+  "OAA",
+  "아세트알데하이드",
+  "C4",
+  "CHO",
+  "DHAP"
+ ]
+}

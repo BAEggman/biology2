@@ -1,0 +1,62 @@
+{
+ "lesson": "L32b",
+ "real": {
+  "디니트로페놀": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "DNP": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "아자이드": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "CN": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "N3": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "UCP": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "전자전달": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "올리고마이신": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "사이안화물": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "CO": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "리불로오스",
+  "P680",
+  "시트르산",
+  "C4",
+  "CHO"
+ ]
+}
