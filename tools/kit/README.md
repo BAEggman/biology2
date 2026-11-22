@@ -3,6 +3,8 @@
 새 세션(새 컨테이너)에서도 그대로 일할 수 있게, 그동안 세션 임시 폴더에만 있던 연장과 순서를 여기에 모았다.
 무엇을 · 어떤 차례로 할지는 `tools/plan/2026-11-14/지시서_Opus_만들것_고칠것.md`, 지난 내력과 배운 것은 `tools/audit/2026-11-10/인계서_새과.md`.
 
+> **2026-11-22 보탬(4단계 그림 고침)**: ① Gemini 에 올릴 파일은 `device_commit_files` 로 `~/Downloads/b2img/` 에 쓴 뒤 **`device_stage_files` 로 다시 들여와 `/mnt/user-data/uploads/Downloads/b2img/…` 경로로** `file_upload` 한다(`/mnt/user-data/outputs/…` 와 기기 경로는 「이 세션이 읽을 수 없는 파일」로 거절됨). ② 구역은 **흔한 가로세로비(4:3 · 3:4 · 16:9 · 4:5 …)로 오려 올린다** — 1.45 같은 비를 올리면 Gemini 가 틀을 다시 짜(1024×765) 정합이 깨진다. ③ 새 채팅을 열면 모드 알약이 「카본」(사고 수준 낮음)이나 다른 모드로 돌아가 있다 — 매번 「카본 높음」을 확인한다. 새로 연 탭은 Trusted Types 때문에 `eval` 이 막힌다(도우미는 코드째 넣는다). ④ 다시 만드는 길은 `tools/prompts/zbuild.py <과>_src/recipe.json [--write]`(바탕 커밋 · Gemini 원본(무손실 webp) · zone3 붙이기 · PIL 걸음 · 설치된 그림과 같은 픽셀인지 확인).
+>
 > **2026-11-20 저녁 보탬**: 음성 파일은 음성 전용 저장소 `BAEggman/biology2-audio`(Pages)에 — 올리는 길은 GitHub 웹 올리기(Claude 가 쓰는 Chrome 창 · 토큰 없음)이고 본 저장소에는 manifest 와 검수 기록만(`lesson/audio/README.md`). 녹음은 Opus 가 맡는다.
 >
 > **2026-11-20 보탬**: 지금의 차례는 `tools/plan/2026-11-20/지시서_Opus_인계문실행.md`(감사 246건 고치기 → 과 승급 → Gemini 낭독 → 통과한 것만 올림). 낭독 제작과 검수 = `tools/plan/2026-11-20/명세_낭독_제작_검수.md` · 대장 = `tools/audit/2026-11-20/README.md`. **`gen_<ID>.py --write` 앞에 `python3 tools/kit/gen_sync.py <ID> --check`** — 다른 도구가 JSON 만 고쳐 gen 42과가 낡아 있다.
