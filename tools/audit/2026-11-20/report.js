@@ -11,8 +11,8 @@ const man=JSON.parse(fs.readFileSync(path.join(ROOT,'lesson/audio/manifest.json'
 const lock=JSON.parse(fs.readFileSync(path.join(ROOT,'tools/audio/locked.json'),'utf8'));
 const holdP=path.join(ROOT,'lesson/audio/hold.json'); const hold=fs.existsSync(holdP)?JSON.parse(fs.readFileSync(holdP,'utf8')):{};
 const promoDir=path.join(A,'승급'); const promo={};
-if(fs.existsSync(promoDir)) for(const f of fs.readdirSync(promoDir)){ const t=fs.readFileSync(path.join(promoDir,f),'utf8'); const m=t.match(/## 판정: \*\*([^*]+)\*\*/); promo[f.replace('.md','')]=m?m[1]:'?'; }
-const OPEN=new Set(['open','reproduced','proposed','changed']);
+if(fs.existsSync(promoDir)) for(const f of fs.readdirSync(promoDir)){ const t=fs.readFileSync(path.join(promoDir,f),'utf8'); const m=t.match(/## 판정: (?:\*\*)?([^*\n]+)/); promo[f.replace('.md','')]=m?m[1].replace(/^구간 단위 잠금 /,'잠금 ').trim():'?'; }
+const OPEN=new Set(['open','reproduced','proposed','changed','blocked']);
 const sevK={critical:'최우선',major:'중요',minor:'경미',user:'사용자'};
 const byL={}; for(const it of I){ if(!OPEN.has(it.state)) continue; (byL[it.lesson]=byL[it.lesson]||[]).push(it); }
 const cnt=(a,f)=>a.filter(f).length;
@@ -30,14 +30,16 @@ const st={}; for(const it of I) st[it.state]=(st[it.state]||0)+1;
 o+=`## 수\n- 대장 ${I.length}줄 — `+Object.entries(st).map(([k,v])=>`${k} ${v}`).join(' · ')+`\n`;
 o+=`- scope 확정(그림을 열어 범위를 정함) ${cnt(I,x=>x.scope)} / ${cnt(I,x=>OPEN.has(x.state))}\n`;
 const nrec=Object.values(man).reduce((a,v)=>a+Object.keys(v).length,0);
-o+=`- 녹음 공개 ${Object.keys(man).length}과 ${nrec} 구간 · 잠금 목록(녹음해도 되는 구간) ${Object.values(lock['잠김']||{}).reduce((a,v)=>a+((v.sids||v['구간']||[]).length),0)} 구간 · hold ${Object.values(hold).reduce((a,v)=>a+(Array.isArray(v)?v.length:0),0)} 구간\n`;
-o+=`- 승급 검사한 과 ${Object.keys(promo).length} — `+Object.entries(promo).map(([k,v])=>`${k} ${v.split(/[ (]/)[0]}`).join(' · ')+`\n\n`;
+o+=`- 녹음 공개 ${Object.keys(man).length}과 ${nrec} 구간 · 잠금 목록(녹음해도 되는 구간) ${Object.values(lock['잠김']||{}).reduce((a,v)=>a+Object.keys(v.sids||v['구간']||{}).length,0)} 구간 · 잠겼는데 녹음 없음 ${Object.entries(lock['잠김']||{}).reduce((a,[L,v])=>a+Object.keys(v['구간']||{}).filter(s=>!(man[L]&&man[L][s])).length,0)} 구간 · hold ${Object.values(hold).reduce((a,v)=>a+(Array.isArray(v)?v.length:0),0)} 구간\n`;
+const dropP=path.join(A,'떨어진구간.json'); const drop=fs.existsSync(dropP)?JSON.parse(fs.readFileSync(dropP,'utf8')).summary:null;
+o+=drop?`- 떨어진 구간 ${drop.dropped} · 재판정 끝 ${drop.rejudged}`+(Object.keys(drop.by_re||{}).length?' ('+Object.entries(drop.by_re).map(([k,v])=>k+' '+v).join(' · ')+')':'')+` — \`떨어진구간.md\`(\`dropped.py --write\` 로 다시 만듦)\n`:`- 떨어진 구간 목록 없음(\`python3 tools/audit/2026-11-20/dropped.py --write\`)\n`;
+o+=`- 승급 검사한 과 ${Object.keys(promo).length} — `+Object.entries(promo).map(([k,v])=>`${k} ${v.split(/ —|\(/)[0].trim()}`).join(' · ')+`\n\n`;
 o+=`## 과마다(열린 항목이 있거나 승급 검사를 한 과)\n| 과 | 감사 판정 | 열린 항목(최우선/중요/경미/사용자) | 그림이 있어야 닫힘 | 녹음 | 승급 | 지금 공개본 |\n|---|---|---|---|---:|---|---|\n`;
 const ids=[...new Set([...Object.keys(byL),...Object.keys(promo)])].sort();
 for(const L of ids){ const a=byL[L]||[];
   const img=cnt(a,x=>/그림/.test(x.scope||x.fix0||''));
   const rec=man[L]?Object.keys(man[L]).length:0;
-  o+=`| ${L} | ${verdict[L]||''} | ${a.length}(${cnt(a,x=>x.sev==='critical')}/${cnt(a,x=>x.sev==='major')}/${cnt(a,x=>x.sev==='minor')}/${cnt(a,x=>x.sev==='user')}) | ${img} | ${rec} | ${promo[L]?promo[L].split(/[ (]/)[0]:'—'} | 글 · 그림 옛것${rec?' · Gemini 녹음(AI 검수)':' · 기기 음성'} |\n`; }
-o+=`\n## 다음 수\n지시서 §9 — 1단계(글): 최우선 8 → 글만으로 닫히는 중요 → 「글→그림」의 글 쪽 → 경미 → L17e-01 한 문장 → hold.json 과 재생기의 보류 처리.\n`;
+  o+=`| ${L} | ${verdict[L]||''} | ${a.length}(${cnt(a,x=>x.sev==='critical')}/${cnt(a,x=>x.sev==='major')}/${cnt(a,x=>x.sev==='minor')}/${cnt(a,x=>x.sev==='user')}) | ${img} | ${rec} | ${promo[L]?promo[L].split(/ —|\(/)[0].trim():'—'} | 글 · 그림 옛것${rec?' · Gemini 녹음(AI 검수)':' · 기기 음성'} |\n`; }
+o+=`\n## 다음 수\n차례는 \`tools/plan/2026-11-22/지시서_Opus_녹음넓히기_고침차례.md\` §3(묶음 0 · 가 · 나 · 다 · 라 · 마) — 잠겼는데 녹음 없는 구간은 Sonnet 의 녹음 묶음(§10).\n`;
 if(process.argv.includes('--write')){ fs.writeFileSync(path.join(A,'보류_보고.md'),o); console.log('→ 보류_보고.md'); }
 else console.log(o.split('\n').slice(0,20).join('\n'));

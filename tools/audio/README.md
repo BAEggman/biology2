@@ -11,7 +11,9 @@
 
 ## 한 묶음의 흐름(파이프라인 — 탭이 놀지 않게)
 1. **눈 검사(한 묶음 앞서)** — `python3 tools/cue/mkreaders.py <L> /tmp/eyeN/<L>`(답 열쇠 `<L>.key.json` 은 판 밖으로 옮긴다) → sonnet 독자 ㄱ·ㄴ·ㄷ 를 배경으로(동시 20 안) · 지시문은 `tools/kit/` 의 독자 틀(판 폴더만 읽게).
-2. **분류 → 잠금** — `python3 tools/audio/triage.py /tmp/eyeN /tmp/eyekeysN <L>...` 로 구간마다 넘음/볼 것/안 됨 표 → 볼 것은 손으로 · ⑤ 글 읽기 → `python3 tools/audio/run/lock_stops.py`(같은 규칙 · 쪽지 `승급/<L>.md` · 원문 `눈검사/<L>/`) → `node test/all.js` → 커밋.
+2. **분류 → 잠금** — `python3 tools/audio/triage.py /tmp/eyeN /tmp/eyekeysN <L>...` 로 구간마다 넘음/볼 것/안 됨 표 → 볼 것은 손으로 · ⑤ 글 읽기 → `python3 tools/audio/run/lock_stops.py /tmp/eyeN /tmp/eyekeysN <L>... [--ok L:s4,s5] [--no L:s7 --why 'L:s7=까닭'] --write`(같은 규칙 · 쪽지 `승급/<L>.md` 에 잠그지 않은 구간마다 까닭 · 원문 `눈검사/<L>/`) → `python3 tools/audit/2026-11-20/dropped.py --write` → `node test/all.js` → 커밋.
+   - 규칙 ①~④ 는 `tools/audio/stoprules.py` 하나(2026-11-22): ① 은 열린 항목의 `sids` 구간만 · `grp` 가 걸린 과는 과 전체 ② · 그림 범위 항목의 상자와 겹치는 구간은 「볼 것 — 다시 그릴 구역」. 눈 검사 전에 볼 구간을 고르려면 `triage.py - - <L>...`.
+   - `lock_stops.py` 는 `--write` 없이 돌리면 보이기만 한다. 「안 됨」 은 `--ok` 로도 잠그지 않는다.
 3. **대본** — `OUT=… node tools/audio/run/mktts.js <L>...`(ttsNorm · {L_sid:{t,h}}) → `python3 tools/audio/scan_misread.py <json>` 로 오독 기록 낱말 · 낱글자 · 수 찾기 → 사전 줄은 생성 때 EXTRA 로.
 4. **대본을 Gemini 에** — 기기 `~/Downloads/b2audio/` 에 commit → stage → Gemini 탭에 `<input type=file>` 을 만들어 file_upload → `localStorage.b2tts2` 에 합침.
 5. **생성** — 새 대화 · 태스크 모드 → `localStorage.b2gen`(= `run/gen.js`)을 AsyncFunction 으로: `(PRE, KS, EXCL, EXTRA, v, zip, TITLE)`. 대본 sha 가 하나라도 어긋나면 보내지 않는다. 한 그룹 11~17 구간.
@@ -40,6 +42,8 @@
 | `run/mktts.js` | 잠긴 구간의 낭독 입력 JSON |
 | `run/dec.py` | 구간 판정 기록 |
 | `run/lock_stops.py` | 구간 단위 잠금(①~④ 기계 규칙 · 쪽지 · 원문 복사) |
+| `stoprules.py` | 잠금 규칙 ①~④ 한곳(triage · lock_stops · dropped 가 같이 씀 · `test/verify_stoprules.js`) |
+| `../audit/2026-11-20/dropped.py` | 떨어진 구간 목록 `떨어진구간.md` · `.json`(재판정 칸은 손으로 · 다시 만들어도 남음) |
 | `triage.py` | 독자 결과 → 넘음/볼 것/안 됨 표 |
 | `scan_misread.py` · `오독기록.json` | 잘 틀리는 낱말을 미리 사전에 |
 | `add_batch.py` | 묶음 spec → manifest · reviews |
