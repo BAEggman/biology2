@@ -1,0 +1,36 @@
+{
+ "lesson": "L34b",
+ "real": {
+  "조세포": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s8"
+  },
+  "쌍자엽": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  },
+  "단자엽": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  },
+  "배젖": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  },
+  "발아": {
+   "sid": "s14",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "앱시스산",
+  "니트로게나아제",
+  "젤라틴"
+ ]
+}

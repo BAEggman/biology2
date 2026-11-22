@@ -1,0 +1,16 @@
+{
+ "lesson": "L35b",
+ "real": {
+  "자연선택": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s2"
+  }
+ },
+ "fake": [
+  "바이러스",
+  "HTLV",
+  "스크래피"
+ ]
+}

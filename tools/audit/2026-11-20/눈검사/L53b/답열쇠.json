@@ -1,0 +1,47 @@
+{
+ "lesson": "L53b",
+ "real": {
+  "가로지르": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "GLUT": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null
+  },
+  "GLUT1": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "GLUT5": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "SGLT": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null
+  },
+  "CO₂": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "단순확산": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s6"
+  }
+ },
+ "fake": [
+  "모자이크",
+  "KDEL",
+  "전아폽토시스"
+ ]
+}

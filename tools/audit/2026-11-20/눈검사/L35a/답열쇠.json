@@ -1,0 +1,15 @@
+{
+ "lesson": "L35a",
+ "real": {
+  "유성생식": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "바이러스",
+  "HTLV",
+  "스크래피"
+ ]
+}
