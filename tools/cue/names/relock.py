@@ -32,6 +32,11 @@ if WRITE: args.remove('--write')
 G = json.load(open(f'{A}/가름.json', encoding='utf-8'))
 PASS = json.load(open(f'{A}/다시재기/판정.json', encoding='utf-8')) if os.path.exists(f'{A}/다시재기/판정.json') else {}
 drop_rows = json.load(open(f'{R}/tools/audit/2026-11-20/떨어진구간.json', encoding='utf-8'))['rows']
+LEDW = {}
+for _k, _e in json.load(open(f'{A}/장부.json', encoding='utf-8')).items():
+    if _e['출처'] == '못 꺼냄':
+        for _s in _e['구간']: LEDW.setdefault((_e['과'], _s), []).append(_e['낱말'])
+NAMEDROP = {(r['lesson'], r['sid']) for r in drop_rows if 'ㄴ 못 꺼냄' in r['kinds']}
 Ls = args or sorted({r['lesson'] for r in drop_rows if 'ㄴ 못 꺼냄' in r['kinds']})
 lk = json.load(open(f'{R}/tools/audio/locked.json', encoding='utf-8'))
 sha = lambda t: hashlib.sha256(t.encode()).hexdigest()[:12]
@@ -63,7 +68,10 @@ for L in Ls:
     locked = set((lk['잠김'].get(L) or {}).get('구간', {}))
     cand = {}
     for s, (k, no, see) in after.items():
-        if s in locked or before[s][0] != '안 됨' or k == '안 됨': continue
+        if s in locked or k == '안 됨': continue
+        if before[s][0] != '안 됨' and (L, s) not in NAMEDROP: continue   # 규칙으론 볼 것이었는데 앞 세션이 손으로 「못 꺼냄」으로 떨군 구간도 본다
+        left = [w for w in LEDW.get((L, s), []) if not gone(L, w)]
+        if left: continue   # 장부의 못 꺼낸 낱말이 아직 남음(㉰ · ㉱ · ㉲) — 잠그지 않는다
         cand[s] = (k, see)
     out[L] = cand
     for s, (k, see) in cand.items():

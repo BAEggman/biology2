@@ -114,6 +114,11 @@ def build():
             c = nans[L].get(t)
             if c and re.search(r'하는 일로 짐작|남은 것', c[3]) and not ('없음' in c[1] or '모름' in c[3]):
                 if f'{L}|{t}' not in led: add(L, t, v['sid'], '△')
+    # 앞 장부의 줄은 잃지 않는다 — 잠겨서 떨어진 구간 목록에서 빠진 줄도 이어 둔다(지시서 §8 · 끝 조건은 줄마다 상태)
+    if os.path.exists(f'{A}/장부.json'):
+        for k, e in json.load(open(f'{A}/장부.json', encoding='utf-8')).items():
+            if k not in led:
+                led[k] = {kk: e[kk] for kk in ('과', '낱말', '구간', '출처', '떨어진 갈래') if kk in e}
     for k, e in led.items():
         L, w = e['과'], e['낱말']
         d = json.load(open(f'{R}/lessons/{L}.json', encoding='utf-8'))

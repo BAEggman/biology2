@@ -1,0 +1,15 @@
+APC
+GPCR
+CDK
+BRCA1
+Myc
+p53
+Cdk4
+p21
+필라멘트
+Ras
+ATM
+폴리펩티드
+ATR
+Rb
+전이
