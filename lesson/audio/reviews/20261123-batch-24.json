@@ -1,0 +1,114 @@
+{
+  "batch": "20261123-batch-24",
+  "status": "accepted_for_integration",
+  "date": "2026-11-23",
+  "by": "Claude Sonnet 5.5 — 글 손질(43b5a17)로 다시 잠긴 4구간 녹음 · AI 검수(Gemini) · 사람 청취 없음",
+  "clips": 4,
+  "accepted": [
+    {
+      "lesson_id": "L01d",
+      "sid": "s1",
+      "version": "v5",
+      "source_commit": "43b5a17629d143f397ded9fc55c45a8d7b0f3412",
+      "say_sha256": "eade4ee38ba892cbed0d5f46054454f0b8ddcb81cedc4e51911bccbc3465bab1",
+      "spoken_sha256": "950d349e43000789ccc124d4d17cff9cc54960d5a129bb488df6f748c41871e7",
+      "wav_sha256": "6e5a6d1dec69928f6e47ae3e39694765ce03aae5a1acfe17f752ad35bd8774cc",
+      "mp3_sha256": "acb609cb8947516b605416e0f0d5c7822924d40f839fbce27203e0ed59c9072c",
+      "duration_sec": 58.848,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "받아 적기가 대본과 문장 단위 완전 일치 · 「거꾸로 벽에 댄 배」 정상(앞 세 판의 댄→된 해소) · 캔서 정상",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L16a",
+      "sid": "s12",
+      "version": "v5",
+      "source_commit": "43b5a17629d143f397ded9fc55c45a8d7b0f3412",
+      "say_sha256": "026de9cbb464040b438a7b44beb5f420aefccefe2367169327c2d308a7f920c6",
+      "spoken_sha256": "026de9cbb464040b438a7b44beb5f420aefccefe2367169327c2d308a7f920c6",
+      "wav_sha256": "0773213e4ff087e6d00682ebee18332ca0ed8d314c5b66693cee0d99a15a541d",
+      "mp3_sha256": "9bbb45d5a0b6957b9859b1a39453acbd2e9afe1490c6d43690f730a1b25da59d",
+      "duration_sec": 52.248,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "완전 일치 · 곧장 통과해 · 창구 · 울리는 정상",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L50b",
+      "sid": "s11",
+      "version": "v5",
+      "source_commit": "43b5a17629d143f397ded9fc55c45a8d7b0f3412",
+      "say_sha256": "346b2ac3a0b3758f29d77b08c83ffb06403be157ab25a9de9619716fc7ef8344",
+      "spoken_sha256": "4480efa2c04f83d635f123e7b8e7b7fcae98c93f702079f3d349688bf20aab19",
+      "wav_sha256": "383a7fc5a2eb0db78667e2dbac85c132e6c0f710cac9fef5fbb53292009a1ab9",
+      "mp3_sha256": "33d2090b94416e078d57336510b9dc69b61cd0e236d139aec402be3b1924d865",
+      "duration_sec": 49.056,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR",
+      "structural_decode_pass": true,
+      "review": "완전 일치 · 내온동물 · 외온동물 · 반듯이 정상(앞 판의 냉온 · 내혼 해소)",
+      "notes": ""
+    },
+    {
+      "lesson_id": "L43d",
+      "sid": "s7",
+      "version": "v5",
+      "source_commit": "43b5a17629d143f397ded9fc55c45a8d7b0f3412",
+      "say_sha256": "8c4e634753206faca5de8c49b9786ddeba4ae430d83602895acfc19128dfac92",
+      "spoken_sha256": "8c4e634753206faca5de8c49b9786ddeba4ae430d83602895acfc19128dfac92",
+      "wav_sha256": "bc13ff4dc902b6776144dd377d817e2bdcdbea4d0c7380cf5f47ebf525a7efb3",
+      "mp3_sha256": "e3048077439f1b26d7c435ae38ce1efc667eedf70f3cd58b6f9de20fbeabd3cb",
+      "duration_sec": 38.376,
+      "content_check": "blind transcript compared with spoken script (spaces/punctuation ignored); every difference resolved by must-hear re-check",
+      "audio_review": "independent Gemini task-mode conversation, MP3 given without script (multimodal audio input, not ASR)",
+      "review_independent": true,
+      "human_listening": false,
+      "pronunciation_status": "CLEAR_ALLOWED_VARIANT",
+      "structural_decode_pass": true,
+      "review": "아래의→아래에 · 옆의→옆에 · 밖의→밖에(의→에 허용) · 나머지 일치 · 뼈 공방에서 본 조혈 줄기세포 · 성체 정상 · 호스 없음",
+      "notes": ""
+    }
+  ],
+  "rejected_attempts": [
+    {
+      "id": "L01d_s1_v4",
+      "status": "REDO",
+      "why": "캔서→캔썩(끝 받침 ㄱ — A/B 필청도 캔썩). 거꾸로 벽에 댄 배는 정상"
+    },
+    {
+      "id": "L16a_s12_v4",
+      "status": "REDO",
+      "why": "울리는→울시는 · 을→에 · 창구→창꼬(사전의 창고 줄이 끌어당긴 듯)"
+    },
+    {
+      "id": "L43d_s7_v4",
+      "status": "REDO",
+      "why": "성체→성치(A/B 필청도 성치). 호스는 해소"
+    },
+    {
+      "id": "L50b_s11_v4",
+      "status": "REDO",
+      "why": "내온→내혼 · 외온→외혼(사전의 「내 온 동물」 줄이 ㅎ 을 끼운 듯)"
+    }
+  ],
+  "reviews": {},
+  "acceptance_policy": "뜻이 통하는 가벼운 발음 흔들림은 수용 · 누락/뜻 뒤집힘/수 · 방향 · 부정의 잘못은 다시(사용자 기준)",
+  "method_limit": "AI 검수(따로 연 Gemini 대화가 MP3 를 원문 없이 받아 적고, 다른 곳은 A/B 필청으로 다시 확인). 사람이 듣지 않았다 — human_listening false.",
+  "note": "글 손질 4구간: 4 모두 통과(v5). 첫 판(v4)은 사전 줄 5개를 붙였더니 새 오독이 생겨, 둘째 판은 줄을 구간마다 낱말 하나씩으로 줄이고 「하지 마」 줄을 정확한 낱말에만 걸었다",
+  "dictionary": "v5: 캔서 · 울리는 · 창구 · 성체 · 내온동물 · 외온동물 · 벽에 · 댄 (낱말마다 한 줄)",
+  "lesson": "사전 줄에 다른 낱말(창고)이나 끊어 읽기([내 온 동물])를 넣으면 거기에 끌려 새 오독이 난다 — 줄은 그 낱말의 정확한 소리만",
+  "publish": "GitHub Pages 200 · sha256 확인은 아래 보고"
+}
