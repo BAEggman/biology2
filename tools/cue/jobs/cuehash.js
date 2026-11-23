@@ -26,11 +26,11 @@ function unrecorded(base, cur, index, jobExists) {
   }
   return bad;
 }
-// 6+1 을 실제로 돌린 일감 폴더인가: 꾸러미 · 제안 여섯(rN_가 ~ 바) · 심판(rN_judge)
+// 6+1 을 실제로 돌린 일감 폴더인가: 꾸러미 · 제안(보통 일감 셋 가 · 다 · 라 — 2026-11-23 사용자 결정 · 기호 일감은 여섯이 더 있음) · 심판(rN_judge)
 function jobDone(dir) {
   if (!fs.existsSync(path.join(dir, 'packet.md'))) return false;
   const fs_ = fs.readdirSync(dir);
   return [...new Set(fs_.map(f => (f.match(/^r(\d+)_judge\.md$/) || [])[1]).filter(Boolean))]
-    .some(n => '가나다라마바'.split('').every(c => fs_.includes(`r${n}_${c}.md`)));
+    .some(n => '가다라'.split('').every(c => fs_.includes(`r${n}_${c}.md`)));
 }
 module.exports = { h, current, unrecorded, jobDone, ROOT };
