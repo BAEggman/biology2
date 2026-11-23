@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L12a","scene":"s12","part":"a","title":"커다란 위 통과 십이지장 작업대 — 위샘 세포와 소화 효소","sub":"기둥 인부 + 초록 펩시 병(주세포 · 펩시노겐) · 벽돌 인부 + 흙 항아리(벽세포 · HCl) · 마개가 튀며 검어지는 병 사슬(HCl 활성화 · 양성 되먹임) · 봉투 + 파란 코(내인자 · B12) · 바깥 수도꼭지(알칼리성 조조) · 송아지(레닌) · 검은 병 마름모 왼쪽(펩신) · 드립 주전자 쌀 · 아르헨티나(트립신) · 기모노 마름모 오른쪽(키모트립신) · 열쇠 상자(엔테로펩티데이스) · 쟁반 + 콜리(라이페이스 · 콜리페이스)","img":"img/L12a.webp?v=39d23882e57f","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"앞을 잘라 낸 커다란 통(위) — 벽에 박힌 인부 둘 · 통 속 뗏목의 요리사 · 오른쪽 아래로 이어진 관(십이지장) 속 작업대 둘 · 관 바닥의 기름 웅덩이","fact":"위샘 세포가 붓고 · 위에서 펩신이 자르고 · 십이지장에서 이자 효소가 마저 자른다","hook":"붓고 · 자르고 · 켜고","say":"앞면을 잘라 낸 큰 강철 통이 위다. 벽에 하반신이 박힌 인부 둘은 무언가를 붓고, 통 안 뗏목의 요리사는 구슬 사슬을 자른다. 구슬 사슬은 단백질이고, 노란 별은 사슬이 끊긴 자리다. 통 오른쪽 아래로 이어지는 관은 십이지장이다. 관 안의 두 작업대에서는 이자에서 온 효소가 소화를 이어간다. 위는 음식을 저장하고 걸쭉한 액체로 만드는 역할을 한다. 통 벽이 꿈틀대며 음식과 위액을 섞는 모습도 연결하자. 이렇게 고루 섞이면 소화가 빨라진다. 한편 관 안으로 오는 이자의 효소들은 탄수화물, 단백질, 핵산, 지방 네 종류를 모두 분해한다.","box":null,"src":["s12p01#0"],"cards":["G1-84","G1-77","G1-79","G1-100"]},{"sid":"s2","obj":"아래쪽 인부 — 하반신이 흰 그리스 기둥 · 파란 티셔츠","fact":"주세포 — 펩시노겐을 낸다","hook":"기둥 주(柱)의 소리 = 주세포(主 · 으뜸세포)","say":"아래쪽 인부의 하반신을 보자. 흰 그리스 기둥이다. 기둥 주의 소리를 빌려 주세포와 연결한다. 이름의 본뜻은 으뜸 주이므로 으뜸세포라고도 한다. 위샘 깊은 곳에서 펩시노겐을 분비하는 세포다.","box":[[245,580,255,425]],"src":["s12p01#0"],"cards":["G1-84"]},{"sid":"s3","obj":"기둥 인부가 초록 유리 펩시 병(잘록한 탄산 병 꼴)에서 붓는 걸쭉한 베이지 반죽","fact":"펩신은 비활성형 펩시노겐으로 분비된다","hook":"초록 유리 펩시 병 = 펩시노겐","say":"기둥 인부가 잘록한 탄산 병 모양의 초록 유리병에서 걸쭉한 베이지색 반죽을 붓는다. 펩시 병에서 펩시노겐을 떠올리자. 펩신은 처음부터 활성형으로 나오지 않고, 비활성형인 펩시노겐으로 분비된다. 산을 만나 활성화된 뒤에는 다른 펩시노겐도 활성화하는 양성 되먹임을 일으킨다. 뗏목 요리사의 검은 병이 활성화된 펩신이다. 위가 자기 벽을 소화하지 않도록 하는 보호도 연결해 두자. 펩신은 비활성형으로 나오고, 염산도 세포 안이 아니라 통 안으로만 분비된다.","box":[380,630,180,210],"src":["s12p01#1"],"cards":["G1-83","G1-91"]},{"sid":"s4","obj":"위쪽 인부 — 하반신이 붉은 벽돌","fact":"벽세포 — 염산을 낸다(주세포는 펩시노겐)","hook":"벽돌 = 벽세포","say":"위쪽 인부의 하반신은 붉은 벽돌이다. 벽돌을 벽세포와 연결하자. 주세포는 펩시노겐을, 벽세포는 염산을 분비한다. 흰 기둥과 붉은 벽돌로 두 세포를 구별해 보자.","box":[240,200,320,400],"src":["s12p01#2"],"cards":["G1-92","G1-85"]},{"sid":"s5","obj":"벽돌 인부가 민짜 흙 항아리에서 붓는 맑은 물줄기","fact":"염산 HCl — 벽세포가 H⁺와 Cl⁻를 내보낸다","hook":"병이 아니라 항아리 = 산","say":"벽돌 인부가 무늬 없는 흙 항아리에서 맑은 물을 붓는다. 이 물줄기는 염산이다. 벽세포는 수소 이온과 염화 이온을 따로 내보내며, 두 이온은 위 안에서 만나 염산이 된다. 주세포의 병과 벽세포의 항아리도 구별 단서다. 위액은 pH 2 정도의 강산으로, 음식 세포를 잇는 세포외기질을 허물고 단백질을 풀어 변성시킨다. 수소 이온을 통 안으로 퍼내는 벽세포의 막 단백질은 양성자 펌프다.","box":[400,340,160,260],"src":["s12p01#3"],"cards":["G1-86","G1-80","G1-81","G1-87"]},{"sid":"s14","obj":"흙 항아리 물줄기가 떨어지는 자리의 초록 탄산 병부터 오른쪽 아래로 이어 닿은 병 여섯 — 물을 맞은 첫 병은 검게 바뀌었고 빨간 왕관 마개가 튀어 날아간다 · 검은 병 셋 · 셋째 검은 병과 닿은 이음매의 노란 불꽃 — 넷째 병의 마개가 튀어 날아가고 넷째는 닿은 위쪽부터 검어진다 · 끝의 아직 초록인 병 둘(다섯째는 넷째 몸통 아래쪽에 포개졌다)","fact":"염산이 펩시노겐의 활성 부위를 드러내 펩신으로 · 펩신이 남은 펩시노겐을 켠다(양성 되먹임)","hook":"마개가 튀며 검어지는 병 사슬 = 펩시노겐 → 펩신","say":"항아리의 염산 물줄기가 떨어지는 곳에 초록 병이 떠 있다. 물이 닿자 빨간 마개가 날아가고 병이 검게 바뀐다. 초록 병은 펩시노겐, 검은 병은 펩신이다. 펩시노겐은 활성 부위가 덮인 채 분비되는데, 염산이 그 덮개를 떼어 내 일부를 펩신으로 활성화한다. 날아가는 마개가 바로 덮개다. 검은 병들이 오른쪽 아래로 이웃 병에 닿으며 이어진다. 셋째 검은 병이 닿은 이음매에서는 노란 불꽃이 튀고 넷째 병의 마개가 날아간다. 넷째 병은 닿은 위쪽부터 검어진다. 활성화된 펩신이 다른 펩시노겐을 펩신으로 바꾸는 양성 되먹임이다. 결과가 원인을 더 키우는 것이다. 끝의 두 병은 아직 초록색으로, 활성화될 차례를 기다린다.","box":[[476,545,140,160],[560,672,160,190],[660,800,240,175]],"cards":["G1-88","G1-89"]},{"sid":"s6","obj":"벽돌 인부가 다른 손으로 내미는 흰 봉투 — 통 위 선반에서 그 봉투를 받아 오른쪽으로 달려 나가려는 사람, 코끝만 코발트빛","fact":"내인자 — 회장에서 비타민 B12를 흡수하는 데 필요","hook":"봉투 = 내인자 · 파란 코 = B12","say":"벽돌 인부가 다른 손으로 내민 흰 봉투를 보자. 통 위 가장자리에서 봉투를 받아 달려가는 사람은 코끝이 코발트빛이다. 비타민 B12, 코발라민이다. 봉투는 내인자이며, 벽세포는 염산뿐 아니라 내인자도 분비한다. 코발라민은 이 봉투를 가지고 회장 문까지 가야 들어갈 수 있다.","box":[[560,170,110,90],[660,20,300,260]],"src":["s12p01#4"],"cards":["G1-214"]},{"sid":"s7","obj":"통 바깥벽 놋쇠 수도꼭지 — 흰 거품이 통 밖의 붉은 관(혈관)으로 흘러 나간다","fact":"알칼리성 조조(alkaline tide) — 산을 낼 때 HCO₃⁻가 혈액으로 간다","hook":"밖으로 나가는 거품 = 중탄산","say":"벽돌 인부 바로 뒤, 통 바깥벽의 놋쇠 수도꼭지가 흰 거품을 쏟는다. 거품은 통 안이 아니라 바깥의 붉은 혈관으로 떨어진다. 벽세포가 위 안으로 산을 분비할 때 중탄산 이온은 반대편 혈액으로 나간다. 그래서 식사 후 혈액이 잠시 알칼리 쪽으로 기운다. 이를 알칼리성 조조, 영어로 알칼라인 타이드라고 한다.","box":[0,360,210,520],"src":["s12p01#5"],"cards":[]},{"sid":"s8","obj":"통 아래 왼쪽 — 어린 송아지가 나무 여물통에 입을 댄다 · 여물통 우유가 몽글몽글 덩어리로 굳었다","fact":"레닌(키모신) — 어린 포유류에서 우유 카세인을 응고","hook":"송아지 + 굳은 우유","say":"통 아래 왼쪽의 어린 송아지가 나무 여물통에 입을 대고 있다. 여물통의 우유는 몽글몽글 굳었고, 바닥에도 덩어리가 흘러 있다. 레닌, 즉 키모신을 나타낸다. 어린 포유류의 위에서 우유 단백질인 카세인을 굳히는 효소다.","box":[20,880,320,250],"src":["s12p01#6"],"cards":[]},{"sid":"s9","obj":"통 속 뗏목 — 검은 탄산 병을 쳐든 요리사 · 사슬은 향 피어오르는 보라 마름모의 왼쪽에서 끊겼다(노란 별)","fact":"펩신 — 방향족 아미노산의 N 말단 쪽(앞)을 자른다","hook":"요리사가 쳐든 검은 펩시 병 = 펩신 · 마름모 왼쪽","say":"통 안 뗏목의 요리사는 검은 탄산 병을 들고 있다. 초록 펩시노겐 병이 산을 만나 활성화된 펩신이다. 사슬의 절단 지점인 노란 별은 향이 피어오르는 보라 마름모의 왼쪽에 있다. 향이 나는 마름모는 방향족 아미노산이다. 교재의 대표 예로, 펩신은 그 앞쪽, N 말단 쪽을 자르는 것으로 연결하자. 위에서 단백질 소화를 담당하는 핵심 효소이며 강산성에서 가장 잘 작용한다.","box":[600,390,340,270],"src":["s12p03#0"],"cards":["G1-82","G1-90"]},{"sid":"s10","obj":"관 속 위 작업대 — 드립 주전자를 든 빨간 멜빵 인부 · 쌀밥 공기 오른쪽과 아르헨티나 국기 오른쪽이 끊겼다(노란 별 둘)","fact":"트립신 — 라이신 · 아르기닌의 C 말단 쪽을 자른다","hook":"드립 = 트립신 · 쌀(라이스) · 아르헨티나(Arg)","say":"관 안의 위쪽 작업대를 보자. 빨간 멜빵 인부가 든 드립 주전자는 트립신의 단서다. 사슬은 쌀밥 공기 오른쪽과 아르헨티나 국기 오른쪽에서 끊겨 있다. 쌀밥을 뜻하는 라이스는 라이신으로, 아르헨티나는 Arg, 아르기닌으로 연결한다. 트립신은 이 두 아미노산의 C 말단 쪽, 그림에서는 오른쪽을 자른다.","box":[[1280,260,360,350],[1585,420,275,85]],"src":["s12p03#1"],"cards":["G1-103"]},{"sid":"s11","obj":"아래 작업대 — 기모노를 입고 같은 드립 주전자를 든 여자 · 향 나는 마름모의 오른쪽이 끊겼다(노란 별)","fact":"키모트립신 — 방향족(Phe · Trp · Tyr)의 C 말단 쪽을 자른다","hook":"기모노 + 드립 = 키모트립신 · 마름모 오른쪽","say":"아래 작업대에서는 기모노를 입은 여자가 같은 드립 주전자를 들고 있다. 기모노와 트립신을 이어 키모트립신을 떠올리자. 가위는 향 나는 마름모의 오른쪽을 잘랐다. 펩신이 자르던 마름모와 같지만 방향은 반대다. 먼저 작용하는 왼쪽 통의 펩신은 주로 N 말단 쪽, 나중에 작용하는 오른쪽 작업대의 이자 효소들은 C 말단 쪽으로 연결한다. 키모트립신은 방향족 아미노산인 페닐알라닌, 트립토판, 타이로신의 C 말단 쪽을 자른다.","box":[[1300,630,240,310],[1660,770,80,60]],"src":["s12p03#2"],"cards":["G1-104"]},{"sid":"s12","obj":"관 왼쪽 벽 회색 상자에 돌린 열쇠 — 케이블이 위로(흰 꺾쇠) 빨간 멜빵 인부의 허리로 · 그의 허리에서 둘째 케이블이 아래로(흰 꺾쇠) 기모노 여자의 허리로","fact":"엔테로펩티데이스가 트립시노겐을 켜고 · 트립신이 나머지를 켠다","hook":"열쇠(엔테로키나아제) → 트립신 → 나머지","say":"관 왼쪽 벽의 회색 상자에서 열쇠가 돌아가 있다. 장벽의 엔테로펩티데이스다. 엔테로는 장이라는 뜻이며, 이 효소는 엔테로키네이스, 옛 표기로 엔테로키나아제라고도 한다. 상자에서 나온 케이블은 흰 꺾쇠를 따라 위쪽의 빨간 멜빵 인부 허리로만 들어간다. 엔테로펩티데이스가 트립시노겐을 트립신으로 활성화하는 것이다. 이어 인부의 허리에서 나온 두 번째 케이블이 흰 꺾쇠를 따라 아래의 기모노 여자에게 간다. 다른 효소들은 활성화된 트립신이 켠다. 트립신을 마스터 스위치로 기억하자. 이자의 단백질 분해효소도 비활성형으로 분비된다. 트립신은 트립시노겐, 키모트립신은 키모트립시노겐으로 나와 십이지장 안에서 활성화된다.","box":[[1056,836,124,114],[1240,440,90,520]],"src":["s12p03#3"],"cards":["G1-216","G1-101","G1-102"]},{"sid":"s13","obj":"관 바닥 노란 기름 웅덩이 — 큰 쟁반이 가장자리를 기름에 담그고 · 콜리가 앞발로 쟁반을 밀어 거든다","fact":"지방 소화의 핵심 효소 = 라이페이스 · 콜리페이스가 기름 표면에 붙게 돕는다","hook":"기름(리피드)에 닿은 쟁반 = 라이페이스 · 콜리 = 콜리페이스","say":"관 바닥에는 노란 기름 웅덩이가 있다. 큰 쟁반의 가장자리가 기름에 닿아 있고, 콜리가 뒷다리로 서서 앞발로 쟁반을 밀어 준다. 기름은 지질, 영어로 리피드다. 쟁반은 리피드를 자르는 리파아제, 새 이름으로 라이페이스를 나타낸다. 지방 소화의 핵심 효소다. 콜리에서 콜리페이스를 떠올리자. 담즙염으로 덮인 기름방울 표면에 라이페이스가 붙도록 돕는다. 라이페이스가 트리글리세리드를 자르면 지방산과 모노글리세리드가 된다.","box":[1440,820,600,320],"src":["s12p03#4"],"cards":["G1-115","G1-116"]}],"cq":{"G1-84":["펩시노겐을 분비하는 세포는?","주세포"],"G1-77":["위의 두 가지 핵심 기능은?","저장과 음식의 액체화"],"G1-79":["위의 연동·휘젓기 운동의 목적은?","음식과 위액을 잘 섞어 소화를 촉진하기 위해"],"G1-100":["췌장은 어떤 종류의 영양소 소화효소를 분비하는가?","탄수화물 · 단백질 · 핵산 · 지방 소화효소"],"G1-83":["펩신은 어떤 형태로 분비되는가?","비활성형인 펩시노겐"],"G1-91":["위가 자신을 소화하지 않는 직접 이유는?","펩신을 비활성형으로 분비하고 염산도 세포 내부가 아니라 내강으로 내보내기 때문"],"G1-92":["주세포와 벽세포를 비교하면?","주세포는 펩시노겐, 벽세포는 HCl 분비"],"G1-85":["염산을 분비하는 세포는?","벽세포"],"G1-86":["벽세포가 염산을 만들기 위해 내보내는 두 이온은?","H+와 Cl-"],"G1-80":["위액의 대표 pH는?","약 2"],"G1-81":["위의 강산성이 하는 일 두 가지는?","세포외기질 파괴와 단백질 변성"],"G1-87":["벽세포가 H⁺를 내강으로 내보내는 막 단백질은?","양성자 펌프(proton pump)"],"G1-88":["염산이 펩시노겐에 하는 직접 작용은?","활성 부위를 노출시켜 일부를 펩신으로 바꾼다"],"G1-89":["활성화된 펩신이 추가 펩시노겐을 펩신으로 바꾸는 것은 어떤 예인가?","양성 되먹임"],"G1-214":["벽세포가 HCl 외에 분비하는 물질과 그 중요성은?","내인자(intrinsic factor)"],"G1-82":["위에서 단백질 소화의 핵심 효소는?","펩신"],"G1-90":["펩신이 작동하기 좋은 환경은?","강산성"],"G1-103":["트립신이 주로 절단하는 아미노산의 C말단은?","Lys와 Arg"],"G1-104":["키모트립신이 주로 절단하는 아미노산의 C말단은?","Phe · Trp · Tyr"],"G1-216":["십이지장에서 트립시노겐을 트립신으로 활성화하는 효소는?","엔테로펩티데이스(엔테로키네이스)"],"G1-101":["췌장의 트립신과 키모트립신은 어떤 형태로 분비되는가?","비활성형"],"G1-102":["트립신·키모트립신이 분비되는 비활성형(zymogen) 이름은?","트립시노겐 · 키모트립시노겐 (십이지장 내강에서 활성화)"],"G1-115":["지방 소화의 핵심 효소는?","라이페이스"],"G1-116":["라이페이스가 트리글리세리드를 분해하면 무엇이 되는가?","지방산과 모노글리세리드"]},"hubPanel":"s12p01"};
+const L0 = /*L0*/{"id":"L12a","scene":"s12","part":"a","title":"커다란 위 통과 십이지장 작업대 — 위샘 세포와 소화 효소","sub":"기둥 인부 + 초록 펩시 병(주세포 · 펩시노겐) · 벽돌 인부 + 흙 항아리(벽세포 · HCl) · 마개가 튀며 검어지는 병 사슬(HCl 활성화 · 양성 되먹임) · 봉투 + 파란 코(내인자 · B12) · 바깥 수도꼭지(알칼리성 조조) · 송아지(레닌) · 검은 병 마름모 왼쪽(펩신) · 드립 주전자 쌀 · 아르헨티나(트립신) · 기모노 마름모 오른쪽(키모트립신) · 열쇠 상자(엔테로펩티데이스) · 쟁반 + 콜리(라이페이스 · 콜리페이스)","img":"img/L12a.webp?v=39d23882e57f","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"앞을 잘라 낸 커다란 통(위) — 벽에 박힌 인부 둘 · 통 속 뗏목의 요리사 · 오른쪽 아래로 이어진 관(십이지장) 속 작업대 둘 · 관 바닥의 기름 웅덩이","fact":"위샘 세포가 붓고 · 위에서 펩신이 자르고 · 십이지장에서 이자 효소가 마저 자른다","hook":"붓고 · 자르고 · 켜고","say":"앞면을 잘라 낸 큰 강철 통이 위다. 벽에 하반신이 박힌 인부 둘은 무언가를 붓고, 통 안 뗏목의 요리사는 구슬 사슬을 자른다. 구슬 사슬은 단백질이고, 노란 별은 사슬이 끊긴 자리다. 통 오른쪽 아래로 이어지는 관은 십이지장이다. 관 안의 두 작업대에서는 이자에서 온 효소가 소화를 이어간다. 위는 음식을 저장하고 걸쭉한 액체로 만드는 역할을 한다. 통 벽이 꿈틀대며 음식과 위액을 섞는 모습도 연결하자. 이렇게 고루 섞이면 소화가 빨라진다. 한편 관 안으로 오는 이자의 효소들은 탄수화물, 단백질, 핵산, 지방 네 종류를 모두 분해한다.","box":null,"src":["s12p01#0"],"cards":["G1-84","G1-77","G1-79","G1-100"]},{"sid":"s2","obj":"아래쪽 인부 — 하반신이 흰 그리스 기둥 · 파란 티셔츠","fact":"주세포 — 펩시노겐을 낸다","hook":"기둥 주(柱)의 소리 = 주세포(主 · 으뜸세포)","say":"아래쪽 인부의 하반신을 보자. 흰 그리스 기둥이다. 기둥 주의 소리를 빌려 주세포와 연결한다. 이름의 본뜻은 으뜸 주이므로 으뜸세포라고도 한다. 위샘 깊은 곳에서 펩시노겐을 분비하는 세포다.","box":[[245,580,255,425]],"src":["s12p01#0"],"cards":["G1-84"]},{"sid":"s3","obj":"기둥 인부가 초록 유리 펩시 병(잘록한 탄산 병 꼴)에서 붓는 걸쭉한 베이지 반죽","fact":"펩신은 비활성형 펩시노겐으로 분비된다","hook":"초록 유리 펩시 병 = 펩시노겐","say":"기둥 인부가 잘록한 탄산 병 모양의 초록 유리병에서 걸쭉한 베이지색 반죽을 붓는다. 펩시 병에서 펩시노겐을 떠올리자. 펩신은 처음부터 활성형으로 나오지 않고, 비활성형인 펩시노겐으로 분비된다. 산을 만나 활성화된 뒤에는 다른 펩시노겐도 활성화하는 양성 되먹임을 일으킨다. 뗏목 요리사의 검은 병이 활성화된 펩신이다. 위가 자기 벽을 소화하지 않도록 하는 보호도 연결해 두자. 펩신은 비활성형으로 나오고, 염산도 세포 안이 아니라 통 안으로만 분비된다.","box":[380,630,180,210],"src":["s12p01#1"],"cards":["G1-83","G1-91"]},{"sid":"s4","obj":"위쪽 인부 — 하반신이 붉은 벽돌","fact":"벽세포 — 염산을 낸다(주세포는 펩시노겐)","hook":"벽돌 = 벽세포","say":"위쪽 인부의 하반신은 붉은 벽돌이다. 벽돌을 벽세포와 연결하자. 주세포는 펩시노겐을, 벽세포는 염산을 분비한다. 흰 기둥과 붉은 벽돌로 두 세포를 구별해 보자.","box":[240,200,320,400],"src":["s12p01#2"],"cards":["G1-92","G1-85"]},{"sid":"s5","obj":"벽돌 인부가 민짜 흙 항아리에서 붓는 맑은 물줄기","fact":"염산 HCl — 벽세포가 H⁺와 Cl⁻를 내보낸다","hook":"병이 아니라 항아리 = 산","say":"벽돌 인부가 무늬 없는 흙 항아리에서 맑은 물을 붓는다. 이 물줄기는 염산이다. 벽세포는 수소 이온과 염화 이온을 따로 내보내며, 두 이온은 위 안에서 만나 염산이 된다. 주세포의 병과 벽세포의 항아리도 구별 단서다. 위액은 pH 2 정도의 강산으로, 음식 세포를 잇는 세포외기질을 허물고 단백질을 풀어 변성시킨다. 수소 이온을 통 안으로 퍼내는 벽세포의 막 단백질은 양성자 펌프다.","box":[400,340,160,260],"src":["s12p01#3"],"cards":["G1-86","G1-80","G1-81","G1-87"]},{"sid":"s14","obj":"흙 항아리 물줄기가 떨어지는 자리의 초록 탄산 병부터 오른쪽 아래로 이어 닿은 병 여섯 — 물을 맞은 첫 병은 검게 바뀌었고 빨간 왕관 마개가 튀어 날아간다 · 검은 병 셋 · 셋째 검은 병과 닿은 이음매의 노란 불꽃 — 넷째 병의 마개가 튀어 날아가고 넷째는 닿은 위쪽부터 검어진다 · 끝의 아직 초록인 병 둘(다섯째는 넷째 몸통 아래쪽에 포개졌다)","fact":"염산이 펩시노겐의 활성 부위를 드러내 펩신으로 · 펩신이 남은 펩시노겐을 켠다(양성 되먹임)","hook":"마개가 튀며 검어지는 병 사슬 = 펩시노겐 → 펩신","say":"항아리의 염산 물줄기가 떨어지는 곳에 초록 병이 떠 있다. 물이 닿자 빨간 마개가 날아가고 병이 검게 바뀐다. 초록 병은 펩시노겐, 검은 병은 펩신이다. 펩시노겐은 활성 부위가 덮인 채 분비되는데, 염산이 그 덮개를 떼어 내 일부를 펩신으로 활성화한다. 날아가는 마개가 바로 덮개다. 검은 병들이 오른쪽 아래로 이웃 병에 닿으며 이어진다. 셋째 검은 병이 닿은 이음매에서는 노란 불꽃이 튀고 넷째 병의 마개가 날아간다. 넷째 병은 닿은 위쪽부터 검어진다. 활성화된 펩신이 다른 펩시노겐을 펩신으로 바꾸는 양성 되먹임이다. 결과가 원인을 더 키우는 것이다. 끝의 두 병은 아직 초록색으로, 활성화될 차례를 기다린다.","box":[[476,545,140,160],[560,672,160,190],[660,800,240,175]],"cards":["G1-88","G1-89"]},{"sid":"s6","obj":"벽돌 인부가 다른 손으로 내미는 흰 봉투 — 통 위 선반에서 그 봉투를 받아 오른쪽으로 달려 나가려는 사람, 코끝만 코발트빛","fact":"내인자 — 회장에서 비타민 B12를 흡수하는 데 필요","hook":"봉투 = 내인자 · 파란 코 = B12","say":"벽돌 인부가 다른 손으로 내민 흰 봉투를 보자. 통 위 가장자리에서 봉투를 받아 달려가는 사람은 코끝이 코발트빛이다. 비타민 B12, 코발라민이다. 봉투는 내인자이며, 벽세포는 염산뿐 아니라 내인자도 분비한다. 코발라민은 이 봉투를 가지고 회장 문까지 가야 들어갈 수 있다.","box":[[560,170,110,90],[660,20,300,260]],"src":["s12p01#4"],"cards":["G1-214"]},{"sid":"s7","obj":"통 바깥벽 놋쇠 수도꼭지 — 흰 거품이 통 밖의 붉은 관(혈관)으로 흘러 나간다","fact":"알칼리성 조조(alkaline tide) — 산을 낼 때 HCO₃⁻가 혈액으로 간다","hook":"밖으로 나가는 거품 = 중탄산","say":"벽돌 인부 바로 뒤, 통 바깥벽의 놋쇠 수도꼭지가 흰 거품을 쏟는다. 거품은 통 안이 아니라 바깥의 붉은 혈관으로 떨어진다. 벽세포가 위 안으로 산을 분비할 때 중탄산 이온은 반대편 혈액으로 나간다. 그래서 식사 후 혈액이 잠시 알칼리 쪽으로 기운다. 이를 알칼리성 조조, 영어로 알칼라인 타이드라고 한다.","box":[0,360,210,520],"src":["s12p01#5"],"cards":[]},{"sid":"s8","obj":"통 아래 왼쪽 — 어린 송아지가 나무 여물통에 입을 댄다 · 여물통 우유가 몽글몽글 덩어리로 굳었다","fact":"레닌(키모신) — 어린 포유류에서 우유 카세인을 응고","hook":"송아지 + 굳은 우유","say":"통 아래 왼쪽의 어린 송아지가 나무 여물통에 입을 대고 있다. 여물통의 우유는 몽글몽글 굳었고, 바닥에도 덩어리가 흘러 있다. 레닌, 즉 키모신을 나타낸다. 어린 포유류의 위에서 우유 단백질인 카세인을 굳히는 효소다.","box":[20,880,320,250],"src":["s12p01#6"],"cards":[]},{"sid":"s9","obj":"통 속 뗏목 — 검은 탄산 병을 쳐든 요리사 · 사슬은 향 피어오르는 보라 마름모의 왼쪽에서 끊겼다(노란 별)","fact":"펩신 — 방향족 아미노산의 N 말단 쪽(앞)을 자른다","hook":"요리사가 쳐든 검은 펩시 병 = 펩신 · 마름모 왼쪽","say":"통 안 뗏목의 요리사는 검은 탄산 병을 들고 있다. 초록 펩시노겐 병이 산을 만나 활성화된 펩신이다. 사슬의 절단 지점인 노란 별은 향이 피어오르는 보라 마름모의 왼쪽에 있다. 향이 나는 마름모는 방향족 아미노산이다. 교재의 대표 예로, 펩신은 그 앞쪽, N 말단 쪽을 자르는 것으로 연결하자. 위에서 단백질 소화를 담당하는 핵심 효소이며 강산성에서 가장 잘 작용한다.","box":[600,390,340,270],"src":["s12p03#0"],"cards":["G1-82","G1-90"]},{"sid":"s10","obj":"관 속 위 작업대 — 드립 주전자를 든 빨간 멜빵 인부 · 쌀밥 공기 오른쪽과 아르헨티나 국기 오른쪽이 끊겼다(노란 별 둘)","fact":"트립신 — 라이신 · 아르기닌의 C 말단 쪽을 자른다","hook":"드립 = 트립신 · 쌀(라이스) · 아르헨티나(Arg)","say":"관 안의 위쪽 작업대를 보자. 빨간 멜빵 인부가 든 드립 주전자는 트립신의 단서다. 사슬은 쌀밥 공기 오른쪽과 아르헨티나 국기 오른쪽에서 끊겨 있다. 쌀밥을 뜻하는 라이스는 라이신으로, 아르헨티나는 Arg, 아르기닌으로 연결한다. 트립신은 이 두 아미노산의 C 말단 쪽, 그림에서는 오른쪽을 자른다.","box":[[1280,260,360,350],[1585,420,275,85]],"src":["s12p03#1"],"cards":["G1-103"]},{"sid":"s11","obj":"아래 작업대 — 기모노를 입고 같은 드립 주전자를 든 여자 · 향 나는 마름모의 오른쪽이 끊겼다(노란 별)","fact":"키모트립신 — 방향족(Phe · Trp · Tyr)의 C 말단 쪽을 자른다","hook":"기모노 + 드립 = 키모트립신 · 마름모 오른쪽","say":"아래 작업대에서는 기모노를 입은 여자가 같은 드립 주전자를 들고 있다. 기모노와 트립신을 이어 키모트립신을 떠올리자. 가위는 향 나는 마름모의 오른쪽을 잘랐다. 펩신이 자르던 마름모와 같지만 방향은 반대다. 먼저 작용하는 왼쪽 통의 펩신은 주로 N 말단 쪽, 나중에 작용하는 오른쪽 작업대의 이자 효소들은 C 말단 쪽으로 연결한다. 키모트립신은 방향족 아미노산인 페닐알라닌, 트립토판, 타이로신의 C 말단 쪽을 자른다.","box":[[1300,630,240,310],[1660,770,80,60]],"src":["s12p03#2"],"cards":["G1-104"]},{"sid":"s12","obj":"관 왼쪽 벽 회색 상자에 돌린 열쇠 — 케이블이 위로(흰 꺾쇠) 빨간 멜빵 인부의 허리로 · 그의 허리에서 둘째 케이블이 아래로(흰 꺾쇠) 기모노 여자의 허리로","fact":"엔테로펩티데이스가 트립시노겐을 켜고 · 트립신이 나머지를 켠다","hook":"열쇠(엔테로키나아제) → 트립신 → 나머지","say":"관 왼쪽 벽의 회색 상자에서 열쇠가 돌아가 있다. 장벽의 엔테로펩티데이스다. 엔테로는 장이라는 뜻이며, 이 효소는 엔테로키네이스, 옛 표기로 엔테로키나아제라고도 한다. 상자에서 나온 케이블은 흰 꺾쇠를 따라 위쪽의 빨간 멜빵 인부 허리로만 들어간다. 엔테로펩티데이스가 트립시노겐을 트립신으로 활성화하는 것이다. 이어 인부의 허리에서 나온 두 번째 케이블이 흰 꺾쇠를 따라 아래의 기모노 여자에게 간다. 다른 효소들은 활성화된 트립신이 켠다. 트립신을 마스터 스위치로 기억하자. 이자의 단백질 분해효소도 비활성형으로 분비된다. 트립신은 트립시노겐, 키모트립신은 키모트립시노겐으로 나와 십이지장 안에서 활성화된다.","box":[[1056,836,124,114],[1240,440,90,520]],"src":["s12p03#3"],"cards":["G1-216","G1-101","G1-102"]},{"sid":"s13","obj":"관 바닥 노란 기름 웅덩이 — 큰 쟁반이 가장자리를 기름에 담그고 · 콜리가 앞발로 쟁반을 밀어 거든다","fact":"지방 소화의 핵심 효소 = 라이페이스 · 콜리페이스가 기름 표면에 붙게 돕는다","hook":"기름(리피드)에 닿은 쟁반 = 라이페이스 · 콜리 = 콜리페이스","say":"관 바닥에는 노란 기름 웅덩이가 있다. 큰 쟁반의 가장자리가 기름에 닿아 있고, 콜리가 뒷다리로 서서 앞발로 쟁반을 밀어 준다. 기름은 지질, 영어로 리피드다. 쟁반은 리피드를 자르는 리파아제, 새 이름으로 라이페이스를 나타낸다. 지방 소화의 핵심 효소다. 콜리에서 콜리페이스를 떠올리자. 담즙염으로 덮인 기름방울 표면에 라이페이스가 붙도록 돕는다. 라이페이스가 트리글리세리드를 자르면 지방산과 모노글리세리드가 된다.","box":[1440,820,600,320],"src":["s12p03#4"],"cards":["G1-115","G1-116"]}],"cq":{"G1-84":["펩시노겐을 분비하는 세포는?","주세포"],"G1-77":["위의 두 가지 핵심 기능은?","저장과 음식의 액체화"],"G1-79":["위의 연동·휘젓기 운동의 목적은?","음식과 위액을 잘 섞어 소화를 촉진하기 위해"],"G1-100":["췌장은 어떤 종류의 영양소 소화효소를 분비하는가?","탄수화물 · 단백질 · 핵산 · 지방 소화효소"],"G1-83":["펩신은 어떤 형태로 분비되는가?","비활성형인 펩시노겐"],"G1-91":["위가 자신을 소화하지 않는 직접 이유는?","펩신을 비활성형으로 분비하고 염산도 세포 내부가 아니라 내강으로 내보내기 때문"],"G1-92":["주세포와 벽세포를 비교하면?","주세포는 펩시노겐, 벽세포는 HCl 분비"],"G1-85":["염산을 분비하는 세포는?","벽세포"],"G1-86":["벽세포가 염산을 만들기 위해 내보내는 두 이온은?","H+와 Cl-"],"G1-80":["위액의 대표 pH는?","약 2"],"G1-81":["위의 강산성이 하는 일 두 가지는?","세포외기질 파괴와 단백질 변성"],"G1-87":["벽세포가 H⁺를 내강으로 내보내는 막 단백질은?","양성자 펌프(proton pump)"],"G1-88":["염산이 펩시노겐에 하는 직접 작용은?","활성 부위를 노출시켜 일부를 펩신으로 바꾼다"],"G1-89":["활성화된 펩신이 추가 펩시노겐을 펩신으로 바꾸는 것은 어떤 예인가?","양성 되먹임"],"G1-214":["벽세포가 HCl 외에 분비하는 물질과 그 중요성은?","내인자(intrinsic factor)"],"G1-82":["위에서 단백질 소화의 핵심 효소는?","펩신"],"G1-90":["펩신이 작동하기 좋은 환경은?","강산성"],"G1-103":["트립신이 주로 절단하는 아미노산의 C말단은?","Lys와 Arg"],"G1-104":["키모트립신이 주로 절단하는 아미노산의 C말단은?","Phe · Trp · Tyr"],"G1-216":["십이지장에서 트립시노겐을 트립신으로 활성화하는 효소는?","엔테로펩티데이스(엔테로키네이스)"],"G1-101":["췌장의 트립신과 키모트립신은 어떤 형태로 분비되는가?","비활성형"],"G1-102":["트립신·키모트립신이 분비되는 비활성형(zymogen) 이름은?","트립시노겐 · 키모트립시노겐 (십이지장 내강에서 활성화)"],"G1-115":["지방 소화의 핵심 효소는?","라이페이스"],"G1-116":["라이페이스가 트리글리세리드를 분해하면 무엇이 되는가?","지방산과 모노글리세리드"]},"hubPanel":"s12p01"}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>

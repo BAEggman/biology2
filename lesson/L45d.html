@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L45d","scene":"s45","part":"d","title":"탄소 공방 — 도는 작업대","sub":"캘빈 회로: 루비스코 · 고정(RuBP + CO₂) · 3-PGA 둘 · 환원(ATP → NADPH) · 빛반응이 대는 창 · 여섯 중 하나 나감(G3P) · 재생(RuBP 셋 · ATP)","img":"img/L45d.webp?v=db7d60fd56c9","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"깔개 위 작업장 — 막대가 한 바퀴 돈다","fact":"캘빈 회로 = 고정 · 환원 · 재생 세 단계 · 스트로마에서 · 한 바퀴 = CO₂ 하나","hook":"마디 하나 = 탄소 하나 · 깔개 = 스트로마","say":"회색 깔개인 스트로마 위의 탄소 공방이다. 마디 있는 막대가 작업대를 한 바퀴 돌며, 마디 하나가 탄소 하나를 뜻한다. 캘빈-벤슨 회로라고도 부르는 캘빈 회로는 고정·환원·재생의 세 단계로 이루어지고, 한 바퀴마다 이산화탄소 하나를 고정한다.","box":null,"src":["s45u01#0"],"cards":["C0-153","C0-245"]},{"sid":"s2","obj":"놋쇠 기둥 위 루비빛 렌즈 스코프 — 렌즈 둘레 발톱 둘","fact":"루비스코 — CO₂를 붙이는 효소 · 지구에서 가장 흔한 단백질","hook":"루비빛 스코프 = 루비스코","say":"작업대 왼쪽 끝의 놋쇠 기둥 위에 루비빛 앞 렌즈를 가진 스코프가 있다. 루비와 스코프를 연결해 루비스코를 떠올리자. 이 회로에서 이산화탄소를 붙이는 효소다. 광합성 생물에 매우 많아 지구에서 가장 흔한 단백질로 꼽힌다.","box":[100,220,360,300],"src":["s45u01#1"],"cards":["C0-156","C0-157","C0-158"]},{"sid":"s3","obj":"발톱이 어두운 방울을 마디 다섯 긴 막대 끝에 눌러 붙인다 · 방울 둘이 차례를 기다린다","fact":"탄소고정 — CO₂ 수용체 = RuBP(5탄) · 한 바퀴에 CO₂ 하나 · G3P 하나 내려면 세 바퀴","hook":"어두운 방울 = CO₂ · 마디 다섯 = RuBP","say":"스코프의 발톱이 어두운 방울 하나를 마디 다섯인 긴 막대 끝에 눌러 붙인다. 방울은 이산화탄소, 막대는 오탄당 알유비피인 리불로오스 1,5-이인산이다. 볼록한 부분이 아니라 그 사이의 곧은 칸을 탄소 마디로 세자. 알유비피가 이산화탄소 수용체다. 위에서 기다리는 방울 둘도 보자. 한 바퀴에 하나씩 고정하므로 지쓰리피 하나를 내보내려면 세 바퀴가 필요하다.","box":[[300,225,530,315]],"src":["s45u01#2"],"cards":["C0-154","C0-9","C0-19","C0-155"]},{"sid":"s4","obj":"방금 부러진 마디 셋 토막 둘 — 한쪽 끝 마디만 방울빛","fact":"6탄 중간체는 불안정 → 3탄 둘(3-PGA) · 첫 안정 산물이 3탄 = C₃ 식물","hook":"다섯 + 방울 하나 = 셋 + 셋","say":"작업대에 막 부러진 마디 셋짜리 토막 둘이 있다. 부러진 톱니가 서로 맞고, 오른쪽 토막 끝의 한 마디만 방울과 같은 색이다. 탄소 다섯에 이산화탄소 하나가 붙어 여섯이 되지만, 불안정한 육탄 중간체는 곧 삼탄 분자 둘로 나뉜다. 삼 피지에이다. 첫 안정 산물이 삼탄 분자라서 씨쓰리 식물이라고 부른다. 벼·밀·대두가 대표적인 씨쓰리 작물이다.","box":[1000,460,520,160],"src":["s45u01#3"],"cards":["C0-159","C0-185","C0-182#1","C0-186"]},{"sid":"s5","obj":"토막마다 금화 하나 반쯤 박힘 · 오른 토막은 장인이 방패로 누르자 반짝","fact":"환원 — 3-PGA +ATP→ 1,3-BPG +NADPH→ G3P · 금화 먼저, 방패 다음(한 곳뿐)","hook":"금화 = ATP · 방패 = NADPH · 반짝 = 환원된 G3P","say":"토막마다 반쯤 박힌 금화는 에이티피다. 오른쪽 토막은 장인이 큰 둥근 방패를 기울여 테로 꾹 누르자 반짝인다. 방패는 엔에이디피에이치다. 두 단계의 순서를 기억하자. 삼 피지에이가 먼저 에이티피를 사용해 일 삼 비스포스포글리세르산이 되고, 이어 엔에이디피에이치의 환원력을 받아 지쓰리피가 된다. 금화가 먼저, 방패가 다음이다. 회로에서 방패를 쓰는 곳은 이 환원 단계뿐이다. 삼탄 분자 여섯에 하나씩 필요하므로 이산화탄소 셋당 엔에이디피에이치 여섯을 사용한다.","box":[1000,420,520,220],"src":["s45u01#4"],"cards":["C0-161","C0-173#1","C0-162","C0-174","C0-175","C0-182#2","C0-168"]},{"sid":"s6","obj":"장인 뒤 맨 창 — 창턱의 금화 바구니와 방패 둘 · 햇살","fact":"ATP · NADPH는 빛반응이 댄다(창으로) — 「암반응」은 오해 · ADP · NADP⁺가 되돌아간다","hook":"공방 안에서 만들지 않고 창으로 들여온다","say":"장인 뒤의 유리 없는 창으로 햇빛이 들어온다. 창턱의 금화 바구니와 방패 둘을 보자. 에이티피와 엔에이디피에이치는 이 공방에서 만드는 것이 아니라 빛반응에서 공급받는다. 이산화탄소 고정 회로가 빛을 직접 쓰지 않는다고 빛과 무관한 것은 아니다. ‘암반응’이라는 옛 이름 때문에 밤에 일어나는 것으로 오해하지 말자. 필요한 에너지를 명반응에서 만들어 주므로 실제로는 낮에 진행된다. 사용한 만큼 에이디피와 엔에이디피가 되어 다시 바깥으로 돌아간다.","box":[760,40,480,420],"src":["s45u01#5"],"cards":["C0-176","C0-184","A0-108"]},{"sid":"s7","obj":"오른끝 여섯 칸 꽂이 — 반짝이는 짧은 막대 다섯 · 왼 칸 비었다","fact":"CO₂ 셋 → 3탄 여섯(G3P) — 칸 수가 여섯","hook":"칸 여섯 = 3탄 여섯","say":"작업대 오른쪽 끝의 나무 꽂이에는 자리가 여섯이다. 반짝이는 짧은 막대 다섯이 꽂혀 있고 맨 왼쪽만 비어 있다. 이산화탄소 셋을 받아 삼탄 분자 여섯이 생긴다는 수를 꽂이에서 확인하자. 반짝이는 막대는 환원된 지쓰리피다.","box":[1560,230,340,330],"src":["s45u01#6"],"cards":["C0-160","C0-183"]},{"sid":"s8","obj":"빈 칸의 미끄럼틀로 막대 하나만 나가 벽 구멍으로","fact":"순생성 G3P 하나(여섯 중 하나) · 포도당 = G3P 둘 = CO₂ 6·ATP 18·NADPH 12","hook":"칸은 여섯 · 나가는 길은 하나","say":"빈 칸에서 비스듬히 내려오는 미끄럼틀로 막대 하나만 벽 아래 구멍을 빠져나간다. 여섯 지쓰리피 중 순생성물로 나가는 것은 하나뿐이다. 마디 셋인 이 막대도 해당과정 당구장의 각뿔처럼 삼탄소라는 점을 나타낸다. 장면마다 모양은 다르다. 광합성의 직접 산물은 포도당이 아니라 지쓰리피이며, 지쓰리피 둘로 포도당을 조립한다. 포도당 하나에 필요한 양은 이산화탄소 여섯, 에이티피 열여덟, 엔에이디피에이치 열둘이다. 밖으로 나온 지쓰리피는 포도당과 다른 유기물의 전구체가 된다. 빛반응에서 나오는 산소는 배출되는 부산물이고, 유기물을 만드는 재료는 이 지쓰리피다.","box":[1680,560,368,420],"src":["s45u01#7"],"cards":["C0-163","C0-164","C0-20","C0-169","C0-170","C0-171","C0-179","C0-241"]},{"sid":"s9","obj":"짐꾼이 마디 다섯 긴 막대 셋을 메고 스코프 쪽으로 걷는다","fact":"재생 — 3탄 다섯(15) → 5탄 셋(15) = RuBP 셋 · 수용체를 매번 다시 만드니 회로","hook":"짧은 막대 다섯 = 긴 막대 셋(탄소 열다섯)","say":"짐꾼이 마디 다섯짜리 긴 막대 셋을 벌려 메고 스코프로 돌아간다. 재생 단계다. 남은 삼탄 막대 다섯의 탄소 열다섯을 다시 배열해, 탄소 다섯짜리 알유비피 셋으로 만든다. 탄소 수는 그대로 열다섯이다. 수용체 셋을 스코프에 돌려보내 다음 세 바퀴에서 이산화탄소 셋을 받게 한다. 수용체를 다시 만드는 과정 때문에 직선 경로가 아니라 회로다.","box":[220,620,800,460],"src":["s45u01#8"],"cards":["C0-165","C0-172","C0-180","C0-182#3"]},{"sid":"s10","obj":"긴 막대 셋의 끝마다 금화 하나","fact":"재생에도 ATP(RuBP 하나에 하나) → CO₂ 셋에 ATP 9(환원 6 + 재생 3)","hook":"막대 앞끝 금화 = 재생의 ATP","say":"짐꾼이 멘 긴 막대 셋의 앞끝에 금화가 하나씩 붙어 있다. 재생에도 에이티피가 필요하다는 단서다. 알유비피 하나를 재생할 때 인산 하나를 더 붙이는 데 사용한다. 따라서 이산화탄소 셋을 처리할 때 환원에서 여섯, 재생에서 셋을 합쳐 에이티피 아홉이 필요하다.","box":[220,640,800,220],"src":["s45u01#9"],"cards":["C0-166","C0-173#2","C0-173","C0-167"]},{"sid":"s11","obj":"작업장 전체 한 바퀴 — 스코프 → 토막 → 꽂이 → 짐꾼 → 스코프","fact":"세 단계 순환 · 빛이 없으면 멈춘다(ATP · NADPH 끊김) · 루비스코는 회로 자신의 효소","hook":"창이 닫히면 작업대가 선다","say":"공방을 한 번 더 따라가 보자. 스코프가 방울을 붙이고 막대가 둘로 갈라진다. 금화와 방패를 받아 반짝인 다음, 꽂이의 여섯 막대 중 하나가 나간다. 남은 다섯은 긴 막대 셋으로 재배열되어 짐꾼을 따라 스코프로 돌아온다. 고정·환원·재생의 순서다. 빛이 없어 창이 닫히면 금화와 방패의 공급이 끊겨 작업대도 멈춘다. 다만 루비스코는 창 밖에서 공급되는 것이 아니라 회로 자체의 효소다.","box":null,"src":["s45u01#0","s45u01#5"],"cards":["C0-153","C0-176","C0-184"]}],"cq":{"C0-153":["캘빈 회로의 3단계는?","탄소고정 · 환원 · RuBP 재생"],"C0-245":["캘빈 회로의 다른 이름은?","캘빈-벤슨 회로(Calvin-Benson cycle)"],"C0-156":["탄소고정 단계에서 CO2를 RuBP에 붙이는 효소는?","루비스코"],"C0-157":["루비스코(Rubisco)란?","RuBP에 CO2를 붙이는 캘빈 회로 효소"],"C0-158":["루비스코가 지구상에서 가장 풍부한 단백질로 언급되는 이유는?","광합성 생물에 매우 많이 존재하기 때문"],"C0-154":["캘빈 회로의 CO2 수용체는?","RuBP"],"C0-9":["캘빈 회로의 핵심 역할은?","CO2를 고정하고 환원해 G3P를 만드는 것"],"C0-19":["광합성에서 CO2를 유기물로 바꾸는 과정을 무엇이라 하는가?","탄소고정"],"C0-155":["RuBP의 풀네임은?","리불로오스-1,5-이인산"],"C0-159":["탄소고정 직후 생기는 불안정한 6탄소 중간체는 어떻게 되는가?","두 분자의 3-PGA로 쪼개진다"],"C0-185":["C3 식물이란?","첫 안정적 탄소고정 산물이 3-PGA인 식물"],"C0-182#1":["캘빈 회로 3단계와 각 핵심 산물을 연결하면?","탄소고정-3PGA"],"C0-186":["대표적 C3 작물 예시는?","벼, 밀, 대두"],"C0-161":["환원 단계에서 3-PGA가 먼저 ATP를 받아 되는 것은?","1,3-BPG"],"C0-173#1":["캘빈 회로에서 ATP가 쓰이는 두 단계는?","3-PGA → 1,3-BPG"],"C0-162":["그다음 NADPH의 환원력을 받아 생성되는 것은?","G3P"],"C0-174":["캘빈 회로에서 NADPH가 쓰이는 단계는?","1,3-BPG → G3P 환원 단계"],"C0-175":["캘빈 회로의 환원 단계에서 NADPH가 하는 일은?","전자(환원력)를 제공해 G3P를 만든다"],"C0-182#2":["캘빈 회로 3단계와 각 핵심 산물을 연결하면?","환원-G3P"],"C0-168":["3 CO2당 필요한 NADPH 수는?","6개"],"C0-176":["캘빈 회로의 ATP는 어디에서 공급되는가?","빛반응"],"C0-184":["캘빈 회로에서 ADP와 NADP+가 다시 생기는 이유는?","ATP와 NADPH가 소비되기 때문"],"A0-108":["암반응이 낮에도 일어나는 이유(노트 기준)?","암반응에 필요한 에너지를 명반응에서 만들기 때문"],"C0-160":["3 CO2가 들어오면 생성되는 3-PGA 수는?","6개"],"C0-183":["캘빈 회로에서 탄소 수를 따라가면 3 CO2 투입 후 어떤 흐름인가?","6개의 3탄소 분자 생성 후 1개 G3P 배출, 나머지 5개 재배열"],"C0-163":["캘빈 회로에서 직접 배출되는 당은?","G3P"],"C0-164":["3 CO2가 들어온 캘빈 회로에서 순생성 G3P는 몇 개인가?","1개"],"C0-20":["광합성의 직접 산물은 포도당인가 G3P인가?","G3P"],"C0-169":["포도당 1분자를 만들려면 캘빈 회로에 필요한 CO2는?","6개"],"C0-170":["포도당 1분자를 만들려면 필요한 ATP는?","18개"],"C0-171":["포도당 1분자를 만들려면 필요한 NADPH는?","12개"],"C0-179":["캘빈 회로의 직접 산물 G3P는 무엇의 전구체인가?","포도당 및 다른 유기물"],"C0-241":["광합성에서 O2와 G3P의 차이는?","O2는 부산물 · G3P는 유용한 유기물 전구체"],"C0-165":["나머지 5개의 G3P는 어디에 쓰이는가?","RuBP 재생"],"C0-172":["캘빈 회로가 '회로'인 이유는?","CO2 수용체 RuBP가 재생되기 때문"],"C0-180":["캘빈 회로에서 6분자의 3-PGA가 모두 최종 산물로 나가지 않는 이유는?","대부분이 RuBP 재생에 쓰이기 때문"],"C0-182#3":["캘빈 회로 3단계와 각 핵심 산물을 연결하면?","재생-RuBP"],"C0-166":["RuBP 재생 단계에서 ATP가 필요한 이유는?","G3P 탄소골격을 RuBP로 재배열·인산화하기 위해"],"C0-173#2":["캘빈 회로에서 ATP가 쓰이는 두 단계는?","RuBP 재생"],"C0-173":["캘빈 회로에서 ATP가 쓰이는 두 단계는?","3-PGA → 1,3-BPG · RuBP 재생"],"C0-167":["3 CO2당 필요한 ATP 수는?","9개"]},"hubPanel":"s45u01"};
+const L0 = /*L0*/{"id":"L45d","scene":"s45","part":"d","title":"탄소 공방 — 도는 작업대","sub":"캘빈 회로: 루비스코 · 고정(RuBP + CO₂) · 3-PGA 둘 · 환원(ATP → NADPH) · 빛반응이 대는 창 · 여섯 중 하나 나감(G3P) · 재생(RuBP 셋 · ATP)","img":"img/L45d.webp?v=db7d60fd56c9","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"깔개 위 작업장 — 막대가 한 바퀴 돈다","fact":"캘빈 회로 = 고정 · 환원 · 재생 세 단계 · 스트로마에서 · 한 바퀴 = CO₂ 하나","hook":"마디 하나 = 탄소 하나 · 깔개 = 스트로마","say":"회색 깔개인 스트로마 위의 탄소 공방이다. 마디 있는 막대가 작업대를 한 바퀴 돌며, 마디 하나가 탄소 하나를 뜻한다. 캘빈-벤슨 회로라고도 부르는 캘빈 회로는 고정·환원·재생의 세 단계로 이루어지고, 한 바퀴마다 이산화탄소 하나를 고정한다.","box":null,"src":["s45u01#0"],"cards":["C0-153","C0-245"]},{"sid":"s2","obj":"놋쇠 기둥 위 루비빛 렌즈 스코프 — 렌즈 둘레 발톱 둘","fact":"루비스코 — CO₂를 붙이는 효소 · 지구에서 가장 흔한 단백질","hook":"루비빛 스코프 = 루비스코","say":"작업대 왼쪽 끝의 놋쇠 기둥 위에 루비빛 앞 렌즈를 가진 스코프가 있다. 루비와 스코프를 연결해 루비스코를 떠올리자. 이 회로에서 이산화탄소를 붙이는 효소다. 광합성 생물에 매우 많아 지구에서 가장 흔한 단백질로 꼽힌다.","box":[100,220,360,300],"src":["s45u01#1"],"cards":["C0-156","C0-157","C0-158"]},{"sid":"s3","obj":"발톱이 어두운 방울을 마디 다섯 긴 막대 끝에 눌러 붙인다 · 방울 둘이 차례를 기다린다","fact":"탄소고정 — CO₂ 수용체 = RuBP(5탄) · 한 바퀴에 CO₂ 하나 · G3P 하나 내려면 세 바퀴","hook":"어두운 방울 = CO₂ · 마디 다섯 = RuBP","say":"스코프의 발톱이 어두운 방울 하나를 마디 다섯인 긴 막대 끝에 눌러 붙인다. 방울은 이산화탄소, 막대는 오탄당 알유비피인 리불로오스 1,5-이인산이다. 볼록한 부분이 아니라 그 사이의 곧은 칸을 탄소 마디로 세자. 알유비피가 이산화탄소 수용체다. 위에서 기다리는 방울 둘도 보자. 한 바퀴에 하나씩 고정하므로 지쓰리피 하나를 내보내려면 세 바퀴가 필요하다.","box":[[300,225,530,315]],"src":["s45u01#2"],"cards":["C0-154","C0-9","C0-19","C0-155"]},{"sid":"s4","obj":"방금 부러진 마디 셋 토막 둘 — 한쪽 끝 마디만 방울빛","fact":"6탄 중간체는 불안정 → 3탄 둘(3-PGA) · 첫 안정 산물이 3탄 = C₃ 식물","hook":"다섯 + 방울 하나 = 셋 + 셋","say":"작업대에 막 부러진 마디 셋짜리 토막 둘이 있다. 부러진 톱니가 서로 맞고, 오른쪽 토막 끝의 한 마디만 방울과 같은 색이다. 탄소 다섯에 이산화탄소 하나가 붙어 여섯이 되지만, 불안정한 육탄 중간체는 곧 삼탄 분자 둘로 나뉜다. 삼 피지에이다. 첫 안정 산물이 삼탄 분자라서 씨쓰리 식물이라고 부른다. 벼·밀·대두가 대표적인 씨쓰리 작물이다.","box":[1000,460,520,160],"src":["s45u01#3"],"cards":["C0-159","C0-185","C0-182#1","C0-186"]},{"sid":"s5","obj":"토막마다 금화 하나 반쯤 박힘 · 오른 토막은 장인이 방패로 누르자 반짝","fact":"환원 — 3-PGA +ATP→ 1,3-BPG +NADPH→ G3P · 금화 먼저, 방패 다음(한 곳뿐)","hook":"금화 = ATP · 방패 = NADPH · 반짝 = 환원된 G3P","say":"토막마다 반쯤 박힌 금화는 에이티피다. 오른쪽 토막은 장인이 큰 둥근 방패를 기울여 테로 꾹 누르자 반짝인다. 방패는 엔에이디피에이치다. 두 단계의 순서를 기억하자. 삼 피지에이가 먼저 에이티피를 사용해 일 삼 비스포스포글리세르산이 되고, 이어 엔에이디피에이치의 환원력을 받아 지쓰리피가 된다. 금화가 먼저, 방패가 다음이다. 회로에서 방패를 쓰는 곳은 이 환원 단계뿐이다. 삼탄 분자 여섯에 하나씩 필요하므로 이산화탄소 셋당 엔에이디피에이치 여섯을 사용한다.","box":[1000,420,520,220],"src":["s45u01#4"],"cards":["C0-161","C0-173#1","C0-162","C0-174","C0-175","C0-182#2","C0-168"]},{"sid":"s6","obj":"장인 뒤 맨 창 — 창턱의 금화 바구니와 방패 둘 · 햇살","fact":"ATP · NADPH는 빛반응이 댄다(창으로) — 「암반응」은 오해 · ADP · NADP⁺가 되돌아간다","hook":"공방 안에서 만들지 않고 창으로 들여온다","say":"장인 뒤의 유리 없는 창으로 햇빛이 들어온다. 창턱의 금화 바구니와 방패 둘을 보자. 에이티피와 엔에이디피에이치는 이 공방에서 만드는 것이 아니라 빛반응에서 공급받는다. 이산화탄소 고정 회로가 빛을 직접 쓰지 않는다고 빛과 무관한 것은 아니다. ‘암반응’이라는 옛 이름 때문에 밤에 일어나는 것으로 오해하지 말자. 필요한 에너지를 명반응에서 만들어 주므로 실제로는 낮에 진행된다. 사용한 만큼 에이디피와 엔에이디피가 되어 다시 바깥으로 돌아간다.","box":[760,40,480,420],"src":["s45u01#5"],"cards":["C0-176","C0-184","A0-108"]},{"sid":"s7","obj":"오른끝 여섯 칸 꽂이 — 반짝이는 짧은 막대 다섯 · 왼 칸 비었다","fact":"CO₂ 셋 → 3탄 여섯(G3P) — 칸 수가 여섯","hook":"칸 여섯 = 3탄 여섯","say":"작업대 오른쪽 끝의 나무 꽂이에는 자리가 여섯이다. 반짝이는 짧은 막대 다섯이 꽂혀 있고 맨 왼쪽만 비어 있다. 이산화탄소 셋을 받아 삼탄 분자 여섯이 생긴다는 수를 꽂이에서 확인하자. 반짝이는 막대는 환원된 지쓰리피다.","box":[1560,230,340,330],"src":["s45u01#6"],"cards":["C0-160","C0-183"]},{"sid":"s8","obj":"빈 칸의 미끄럼틀로 막대 하나만 나가 벽 구멍으로","fact":"순생성 G3P 하나(여섯 중 하나) · 포도당 = G3P 둘 = CO₂ 6·ATP 18·NADPH 12","hook":"칸은 여섯 · 나가는 길은 하나","say":"빈 칸에서 비스듬히 내려오는 미끄럼틀로 막대 하나만 벽 아래 구멍을 빠져나간다. 여섯 지쓰리피 중 순생성물로 나가는 것은 하나뿐이다. 마디 셋인 이 막대도 해당과정 당구장의 각뿔처럼 삼탄소라는 점을 나타낸다. 장면마다 모양은 다르다. 광합성의 직접 산물은 포도당이 아니라 지쓰리피이며, 지쓰리피 둘로 포도당을 조립한다. 포도당 하나에 필요한 양은 이산화탄소 여섯, 에이티피 열여덟, 엔에이디피에이치 열둘이다. 밖으로 나온 지쓰리피는 포도당과 다른 유기물의 전구체가 된다. 빛반응에서 나오는 산소는 배출되는 부산물이고, 유기물을 만드는 재료는 이 지쓰리피다.","box":[1680,560,368,420],"src":["s45u01#7"],"cards":["C0-163","C0-164","C0-20","C0-169","C0-170","C0-171","C0-179","C0-241"]},{"sid":"s9","obj":"짐꾼이 마디 다섯 긴 막대 셋을 메고 스코프 쪽으로 걷는다","fact":"재생 — 3탄 다섯(15) → 5탄 셋(15) = RuBP 셋 · 수용체를 매번 다시 만드니 회로","hook":"짧은 막대 다섯 = 긴 막대 셋(탄소 열다섯)","say":"짐꾼이 마디 다섯짜리 긴 막대 셋을 벌려 메고 스코프로 돌아간다. 재생 단계다. 남은 삼탄 막대 다섯의 탄소 열다섯을 다시 배열해, 탄소 다섯짜리 알유비피 셋으로 만든다. 탄소 수는 그대로 열다섯이다. 수용체 셋을 스코프에 돌려보내 다음 세 바퀴에서 이산화탄소 셋을 받게 한다. 수용체를 다시 만드는 과정 때문에 직선 경로가 아니라 회로다.","box":[220,620,800,460],"src":["s45u01#8"],"cards":["C0-165","C0-172","C0-180","C0-182#3"]},{"sid":"s10","obj":"긴 막대 셋의 끝마다 금화 하나","fact":"재생에도 ATP(RuBP 하나에 하나) → CO₂ 셋에 ATP 9(환원 6 + 재생 3)","hook":"막대 앞끝 금화 = 재생의 ATP","say":"짐꾼이 멘 긴 막대 셋의 앞끝에 금화가 하나씩 붙어 있다. 재생에도 에이티피가 필요하다는 단서다. 알유비피 하나를 재생할 때 인산 하나를 더 붙이는 데 사용한다. 따라서 이산화탄소 셋을 처리할 때 환원에서 여섯, 재생에서 셋을 합쳐 에이티피 아홉이 필요하다.","box":[220,640,800,220],"src":["s45u01#9"],"cards":["C0-166","C0-173#2","C0-173","C0-167"]},{"sid":"s11","obj":"작업장 전체 한 바퀴 — 스코프 → 토막 → 꽂이 → 짐꾼 → 스코프","fact":"세 단계 순환 · 빛이 없으면 멈춘다(ATP · NADPH 끊김) · 루비스코는 회로 자신의 효소","hook":"창이 닫히면 작업대가 선다","say":"공방을 한 번 더 따라가 보자. 스코프가 방울을 붙이고 막대가 둘로 갈라진다. 금화와 방패를 받아 반짝인 다음, 꽂이의 여섯 막대 중 하나가 나간다. 남은 다섯은 긴 막대 셋으로 재배열되어 짐꾼을 따라 스코프로 돌아온다. 고정·환원·재생의 순서다. 빛이 없어 창이 닫히면 금화와 방패의 공급이 끊겨 작업대도 멈춘다. 다만 루비스코는 창 밖에서 공급되는 것이 아니라 회로 자체의 효소다.","box":null,"src":["s45u01#0","s45u01#5"],"cards":["C0-153","C0-176","C0-184"]}],"cq":{"C0-153":["캘빈 회로의 3단계는?","탄소고정 · 환원 · RuBP 재생"],"C0-245":["캘빈 회로의 다른 이름은?","캘빈-벤슨 회로(Calvin-Benson cycle)"],"C0-156":["탄소고정 단계에서 CO2를 RuBP에 붙이는 효소는?","루비스코"],"C0-157":["루비스코(Rubisco)란?","RuBP에 CO2를 붙이는 캘빈 회로 효소"],"C0-158":["루비스코가 지구상에서 가장 풍부한 단백질로 언급되는 이유는?","광합성 생물에 매우 많이 존재하기 때문"],"C0-154":["캘빈 회로의 CO2 수용체는?","RuBP"],"C0-9":["캘빈 회로의 핵심 역할은?","CO2를 고정하고 환원해 G3P를 만드는 것"],"C0-19":["광합성에서 CO2를 유기물로 바꾸는 과정을 무엇이라 하는가?","탄소고정"],"C0-155":["RuBP의 풀네임은?","리불로오스-1,5-이인산"],"C0-159":["탄소고정 직후 생기는 불안정한 6탄소 중간체는 어떻게 되는가?","두 분자의 3-PGA로 쪼개진다"],"C0-185":["C3 식물이란?","첫 안정적 탄소고정 산물이 3-PGA인 식물"],"C0-182#1":["캘빈 회로 3단계와 각 핵심 산물을 연결하면?","탄소고정-3PGA"],"C0-186":["대표적 C3 작물 예시는?","벼, 밀, 대두"],"C0-161":["환원 단계에서 3-PGA가 먼저 ATP를 받아 되는 것은?","1,3-BPG"],"C0-173#1":["캘빈 회로에서 ATP가 쓰이는 두 단계는?","3-PGA → 1,3-BPG"],"C0-162":["그다음 NADPH의 환원력을 받아 생성되는 것은?","G3P"],"C0-174":["캘빈 회로에서 NADPH가 쓰이는 단계는?","1,3-BPG → G3P 환원 단계"],"C0-175":["캘빈 회로의 환원 단계에서 NADPH가 하는 일은?","전자(환원력)를 제공해 G3P를 만든다"],"C0-182#2":["캘빈 회로 3단계와 각 핵심 산물을 연결하면?","환원-G3P"],"C0-168":["3 CO2당 필요한 NADPH 수는?","6개"],"C0-176":["캘빈 회로의 ATP는 어디에서 공급되는가?","빛반응"],"C0-184":["캘빈 회로에서 ADP와 NADP+가 다시 생기는 이유는?","ATP와 NADPH가 소비되기 때문"],"A0-108":["암반응이 낮에도 일어나는 이유(노트 기준)?","암반응에 필요한 에너지를 명반응에서 만들기 때문"],"C0-160":["3 CO2가 들어오면 생성되는 3-PGA 수는?","6개"],"C0-183":["캘빈 회로에서 탄소 수를 따라가면 3 CO2 투입 후 어떤 흐름인가?","6개의 3탄소 분자 생성 후 1개 G3P 배출, 나머지 5개 재배열"],"C0-163":["캘빈 회로에서 직접 배출되는 당은?","G3P"],"C0-164":["3 CO2가 들어온 캘빈 회로에서 순생성 G3P는 몇 개인가?","1개"],"C0-20":["광합성의 직접 산물은 포도당인가 G3P인가?","G3P"],"C0-169":["포도당 1분자를 만들려면 캘빈 회로에 필요한 CO2는?","6개"],"C0-170":["포도당 1분자를 만들려면 필요한 ATP는?","18개"],"C0-171":["포도당 1분자를 만들려면 필요한 NADPH는?","12개"],"C0-179":["캘빈 회로의 직접 산물 G3P는 무엇의 전구체인가?","포도당 및 다른 유기물"],"C0-241":["광합성에서 O2와 G3P의 차이는?","O2는 부산물 · G3P는 유용한 유기물 전구체"],"C0-165":["나머지 5개의 G3P는 어디에 쓰이는가?","RuBP 재생"],"C0-172":["캘빈 회로가 '회로'인 이유는?","CO2 수용체 RuBP가 재생되기 때문"],"C0-180":["캘빈 회로에서 6분자의 3-PGA가 모두 최종 산물로 나가지 않는 이유는?","대부분이 RuBP 재생에 쓰이기 때문"],"C0-182#3":["캘빈 회로 3단계와 각 핵심 산물을 연결하면?","재생-RuBP"],"C0-166":["RuBP 재생 단계에서 ATP가 필요한 이유는?","G3P 탄소골격을 RuBP로 재배열·인산화하기 위해"],"C0-173#2":["캘빈 회로에서 ATP가 쓰이는 두 단계는?","RuBP 재생"],"C0-173":["캘빈 회로에서 ATP가 쓰이는 두 단계는?","3-PGA → 1,3-BPG · RuBP 재생"],"C0-167":["3 CO2당 필요한 ATP 수는?","9개"]},"hubPanel":"s45u01"}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>

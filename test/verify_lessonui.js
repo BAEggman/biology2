@@ -26,12 +26,13 @@ function boot(file, { store = {}, brokenStorage = false, url } = {}) {
 // ── 과 화면 · 가짜 환경 ────────────────────────────────
 // 가상 시계(setTimeout · setInterval · Date.now) · 가짜 fetch(과 쪽 · audio/*.json) · 가짜 Audio · 가짜 기기 음성.
 // 틀의 스크립트는 그대로 돌고, 시간만 우리가 흘린다 — 5초 알림 · 0.7초 · 3.5초를 기다리지 않고 잰다.
-function bootLesson(id, { store = {}, brokenStorage = false, manifest = { lessons: {} }, hold = {}, heard = {}, speech = 'auto', speakMs = 10, url, now = 1.8e12, noFetchLessons = false, noImgLoad = false } = {}) {
+function bootLesson(id, { store = {}, brokenStorage = false, manifest = { lessons: {} }, hold = {}, heard = {}, speech = 'auto', speakMs = 10, url, now = 1.8e12, noFetchLessons = false, noImgLoad = false, mutate = null } = {}) {
   let html = fs.readFileSync(path.join(LES, id + '.html'), 'utf8');
   html = html.replace(/<script src="narration-player\.js[^"]*"><\/script>/, () => '<script>' + fs.readFileSync(path.join(LES, 'narration-player.js'), 'utf8') + '</script>')
              .replace(/<script src="order\.js"><\/script>/, () => '<script>' + fs.readFileSync(path.join(LES, 'order.js'), 'utf8') + '</script>');
+  if (mutate) html = mutate(html);
   const errs = [], vc = new VirtualConsole(); vc.on('jsdomError', e => errs.push(e.message.split('\n')[0]));
-  const env = { errs, fetched: [], audios: [], spoken: [], pending: [], q: [], nowMs: 0, seq: 0 };
+  const env = { errs, fetched: [], audios: [], spoken: [], pending: [], q: [], nowMs: 0, seq: 0, nav: [] };
   const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: false, virtualConsole: vc, url: url || 'https://baeggman.github.io/biology2/lesson/' + id + '.html',
     beforeParse(w) {
       if (brokenStorage) Object.defineProperty(w, 'localStorage', { get() { throw new Error('storage blocked'); } });
@@ -42,6 +43,7 @@ function bootLesson(id, { store = {}, brokenStorage = false, manifest = { lesson
       w.clearTimeout = w.clearInterval = tid => { env.q = env.q.filter(t => t.id !== tid); };
       const D = w.Date; w.Date = class extends D { constructor(...a) { if (a.length) super(...a); else super(now + env.nowMs); } static now() { return now + env.nowMs; } };
       w.Element.prototype.scrollIntoView = function () {};
+      w.__navigate = u => env.nav.push(u);   // 쪽 옮기기를 가로챈다(jsdom 은 실제로 옮기지 못한다)
       w.fetch = async u => {
         const name = String(u).split('?')[0].split('/').slice(-2).join('/'); env.fetched.push(name);
         const json = o => ({ ok: true, json: async () => o, text: async () => JSON.stringify(o) });
@@ -239,11 +241,12 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
   const abKey = id => 'lesson_ab_' + id;
   const trace = async (P, ms, step = 100) => { const seen = []; for (let t = 0; t < ms; t += step) { await P.tick(step); const v = at(P); if (seen[seen.length - 1] !== v) seen.push(v); } return seen; };
 
-  await T('🔁 단추 — 꺼짐 → 구간 → 이 그림 → 꺼짐 · 눌림 표시 · 설정이 lesson_prefs 에 · 구간 줄은 구간일 때만', async () => {
+  await T('🔁 단추 — 꺼짐 → 구간 → 이 그림 → 목록 → 꺼짐 · 눌림 표시 · 설정이 lesson_prefs 에 · 구간 줄은 구간일 때만', async () => {
     const P = bootLesson('L17e'); eq(P.errs, []); const b = P.d.getElementById('bRep'), bar = P.d.getElementById('abBar');
     eq([b.textContent, b.getAttribute('aria-pressed'), bar.hidden], ['🔁 반복 꺼짐', 'false', true]);
     clickId(P, 'bRep'); eq([b.textContent, b.getAttribute('aria-pressed'), bar.hidden, prefs(P.w).rep], ['🔁 구간 반복', 'true', false, 'ab']);
     clickId(P, 'bRep'); eq([b.textContent, bar.hidden, prefs(P.w).rep], ['🔁 이 그림 반복', true, 'one']);
+    clickId(P, 'bRep'); eq([b.textContent, bar.hidden, prefs(P.w).rep], ['🔁 목록 반복', true, 'list']);
     clickId(P, 'bRep'); eq([b.textContent, bar.hidden, prefs(P.w).rep], ['🔁 반복 꺼짐', true, 'off']);
     const Q = bootLesson('L17e', { store: { lesson_prefs: JSON.stringify({ rep: 'one' }) } }); eq(Q.d.getElementById('bRep').textContent, '🔁 이 그림 반복', '새로 열어도 기억');
   });
@@ -364,6 +367,145 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
   await T('저장이 막혀도 반복 · 구간이 오류 없이 그 쪽에서 동작', async () => {
     const P = bootLesson('L17e', { brokenStorage: true }); clickId(P, 'bRep'); goTo(P, 2); clickId(P, 'bA'); goTo(P, 4); clickId(P, 'bB'); P.w.eval('playing=false'); goTo(P, 2); play(P);
     const seen = await trace(P, 3200); yes(seen.every(v => v >= 2 && v <= 4), JSON.stringify(seen)); eq(P.errs, []);
+  });
+
+
+  // ═══════════════════ ④ 다음 그림 자동 넘김 ═══════════════════
+  console.log('\n── ④ 다음 그림 자동 넘김 ──');
+  const ORD = JSON.parse(fs.readFileSync(path.join(LES, 'order.js'), 'utf8').replace(/^\/\*[\s\S]*?\*\/\s*/, '').replace(/^window\.LESSON_ORDER=/, '').replace(/;\s*$/, ''));
+  const nextOf = (id, d = 1) => { const k = ORD.findIndex(o => o.id === id); return ORD[k + d] ? ORD[k + d].id : null; };
+  const cur = P => P.w.eval('L.id');
+  const nStops = id => JSON.parse(fs.readFileSync(path.join(ROOT, 'lessons', id + '.json'), 'utf8')).stops.length;
+  const pathId = P => (/\/(L\d{2}[a-z]?)\.html$/.exec(P.w.location.pathname) || [])[1];
+  const noteTxt = P => P.d.getElementById('nextNote').hidden ? '' : P.d.getElementById('nextNote').textContent;
+  // 끝에서 둘째 정거장부터 자동으로 읽게 해서 끝까지 흘린다
+  const toEnd = async (P, ms = 1500) => { const n = P.w.eval('stops.length'); P.w.eval('playing=true'); goTo(P, n - 2); await P.tick(ms); };
+  const F = ORD[10].id, F2 = nextOf(F);   // 시험에 쓰는 과와 그 다음 과
+
+  await T('「다음 그림 자동」 단추 — 눌림 · prefs.autoNext · 범위 단추(전체 ↔ ★만) · 앞뒤 그림 링크가 목록 차례대로', () => {
+    const P = bootLesson(F); const b = P.d.getElementById('bNextAuto');
+    eq([b.hidden, b.textContent, b.getAttribute('aria-pressed')], [false, '다음 그림 자동 꺼짐', 'false']);
+    clickId(P, 'bNextAuto'); eq([b.textContent, b.getAttribute('aria-pressed'), prefs(P.w).autoNext], ['다음 그림 자동 켜짐', 'true', true]);
+    clickId(P, 'bScope'); eq([P.d.getElementById('bScope').textContent, prefs(P.w).scope], ['범위 ★만', 'star']); clickId(P, 'bScope'); eq(prefs(P.w).scope, 'all');
+    eq([P.d.getElementById('navNext').getAttribute('href'), P.d.getElementById('navPrev').getAttribute('href')], [F2 + '.html', nextOf(F, -1) + '.html']);
+    const Q = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: true, scope: 'star' }) } }); eq([Q.d.getElementById('bNextAuto').textContent, Q.d.getElementById('bScope').textContent], ['다음 그림 자동 켜짐', '범위 ★만'], '새로 열어도 기억');
+  });
+  await T('목록 맨 앞 과에는 앞 그림 링크가 없고, 맨 뒤 과에는 다음 그림 링크가 없음 · 한 파일(standalone)에는 이어 듣기 단추가 없음', () => {
+    const a = bootLesson(ORD[0].id), z = bootLesson(ORD[ORD.length - 1].id);
+    eq([a.d.getElementById('navPrev').hidden, a.d.getElementById('navNext').hidden, z.d.getElementById('navNext').hidden, z.d.getElementById('navPrev').hidden], [true, false, true, false]);
+    const S = bootLesson(F, { mutate: h => h.replace('/*L' + '0*/{', '/*L' + '0*/{"home":"https://x.example/index.html",') }); eq(S.errs, []);
+    eq([S.d.getElementById('bNextAuto').hidden, S.d.getElementById('bScope').hidden, S.d.getElementById('navNext').hidden], [true, true, true]);
+    clickId(S, 'bRep'); clickId(S, 'bRep'); clickId(S, 'bRep'); eq(S.d.getElementById('bRep').textContent, '🔁 반복 꺼짐', '목록 반복이 없음(구간 → 이 그림 → 꺼짐)');
+  });
+
+  await T('켜 두고 끝까지 읽으면 — 되짚기는 조용히 보이고 5초 알림이 뜸(다음 과 이름 · 지금 넘김 · 취소)', async () => {
+    const P = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: true }) } }); const n0 = P.spoken.length;
+    await toEnd(P); eq(cur(P), F, '아직 같은 과'); eq(P.d.getElementById('recap').style.display, 'block');
+    yes(!P.spoken.slice(n0).some(t => /되짚기/.test(t)) && P.spoken.length - n0 <= 3, '되짚기를 읽지 않음 ' + (P.spoken.length - n0));
+    const t = noteTxt(P); yes(/5초 뒤 다음 그림/.test(t) && t.includes(F2) && /지금 넘김/.test(t) && /취소/.test(t), '알림 글: ' + t); eq(P.errs, []);
+  });
+  await T('알림의 초가 줄어들고 5초가 되면 그 자리에서 다음 과로 바뀜(제목 · 그림 · 주소 · 점수 열쇠 · 별표 · 읽기 시작)', async () => {
+    const rec = JSON.stringify({ v: 2, items: { s1: [{ t: 1, ok: true, s: 0 }] }, sessions: [] });
+    const P = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: true }), ['lesson_' + F2]: rec, lesson_stars: JSON.stringify({ [F2]: 9 }) } });
+    await toEnd(P); yes(/<b>5<\/b>|5초/.test(noteTxt(P)), '5초에서 시작'); await P.tick(2100); yes(/3초 뒤/.test(noteTxt(P)), '3초: ' + noteTxt(P)); eq(cur(P), F);
+    await P.tick(3200);
+    eq(cur(P), F2, '과가 바뀜'); eq(P.d.getElementById('title').textContent, P.w.eval('L.title')); eq(P.d.title, P.w.eval('L.title'));
+    eq(pathId(P), F2, '주소창'); eq(P.w.eval('scoreKey'), 'lesson_' + F2); eq(P.w.eval('Object.keys(store.items)'), ['s1'], '그 과의 옛 기록을 읽음');
+    eq(P.d.getElementById('bStar').textContent, '★', '새 과의 별표'); yes(P.d.getElementById('img').getAttribute('src').includes(F2), '그림이 바뀜');
+    eq(at(P), 0, '새 과의 첫 정거장부터 읽기 시작'); eq(P.w.eval('playing'), true); eq(noteTxt(P), '', '알림이 사라짐');
+    yes(P.d.getElementById('step').textContent.startsWith('1 / ' + nStops(F2)), '단계 ' + P.d.getElementById('step').textContent);
+    eq(P.d.getElementById('bNextAuto').textContent, '다음 그림 자동 켜짐', '켜 둔 채 이어짐'); eq(P.errs, []);
+  });
+  await T('「지금 넘김」 — 기다리지 않고 바로 바꿈', async () => {
+    const P = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: true }) } }); await toEnd(P);
+    click(P.w, P.d.querySelector('#nextNote [data-cd="now"]')); await P.tick(50); eq(cur(P), F2); eq(at(P), 0);
+  });
+  await T('「취소」 — 이번 한 번만: 그 과에 머물고 단추는 켜진 채, 안내 글이 남음', async () => {
+    const P = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: true }) } }); await toEnd(P);
+    click(P.w, P.d.querySelector('#nextNote [data-cd="cancel"]')); await P.tick(20000);
+    eq(cur(P), F); eq(P.d.getElementById('bNextAuto').getAttribute('aria-pressed'), 'true'); eq(prefs(P.w).autoNext, true); yes(/취소했다/.test(noteTxt(P)), noteTxt(P));
+    eq(P.w.eval('playing'), false);
+  });
+  await T('알림 중에 ◀ · ▶ · ❚❚(시작) · 모드 바꾸기 · 단추 끄기를 하면 알림이 거두어지고 넘어가지 않음', async () => {
+    const acts = { '◀': P => clickId(P, 'bPrev'), '▶ 다음': P => clickId(P, 'bNext'), '시작/멈춤': P => clickId(P, 'bPlay'), '복습': P => clickId(P, 'bReview'), '시험': P => clickId(P, 'bQuiz'), '자동 끄기': P => clickId(P, 'bNextAuto'), '앞 그림 링크': P => clickId(P, 'navPrev') };
+    for (const [name, act] of Object.entries(acts)) {
+      const P = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: true }) } }); await toEnd(P); yes(noteTxt(P), name + ' 알림이 떠 있어야'); const before = cur(P);
+      act(P); await P.tick(100); if (name === '앞 그림 링크') { await P.tick(50); eq(cur(P), nextOf(F, -1), name + ' — 앞 과로 감'); continue; }
+      yes(!/뒤 다음 그림/.test(noteTxt(P)), name + ' 알림이 남음: ' + noteTxt(P)); await P.tick(8000); yes(cur(P) === before || name === '시작/멈춤', name + ' 과가 넘어감 ' + cur(P));
+    }
+  });
+  await T('자동이 꺼져 있으면 끝에서 되짚기를 읽고 알림 없이 멈춤(옛 동작 그대로)', async () => {
+    const P = bootLesson(F); const n0 = P.spoken.length; await toEnd(P, 2500); eq(noteTxt(P), ''); await P.tick(10000); eq(cur(P), F);
+    yes(P.spoken.length - n0 > 3, '되짚기를 읽음 ' + (P.spoken.length - n0));
+  });
+  await T('목록 반복 — 자동 단추가 꺼져 있어도 이어 가고, 목록 맨 끝에서는 맨 앞 과로 한 바퀴', async () => {
+    const LAST = ORD[ORD.length - 1].id, P = bootLesson(LAST, { store: { lesson_prefs: JSON.stringify({ rep: 'list' }) } }); await toEnd(P);
+    yes(noteTxt(P).includes(ORD[0].id), '맨 앞 과로: ' + noteTxt(P)); await P.tick(5200); eq(cur(P), ORD[0].id);
+    const Q = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ rep: 'list' }) } }); await toEnd(Q); await P.tick(0); yes(Q.d.getElementById('nextNote').textContent.includes(F2));
+  });
+  await T('목록 끝에서 목록 반복이 아니면 「목록의 끝」 — 알림 없이 조용히 멈춤', async () => {
+    const LAST = ORD[ORD.length - 1].id, P = bootLesson(LAST, { store: { lesson_prefs: JSON.stringify({ autoNext: true }) } }); await toEnd(P);
+    yes(/목록의 끝/.test(noteTxt(P)), noteTxt(P)); yes(!P.d.querySelector('#nextNote [data-cd]'), '단추 없음'); await P.tick(9000); eq(cur(P), LAST);
+  });
+  await T('★만 이어 듣기 — ★ 없는 과는 건너뜀 · 앞뒤 그림 링크도 같은 범위 · 마지막 ★ 다음은 「끝」', async () => {
+    const id = [ORD[10].id, ORD[13].id, ORD[15].id], st = { lesson_stars: JSON.stringify({ [id[0]]: 1, [id[1]]: 2, [id[2]]: 3 }), lesson_prefs: JSON.stringify({ autoNext: true, scope: 'star' }) };
+    const P = bootLesson(id[0], { store: st }); eq(P.d.getElementById('navNext').getAttribute('href'), id[1] + '.html'); eq(P.d.getElementById('navPrev').hidden, true, '앞쪽에 ★ 없음');
+    await toEnd(P); yes(noteTxt(P).includes(id[1]), noteTxt(P)); await P.tick(5200); eq(cur(P), id[1]);
+    const Z = bootLesson(id[2], { store: st }); await toEnd(Z); yes(/★ 표시한 그림의 끝/.test(noteTxt(Z)), noteTxt(Z));
+  });
+  await T('음성을 끈 채로도 이어 감(3.5초 간격) — 알림 뒤 새 과도 음성 없이 읽는 척 넘어감', async () => {
+    const P = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: true }) } }); clickId(P, 'bVoice'); P.w.eval('playing=true'); goTo(P, P.w.eval('stops.length') - 2);
+    await P.tick(3600 * 2 + 200); yes(noteTxt(P), '알림이 뜸'); await P.tick(5200); eq(cur(P), F2); eq(P.spoken.length, 0);
+  });
+  await T('빠른 연타 — 다음 그림 ▶ 직후 앞 그림 ◀ 를 눌러도 나중에 누른 쪽만 남음(swapSeq)', async () => {
+    const P = bootLesson(F); clickId(P, 'navNext'); clickId(P, 'navPrev'); await P.tick(100); eq(cur(P), nextOf(F, -1)); eq(pathId(P) || 'x', nextOf(F, -1)); eq(P.errs, []);
+    const Q = bootLesson(F); for (let r = 0; r < 12; r++) clickId(Q, r % 2 ? 'navPrev' : 'navNext'); await Q.tick(200); yes([F2, nextOf(F, -1)].includes(cur(Q)), '마지막 눌림 쪽'); eq(cur(Q), nextOf(F, -1)); eq(Q.errs, []);
+  });
+  await T('늦은 완료 — 과가 바뀐 뒤 옛 과의 낭독이 뒤늦게 끝나도 새 과가 넘어가지 않음', async () => {
+    const P = bootLesson(F, { speech: 'manual' }); clickId(P, 'bPlay'); await P.tick(0); const old = P.pending[0]; yes(old, '옛 과 낭독');
+    clickId(P, 'navNext'); await P.tick(50); eq(cur(P), F2); const n1 = P.spoken.length; old.onend && old.onend(); old.onend && old.onend(); await P.tick(1500);   // (기기 음성이 3초 안에 시작하지 않으면 막힌 것으로 본다 — 그 전에 확인)
+    eq(at(P), 0, '옛 완료가 새 과를 건드리지 않음(재생 중이었으니 새 과의 첫 정거장에서 기다림)'); eq(P.spoken.length, n1, '새로 읽기 시작한 것이 없음'); eq(P.errs, []);
+    P.finishSpeech(); await P.tick(800); eq(at(P), 1, '새 과의 낭독이 끝나야 넘어감');
+  });
+  await T('늦은 완료 — 받아 오는 중에 바뀐 과의 답이 늦게 와도 버림', async () => {
+    const P = bootLesson(F); let release; const gate = new Promise(r => { release = r; }); const orig = P.w.fetch;
+    P.w.fetch = async u => { if (String(u).includes(F2 + '.html')) await gate; return orig(u); };
+    clickId(P, 'navNext'); await P.tick(10); clickId(P, 'navPrev'); await P.tick(50); eq(cur(P), nextOf(F, -1)); release(); await P.tick(100); eq(cur(P), nextOf(F, -1), '늦게 온 다음 과를 버림'); eq(pathId(P), nextOf(F, -1));
+  });
+  await T('받아 오기에 실패하면 예전처럼 쪽을 옮김(#auto) — 오류 없이', async () => {
+    const P = bootLesson(F, { noFetchLessons: true, store: { lesson_prefs: JSON.stringify({ autoNext: true }) } }); await toEnd(P); await P.tick(5200);
+    eq(P.nav, [F2 + '.html#auto']); eq(cur(P), F); eq(P.errs, []);
+    clickId(P, 'navNext'); await P.tick(50); eq(P.nav[1], F2 + '.html', '손으로 누르면 #auto 없이');
+  });
+  await T('뒤로 가기(popstate) — 바꿔 끼운 쪽 사이를 오감', async () => {
+    const P = bootLesson(F); clickId(P, 'navNext'); await P.tick(50); eq(cur(P), F2);
+    P.w.history.pushState({}, '', F + '.html'); P.w.dispatchEvent(new P.w.PopStateEvent('popstate')); await P.tick(50); eq(cur(P), F, '뒤로'); eq(P.w.eval('playing'), false);
+  });
+  await T('#auto 로 열리면 자동 시작이 꺼져 있어도 읽기 시작 / 없으면 옛 동작', async () => {
+    const A1 = bootLesson(F, { url: 'https://baeggman.github.io/biology2/lesson/' + F + '.html#auto', store: { lesson_auto_start: '0' } }); A1.imgLoad(); await A1.tick(50); eq(A1.w.eval('playing'), true); eq(at(A1), 0);
+    const A2 = bootLesson(F, { store: { lesson_auto_start: '0' } }); A2.imgLoad(); await A2.tick(50); eq(A2.w.eval('playing'), false);
+    const A3 = bootLesson(F); A3.imgLoad(); await A3.tick(50); eq(A3.w.eval('playing'), true, '자동 시작 켜짐이 기본');
+  });
+  await T('한 시간 지킴이가 이어 듣기에도 걸림 — 만지지 않은 지 한 시간이 넘으면 다음 그림으로 안 넘어감', async () => {
+    const P = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: true }) } }); P.w.eval('lastTouch = Date.now() - 3700000'); P.w.eval('playing=true'); goTo(P, 0); await P.tick(2000);
+    eq(P.w.eval('playing'), false); yes(/계속할까요/.test(P.d.getElementById('audioStatus').textContent));
+  });
+  await T('목록의 「처음부터 / ★만 이어 듣기」 — 설정을 켜고 첫 과(#auto)로 감 · ★ 없으면 ★만은 눌리지 않음', () => {
+    const B = boot('index.html'); let got = []; B.w.__navigate = u => got.push(u);
+    eq(B.d.getElementById('chainStar').disabled, true);
+    click(B.w, B.d.getElementById('chainAll')); eq(got, [ORD[0].id + '.html#auto']); eq([prefs(B.w).autoNext, prefs(B.w).scope], [true, 'all']);
+    click(B.w, B.d.querySelectorAll('.row')[7].querySelector('.star')); eq(B.d.getElementById('chainStar').disabled, false);
+    click(B.w, B.d.getElementById('chainStar')); eq(got[1], ORD[7].id + '.html#auto'); eq([prefs(B.w).autoNext, prefs(B.w).scope], [true, 'star']);
+  });
+  await T('이어 듣기가 옛 저장 열쇠를 건드리지 않음 · 새 열쇠는 lesson_prefs · lesson_stars · lesson_ab_<ID> · 점수 열쇠만', async () => {
+    const old = { lesson_shuffle: '1', lesson_srs_inbox: '[]', lesson_auto_start: '1' };
+    const P = bootLesson(F, { store: { ...old, lesson_prefs: JSON.stringify({ autoNext: true }) } }); await toEnd(P); await P.tick(5200);
+    for (const k in old) eq(P.w.localStorage.getItem(k), old[k], k);
+    eq(Object.keys(P.w.localStorage).filter(k => !(k in old)).sort(), ['lesson_prefs']);
+  });
+  await T('142과 모두 새 틀 — 이어 듣기 단추 · 알림 칸 · 앞뒤 링크 · 표지가 한 번씩 있음', () => {
+    const bad = lessons.filter(L => { const t = fs.readFileSync(path.join(LES, L.id + '.html'), 'utf8'); return !(['id="bNextAuto"', 'id="nextNote"', 'id="navNext"', '<script src="order.js"></script>'].every(x => t.includes(x)) && t.split('/*L' + '0*/').length === 2 && t.split('/*L' + '1*/').length === 2); }).map(L => L.id);
+    eq(bad, []);
   });
 
   console.log('\n' + (fail ? '❌' : '✅') + ' 보기 화면 통과 ' + pass + ' / 실패 ' + fail);

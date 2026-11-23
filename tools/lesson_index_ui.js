@@ -22,6 +22,7 @@
     $$('.toc-group').forEach(g => { g.hidden = !$$('li', g).some(li => !li.hidden); });
     const n = rows().filter(r => LStore.isStar(r.dataset.id)).length, f = $('#fStar');
     f.textContent = '★ 표시한 것만 (' + n + ')'; f.setAttribute('aria-pressed', String(only)); f.classList.toggle('on', only);
+    $('#chainStar').disabled = n === 0;
   }
   function setStar(id, on) { LStore.setStar(id, on); const r = rowOf(id); if (r) paintRow(r); if (bigRow && bigRow.dataset.id === id) paintStarBtn($('#bigStar'), on); applyFilter(); if (bigRow) bigButtons(); }
   document.addEventListener('click', e => {
@@ -86,6 +87,15 @@
 
   // 다른 탭에서 바뀌면 따라간다
   window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars' || e.key === 'lesson_prefs') { rows().forEach(paintRow); if (bigRow) paintStarBtn($('#bigStar'), LStore.isStar(bigRow.dataset.id)); applyFilter(); } });
+
+  // 이어 듣기 — 첫 그림으로 가서 「다음 그림 자동」을 켠다(범위만 다르게). 과 화면이 #auto 로 열리면 곧장 읽기 시작한다.
+  function chain(scope) {
+    const first = (window.LESSON_ORDER || []).find(o => scope !== 'star' || LStore.isStar(o.id)); if (!first) return;
+    LStore.setPrefs({ autoNext: true, scope });
+    const url = first.id + '.html#auto'; if (window.__navigate) window.__navigate(url); else location.href = url;
+  }
+  $('#chainAll').addEventListener('click', () => chain('all'));
+  $('#chainStar').addEventListener('click', () => chain('star'));
 
   rows().forEach(paintRow); applyFilter();
 })();

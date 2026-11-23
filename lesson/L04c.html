@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L04c","scene":"s04","part":"c","title":"담요 가게와 소시지 건물 — 연체와 환형","sub":"온 바닥 대리석(진체강) · 담요 가게의 셋(신발 = 발 · 창고 = 내장낭 · 담요 = 외투막) · 쇠줄(치설) · 문어의 관 고리(두족류 폐쇄) vs 발치의 물(개방) · 거대 소시지 건물의 마디(체절) · 깔때기(후신관) · 되돌아오는 배관(폐쇄)","img":"img/L04c.webp?v=467abf45e87d","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"온 바닥 흰 대리석 거리 — 왼쪽 담요 덮은 가게 · 오른쪽 마디 진 소시지 건물","fact":"진체강 거리 — 담요 집 = 연체 · 마디 소시지 = 환형","hook":"한 거리의 두 집","say":"흰 대리석이 빈틈없이 깔린 거리다. 왼쪽에는 커다란 담요를 뒤집어쓴 가게가 있고, 오른쪽에는 마디가 이어진 소시지 모양 건물이 있다. 담요 가게는 연체동물, 소시지 건물은 환형동물을 나타낸다. 둘 다 진체강을 가진 선구동물이어서 같은 거리에 놓여 있다.","box":null,"src":["s04p03#0"],"cards":["N1-19#2","S-AN-4"]},{"sid":"s2","obj":"온 바닥에 빈틈없이 깐 흰 대리석","fact":"진체강 — 중배엽이 체강을 온통 두른다","hook":"온 바닥 = 온통 두른 안감","say":"먼저 발밑을 보자. 바닥 전체에 흰 대리석이 깔려 있다. 체강을 중배엽이 완전히 둘러싸는 진체강의 단서다. 여기서 바닥은 체강의 안감을 뜻한다. 지난 거리의 맨흙은 무체강, 위쪽에만 깐 판석은 위체강이었다. 이곳은 바닥 전체를 대리석으로 덮었다는 차이를 기억하자.","box":[1040,700,1008,444],"src":["s04p03#0"],"cards":["N1-19#2","S-AN-4"]},{"sid":"s3","obj":"담요 차양 아래의 신발 진열대","fact":"발 — 근육성 발(이동)","hook":"신발 = 발","say":"담요 차양 아래에 진열된 신발을 보자. 신발에서 발을 떠올리면 된다. 연체동물은 근육성 발을 이용해 움직인다.","box":[[135,485,300,265]],"src":["s04p03#1"],"cards":[]},{"sid":"s4","obj":"가게 옆구리에 붙은 작은 창고 — 열린 문 안에 자루가 쌓였다","fact":"내장낭 — 내장이 모인 덩이","hook":"자루 쌓인 창고 = 내장이 모인 주머니","say":"가게 옆구리에 붙은 작은 창고를 보자. 열린 문 안에 자루가 쌓여 있다. 몸속 내용물을 한데 모아 둔 이 창고는 내장낭이다. 내장이 모여 있는 덩어리라는 뜻이다.","box":[[755,300,285,465]],"src":["s04p03#2"],"cards":[]},{"sid":"s5","obj":"가게를 통째로 덮은 빨강 · 노랑 · 파랑 · 초록 조각보 담요 — 앞으로 늘어져 차양이 됐다","fact":"외투막 — 껍질을 분비하는 덮개","hook":"담요 = 외투 = 외투막","say":"알록달록한 조각보 담요가 가게 전체를 덮고, 앞쪽으로 늘어져 차양을 이루고 있다. 몸을 덮는 외투를 떠올리자. 연체동물의 외투막은 몸을 덮으며 껍질을 분비한다.","box":[50,80,930,380],"src":["s04p03#3"],"cards":[]},{"sid":"s6","obj":"계산대에서 주인이 양손에 든 쇠줄","fact":"치설 — 쇠줄처럼 긁어 먹는다","hook":"쇠줄 = 치설","say":"계산대의 주인이 양손에 든 쇠줄을 보자. 강판처럼 표면이 거칠다. 먹이를 긁어 먹는 이빨 띠, 치설의 단서다. 쇠줄로 긁는 모습과 연체동물의 치설을 연결하자.","box":[500,440,300,200],"src":["s04p03#4"],"cards":["N1-14"]},{"sid":"s7","obj":"손님 넷 — 문어만 제 몸에서 나와 제 몸으로 되돌아가는 은색 관 고리 · 달팽이 · 조개 · 민달팽이는 관 없이 발치에 물이 번진다","fact":"연체 중 두족류만 폐쇄순환 · 나머지는 개방순환(혈체강에 번짐)","hook":"제 몸의 고리 = 닫힌 관 · 발치의 물 = 열린 순환","say":"가게 앞에는 손님이 넷 있다. 문어의 머리에서 나온 은색 관만 공중에서 고리를 그린 뒤 자기 몸으로 돌아간다. 달팽이, 조개, 민달팽이의 발치에는 관이나 마개 없이 물이 번져 있다. 연체동물 가운데 문어와 오징어 같은 두족류는 폐쇄순환을 하고, 나머지는 개방순환을 한다는 대비다. 개방순환에서는 혈림프가 관 안에만 머물지 않고 기관 사이의 빈 공간인 혈체강으로 퍼진다. 문어의 관은 옆 소시지 건물의 배관과 이어지지 않는다. 둘 다 닫힌 고리이지만 각자의 몸 안에서 도는 별개의 순환이다. 폐쇄순환의 혈액은 혈관 안을 돌기 때문에, 혈관 밖에서 세포 사이를 적시는 세포사이액과 구별된다. 개방순환에서는 혈림프 자체가 세포 사이를 적셔 이런 구별이 없다. 개방순환은 심장의 힘이 약하고, 몸을 움직이며 체강을 누르는 힘으로도 혈림프를 순환시킨다. 곤충도 같은 방식이다.","box":[[330,510,190,210],[30,540,920,500]],"src":["s04p03#5"],"cards":["X-AN-12","S-AN-8","H0-2","H0-3","H0-4","H0-5","H0-6","H0-279"]},{"sid":"s8","obj":"땅에 누운 거대한 소시지 건물 — 마디 넷이 잘록하게 이어졌다","fact":"체절 — 환형동물의 마디 · 마디마다 센털(강모)","hook":"거대 소시지 건물의 마디 = 체절","say":"오른쪽의 긴 건물은 땅에 누운 거대한 소시지처럼 생겼다. 마디마다 잘록하게 나뉜 모습에서 체절을 떠올리자. 환형동물은 몸이 마디로 나뉘며, 지렁이의 각 마디에는 강모라는 짧은 센털이 있다. 앞서 세 가게 거리에서 줄에 꿰어 놓은 작은 소시지는 오페론이었다. 이곳에서는 건물 자체가 마디로 나뉘어 있으므로 체절이 핵심이다. 환형동물의 예로는 땅속의 지렁이, 피를 빠는 거머리, 바다의 갯지렁이가 있다.","box":[[1115,400,865,340]],"src":["s04p03#6"],"cards":["N1-19#1","N1-20"]},{"sid":"s9","obj":"마디마다 아래로 삐죽 나온 깔때기 배수구 — 마디 하나에 둘씩 나란히","fact":"신관(후신관) — 배설기관 · 체절마다 한 쌍 · 편형은 원신관","hook":"마디마다 둘씩 난 작은 깔때기 = 체절마다 한 쌍의 후신관","say":"마디 아래로 나란히 나온 깔때기 배수구를 보자. 마디마다 둘씩, 한 쌍이다. 체강의 액을 깔때기로 받아 노폐물을 몸 밖으로 내보내는 신관, 즉 후신관을 나타낸다. 이 깔때기는 환형동물과 연체동물의 배설기관을 떠올리는 단서다. 편형동물의 불꽃세포가 있는 원신관과 구별하자.","box":[1320,620,600,170],"src":["s04p03#7"],"cards":["N1-19#5","S-AN-9","H1-190#2"]},{"sid":"s10","obj":"소시지 건물 왼끝에서 나와 건물 위를 넘어 오른끝으로 되돌아 박히는 은색 배관","fact":"환형동물은 폐쇄순환 — 관이 제 몸으로 되돌아온다","hook":"끝에서 끝으로 되돌아오는 관 = 닫힌 순환","say":"소시지 건물의 한쪽 끝에서 나온 은색 배관을 따라가 보자. 건물 위를 지나 반대쪽 끝으로 다시 들어가며 닫힌 고리를 만든다. 관이 끊기지 않고 자기 몸으로 돌아오는 모습은 환형동물의 폐쇄순환을 뜻한다.","box":[1080,160,940,500],"src":["s04p03#8"],"cards":["N1-19#4"]},{"sid":"s11","obj":"담요 집에 갖춰진 셋 — 신발 진열 · 옆 창고 · 덮은 담요","fact":"연체동물 3부분 — 발 · 내장낭 · 외투막","hook":"신발 · 창고 · 담요가 한 집에","say":"담요 가게의 세 부분을 다시 짚어 보자. 앞의 신발은 발, 옆의 창고는 내장낭, 위를 덮은 담요는 외투막이다. 발·내장낭·외투막이 연체동물의 공통된 세 부분이다. 세 가지가 한 집에 모두 있어야 연체동물이라는 점을 기억하자.","box":[[135,485,300,265],[755,300,285,465],[50,80,930,380]],"src":["s04p03#9"],"cards":["N1-13"]}],"cq":{"N1-19#2":["환형동물(Annelida)의 핵심 형질은?","진체강"],"S-AN-4":["체강 3형(무·위·진)과 각 대표 무리 격자는?","무체강=편형 / 위체강=선충·윤형 / 진체강=환형"],"N1-14":["치설(radula)이란?","연체동물의 줄 모양 먹이 긁는 기관"],"X-AN-12":["폐쇄순환계를 가지는 무척추동물은?","환형동물, 두족류 (← 나머지 연체동물은 개방순환계)"],"S-AN-8":["순환계 유형으로 무척추동물 문을 나누면?","선충=없음 / 연체=개방(두족류 제외) / 환형·두족=폐쇄"],"H0-2":["폐쇄순환계(closed circulatory system)란?","혈액이 혈관 안에서만 순환하는 순환계"],"H0-3":["개방순환계(open circulatory system)란?","혈림프가 혈관을 떠나 체강을 직접 적시는 순환계"],"H0-4":["폐쇄순환계에서 혈액과 세포사이액은 구별되는가?","예, 구별된다"],"H0-5":["개방순환계의 순환액을 무엇이라 하는가?","혈림프"],"H0-6":["곤충의 개방순환계에서 혈림프 순환이 촉진되는 이유 한 가지는?","몸의 움직임이 체강을 눌러 순환을 돕기 때문"],"H0-279":["개방순환계와 폐쇄순환계를 비교하면?","개방순환은 혈림프가 체강을 적시고 · 폐쇄순환은 혈액이 혈관 안에만 있다"],"N1-19#1":["환형동물(Annelida)의 핵심 형질은?","체절(segment)로 반복(체절동물)"],"N1-20":["환형동물의 예는?","지렁이(빈모류) · 거머리 · 갯지렁이(다모류)"],"N1-19#5":["환형동물(Annelida)의 핵심 형질은?","후신관"],"S-AN-9":["배설 기관으로 무척추동물 문을 나누면?","편형=불꽃세포(원신관) / 환형·연체=후신관"],"H1-190#2":["배설계의 진화적 계열(동물군별)은?","후신관/신관(환형동물, 지렁이)"],"N1-19#4":["환형동물(Annelida)의 핵심 형질은?","폐쇄순환계"],"N1-13":["연체동물(Mollusca)의 공통 3부분은?","발(foot) · 내장낭(visceral mass) · 외투막(mantle, 껍질 분비)"]},"hubPanel":"s04p03"};
+const L0 = /*L0*/{"id":"L04c","scene":"s04","part":"c","title":"담요 가게와 소시지 건물 — 연체와 환형","sub":"온 바닥 대리석(진체강) · 담요 가게의 셋(신발 = 발 · 창고 = 내장낭 · 담요 = 외투막) · 쇠줄(치설) · 문어의 관 고리(두족류 폐쇄) vs 발치의 물(개방) · 거대 소시지 건물의 마디(체절) · 깔때기(후신관) · 되돌아오는 배관(폐쇄)","img":"img/L04c.webp?v=467abf45e87d","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"온 바닥 흰 대리석 거리 — 왼쪽 담요 덮은 가게 · 오른쪽 마디 진 소시지 건물","fact":"진체강 거리 — 담요 집 = 연체 · 마디 소시지 = 환형","hook":"한 거리의 두 집","say":"흰 대리석이 빈틈없이 깔린 거리다. 왼쪽에는 커다란 담요를 뒤집어쓴 가게가 있고, 오른쪽에는 마디가 이어진 소시지 모양 건물이 있다. 담요 가게는 연체동물, 소시지 건물은 환형동물을 나타낸다. 둘 다 진체강을 가진 선구동물이어서 같은 거리에 놓여 있다.","box":null,"src":["s04p03#0"],"cards":["N1-19#2","S-AN-4"]},{"sid":"s2","obj":"온 바닥에 빈틈없이 깐 흰 대리석","fact":"진체강 — 중배엽이 체강을 온통 두른다","hook":"온 바닥 = 온통 두른 안감","say":"먼저 발밑을 보자. 바닥 전체에 흰 대리석이 깔려 있다. 체강을 중배엽이 완전히 둘러싸는 진체강의 단서다. 여기서 바닥은 체강의 안감을 뜻한다. 지난 거리의 맨흙은 무체강, 위쪽에만 깐 판석은 위체강이었다. 이곳은 바닥 전체를 대리석으로 덮었다는 차이를 기억하자.","box":[1040,700,1008,444],"src":["s04p03#0"],"cards":["N1-19#2","S-AN-4"]},{"sid":"s3","obj":"담요 차양 아래의 신발 진열대","fact":"발 — 근육성 발(이동)","hook":"신발 = 발","say":"담요 차양 아래에 진열된 신발을 보자. 신발에서 발을 떠올리면 된다. 연체동물은 근육성 발을 이용해 움직인다.","box":[[135,485,300,265]],"src":["s04p03#1"],"cards":[]},{"sid":"s4","obj":"가게 옆구리에 붙은 작은 창고 — 열린 문 안에 자루가 쌓였다","fact":"내장낭 — 내장이 모인 덩이","hook":"자루 쌓인 창고 = 내장이 모인 주머니","say":"가게 옆구리에 붙은 작은 창고를 보자. 열린 문 안에 자루가 쌓여 있다. 몸속 내용물을 한데 모아 둔 이 창고는 내장낭이다. 내장이 모여 있는 덩어리라는 뜻이다.","box":[[755,300,285,465]],"src":["s04p03#2"],"cards":[]},{"sid":"s5","obj":"가게를 통째로 덮은 빨강 · 노랑 · 파랑 · 초록 조각보 담요 — 앞으로 늘어져 차양이 됐다","fact":"외투막 — 껍질을 분비하는 덮개","hook":"담요 = 외투 = 외투막","say":"알록달록한 조각보 담요가 가게 전체를 덮고, 앞쪽으로 늘어져 차양을 이루고 있다. 몸을 덮는 외투를 떠올리자. 연체동물의 외투막은 몸을 덮으며 껍질을 분비한다.","box":[50,80,930,380],"src":["s04p03#3"],"cards":[]},{"sid":"s6","obj":"계산대에서 주인이 양손에 든 쇠줄","fact":"치설 — 쇠줄처럼 긁어 먹는다","hook":"쇠줄 = 치설","say":"계산대의 주인이 양손에 든 쇠줄을 보자. 강판처럼 표면이 거칠다. 먹이를 긁어 먹는 이빨 띠, 치설의 단서다. 쇠줄로 긁는 모습과 연체동물의 치설을 연결하자.","box":[500,440,300,200],"src":["s04p03#4"],"cards":["N1-14"]},{"sid":"s7","obj":"손님 넷 — 문어만 제 몸에서 나와 제 몸으로 되돌아가는 은색 관 고리 · 달팽이 · 조개 · 민달팽이는 관 없이 발치에 물이 번진다","fact":"연체 중 두족류만 폐쇄순환 · 나머지는 개방순환(혈체강에 번짐)","hook":"제 몸의 고리 = 닫힌 관 · 발치의 물 = 열린 순환","say":"가게 앞에는 손님이 넷 있다. 문어의 머리에서 나온 은색 관만 공중에서 고리를 그린 뒤 자기 몸으로 돌아간다. 달팽이, 조개, 민달팽이의 발치에는 관이나 마개 없이 물이 번져 있다. 연체동물 가운데 문어와 오징어 같은 두족류는 폐쇄순환을 하고, 나머지는 개방순환을 한다는 대비다. 개방순환에서는 혈림프가 관 안에만 머물지 않고 기관 사이의 빈 공간인 혈체강으로 퍼진다. 문어의 관은 옆 소시지 건물의 배관과 이어지지 않는다. 둘 다 닫힌 고리이지만 각자의 몸 안에서 도는 별개의 순환이다. 폐쇄순환의 혈액은 혈관 안을 돌기 때문에, 혈관 밖에서 세포 사이를 적시는 세포사이액과 구별된다. 개방순환에서는 혈림프 자체가 세포 사이를 적셔 이런 구별이 없다. 개방순환은 심장의 힘이 약하고, 몸을 움직이며 체강을 누르는 힘으로도 혈림프를 순환시킨다. 곤충도 같은 방식이다.","box":[[330,510,190,210],[30,540,920,500]],"src":["s04p03#5"],"cards":["X-AN-12","S-AN-8","H0-2","H0-3","H0-4","H0-5","H0-6","H0-279"]},{"sid":"s8","obj":"땅에 누운 거대한 소시지 건물 — 마디 넷이 잘록하게 이어졌다","fact":"체절 — 환형동물의 마디 · 마디마다 센털(강모)","hook":"거대 소시지 건물의 마디 = 체절","say":"오른쪽의 긴 건물은 땅에 누운 거대한 소시지처럼 생겼다. 마디마다 잘록하게 나뉜 모습에서 체절을 떠올리자. 환형동물은 몸이 마디로 나뉘며, 지렁이의 각 마디에는 강모라는 짧은 센털이 있다. 앞서 세 가게 거리에서 줄에 꿰어 놓은 작은 소시지는 오페론이었다. 이곳에서는 건물 자체가 마디로 나뉘어 있으므로 체절이 핵심이다. 환형동물의 예로는 땅속의 지렁이, 피를 빠는 거머리, 바다의 갯지렁이가 있다.","box":[[1115,400,865,340]],"src":["s04p03#6"],"cards":["N1-19#1","N1-20"]},{"sid":"s9","obj":"마디마다 아래로 삐죽 나온 깔때기 배수구 — 마디 하나에 둘씩 나란히","fact":"신관(후신관) — 배설기관 · 체절마다 한 쌍 · 편형은 원신관","hook":"마디마다 둘씩 난 작은 깔때기 = 체절마다 한 쌍의 후신관","say":"마디 아래로 나란히 나온 깔때기 배수구를 보자. 마디마다 둘씩, 한 쌍이다. 체강의 액을 깔때기로 받아 노폐물을 몸 밖으로 내보내는 신관, 즉 후신관을 나타낸다. 이 깔때기는 환형동물과 연체동물의 배설기관을 떠올리는 단서다. 편형동물의 불꽃세포가 있는 원신관과 구별하자.","box":[1320,620,600,170],"src":["s04p03#7"],"cards":["N1-19#5","S-AN-9","H1-190#2"]},{"sid":"s10","obj":"소시지 건물 왼끝에서 나와 건물 위를 넘어 오른끝으로 되돌아 박히는 은색 배관","fact":"환형동물은 폐쇄순환 — 관이 제 몸으로 되돌아온다","hook":"끝에서 끝으로 되돌아오는 관 = 닫힌 순환","say":"소시지 건물의 한쪽 끝에서 나온 은색 배관을 따라가 보자. 건물 위를 지나 반대쪽 끝으로 다시 들어가며 닫힌 고리를 만든다. 관이 끊기지 않고 자기 몸으로 돌아오는 모습은 환형동물의 폐쇄순환을 뜻한다.","box":[1080,160,940,500],"src":["s04p03#8"],"cards":["N1-19#4"]},{"sid":"s11","obj":"담요 집에 갖춰진 셋 — 신발 진열 · 옆 창고 · 덮은 담요","fact":"연체동물 3부분 — 발 · 내장낭 · 외투막","hook":"신발 · 창고 · 담요가 한 집에","say":"담요 가게의 세 부분을 다시 짚어 보자. 앞의 신발은 발, 옆의 창고는 내장낭, 위를 덮은 담요는 외투막이다. 발·내장낭·외투막이 연체동물의 공통된 세 부분이다. 세 가지가 한 집에 모두 있어야 연체동물이라는 점을 기억하자.","box":[[135,485,300,265],[755,300,285,465],[50,80,930,380]],"src":["s04p03#9"],"cards":["N1-13"]}],"cq":{"N1-19#2":["환형동물(Annelida)의 핵심 형질은?","진체강"],"S-AN-4":["체강 3형(무·위·진)과 각 대표 무리 격자는?","무체강=편형 / 위체강=선충·윤형 / 진체강=환형"],"N1-14":["치설(radula)이란?","연체동물의 줄 모양 먹이 긁는 기관"],"X-AN-12":["폐쇄순환계를 가지는 무척추동물은?","환형동물, 두족류 (← 나머지 연체동물은 개방순환계)"],"S-AN-8":["순환계 유형으로 무척추동물 문을 나누면?","선충=없음 / 연체=개방(두족류 제외) / 환형·두족=폐쇄"],"H0-2":["폐쇄순환계(closed circulatory system)란?","혈액이 혈관 안에서만 순환하는 순환계"],"H0-3":["개방순환계(open circulatory system)란?","혈림프가 혈관을 떠나 체강을 직접 적시는 순환계"],"H0-4":["폐쇄순환계에서 혈액과 세포사이액은 구별되는가?","예, 구별된다"],"H0-5":["개방순환계의 순환액을 무엇이라 하는가?","혈림프"],"H0-6":["곤충의 개방순환계에서 혈림프 순환이 촉진되는 이유 한 가지는?","몸의 움직임이 체강을 눌러 순환을 돕기 때문"],"H0-279":["개방순환계와 폐쇄순환계를 비교하면?","개방순환은 혈림프가 체강을 적시고 · 폐쇄순환은 혈액이 혈관 안에만 있다"],"N1-19#1":["환형동물(Annelida)의 핵심 형질은?","체절(segment)로 반복(체절동물)"],"N1-20":["환형동물의 예는?","지렁이(빈모류) · 거머리 · 갯지렁이(다모류)"],"N1-19#5":["환형동물(Annelida)의 핵심 형질은?","후신관"],"S-AN-9":["배설 기관으로 무척추동물 문을 나누면?","편형=불꽃세포(원신관) / 환형·연체=후신관"],"H1-190#2":["배설계의 진화적 계열(동물군별)은?","후신관/신관(환형동물, 지렁이)"],"N1-19#4":["환형동물(Annelida)의 핵심 형질은?","폐쇄순환계"],"N1-13":["연체동물(Mollusca)의 공통 3부분은?","발(foot) · 내장낭(visceral mass) · 외투막(mantle, 껍질 분비)"]},"hubPanel":"s04p03"}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>

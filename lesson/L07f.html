@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L07f","scene":"s07","part":"f","title":"갑상선 공장의 뒤뜰 — 고장 난 날들: 저하 · 항진 · 크레틴 · 하시모토 · 그레이브스 · 갑상샘종 · 테타니 · 침전","sub":"목도리에 하품하는 사람 vs 부채질하며 땀 흘리는 마른 사람(저하 · 항진) · 크레용 낙서와 키 작은 아기(크레틴병) · 모토사이클을 세우고 제 공장을 허무는 일본군 장난감 병정(하시모토) · 묘비 뒤 유령이 가짜 나비 판으로 초인종을 누르고 굴뚝이 연기를 뿜음(그레이브스) · 빈 트럭과 나비 판 전령에 부푼 헛간(갑상샘종) · 자갈 둘뿐인 바구니와 갈퀴처럼 굳은 손(저칼슘 · 테타니) · 넘친 자갈이 성냥개비와 굳어 관을 막음(고칼슘 · 침전)","img":"img/L07f.webp?v=1ed75ae35664","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"갑상선 공장의 뒤뜰 — 벽에 매달린 노란 젤 수영장 · 곁의 보라 결정 · 마당 곳곳의 고장 난 일들 (틀)","fact":"갑상선 · 부갑상선 고장 — 호르몬 모자람 · 넘침 · 제 몸이 부숨 · 가짜 신호 · 칼슘 모자람 · 넘침","hook":"같은 공장(젤 수영장 · 보라 결정)의 뒤뜰 = 고장 난 날","say":"갑상선 공장의 뒤뜰이다. 벽에 걸린 노란 젤 수영장은 콜로이드이고, 옆의 보라 결정은 요오드다. 오늘은 공장이 고장 났을 때의 모습을 살펴보자. 호르몬이 부족하거나 넘치는 경우, 면역계가 자기 공장을 부수는 경우, 가짜 신호가 공장을 계속 돌리는 경우, 그리고 칼슘이 부족하거나 넘치는 경우를 마당에서 찾아보자.","box":[190,290,540,200],"cards":[]},{"sid":"s2","obj":"왼쪽 앞 — 햇볕에도 두꺼운 목도리 · 외투를 두르고 하품하며 떠는 통통한 사람 / 곁에 땀에 흠뻑 젖어 부채질하는 깡마른 사람","fact":"저하증 = 무기력 · 체중 증가 · 추위에 약함 / 항진증 = 대사 항진 · 체중 감소 · 더위에 약함","hook":"목도리에 하품 = 저하(느리고 춥다) · 부채질하는 마른 사람 = 항진(빠르고 덥다)","say":"왼쪽 앞의 두 사람을 비교해 보자. 햇볕이 쨍한데도 두꺼운 목도리와 외투를 걸친 통통한 사람이 하품하며 떨고 있다. 갑상샘기능저하증이다. 대사가 느려져 무기력해지고 체중이 늘며 추위를 탄다. 옆의 깡마른 사람은 땀에 젖어 부채질을 한다. 갑상샘기능항진증으로, 대사가 너무 빨라 체중이 줄고 더위를 탄다. 같은 호르몬이 부족하면 느리고 추운 쪽, 넘치면 빠르고 더운 쪽으로 연결해 보자.","cards":["G0-163","G0-164"],"box":[55,540,560,545]},{"sid":"s3","obj":"풀밭의 아기 — 크레용을 쥐었는데 큰 종이엔 엉킨 낙서뿐 · 곁의 높은 키재기 막대에 비해 키가 아주 작다","fact":"크레틴병 — 영유아기 갑상샘기능저하로 생기는 발달 장애","hook":"크레용 낙서 아기 = 크레틴병 · 키재기 = 자라지 못함","say":"풀밭에 앉은 아기가 크레용을 쥐고 있다. 큰 종이에는 엉킨 낙서만 있고, 옆의 높은 키재기 막대와 비교하면 키도 아주 작다. 크레용에서 크레틴병을 떠올리자. 아기 때 갑상샘 호르몬이 부족하면 신체와 지능의 발달이 늦어진다.","cards":["G0-210"],"box":[625,570,280,550]},{"sid":"s4","obj":"담의 구멍 옆, 붉은 원 완장의 카키색 장난감 병정 둘이 공장 벽을 허문다. 바로 앞 군용 모토사이클 뒤 짐받이에 긴 나무 젓가락 두 개가 묶여 있다.","fact":"하시모토 갑상샘염 → 자가면역성 여포 손상 → 흔히 일차성 갑상샘기능저하","hook":"일본어로 젓가락은 하시 · 모토사이클은 모토 → 하시모토 · 자기 공장 벽을 허무는 망치 → 자가면역 손상","say":"붉은 원 완장을 찬 옛 일본군 장난감 병정 둘이 자기 공장의 벽돌을 빼고 있다. 모토사이클 뒤 짐받이에는 젓가락 한 쌍이 묶여 있다. 젓가락을 뜻하는 일본어 하시와 모토사이클의 모토를 이으면 하시모토가 된다. 병정은 면역세포이고, 자기 갑상샘 벽에 생긴 구멍은 자가면역성 여포 손상이다. 흔히 일차성 기능저하로 이어지며, 현성 저하증에서는 유리 T4가 낮고 TSH가 높다. 옆에서 묘비 유령이 초인종을 계속 눌러 수용체를 자극하는 그레이브스병 장면과 구분하자.","cards":["G0-166"],"ask":"모토사이클 곁 병정은 자기 공장에 무슨 일을 하는가? 질환명을 대고 현성 기능저하 때 유리 T4와 TSH의 변화를 말한 다음, 묘비 유령의 작용과 구분해 보자.","box":[[848,601,291,261],[1041,733,443,312],[1284,686,287,148]]},{"sid":"s5","obj":"묘비 뒤에서 솟은 하얀 유령이 가짜 나비 판으로 공장 벽의 초인종 스위치를 자꾸 누르고 · 공장 굴뚝이 시커먼 연기를 잔뜩 뿜는다","fact":"그레이브스병 — TSH 수용체 자가항체가 갑상샘을 계속 자극(T3 · T4 ↑ · TSH ↓)","hook":"묘비(grave) 유령 = 그레이브스 · 가짜 나비 판 = TSH 흉내 자가항체 · 연기 = 과다 생산","say":"묘비 뒤에서 솟은 하얀 유령을 보자. 묘비를 뜻하는 그레이브에서 그레이브스병을 떠올린다. 유령은 가짜 나비 판으로 공장 벽의 초인종 스위치를 계속 누른다. 나비 판은 본사 창구의 TSH를 가리키지만, 여기서는 진짜 TSH가 아니다. TSH 수용체에 붙는 자가항체가 갑상샘을 쉬지 않고 자극하는 것이다. 굴뚝에서 쏟아지는 검은 연기를 호르몬 과다와 연결하자. T3와 T4는 높고, 음성 피드백 때문에 진짜 TSH는 낮다.","cards":["G0-165","Q0-26"],"box":[[1085,470,300,300],[975,0,690,235]]},{"sid":"s6","obj":"뒷담 곁 — 짐칸이 텅 빈 덤프트럭 · 나비 판을 든 전령 떼가 작은 헛간에 몰려 판을 들이대고 · 헛간이 풍선처럼 둥글게 부풀었다","fact":"갑상샘종 — 자극호르몬(TSH)을 지나치게 받아 갑상샘이 커진다(음성 피드백 이상)","hook":"빈 트럭 = 요오드 없음 · 나비 판 전령 떼 = TSH 과다 · 부푼 헛간 = 갑상샘종","say":"뒷담 옆 덤프트럭의 짐칸이 비어 있다. 보라 결정인 요오드가 들어오지 않는 상황이다. 갑상샘 호르몬을 만들지 못하면 음성 피드백이 풀린다. 그래서 나비 판을 든 전령들이 몰려와 작은 헛간에 판을 계속 들이댄다. 자극호르몬 TSH를 과하게 받은 갑상샘이 커지는 갑상샘종이다. 풍선처럼 둥글게 부푼 헛간이 그 결과를 보여 준다.","cards":["G0-209","G1-72"],"box":[1315,310,550,355]},{"sid":"s7","obj":"사람 곁 풀밭에 낮게 놓인 바구니 — 흰 자갈이 둘뿐 / 그 곁에 앉은 사람은 팔과 손가락이 갈퀴처럼 뻣뻣하게 굳어 떨린다","fact":"저칼슘혈증 — 골격근의 강직성 경련(테타니)","hook":"바닥에 낮게 놓인 자갈 둘뿐인 바구니 = 혈중 Ca²⁺ 모자람(낮은 바구니 = 낮은 Ca²⁺ · L07c 와 같은 규칙) · 갈퀴처럼 굳은 손 = 테타니","say":"사람 곁 풀밭에 낮게 놓인 바구니에는 흰 자갈이 둘뿐이다. 자갈은 칼슘이고, 앞 공장에서처럼 바구니가 낮으면 혈중 칼슘이 낮다. 곁에 앉은 사람의 팔과 손가락이 갈퀴처럼 굳고 바르르 떨고 있다. 저칼슘혈증으로 나타나는 강직성 경련, 테타니다. 칼슘이 부족하면 신경과 근육이 쉽게 흥분해 근육이 굳는다는 연결을 기억하자.","cards":["G0-205"],"box":[[1320,890,230,190],[1515,640,290,420]]},{"sid":"s8","obj":"오른쪽 — 도르래로 높이 끌어올린 바구니에서 흰 자갈이 넘쳐 아래로 쏟아진다 · 쏟아진 자갈이 빨간 머리 성냥개비와 엉겨 흰 껍데기로 굳어 관을 막았다","fact":"고칼슘혈증 — 인산칼슘이 침전해 조직 · 기관이 손상된다","hook":"높이 매달려 넘친 바구니 = 혈중 Ca²⁺ 넘침 · 성냥개비 = 인산 · 굳은 껍데기 = 인산칼슘 침전","say":"오른쪽 도르래의 바구니는 높이 올라가 있고, 흰 자갈이 넘쳐 아래로 쏟아진다. 높은 바구니에 넘치는 자갈, 혈중 칼슘이 많은 상태다. 쏟아진 자갈이 빨간 머리 성냥개비와 엉겨 흰 껍데기로 굳고 관을 막는다. 이 덱에서 성냥개비는 인산이다. 고칼슘혈증에서 인산칼슘이 침전해 조직과 기관을 손상시키는 모습을 연결한 것이다.","cards":["G0-206"],"box":[[1800,590,220,460],[1600,930,448,190]]}],"cq":{"G0-163":["갑상샘기능저하증의 대표 증상 예는?","무기력 · 체중 증가 · 추위 민감"],"G0-164":["갑상샘기능항진증의 반대 방향 특징은?","대사 항진 · 체중 감소 · 더위 민감 등"],"G0-210":["크레틴병(cretinism)이란?","영유아기 갑상샘기능저하로 인한 발달 장애"],"G0-166":["하시모토병의 핵심 기전은?","자가면역성 갑상샘 파괴"],"G0-165":["그레이브스병의 핵심 기전은?","자가항체에 의한 갑상샘 자극"],"Q0-26":["그레이브스병(Graves' disease)의 원인은?","TSH 수용체 자가항체가 갑상선을 계속 자극하는 자가면역 질환(T3·T4 높지만 TSH 낮음)"],"G0-209":["갑상샘종(goiter)이 음성피드백 이상으로 생기는 기전은?","자극호르몬(TSH 등)을 과도하게 받아 갑상샘이 비대해진다"],"G1-72":["아이오딘 결핍의 대표 결과는?","갑상샘종"],"G0-205":["저칼슘혈증(hypocalcemia)의 대표 증상은?","골격근의 강직성 경련(테타니)"],"G0-206":["고칼슘혈증(hypercalcemia)의 대표 결과는?","인산칼슘 침전으로 조직·기관 손상"]},"hubPanel":null};
+const L0 = /*L0*/{"id":"L07f","scene":"s07","part":"f","title":"갑상선 공장의 뒤뜰 — 고장 난 날들: 저하 · 항진 · 크레틴 · 하시모토 · 그레이브스 · 갑상샘종 · 테타니 · 침전","sub":"목도리에 하품하는 사람 vs 부채질하며 땀 흘리는 마른 사람(저하 · 항진) · 크레용 낙서와 키 작은 아기(크레틴병) · 모토사이클을 세우고 제 공장을 허무는 일본군 장난감 병정(하시모토) · 묘비 뒤 유령이 가짜 나비 판으로 초인종을 누르고 굴뚝이 연기를 뿜음(그레이브스) · 빈 트럭과 나비 판 전령에 부푼 헛간(갑상샘종) · 자갈 둘뿐인 바구니와 갈퀴처럼 굳은 손(저칼슘 · 테타니) · 넘친 자갈이 성냥개비와 굳어 관을 막음(고칼슘 · 침전)","img":"img/L07f.webp?v=1ed75ae35664","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"갑상선 공장의 뒤뜰 — 벽에 매달린 노란 젤 수영장 · 곁의 보라 결정 · 마당 곳곳의 고장 난 일들 (틀)","fact":"갑상선 · 부갑상선 고장 — 호르몬 모자람 · 넘침 · 제 몸이 부숨 · 가짜 신호 · 칼슘 모자람 · 넘침","hook":"같은 공장(젤 수영장 · 보라 결정)의 뒤뜰 = 고장 난 날","say":"갑상선 공장의 뒤뜰이다. 벽에 걸린 노란 젤 수영장은 콜로이드이고, 옆의 보라 결정은 요오드다. 오늘은 공장이 고장 났을 때의 모습을 살펴보자. 호르몬이 부족하거나 넘치는 경우, 면역계가 자기 공장을 부수는 경우, 가짜 신호가 공장을 계속 돌리는 경우, 그리고 칼슘이 부족하거나 넘치는 경우를 마당에서 찾아보자.","box":[190,290,540,200],"cards":[]},{"sid":"s2","obj":"왼쪽 앞 — 햇볕에도 두꺼운 목도리 · 외투를 두르고 하품하며 떠는 통통한 사람 / 곁에 땀에 흠뻑 젖어 부채질하는 깡마른 사람","fact":"저하증 = 무기력 · 체중 증가 · 추위에 약함 / 항진증 = 대사 항진 · 체중 감소 · 더위에 약함","hook":"목도리에 하품 = 저하(느리고 춥다) · 부채질하는 마른 사람 = 항진(빠르고 덥다)","say":"왼쪽 앞의 두 사람을 비교해 보자. 햇볕이 쨍한데도 두꺼운 목도리와 외투를 걸친 통통한 사람이 하품하며 떨고 있다. 갑상샘기능저하증이다. 대사가 느려져 무기력해지고 체중이 늘며 추위를 탄다. 옆의 깡마른 사람은 땀에 젖어 부채질을 한다. 갑상샘기능항진증으로, 대사가 너무 빨라 체중이 줄고 더위를 탄다. 같은 호르몬이 부족하면 느리고 추운 쪽, 넘치면 빠르고 더운 쪽으로 연결해 보자.","cards":["G0-163","G0-164"],"box":[55,540,560,545]},{"sid":"s3","obj":"풀밭의 아기 — 크레용을 쥐었는데 큰 종이엔 엉킨 낙서뿐 · 곁의 높은 키재기 막대에 비해 키가 아주 작다","fact":"크레틴병 — 영유아기 갑상샘기능저하로 생기는 발달 장애","hook":"크레용 낙서 아기 = 크레틴병 · 키재기 = 자라지 못함","say":"풀밭에 앉은 아기가 크레용을 쥐고 있다. 큰 종이에는 엉킨 낙서만 있고, 옆의 높은 키재기 막대와 비교하면 키도 아주 작다. 크레용에서 크레틴병을 떠올리자. 아기 때 갑상샘 호르몬이 부족하면 신체와 지능의 발달이 늦어진다.","cards":["G0-210"],"box":[625,570,280,550]},{"sid":"s4","obj":"담의 구멍 옆, 붉은 원 완장의 카키색 장난감 병정 둘이 공장 벽을 허문다. 바로 앞 군용 모토사이클 뒤 짐받이에 긴 나무 젓가락 두 개가 묶여 있다.","fact":"하시모토 갑상샘염 → 자가면역성 여포 손상 → 흔히 일차성 갑상샘기능저하","hook":"일본어로 젓가락은 하시 · 모토사이클은 모토 → 하시모토 · 자기 공장 벽을 허무는 망치 → 자가면역 손상","say":"붉은 원 완장을 찬 옛 일본군 장난감 병정 둘이 자기 공장의 벽돌을 빼고 있다. 모토사이클 뒤 짐받이에는 젓가락 한 쌍이 묶여 있다. 젓가락을 뜻하는 일본어 하시와 모토사이클의 모토를 이으면 하시모토가 된다. 병정은 면역세포이고, 자기 갑상샘 벽에 생긴 구멍은 자가면역성 여포 손상이다. 흔히 일차성 기능저하로 이어지며, 현성 저하증에서는 유리 T4가 낮고 TSH가 높다. 옆에서 묘비 유령이 초인종을 계속 눌러 수용체를 자극하는 그레이브스병 장면과 구분하자.","cards":["G0-166"],"ask":"모토사이클 곁 병정은 자기 공장에 무슨 일을 하는가? 질환명을 대고 현성 기능저하 때 유리 T4와 TSH의 변화를 말한 다음, 묘비 유령의 작용과 구분해 보자.","box":[[848,601,291,261],[1041,733,443,312],[1284,686,287,148]]},{"sid":"s5","obj":"묘비 뒤에서 솟은 하얀 유령이 가짜 나비 판으로 공장 벽의 초인종 스위치를 자꾸 누르고 · 공장 굴뚝이 시커먼 연기를 잔뜩 뿜는다","fact":"그레이브스병 — TSH 수용체 자가항체가 갑상샘을 계속 자극(T3 · T4 ↑ · TSH ↓)","hook":"묘비(grave) 유령 = 그레이브스 · 가짜 나비 판 = TSH 흉내 자가항체 · 연기 = 과다 생산","say":"묘비 뒤에서 솟은 하얀 유령을 보자. 묘비를 뜻하는 그레이브에서 그레이브스병을 떠올린다. 유령은 가짜 나비 판으로 공장 벽의 초인종 스위치를 계속 누른다. 나비 판은 본사 창구의 TSH를 가리키지만, 여기서는 진짜 TSH가 아니다. TSH 수용체에 붙는 자가항체가 갑상샘을 쉬지 않고 자극하는 것이다. 굴뚝에서 쏟아지는 검은 연기를 호르몬 과다와 연결하자. T3와 T4는 높고, 음성 피드백 때문에 진짜 TSH는 낮다.","cards":["G0-165","Q0-26"],"box":[[1085,470,300,300],[975,0,690,235]]},{"sid":"s6","obj":"뒷담 곁 — 짐칸이 텅 빈 덤프트럭 · 나비 판을 든 전령 떼가 작은 헛간에 몰려 판을 들이대고 · 헛간이 풍선처럼 둥글게 부풀었다","fact":"갑상샘종 — 자극호르몬(TSH)을 지나치게 받아 갑상샘이 커진다(음성 피드백 이상)","hook":"빈 트럭 = 요오드 없음 · 나비 판 전령 떼 = TSH 과다 · 부푼 헛간 = 갑상샘종","say":"뒷담 옆 덤프트럭의 짐칸이 비어 있다. 보라 결정인 요오드가 들어오지 않는 상황이다. 갑상샘 호르몬을 만들지 못하면 음성 피드백이 풀린다. 그래서 나비 판을 든 전령들이 몰려와 작은 헛간에 판을 계속 들이댄다. 자극호르몬 TSH를 과하게 받은 갑상샘이 커지는 갑상샘종이다. 풍선처럼 둥글게 부푼 헛간이 그 결과를 보여 준다.","cards":["G0-209","G1-72"],"box":[1315,310,550,355]},{"sid":"s7","obj":"사람 곁 풀밭에 낮게 놓인 바구니 — 흰 자갈이 둘뿐 / 그 곁에 앉은 사람은 팔과 손가락이 갈퀴처럼 뻣뻣하게 굳어 떨린다","fact":"저칼슘혈증 — 골격근의 강직성 경련(테타니)","hook":"바닥에 낮게 놓인 자갈 둘뿐인 바구니 = 혈중 Ca²⁺ 모자람(낮은 바구니 = 낮은 Ca²⁺ · L07c 와 같은 규칙) · 갈퀴처럼 굳은 손 = 테타니","say":"사람 곁 풀밭에 낮게 놓인 바구니에는 흰 자갈이 둘뿐이다. 자갈은 칼슘이고, 앞 공장에서처럼 바구니가 낮으면 혈중 칼슘이 낮다. 곁에 앉은 사람의 팔과 손가락이 갈퀴처럼 굳고 바르르 떨고 있다. 저칼슘혈증으로 나타나는 강직성 경련, 테타니다. 칼슘이 부족하면 신경과 근육이 쉽게 흥분해 근육이 굳는다는 연결을 기억하자.","cards":["G0-205"],"box":[[1320,890,230,190],[1515,640,290,420]]},{"sid":"s8","obj":"오른쪽 — 도르래로 높이 끌어올린 바구니에서 흰 자갈이 넘쳐 아래로 쏟아진다 · 쏟아진 자갈이 빨간 머리 성냥개비와 엉겨 흰 껍데기로 굳어 관을 막았다","fact":"고칼슘혈증 — 인산칼슘이 침전해 조직 · 기관이 손상된다","hook":"높이 매달려 넘친 바구니 = 혈중 Ca²⁺ 넘침 · 성냥개비 = 인산 · 굳은 껍데기 = 인산칼슘 침전","say":"오른쪽 도르래의 바구니는 높이 올라가 있고, 흰 자갈이 넘쳐 아래로 쏟아진다. 높은 바구니에 넘치는 자갈, 혈중 칼슘이 많은 상태다. 쏟아진 자갈이 빨간 머리 성냥개비와 엉겨 흰 껍데기로 굳고 관을 막는다. 이 덱에서 성냥개비는 인산이다. 고칼슘혈증에서 인산칼슘이 침전해 조직과 기관을 손상시키는 모습을 연결한 것이다.","cards":["G0-206"],"box":[[1800,590,220,460],[1600,930,448,190]]}],"cq":{"G0-163":["갑상샘기능저하증의 대표 증상 예는?","무기력 · 체중 증가 · 추위 민감"],"G0-164":["갑상샘기능항진증의 반대 방향 특징은?","대사 항진 · 체중 감소 · 더위 민감 등"],"G0-210":["크레틴병(cretinism)이란?","영유아기 갑상샘기능저하로 인한 발달 장애"],"G0-166":["하시모토병의 핵심 기전은?","자가면역성 갑상샘 파괴"],"G0-165":["그레이브스병의 핵심 기전은?","자가항체에 의한 갑상샘 자극"],"Q0-26":["그레이브스병(Graves' disease)의 원인은?","TSH 수용체 자가항체가 갑상선을 계속 자극하는 자가면역 질환(T3·T4 높지만 TSH 낮음)"],"G0-209":["갑상샘종(goiter)이 음성피드백 이상으로 생기는 기전은?","자극호르몬(TSH 등)을 과도하게 받아 갑상샘이 비대해진다"],"G1-72":["아이오딘 결핍의 대표 결과는?","갑상샘종"],"G0-205":["저칼슘혈증(hypocalcemia)의 대표 증상은?","골격근의 강직성 경련(테타니)"],"G0-206":["고칼슘혈증(hypercalcemia)의 대표 결과는?","인산칼슘 침전으로 조직·기관 손상"]},"hubPanel":null}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>

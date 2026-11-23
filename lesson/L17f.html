@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L17f","scene":"s17","part":"f","title":"집합관 수갱과 창을 다는 방","sub":"수질 기울기(NaCl · 요소) · 요소 재순환 · ADH 의 두 길 · 구동력 · 최종 농축 · 주세포 방(AQP2 끼움 · AQP3/4 박힘 · 4량체) · 바사 렉타 · 굵은 상행지 · 요붕증 · 루프 이뇨제","img":"img/L17f.webp?v=40f1eed52f75","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"둑 운하가 꺾여 수갱으로 — 내려갈수록 물빛이 짙다 · 바닥 항아리","fact":"집합관 — 피질에서 수질로 · 물 투과성이 ADH로 바뀌는 곳(AQP1은 무관)","hook":"수갱 깊이 = 수질 깊이 · 항아리 = 최종 오줌","say":"둑 위의 운하가 가운데서 꺾여 네모 수갱으로 내려간다. 집합관이 피질에서 수질로 들어가는 모습이다. 아래로 갈수록 물빛이 짙어지고, 바닥 항아리에 최종 소변이 모인다. 둑은 겉질인 피질, 수갱은 속질인 수질, 바닥 항아리는 신배를 거쳐 소변이 모이는 깔때기 모양의 신우를 나타낸다. 콩팥의 기본 구조 세 가지를 이 장면에 대응시켜 보자. 여기서는 에이디에이치에 따라 물 투과성이 달라진다.","box":null,"src":["s17u03#0"],"cards":["X-RN-14","H1-6"]},{"sid":"s2","obj":"수갱 바깥의 소금 껍질 쐐기(위 얇고 아래 두꺼움) · 아래 3분의 1의 누런 요","fact":"수질 삼투기울기의 용질 둘 — NaCl + 요소(요소는 안쪽 수질에서만) · 간질이 짜다","hook":"껍질은 바깥에 = 간질이 짜다 · 요 = 요소","say":"수갱 바깥벽의 흰 소금 껍질을 보자. 위에서는 종이처럼 얇지만 아래에서는 쐐기처럼 두껍다. 쐐기의 아래 삼분의 일에는 두툼한 누런 요가 층층이 쌓여 있다. 수질 삼투기울기에 기여하는 두 용질, 소금과 요소다. 요소는 깊은 안쪽 수질에서만 크게 기여한다. 껍질이 관 바깥에 있다는 점도 보자. 삼투기울기가 형성되는 곳은 관강이 아니라 바깥의 간질이다.","box":[[520,220,160,560],[300,780,500,364]],"src":["s17u03#6"],"cards":["S-RN-12","H1-165"]},{"sid":"s3","obj":"맨 아래에만 열린 작은 문 — 누런 가루가 요 속으로","fact":"요소 재순환 — 안쪽 수질 집합관에서만 요소가 나가 기울기를 보탠다","hook":"문이 맨 아래에만","say":"수갱 맨 아래에만 작은 문이 열려 있다. 누런 가루가 그 문을 통해 곁의 요 속으로 배어든다. 요소 재순환이다. 집합관의 요소가 안쪽 수질 간질로 나가 삼투기울기에 기여하고, 헨레고리를 거쳐 다시 돌아온다. 문이 맨 아래에만 있는 것은 그 위쪽이 요소에 불투과성임을 나타낸다.","box":[560,900,160,140],"src":["s17u03#7"],"cards":["H1-163","H1-164","H1-175"]},{"sid":"s4","obj":"바깥면에 꽂힌 흰 V 둘 — 중턱 물실 위 · 맨 아래 문 곁","fact":"ADH가 여는 길 둘 — 주세포 물길(AQP2) · 안쪽 수질 요소 통로 · V2 수용체는 기저외측막","hook":"V = 바소프레신 · 바깥면에 꽂힘 = 수용체가 기저외측막","say":"수갱 바깥면에 꽂힌 흰 브이자 이음쇠 둘을 찾자. 하나는 중턱의 물실 바로 위, 다른 하나는 맨 아래 요소 문 곁에 있다. 에이디에이치가 집합관에서 여는 두 길, 주세포의 물길과 안쪽 수질의 요소 통로를 나타낸다. 브이가 바깥면에 꽂힌 것은 브이투 수용체가 기저외측막에 있다는 위치 단서다.","box":[[600,440,180,160],[710,940,80,80]],"src":["s17u03#8"],"cards":["S-RN-13","H1-161","H1-129","H1-162"]},{"sid":"s5","obj":"중턱 V 밑에서 나온 물실이 벽을 타고 소금 껍질에 빨려 든다","fact":"물 재흡수의 직접 구동력 = 고삼투 간질 — ADH가 있어도 기울기 없으면 안 나간다","hook":"벽이 짜니까 물이 그쪽으로","say":"중턱의 브이 바로 아래에서 물이 가는 실처럼 흘러나온다. 벽을 타고 내려가다 소금 껍질 속으로 빨려 들어가고, 그 부분의 껍질은 젖어 짙어졌다. 물 재흡수를 직접 구동하는 힘은 고삼투성 수질 간질이다. 벽 쪽이 짜기 때문에 물이 그쪽으로 이동하는 것이다. 에이디에이치가 아무리 많아도 이 기울기가 없으면 물이 빠져나가지 못한다.","box":[640,580,60,260],"src":["s17u03#9"],"cards":["H1-135"]},{"sid":"s6","obj":"바닥 항아리에 짙은 물 조금 — 안 넘친다","fact":"최종 농축을 정하는 둘 — ADH + 수질 기울기 → 진하고 적은 오줌","hook":"둘이 갖춰져야 안 넘친다","say":"바닥 항아리로 들어가는 물줄기는 짙은 남색이고 양이 적어서 넘치지 않는다. 최종 소변의 농축을 결정하는 두 조건은 에이디에이치와 수질 삼투기울기다. 둘이 갖춰지면 물이 벽 쪽으로 재흡수되어 소변이 진해지고 양은 줄어든다.","box":[860,880,140,240],"src":["s17u03#10"],"cards":["H1-140","H1-170","H1-133","H1-134"]},{"sid":"s7","obj":"수갱과 맞닿은 나무벽, 창 두 줄과 뒷문을 모두 볼 수 있는 돌벽","fact":"집합관 주세포의 관강막은 소변 쪽 · 기저외측막은 간질·혈관 쪽","hook":"수갱 쪽 나무벽 = 관강막 · 맞은편 돌벽 = 기저외측막","say":"앞이 열린 방 하나를 집합관의 주세포라고 생각해 보자. 왼쪽 나무벽 너머는 소변이 흐르는 관강이고, 맞은편 돌벽 너머는 수질 간질과 혈관이다. 나무벽에서는 창을 끼우는 작업이 진행된다. 맞은편 뒤쪽과 앞쪽의 돌벽에는 고정창이 두 줄로 나 있다. 이 두 돌벽은 모두 간질을 향하는 기저외측막을 나타낸다.","box":[1009,383,743,710],"src":["s17u03#11"],"ask":"관강과 간질은 이 방의 어느 벽에 있는가? 두 막에서 물이 방을 지나는 순서는?","cards":[]},{"sid":"s8","obj":"손수레의 창틀 한 짝과 인부가 왼쪽 나무벽에 끼우는 창틀 한 짝","fact":"ADH가 기저외측 V2 수용체에 작용 → cAMP·PKA → 관강막 AQP2 삽입 증가","hook":"실려 와 끼워지는 창 두 짝 = AQP2 · 왼쪽 나무벽 = 관강막","say":"수레에 실린 창 한 짝과 인부가 든 창 한 짝을 보자. 둘을 합쳐 AQP2의 번호를 기억한다. ADH가 주세포의 혈액 쪽 V2 수용체에 결합하면, cAMP와 PKA를 거쳐 AQP2를 담은 소포가 관강막에 융합한다. 물은 삼투기울기를 따라 이 통로로 세포 안에 들어온다. AQP2가 삽입되는 곳은 관강막이다. 혈액 쪽 기저외측막에 늘 있는 것은 AQP3·AQP4이므로 위치를 바꾸어 묻는 문제에 주의하자. V1은 주로 혈관 평활근 수축에 관여하는 수용체다.","box":[[1047,617,186,366],[1231,816,184,201]],"src":["s17u03#12"],"ask":"수레에서 옮기는 창틀은 몇 번 아쿠아포린인가? ADH는 어느 면의 어떤 수용체에 결합하며, 창은 어느 막에 더 삽입되는가?","cards":["H1-130","S-RN-7","G0-212#1","X-RN-7"]},{"sid":"s9","obj":"윗줄 창 세 개는 뒷돌벽에 있다. 셋째는 앞돌벽 모서리 뒤에 반쯤 보인다. 아랫줄은 모서리 왼쪽 뒷벽에 둘, 오른쪽 앞벽에 둘이다. 옆 뒷문에는 동전 펌프가 있다.","fact":"AQP3·AQP4는 주세포 기저외측막의 물 출구 · 같은 쪽에 Na⁺·K⁺ 펌프","hook":"윗줄 뒷벽에서 셋 → AQP3 · 아랫줄 뒷벽 둘 + 앞벽 둘 → AQP4 · 두 돌벽 모두 기저외측막","say":"위에서부터 창틀의 바깥 테두리를 세어 보자. 윗줄 뒷벽에는 온전한 창 둘과 오른쪽이 돌 모서리에 가린 창 하나가 있어서 AQP3이다. 아랫줄에는 모서리 왼쪽의 뒷벽에 둘, 오른쪽으로 나온 앞벽에 둘이 있어 AQP4이다. 두 돌벽은 모두 주세포의 기저외측막이다. 관강막의 AQP2로 들어온 물은 기저외측막의 AQP3 또는 AQP4를 지나 삼투기울기에 따라 간질로 나가고 혈관으로 회수된다. 창틀 셋과 넷은 단백질의 번호를 기억하기 위한 수다. 뒷문 옆 동전 펌프는 같은 막에 있는 나트륨·칼륨 펌프다.","box":[[1291,476,271,151],[1268,630,193,140],[1454,635,181,149],[1635,821,112,144]],"src":["s17u03#13"],"ask":"윗줄과 아랫줄의 창틀을 각각 세어 채널 이름과 막 위치를 말해 보자. 물은 어느 구획에서 어느 구획으로 이동하는가?","cards":["H1-131","S-RN-8"]},{"sid":"s10","obj":"돌벽의 맨 왼쪽 위 창 하나를 확대하면 네 칸마다 물방울이 하나씩 보인다","fact":"아쿠아포린은 단량체 넷의 4량체 · 각 단량체가 독립적인 물 통로 하나를 만든다","hook":"창틀 바깥을 세면 채널 번호 · 한 창 안에서 네 유리칸을 세면 4량체","say":"이번에는 왼쪽 위의 창틀 하나만 확대해 생각해 보자. 십자살로 나눈 유리 네 칸에 물방울이 하나씩 있다. 아쿠아포린은 단량체 넷이 모인 사량체이며, 각 단량체에는 물이 한 줄로 지나는 통로가 하나씩 있다. 큰 창틀의 개수와 창틀 하나 안의 유리칸 개수를 구별하자. 위치도 정리해 보자. AQP1은 근위세뇨관과 얇은 하행지, AQP2는 주세포 관강막, AQP3와 AQP4는 주세포 기저외측막이다.","box":[1297,482,80,116],"src":["s17u03#14","s17u03#15"],"ask":"창틀 하나 안쪽의 작은 유리칸을 세어 보자. 아쿠아포린 한 복합체의 단량체 수와 독립된 물 통로 수는 각각 얼마인가?","cards":["A1-57","A1-56","A1-55","X-RN-6"]},{"sid":"s11","obj":"방 오른쪽 곧은 구리 왕복관 — 유리 구 셋 — 내려가는 왼 다리의 아래 구만 흰 결정으로 뿌옇고 · 나머지 둘(왼 다리 위 · 올라오는 오른 다리)은 맑다","fact":"바사 렉타 역류교환 — 내려갈 때 받고 올라갈 때 도로 놓아 기울기를 지킨다(만드는 쪽 아님)","hook":"올라오는 쪽이 다시 맑다 = 씻어 가지 않는다","say":"방 오른쪽의 곧은 구리관을 보자. 아래로 내려갔다가 머리핀처럼 꺾여 다시 올라온다. 화살표를 따르면 왼 다리로 내려가 오른 다리로 올라간다. 유리 구 셋 중 깊이 내려간 왼 다리 아래의 구만 흰 결정 때문에 뿌옇다. 바사 렉타를 나타낸다. 내려갈 때 받은 것을 올라올 때 다시 내놓으므로, 올라오는 쪽은 맑아진다. 수질 기울기를 씻어 내지 않고 보존하는 것이다. 혈류가 너무 빠르면 되돌려 놓을 시간이 부족해 기울기가 씻겨 나간다. 이 구리관은 요소를 되돌리는 벨트가 아니다. 요소 재순환은 아래 문과 연결해 기억하자.","box":[1780,380,240,660],"src":["s17u03#16","s17u03#17"],"cards":["H1-167","S-RN-11","H1-177","H1-179"]},{"sid":"s12","obj":"수갱 왼쪽에 따로 선 역청 토막의 기계가 껍질을 뿌린다","fact":"수질의 소금 기울기는 굵은 상행지의 NaCl 재흡수가 만든다 — 집합관은 요소만 보탠다","hook":"토막이 따로 선 까닭","say":"수갱 왼쪽에 따로 선 수로 토막을 보자. 역청 이음매가 있는 벽에서 톱니 기계가 흰 결정을 수갱의 껍질 쪽으로 뿌린다. 헨레고리 굵은 상행지의 소금 재흡수다. 굵은 상행각이라고도 한다. 수질 간질을 짜게 만드는 핵심 작용이다. 집합관 자체가 소금을 퍼내는 장면이 아니므로, 수로 토막을 수갱과 따로 놓았다.","box":[[0,540,545,500]],"src":["s17u03#18"],"cards":["H1-90"]},{"sid":"s13","obj":"벽에 건 왼 틀 — V 자리가 빈 꽂이 · 물이 끝까지 옅고 항아리가 넘친다","fact":"ADH 없음 → 묽은 오줌 많이(요붕증) · 껍질은 그대로(기울기는 남는다) · 술은 ADH 분비를 억제","hook":"V가 없는 날","say":"벽에 걸린 왼쪽 틀에는 같은 수갱이 그려져 있지만 브이 자리에는 빈 꽂이만 남았다. 물실도 아래 문도 없고, 물빛은 끝까지 옅으며 항아리가 넘친다. 에이디에이치가 없으면 소변이 묽고 많아지는 요붕증을 나타낸다. 그림의 소금 껍질은 남아 있다. 삼투기울기의 바탕인 소금 기울기는 에이디에이치가 만드는 것이 아니라는 점을 구별하자. 술도 에이디에이치 분비를 억제해서 소변량을 늘린다.","box":[1200,50,280,310],"src":["s17u03#19"],"cards":["H1-172","H1-171","H1-132"]},{"sid":"s14","obj":"벽에 건 오른 틀 — 기계에 금 자물쇠 · 껍질 없음 · V는 있는데 항아리가 넘친다","fact":"루프 이뇨제 → 기울기 약화 → ADH가 있어도 농축 못 함 · 둘 중 하나만 없어도 안 된다","hook":"껍질이 없는 날","say":"오른쪽 틀에서는 수로 토막의 기계에 금색 자물쇠가 걸려 있다. 알갱이가 나오지 않고 벽에도 껍질이 없어 맨돌이다. 브이는 남아 있는데 물실이 나오지 않고 항아리가 넘친다. 루프 이뇨제가 굵은 상행지를 막아 수질 기울기가 약해지면, 에이디에이치가 있어도 물을 끌어낼 힘이 없다. 두 틀을 나란히 비교하자. 에이디에이치와 수질 기울기 가운데 어느 하나가 없어도 소변을 농축하지 못한다.","box":[1510,50,280,310],"src":["s17u03#20"],"cards":["H1-173","H1-174","H1-93","H1-106","H1-103"]}],"cq":{"X-RN-14":["물 투과성이 ADH에 의해 조절되는 분절은?","집합관 — ADH가 없으면 물 투과성이 낮다 (다른 분절의 물 투과성은 ADH 비의존)"],"H1-6":["포유류 신장의 기본 구조는?","겉질(피질, cortex) + 속질(수질, medulla) + 신배를 거쳐 오줌이 모이는 신우(renal pelvis)"],"S-RN-12":["수질 삼투기울기의 구성 용질과 보강 기전은?","NaCl + 요소 / 요소 재순환(ADH가 IMCD 요소 투과성↑)"],"H1-165":["내수질의 높은 삼투농도는 주로 무엇들로 이루어지는가?","NaCl과 요소"],"H1-163":["요소 재순환(urea recycling)이란?","집합관에서 나온 요소가 헨레고리와 수질 간질을 거쳐 다시 집합관에 기여하는 현상"],"H1-164":["요소 재순환의 핵심 생리적 의미는?","신수질 고삼투성 유지"],"H1-175":["내수질 집합관에서 요소 투과성이 낮으면 물 재흡수는 어떻게 되는가?","감소하는 경향이 있다"],"S-RN-13":["ADH의 작용 분절과 표적 2가지는?","집합관 주세포 AQP2(관강막)·내수질 집합관 요소 투과성"],"H1-161":["내수질 집합관(IMCD)에서 ADH가 증가시키는 중요한 물질 이동 두 가지는?","물 재흡수와 요소(urea) 투과성 증가"],"H1-129":["ADH는 주세포의 어느 단백질을 증가시켜 물 재흡수를 늘리는가?","AQP2"],"H1-162":["ADH가 내수질 집합관 요소 투과성을 높이는 이유는?","수질 삼투기울기를 강화해 물 재흡수를 돕기 위해"],"H1-135":["주세포에서 물 재흡수의 직접 구동력은?","고삼투성 수질 간질"],"H1-140":["집합관에서 최종 소변 농축 정도가 크게 결정되는 직접 요소 두 가지는?","ADH와 수질 삼투기울기"],"H1-170":["수질 삼투기울기가 크면 집합관에서 어떤 일이 가능해지는가?","ADH 존재 시 강한 물 재흡수와 농축뇨 형성"],"H1-133":["ADH가 증가하면 소변 삼투농도는 어떻게 되는가?","증가한다"],"H1-134":["ADH가 증가하면 소변량은 어떻게 되는가?","감소한다"],"H1-130":["AQP2는 어느 막에 삽입되는가?","관강막(apical membrane)"],"S-RN-7":["집합관 주세포 관강막의 수송체 3종은?","ENaC(Na+ 흡수)·ROMK(K+ 분비)·AQP2(물)"],"G0-212#1":["ADH의 V2와 V1 수용체 차이 — 「V2」? (↔ V1)","신장 집합관(cAMP→아쿠아포린, 수분 재흡수)"],"X-RN-7":["AQP2가 삽입되는 막은 관강막인가 기저외측막인가?","관강막(apical) (← AQP3/AQP4는 기저외측막이므로 혼동 주의)"],"H1-131":["AQP3와 AQP4는 주로 어디에 존재하는가?","기저외측막"],"S-RN-8":["집합관 주세포 기저외측막의 수송체 2종은?","Na+/K+-ATPase·AQP3/AQP4(물 유출)"],"A1-57":["아쿠아포린은 몇 개의 소단위체로 구성되는가?","4개의 동일한 폴리펩타이드(각각 물 통로 형성)"],"A1-56":["아쿠아포린 1개의 폴리펩타이드가 하는 일은?","물 분자가 일렬로 통과하는 통로 형성"],"A1-55":["아쿠아포린(aquaporin)의 기능은?","물 분자가 매우 빠르게 이동하도록 돕는 통로 제공"],"X-RN-6":["AQP1·AQP2·AQP3/AQP4는 각각 어디에 있는가?","AQP1 근위세뇨관·얇은 하행각 / AQP2 주세포 관강막(ADH가 증가) / AQP3·AQP4 기저외측막"],"H1-167":["바사 렉타가 역류교환기(countercurrent exchanger)인 이유는?","내려갈 때와 올라갈 때 용질·물 교환으로 수질 기울기를 보존하기 때문"],"S-RN-11":["대향류 증폭계의 증폭기·교환기·필수 조건은?","증폭기 굵은 상행각·교환기 바사 렉타 / 상행 NaCl+하행 물"],"H1-177":["역류교환기인 바사 렉타가 너무 빠른 혈류를 가지면 문제가 되는 이유는?","수질 기울기가 washout되기 때문이다"],"H1-179":["집합관-요소-바사 렉타의 관계를 한 문장으로 쓰면?","집합관과 요소 재순환이 기울기를 만들고 바사 렉타가 그 기울기를 보존한다"],"H1-90":["굵은 상행각의 NaCl 재흡수가 수질 삼투기울기에 중요한 이유는?","수질 간질을 고삼투성으로 만드는 핵심 단계이기 때문이다"],"H1-172":["수질 삼투기울기는 있는데 ADH가 없으면 소변은 어떻게 되는가?","묽고 양이 많다"],"H1-171":["ADH가 없어도 수질 삼투기울기가 존재할 수 있는가?","예"],"H1-132":["ADH가 없으면 집합관의 물 투과성은 어떻게 되는가?","낮다"],"H1-173":["ADH는 있는데 수질 삼투기울기가 무너지면 소변 농축이 어려운 이유는?","물을 끌어낼 삼투 구동력이 부족하기 때문이다"],"H1-174":["loop diuretic이 농축뇨를 약화시키는 핵심 이유는?","수질 NaCl 기울기를 약화시키기 때문이다"],"H1-93":["loop diuretic 투여 시 소변량이 증가하는 직접 이유는?","NaCl 재흡수 감소와 수질 삼투기울기 약화로 물 재흡수가 줄기 때문이다"],"H1-106":["상행각 차단 시 농축뇨 능력이 떨어지는 핵심 이유는?","수질 간질 고삼투성이 약화되기 때문이다"],"H1-103":["굵은 상행각이 정상이어야 집합관에서 ADH가 잘 작동하는 이유는?","수질 삼투기울기가 유지되어야 ADH에 의한 물 재흡수가 가능하기 때문이다"]},"hubPanel":"s17u03"};
+const L0 = /*L0*/{"id":"L17f","scene":"s17","part":"f","title":"집합관 수갱과 창을 다는 방","sub":"수질 기울기(NaCl · 요소) · 요소 재순환 · ADH 의 두 길 · 구동력 · 최종 농축 · 주세포 방(AQP2 끼움 · AQP3/4 박힘 · 4량체) · 바사 렉타 · 굵은 상행지 · 요붕증 · 루프 이뇨제","img":"img/L17f.webp?v=40f1eed52f75","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"둑 운하가 꺾여 수갱으로 — 내려갈수록 물빛이 짙다 · 바닥 항아리","fact":"집합관 — 피질에서 수질로 · 물 투과성이 ADH로 바뀌는 곳(AQP1은 무관)","hook":"수갱 깊이 = 수질 깊이 · 항아리 = 최종 오줌","say":"둑 위의 운하가 가운데서 꺾여 네모 수갱으로 내려간다. 집합관이 피질에서 수질로 들어가는 모습이다. 아래로 갈수록 물빛이 짙어지고, 바닥 항아리에 최종 소변이 모인다. 둑은 겉질인 피질, 수갱은 속질인 수질, 바닥 항아리는 신배를 거쳐 소변이 모이는 깔때기 모양의 신우를 나타낸다. 콩팥의 기본 구조 세 가지를 이 장면에 대응시켜 보자. 여기서는 에이디에이치에 따라 물 투과성이 달라진다.","box":null,"src":["s17u03#0"],"cards":["X-RN-14","H1-6"]},{"sid":"s2","obj":"수갱 바깥의 소금 껍질 쐐기(위 얇고 아래 두꺼움) · 아래 3분의 1의 누런 요","fact":"수질 삼투기울기의 용질 둘 — NaCl + 요소(요소는 안쪽 수질에서만) · 간질이 짜다","hook":"껍질은 바깥에 = 간질이 짜다 · 요 = 요소","say":"수갱 바깥벽의 흰 소금 껍질을 보자. 위에서는 종이처럼 얇지만 아래에서는 쐐기처럼 두껍다. 쐐기의 아래 삼분의 일에는 두툼한 누런 요가 층층이 쌓여 있다. 수질 삼투기울기에 기여하는 두 용질, 소금과 요소다. 요소는 깊은 안쪽 수질에서만 크게 기여한다. 껍질이 관 바깥에 있다는 점도 보자. 삼투기울기가 형성되는 곳은 관강이 아니라 바깥의 간질이다.","box":[[520,220,160,560],[300,780,500,364]],"src":["s17u03#6"],"cards":["S-RN-12","H1-165"]},{"sid":"s3","obj":"맨 아래에만 열린 작은 문 — 누런 가루가 요 속으로","fact":"요소 재순환 — 안쪽 수질 집합관에서만 요소가 나가 기울기를 보탠다","hook":"문이 맨 아래에만","say":"수갱 맨 아래에만 작은 문이 열려 있다. 누런 가루가 그 문을 통해 곁의 요 속으로 배어든다. 요소 재순환이다. 집합관의 요소가 안쪽 수질 간질로 나가 삼투기울기에 기여하고, 헨레고리를 거쳐 다시 돌아온다. 문이 맨 아래에만 있는 것은 그 위쪽이 요소에 불투과성임을 나타낸다.","box":[560,900,160,140],"src":["s17u03#7"],"cards":["H1-163","H1-164","H1-175"]},{"sid":"s4","obj":"바깥면에 꽂힌 흰 V 둘 — 중턱 물실 위 · 맨 아래 문 곁","fact":"ADH가 여는 길 둘 — 주세포 물길(AQP2) · 안쪽 수질 요소 통로 · V2 수용체는 기저외측막","hook":"V = 바소프레신 · 바깥면에 꽂힘 = 수용체가 기저외측막","say":"수갱 바깥면에 꽂힌 흰 브이자 이음쇠 둘을 찾자. 하나는 중턱의 물실 바로 위, 다른 하나는 맨 아래 요소 문 곁에 있다. 에이디에이치가 집합관에서 여는 두 길, 주세포의 물길과 안쪽 수질의 요소 통로를 나타낸다. 브이가 바깥면에 꽂힌 것은 브이투 수용체가 기저외측막에 있다는 위치 단서다.","box":[[600,440,180,160],[710,940,80,80]],"src":["s17u03#8"],"cards":["S-RN-13","H1-161","H1-129","H1-162"]},{"sid":"s5","obj":"중턱 V 밑에서 나온 물실이 벽을 타고 소금 껍질에 빨려 든다","fact":"물 재흡수의 직접 구동력 = 고삼투 간질 — ADH가 있어도 기울기 없으면 안 나간다","hook":"벽이 짜니까 물이 그쪽으로","say":"중턱의 브이 바로 아래에서 물이 가는 실처럼 흘러나온다. 벽을 타고 내려가다 소금 껍질 속으로 빨려 들어가고, 그 부분의 껍질은 젖어 짙어졌다. 물 재흡수를 직접 구동하는 힘은 고삼투성 수질 간질이다. 벽 쪽이 짜기 때문에 물이 그쪽으로 이동하는 것이다. 에이디에이치가 아무리 많아도 이 기울기가 없으면 물이 빠져나가지 못한다.","box":[640,580,60,260],"src":["s17u03#9"],"cards":["H1-135"]},{"sid":"s6","obj":"바닥 항아리에 짙은 물 조금 — 안 넘친다","fact":"최종 농축을 정하는 둘 — ADH + 수질 기울기 → 진하고 적은 오줌","hook":"둘이 갖춰져야 안 넘친다","say":"바닥 항아리로 들어가는 물줄기는 짙은 남색이고 양이 적어서 넘치지 않는다. 최종 소변의 농축을 결정하는 두 조건은 에이디에이치와 수질 삼투기울기다. 둘이 갖춰지면 물이 벽 쪽으로 재흡수되어 소변이 진해지고 양은 줄어든다.","box":[860,880,140,240],"src":["s17u03#10"],"cards":["H1-140","H1-170","H1-133","H1-134"]},{"sid":"s7","obj":"수갱과 맞닿은 나무벽, 창 두 줄과 뒷문을 모두 볼 수 있는 돌벽","fact":"집합관 주세포의 관강막은 소변 쪽 · 기저외측막은 간질·혈관 쪽","hook":"수갱 쪽 나무벽 = 관강막 · 맞은편 돌벽 = 기저외측막","say":"앞이 열린 방 하나를 집합관의 주세포라고 생각해 보자. 왼쪽 나무벽 너머는 소변이 흐르는 관강이고, 맞은편 돌벽 너머는 수질 간질과 혈관이다. 나무벽에서는 창을 끼우는 작업이 진행된다. 맞은편 뒤쪽과 앞쪽의 돌벽에는 고정창이 두 줄로 나 있다. 이 두 돌벽은 모두 간질을 향하는 기저외측막을 나타낸다.","box":[1009,383,743,710],"src":["s17u03#11"],"ask":"관강과 간질은 이 방의 어느 벽에 있는가? 두 막에서 물이 방을 지나는 순서는?","cards":[]},{"sid":"s8","obj":"손수레의 창틀 한 짝과 인부가 왼쪽 나무벽에 끼우는 창틀 한 짝","fact":"ADH가 기저외측 V2 수용체에 작용 → cAMP·PKA → 관강막 AQP2 삽입 증가","hook":"실려 와 끼워지는 창 두 짝 = AQP2 · 왼쪽 나무벽 = 관강막","say":"수레에 실린 창 한 짝과 인부가 든 창 한 짝을 보자. 둘을 합쳐 AQP2의 번호를 기억한다. ADH가 주세포의 혈액 쪽 V2 수용체에 결합하면, cAMP와 PKA를 거쳐 AQP2를 담은 소포가 관강막에 융합한다. 물은 삼투기울기를 따라 이 통로로 세포 안에 들어온다. AQP2가 삽입되는 곳은 관강막이다. 혈액 쪽 기저외측막에 늘 있는 것은 AQP3·AQP4이므로 위치를 바꾸어 묻는 문제에 주의하자. V1은 주로 혈관 평활근 수축에 관여하는 수용체다.","box":[[1047,617,186,366],[1231,816,184,201]],"src":["s17u03#12"],"ask":"수레에서 옮기는 창틀은 몇 번 아쿠아포린인가? ADH는 어느 면의 어떤 수용체에 결합하며, 창은 어느 막에 더 삽입되는가?","cards":["H1-130","S-RN-7","G0-212#1","X-RN-7"]},{"sid":"s9","obj":"윗줄 창 세 개는 뒷돌벽에 있다. 셋째는 앞돌벽 모서리 뒤에 반쯤 보인다. 아랫줄은 모서리 왼쪽 뒷벽에 둘, 오른쪽 앞벽에 둘이다. 옆 뒷문에는 동전 펌프가 있다.","fact":"AQP3·AQP4는 주세포 기저외측막의 물 출구 · 같은 쪽에 Na⁺·K⁺ 펌프","hook":"윗줄 뒷벽에서 셋 → AQP3 · 아랫줄 뒷벽 둘 + 앞벽 둘 → AQP4 · 두 돌벽 모두 기저외측막","say":"위에서부터 창틀의 바깥 테두리를 세어 보자. 윗줄 뒷벽에는 온전한 창 둘과 오른쪽이 돌 모서리에 가린 창 하나가 있어서 AQP3이다. 아랫줄에는 모서리 왼쪽의 뒷벽에 둘, 오른쪽으로 나온 앞벽에 둘이 있어 AQP4이다. 두 돌벽은 모두 주세포의 기저외측막이다. 관강막의 AQP2로 들어온 물은 기저외측막의 AQP3 또는 AQP4를 지나 삼투기울기에 따라 간질로 나가고 혈관으로 회수된다. 창틀 셋과 넷은 단백질의 번호를 기억하기 위한 수다. 뒷문 옆 동전 펌프는 같은 막에 있는 나트륨·칼륨 펌프다.","box":[[1291,476,271,151],[1268,630,193,140],[1454,635,181,149],[1635,821,112,144]],"src":["s17u03#13"],"ask":"윗줄과 아랫줄의 창틀을 각각 세어 채널 이름과 막 위치를 말해 보자. 물은 어느 구획에서 어느 구획으로 이동하는가?","cards":["H1-131","S-RN-8"]},{"sid":"s10","obj":"돌벽의 맨 왼쪽 위 창 하나를 확대하면 네 칸마다 물방울이 하나씩 보인다","fact":"아쿠아포린은 단량체 넷의 4량체 · 각 단량체가 독립적인 물 통로 하나를 만든다","hook":"창틀 바깥을 세면 채널 번호 · 한 창 안에서 네 유리칸을 세면 4량체","say":"이번에는 왼쪽 위의 창틀 하나만 확대해 생각해 보자. 십자살로 나눈 유리 네 칸에 물방울이 하나씩 있다. 아쿠아포린은 단량체 넷이 모인 사량체이며, 각 단량체에는 물이 한 줄로 지나는 통로가 하나씩 있다. 큰 창틀의 개수와 창틀 하나 안의 유리칸 개수를 구별하자. 위치도 정리해 보자. AQP1은 근위세뇨관과 얇은 하행지, AQP2는 주세포 관강막, AQP3와 AQP4는 주세포 기저외측막이다.","box":[1297,482,80,116],"src":["s17u03#14","s17u03#15"],"ask":"창틀 하나 안쪽의 작은 유리칸을 세어 보자. 아쿠아포린 한 복합체의 단량체 수와 독립된 물 통로 수는 각각 얼마인가?","cards":["A1-57","A1-56","A1-55","X-RN-6"]},{"sid":"s11","obj":"방 오른쪽 곧은 구리 왕복관 — 유리 구 셋 — 내려가는 왼 다리의 아래 구만 흰 결정으로 뿌옇고 · 나머지 둘(왼 다리 위 · 올라오는 오른 다리)은 맑다","fact":"바사 렉타 역류교환 — 내려갈 때 받고 올라갈 때 도로 놓아 기울기를 지킨다(만드는 쪽 아님)","hook":"올라오는 쪽이 다시 맑다 = 씻어 가지 않는다","say":"방 오른쪽의 곧은 구리관을 보자. 아래로 내려갔다가 머리핀처럼 꺾여 다시 올라온다. 화살표를 따르면 왼 다리로 내려가 오른 다리로 올라간다. 유리 구 셋 중 깊이 내려간 왼 다리 아래의 구만 흰 결정 때문에 뿌옇다. 바사 렉타를 나타낸다. 내려갈 때 받은 것을 올라올 때 다시 내놓으므로, 올라오는 쪽은 맑아진다. 수질 기울기를 씻어 내지 않고 보존하는 것이다. 혈류가 너무 빠르면 되돌려 놓을 시간이 부족해 기울기가 씻겨 나간다. 이 구리관은 요소를 되돌리는 벨트가 아니다. 요소 재순환은 아래 문과 연결해 기억하자.","box":[1780,380,240,660],"src":["s17u03#16","s17u03#17"],"cards":["H1-167","S-RN-11","H1-177","H1-179"]},{"sid":"s12","obj":"수갱 왼쪽에 따로 선 역청 토막의 기계가 껍질을 뿌린다","fact":"수질의 소금 기울기는 굵은 상행지의 NaCl 재흡수가 만든다 — 집합관은 요소만 보탠다","hook":"토막이 따로 선 까닭","say":"수갱 왼쪽에 따로 선 수로 토막을 보자. 역청 이음매가 있는 벽에서 톱니 기계가 흰 결정을 수갱의 껍질 쪽으로 뿌린다. 헨레고리 굵은 상행지의 소금 재흡수다. 굵은 상행각이라고도 한다. 수질 간질을 짜게 만드는 핵심 작용이다. 집합관 자체가 소금을 퍼내는 장면이 아니므로, 수로 토막을 수갱과 따로 놓았다.","box":[[0,540,545,500]],"src":["s17u03#18"],"cards":["H1-90"]},{"sid":"s13","obj":"벽에 건 왼 틀 — V 자리가 빈 꽂이 · 물이 끝까지 옅고 항아리가 넘친다","fact":"ADH 없음 → 묽은 오줌 많이(요붕증) · 껍질은 그대로(기울기는 남는다) · 술은 ADH 분비를 억제","hook":"V가 없는 날","say":"벽에 걸린 왼쪽 틀에는 같은 수갱이 그려져 있지만 브이 자리에는 빈 꽂이만 남았다. 물실도 아래 문도 없고, 물빛은 끝까지 옅으며 항아리가 넘친다. 에이디에이치가 없으면 소변이 묽고 많아지는 요붕증을 나타낸다. 그림의 소금 껍질은 남아 있다. 삼투기울기의 바탕인 소금 기울기는 에이디에이치가 만드는 것이 아니라는 점을 구별하자. 술도 에이디에이치 분비를 억제해서 소변량을 늘린다.","box":[1200,50,280,310],"src":["s17u03#19"],"cards":["H1-172","H1-171","H1-132"]},{"sid":"s14","obj":"벽에 건 오른 틀 — 기계에 금 자물쇠 · 껍질 없음 · V는 있는데 항아리가 넘친다","fact":"루프 이뇨제 → 기울기 약화 → ADH가 있어도 농축 못 함 · 둘 중 하나만 없어도 안 된다","hook":"껍질이 없는 날","say":"오른쪽 틀에서는 수로 토막의 기계에 금색 자물쇠가 걸려 있다. 알갱이가 나오지 않고 벽에도 껍질이 없어 맨돌이다. 브이는 남아 있는데 물실이 나오지 않고 항아리가 넘친다. 루프 이뇨제가 굵은 상행지를 막아 수질 기울기가 약해지면, 에이디에이치가 있어도 물을 끌어낼 힘이 없다. 두 틀을 나란히 비교하자. 에이디에이치와 수질 기울기 가운데 어느 하나가 없어도 소변을 농축하지 못한다.","box":[1510,50,280,310],"src":["s17u03#20"],"cards":["H1-173","H1-174","H1-93","H1-106","H1-103"]}],"cq":{"X-RN-14":["물 투과성이 ADH에 의해 조절되는 분절은?","집합관 — ADH가 없으면 물 투과성이 낮다 (다른 분절의 물 투과성은 ADH 비의존)"],"H1-6":["포유류 신장의 기본 구조는?","겉질(피질, cortex) + 속질(수질, medulla) + 신배를 거쳐 오줌이 모이는 신우(renal pelvis)"],"S-RN-12":["수질 삼투기울기의 구성 용질과 보강 기전은?","NaCl + 요소 / 요소 재순환(ADH가 IMCD 요소 투과성↑)"],"H1-165":["내수질의 높은 삼투농도는 주로 무엇들로 이루어지는가?","NaCl과 요소"],"H1-163":["요소 재순환(urea recycling)이란?","집합관에서 나온 요소가 헨레고리와 수질 간질을 거쳐 다시 집합관에 기여하는 현상"],"H1-164":["요소 재순환의 핵심 생리적 의미는?","신수질 고삼투성 유지"],"H1-175":["내수질 집합관에서 요소 투과성이 낮으면 물 재흡수는 어떻게 되는가?","감소하는 경향이 있다"],"S-RN-13":["ADH의 작용 분절과 표적 2가지는?","집합관 주세포 AQP2(관강막)·내수질 집합관 요소 투과성"],"H1-161":["내수질 집합관(IMCD)에서 ADH가 증가시키는 중요한 물질 이동 두 가지는?","물 재흡수와 요소(urea) 투과성 증가"],"H1-129":["ADH는 주세포의 어느 단백질을 증가시켜 물 재흡수를 늘리는가?","AQP2"],"H1-162":["ADH가 내수질 집합관 요소 투과성을 높이는 이유는?","수질 삼투기울기를 강화해 물 재흡수를 돕기 위해"],"H1-135":["주세포에서 물 재흡수의 직접 구동력은?","고삼투성 수질 간질"],"H1-140":["집합관에서 최종 소변 농축 정도가 크게 결정되는 직접 요소 두 가지는?","ADH와 수질 삼투기울기"],"H1-170":["수질 삼투기울기가 크면 집합관에서 어떤 일이 가능해지는가?","ADH 존재 시 강한 물 재흡수와 농축뇨 형성"],"H1-133":["ADH가 증가하면 소변 삼투농도는 어떻게 되는가?","증가한다"],"H1-134":["ADH가 증가하면 소변량은 어떻게 되는가?","감소한다"],"H1-130":["AQP2는 어느 막에 삽입되는가?","관강막(apical membrane)"],"S-RN-7":["집합관 주세포 관강막의 수송체 3종은?","ENaC(Na+ 흡수)·ROMK(K+ 분비)·AQP2(물)"],"G0-212#1":["ADH의 V2와 V1 수용체 차이 — 「V2」? (↔ V1)","신장 집합관(cAMP→아쿠아포린, 수분 재흡수)"],"X-RN-7":["AQP2가 삽입되는 막은 관강막인가 기저외측막인가?","관강막(apical) (← AQP3/AQP4는 기저외측막이므로 혼동 주의)"],"H1-131":["AQP3와 AQP4는 주로 어디에 존재하는가?","기저외측막"],"S-RN-8":["집합관 주세포 기저외측막의 수송체 2종은?","Na+/K+-ATPase·AQP3/AQP4(물 유출)"],"A1-57":["아쿠아포린은 몇 개의 소단위체로 구성되는가?","4개의 동일한 폴리펩타이드(각각 물 통로 형성)"],"A1-56":["아쿠아포린 1개의 폴리펩타이드가 하는 일은?","물 분자가 일렬로 통과하는 통로 형성"],"A1-55":["아쿠아포린(aquaporin)의 기능은?","물 분자가 매우 빠르게 이동하도록 돕는 통로 제공"],"X-RN-6":["AQP1·AQP2·AQP3/AQP4는 각각 어디에 있는가?","AQP1 근위세뇨관·얇은 하행각 / AQP2 주세포 관강막(ADH가 증가) / AQP3·AQP4 기저외측막"],"H1-167":["바사 렉타가 역류교환기(countercurrent exchanger)인 이유는?","내려갈 때와 올라갈 때 용질·물 교환으로 수질 기울기를 보존하기 때문"],"S-RN-11":["대향류 증폭계의 증폭기·교환기·필수 조건은?","증폭기 굵은 상행각·교환기 바사 렉타 / 상행 NaCl+하행 물"],"H1-177":["역류교환기인 바사 렉타가 너무 빠른 혈류를 가지면 문제가 되는 이유는?","수질 기울기가 washout되기 때문이다"],"H1-179":["집합관-요소-바사 렉타의 관계를 한 문장으로 쓰면?","집합관과 요소 재순환이 기울기를 만들고 바사 렉타가 그 기울기를 보존한다"],"H1-90":["굵은 상행각의 NaCl 재흡수가 수질 삼투기울기에 중요한 이유는?","수질 간질을 고삼투성으로 만드는 핵심 단계이기 때문이다"],"H1-172":["수질 삼투기울기는 있는데 ADH가 없으면 소변은 어떻게 되는가?","묽고 양이 많다"],"H1-171":["ADH가 없어도 수질 삼투기울기가 존재할 수 있는가?","예"],"H1-132":["ADH가 없으면 집합관의 물 투과성은 어떻게 되는가?","낮다"],"H1-173":["ADH는 있는데 수질 삼투기울기가 무너지면 소변 농축이 어려운 이유는?","물을 끌어낼 삼투 구동력이 부족하기 때문이다"],"H1-174":["loop diuretic이 농축뇨를 약화시키는 핵심 이유는?","수질 NaCl 기울기를 약화시키기 때문이다"],"H1-93":["loop diuretic 투여 시 소변량이 증가하는 직접 이유는?","NaCl 재흡수 감소와 수질 삼투기울기 약화로 물 재흡수가 줄기 때문이다"],"H1-106":["상행각 차단 시 농축뇨 능력이 떨어지는 핵심 이유는?","수질 간질 고삼투성이 약화되기 때문이다"],"H1-103":["굵은 상행각이 정상이어야 집합관에서 ADH가 잘 작동하는 이유는?","수질 삼투기울기가 유지되어야 ADH에 의한 물 재흡수가 가능하기 때문이다"]},"hubPanel":"s17u03"}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>

@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L22d","scene":"s22","part":"d","title":"땅속의 두 동업 — 뿌리혹과 균근","sub":"뿌리 끝 흰 구름(플라보노이드) · 혹 그림 말풍선(Nod 신호) · 혹 속 알약꼴 세균(근류균) · 금빛 밀폐 헬멧 + 거품 금지(산소에 약함 · 레그헤모글로빈) · 큰 바퀴(니트로게나아제) · 세포 속 붉은 가지(AM) · 겉만 감은 실(ECM) · 아래 잎부터 누런 콩(이동성 원소 결핍)","img":"img/L22d.webp?v=af3524b7df71","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"정원의 땅속 단면 — 왼쪽은 콩 뿌리(흰 구름 · 말풍선 띄운 알약꼴 세균 · 창 달린 혹) · 오른쪽은 나무뿌리(속까지 붉은 가지 · 겉만 감은 흰 실) · 위의 콩은 아래 잎부터 누렇다","fact":"뿌리와 미생물의 공생 둘 — 뿌리혹(질소 고정)과 균근(인 · 물 ↔ 당) · 결핍은 잎에 드러난다","hook":"땅속의 두 동업","say":"정원을 세로로 잘라 땅속을 들여다보자. 왼쪽에는 콩 뿌리와 흰 구름, 말풍선을 띄운 초록 알약 모양 세균, 창 달린 혹이 있다. 오른쪽 나무뿌리는 하나는 속까지 붉은 가지가 들어 있고, 다른 하나는 겉이 흰 실로 감겨 있다. 땅 위 콩은 아래 잎부터 누렇다. 뿌리와 미생물의 두 협력 관계인 뿌리혹의 질소 고정과 균근을 보자.","box":null,"src":["s22p03#0"],"cards":[]},{"sid":"s2","obj":"콩 뿌리 끝에서 뭉게뭉게 피어나는 흰 구름","fact":"콩과 식물이 먼저 플라보노이드를 내 근류균을 부른다","hook":"뿌리가 먼저 신호 구름","say":"콩 뿌리 끝에서 피어나는 흰 구름을 보자. 먼저 신호를 보내는 쪽은 식물이다. 콩과 식물이 플라보노이드를 분비해 근류균을 부른다.","box":[30,730,200,200],"src":["s22p03#0"],"cards":[]},{"sid":"s3","obj":"흰 구름 곁의 초록 알약꼴 세균 — 둥근 혹 덩이가 그려진 말풍선을 띄웠다","fact":"근류균이 혹을 만들라는 신호(Nod 인자)로 답한다 — 서로 확인한 뒤에야 혹이 생긴다","hook":"혹 그림 말풍선 = 답장","say":"흰 구름 옆의 초록 알약 모양 근류균이 말풍선으로 답한다. 안에는 둥근 혹의 그림이 있다. 혹을 만들라는 이 신호가 노드 인자다. 혹을 뜻하는 영어 노듈의 앞부분과 연결하자. 식물과 세균이 신호를 주고받아 확인한 뒤에 혹이 만들어진다.","box":[[240,745,185,205],[330,620,170,160]],"src":["s22p03#1"],"cards":[]},{"sid":"s4","obj":"콩 뿌리에 부풀어 오른 둥근 혹 하나 — 둥근 창 안에 알약꼴 세균이 들어앉았다","fact":"세균이 뿌리 피층 안에 자리 잡는다(뿌리혹 · 박테로이드)","hook":"혹 안에 들어앉은 알약꼴 세균","say":"콩 뿌리에 둥글게 부푼 혹 옆구리의 둥근 창 안으로 초록 알약 모양 세균이 보인다. 세균이 뿌리 피층 안에 자리 잡은 모습이다. 혹 안에서 질소를 고정하는 형태로 바뀐 세균을 박테로이드라고 한다. 콩과 식물을 번갈아 심는 윤작이 토양의 질소를 회복시키는 이유와 연결하자.","box":[520,560,360,380],"src":["s22p03#2"],"cards":["O2-19","O2-21"]},{"sid":"s5","obj":"혹 속 세균은 금빛 밀폐 헬멧을 썼고 · 혹 곁뿌리에 매단 표지엔 공기 방울에 붉은 빗금","fact":"질소고정효소는 산소에 닿으면 망가진다 — 레그헤모글로빈이 산소를 완충(「효소에 산소 원활 공급」은 오답)","hook":"밀폐 헬멧 · 거품 금지 · 붉은 빗금 = 레그헤모글로빈","say":"혹 안의 세균은 얼굴까지 덮은 금빛 밀폐 헬멧을 쓰고 있다. 곁뿌리에 매단 둥근 표지의 공기 방울에는 붉은 빗금이 그어져 있다. 산소에 노출되면 질소고정효소가 손상된다는 뜻이다. 표지의 붉은 빗금은 실제 뿌리혹을 붉게 만드는 단백질 레그헤모글로빈의 단서다. 산소를 붙잡아 농도를 완충하므로 효소를 보호하면서도 세균 호흡에 필요한 산소는 알맞게 공급한다. 질소고정효소에 산소를 원활히 공급해야 한다는 선지는 이 관계를 뒤집은 설명이다.","box":[[570,620,200,200],[880,700,110,100]],"src":["s22p03#3"],"cards":["O2-20","X-PL-26"]},{"sid":"s6","obj":"세균이 돌리는 바큇살 달린 쇠 기계 바퀴","fact":"니트로게나아제(질소고정효소) — 대기 N₂(삼중결합)를 NH₃로 고정하는 장치","hook":"큰 바퀴 = 니트로게나아제","say":"세균이 돌리는 바큇살 달린 쇠 기계 바퀴는 니트로게나아제다. 앞에서 산소에 의해 손상된다고 보았던 질소고정효소다. 대기의 질소는 삼중결합으로 거의 불활성이어서 식물이 그대로 이용할 수 없다. 이 바퀴가 그 질소를 암모니아로 바꾼다.","box":[680,720,120,120],"src":["s22p03#4"],"cards":["O2-16","O2-18"]},{"sid":"s7","obj":"그 바퀴를 돌리는 것은 금빛 헬멧을 쓴 초록 알약꼴 세균 — 혹 안에 사람은 없다","fact":"질소를 고정하는 쪽은 식물이 아니라 근류균 — 질소고정효소는 원핵(세균)의 것","hook":"바퀴는 세균이 돌린다","say":"바퀴를 돌리는 주체는 금빛 헬멧을 쓴 알약 모양 세균이다. 혹 안에 사람은 없다. 질소를 고정하는 것은 식물이 아니라 근류균이라는 구분이다. 질소고정효소는 원핵생물에만 있어 질소고정생물은 거의 모두 원핵생물이다. 근류균, 아조토박터, 시아노박테리아 같은 세균이 대표다. 콩을 윤작하면 토양에 질소가 돌아오는 이유를 다시 연결하자.","box":[580,640,220,180],"src":["s22p03#5"],"cards":["O2-17","L0-24"]},{"sid":"s8","obj":"오른쪽 — 세로로 연 나무뿌리의 방 같은 세포 안까지 붉은 나뭇가지가 뻗어 덤불처럼 찼다(밖에도 붉은 가지가 뻗는다)","fact":"수지상균근(AM) — 균사가 세포벽을 뚫고 수지상체를 만든다 · 글로메로균 · 육상식물 80%","hook":"세포 안의 붉은 나무 = 수지상체","say":"오른쪽에서 길게 열어 놓은 나무뿌리를 보자. 방처럼 생긴 세포 안에 붉은 가지가 덤불처럼 뻗고, 뿌리 밖으로도 이어진다. 수지상균근, AM이다. 균사가 세포벽을 뚫고 들어가 나뭇가지 모양 수지상체를 만든다. 세포벽은 뚫지만 원형질막은 뚫지 않고 안쪽으로 밀어 넣는다는 차이를 구분하자. 글로메로균이 형성하며, 나무뿐 아니라 풀과 곡식까지 육상식물의 팔십 퍼센트에 나타난다. 균류는 인과 물을 주고 식물은 당을 제공한다. 곰팡이 마을에서 뿌리에 손가락을 넣어 작은 나무처럼 갈라지던 가죽 글러브를 기억하자. 그 손가락 끝이 여기의 붉은 가지다.","box":[[1150,420,390,540]],"src":["s22p03#6"],"cards":["M2-8","O2-23","O2-23#1","M2-8#1"]},{"sid":"s9","obj":"또 하나의 나무뿌리 — 겉만 흰 실로 고치처럼 감겼고 실은 세포 속으로 안 들어간다","fact":"외생균근(ECM) — 뿌리 겉과 세포 사이만 감싼다 · 자낭균 · 담자균 · 소나무 · 참나무","hook":"겉만 감은 실 = 외생","say":"다른 나무뿌리는 겉만 흰 실로 고치처럼 감겨 있다. 외생균근, ECM이다. 균사는 표면을 덮고 세포 사이로는 들어가지만 세포 안에는 들어가지 않는다. 자낭균과 담자균이 소나무나 참나무 같은 나무와 이루는 관계다.","box":[1480,400,500,620],"src":["s22p03#7"],"cards":["M2-8#2","O2-23#2"]},{"sid":"s10","obj":"땅 위의 콩 — 아래쪽 오래된 잎부터 누렇고 갈색 · 위쪽 어린 잎은 싱싱한 초록","fact":"이동성 높은 원소(Mg 등)의 결핍은 오래된 잎부터 · 비이동성(Fe 등)은 어린 잎부터","hook":"아래 잎부터 누렇다 = 이동성","say":"땅 위의 콩은 오래된 아래 잎부터 누렇고 갈색으로 변했지만, 어린 위쪽 잎은 싱싱한 초록색이다. 이동성이 높은 원소가 부족할 때의 모습이다. 식물은 마그네슘처럼 이동 가능한 원소를 늙은 잎에서 어린 잎으로 옮기므로, 결핍 증상이 오래된 잎에 먼저 생긴다. 잘 이동하지 않는 철은 반대로 어린 잎부터 증상이 나타난다. 누렇게 변하는 백화증의 대표 원인은 엽록소 성분인 마그네슘과 엽록소 합성 효소의 보조인자인 철의 부족이다.","box":[[150,260,760,200],[200,20,700,240]],"src":["s22p03#8"],"cards":["O2-10#1","O2-9","X-PL-24"]},{"sid":"s11","obj":"땅속 가운데 — 위아래로 이어진 키 큰 원통형 유리 여과 통 둘 · 위 통으로 떨어지는 갈색 알갱이 · 분홍 알약 세균이 첫 통 손잡이를 돌리자 통 안이 옅은 노랑 물이 되고 · 아래 통으로 내려간 물을 보라 알약 세균이 손잡이를 돌려 진한 호박색 물로 만들어 바닥 꼭지로 떨어뜨린다","fact":"질화작용 = NH₃(NH₄⁺) → NO₂⁻(아질산) → NO₃⁻(질산) · 단계마다 다른 질화세균이 매개","hook":"한 번 거치면 옅은 노랑(아질산) · 두 번 거치면 진한 호박색(질산) = 질화 두 단계","say":"땅속 가운데에는 원통형 유리 여과 통 둘이 위아래로 연결되어 있다. 이 덱에서 갈색 알갱이는 암모늄, 옅은 노랑 물은 아질산, 진한 호박색 물은 질산이다. 위쪽 첫째 통에 갈색 알갱이가 떨어지면 분홍 알약 세균이 옆 손잡이를 돌려 옅은 노랑 물로 바꾼다. 아질산균이 암모니아나 암모늄을 아질산, NO₂ 마이너스로 산화하는 첫 단계다. 옅은 노랑 물이 연결관을 타고 아래쪽 둘째 통으로 내려오면, 이번에는 보라 알약 세균이 손잡이를 돌려 진한 호박색 물로 바꾼다. 질산균이 아질산을 질산, NO₃ 마이너스로 산화하는 단계다. 암모니아에서 아질산을 거쳐 질산이 되는 두 단계가 질화작용이며, 서로 다른 질화세균이 각 단계를 맡는다. 큰 흐름도 연결하자. 대기 질소는 고정으로 암모니아와 암모늄이 되고, 질화를 거쳐 질산이 되어 식물에 주로 흡수되며, 탈질로 다시 대기 질소가 된다.","box":[[1020,465,178,392]],"src":["s30p01#1","s30p01#2"],"cards":["O2-14","O2-14#2","O2-14#3","S-PL-13"]},{"sid":"s12","obj":"땅 위 풀밭 — 오른쪽 나무 밑동 가까이 쌓인 갈색 낙엽 더미를 작은 갈색 알약 세균 둘이 갉아먹자 그 밑으로 갈색 알갱이들이 흙 속으로 스며든다 · 왼쪽 콩 밑동 곁에선 흰 수건 머리띠를 두른 농부가 투명 유리병의 진한 호박색 물을 콩 식물 쪽으로 붓는다","fact":"암모늄 두 길 = 질소고정 + 암모니아화(분해자) · 식물은 NO₃⁻ · NH₄⁺ 흡수(주로 NO₃⁻)","hook":"썩는 낙엽 밑 갈색 알갱이 = 암모니아화 · 농부가 붓는 호박색 물 = 주로 질산 흡수","say":"땅 위 오른쪽 풀밭에는 썩는 갈색 낙엽 더미가 있다. 작은 갈색 알약 세균 둘이 이를 분해하면 갈색 알갱이인 암모늄이 흙으로 스며든다. 죽은 생물이나 유기질소를 분해해 암모늄을 만드는 암모니아화다. 토양에 암모늄이 생기는 두 경로를 구분하자. 뿌리혹의 질소고정세균은 대기 질소를 암모니아로 바꾸고, 이곳의 분해자는 유기질소를 암모늄으로 바꾼다. 왼쪽의 흰 수건 머리띠 농부는 유리병에 담긴 진한 호박색 물을 콩 밑동에 붓는다. 아래 여과 통에서 만든 질산이다. 뿌리로 흡수하는 무기 질소는 질산인 NO₃ 마이너스와 암모늄인 NH₄ 플러스의 두 형태다. 토양에서는 대부분 질산 형태로 존재하므로 식물은 주로 질산을 흡수한다.","box":[[790,120,238,250],[1045,255,240,210]],"src":["s30p01#3"],"cards":["O2-12","O2-13"]},{"sid":"s13","obj":"땅속 맨 아래 — 창문 하나 없이 막힌 흙벽 지하실에서 주황 알약 세균이 진한 호박색 물이 든 유리병의 마개를 따자, 하얗고 맑은 김이 피어올라 천장의 가는 관을 타고 땅 위 하늘로 빠져나간다","fact":"탈질작용 = 혐기성 토양에서 탈질세균이 NO₃⁻ → N₂ 로 바꿔 대기로 잃음","hook":"창 없는 지하실(혐기) · 호박색 병에서 맑은 김(N₂)이 하늘로 = 탈질","say":"땅속 맨 아래에는 창문 없는 흙벽 지하실이 있다. 창이 없다는 모습은 산소가 부족한 혐기 조건이다. 주황 알약 세균이 진한 호박색 물을 담은 유리병의 마개를 열자, 맑은 흰 김이 천장에 꽂힌 가는 관을 따라 땅 위 하늘로 올라간다. 호박색 물은 질산이고, 날아가는 김은 질소 기체 N₂이다. 물이 고이거나 다져져 산소가 부족한 토양에서 탈질세균이 질산을 질소 기체로 환원해 대기로 돌려보내는 탈질작용이다. 토양의 이용 가능한 질소가 공기로 빠져나가는 경로다. 산소가 있는 흙에서 암모니아를 질산으로 바꾸는 여과 통 두 칸의 질화작용과, 혐기 지하실에서 질산을 질소 기체로 바꾸는 탈질작용의 방향을 구분하자.","box":[[958,935,236,200],[998,195,80,745]],"src":["s30p01#4"],"cards":["O2-15","X-PL-25"]}],"cq":{"O2-19":["콩과식물 뿌리혹(root nodule)에서 세균의 분화형은?","박테로이드(bacteroid, 질소 고정형)"],"O2-21":["윤작(crop rotation)으로 콩과를 심는 효과는?","토양 질소 회복"],"O2-20":["레그헤모글로빈(leghemoglobin)의 역할은?","산소를 완충해 니트로게나아제를 보호하면서 세균 호흡에 O₂를 적절히 공급"],"X-PL-26":["뿌리혹에서 산소를 완충하는 것과 세균의 질소고정형 이름은?","레그헤모글로빈 / 박테로이드"],"O2-16":["대기 질소(N₂)를 식물이 못 쓰는 이유는?","삼중결합으로 거의 불활성"],"O2-18":["질소 고정 효소와 그 약점은?","니트로게나아제(nitrogenase) · 산소에 의해 불활성화(혐기 조건/산소 차단 필요)"],"O2-17":["질소 고정(nitrogen fixation)을 하는 생물은?","모든 질소고정생물은 세균(Rhizobium·Azotobacter·시아노박테리아)"],"L0-24":["질소고정(nitrogen fixation)이란?","일부 원핵이 대기 질소(N₂)를 암모니아(NH₃)로 전환; 진핵이 못 쓰는 대기 질소를 식물이 쓸 형태로"],"M2-8":["수지상균근(AM)과 외생균근(ECM)의 차이는?","AM(글로메로균)=균사가 뿌리 세포벽 뚫고 수지상체 형성, 식물 80% · ECM(자낭·담자균)=뿌리 표면·세포 사이 감쌈(세포 내 침투 없음), 나무"],"O2-23":["수지상균근(AM)과 외생균근(ECM)의 균류·분포는?","AM=글로메로균, 수지상체, 육상식물 80% · ECM=자낭·담자균, 나무"],"O2-23#1":["수지상균근(AM)과 외생균근(ECM)의 균류·분포 — 「AM」? (↔ ECM)","글로메로균, 수지상체, 육상식물 80%"],"M2-8#1":["수지상균근(AM)과 외생균근(ECM)의 차이는?","AM(글로메로균)=균사가 뿌리 세포벽 뚫고 수지상체 형성, 식물 80%"],"M2-8#2":["수지상균근(AM)과 외생균근(ECM)의 차이는?","ECM(자낭·담자균)=뿌리 표면·세포 사이 감쌈(세포 내 침투 없음), 나무"],"O2-23#2":["수지상균근(AM)과 외생균근(ECM)의 균류·분포 — 「ECM」? (↔ AM)","자낭·담자균, 나무"],"O2-10#1":["이동성·비이동성 무기물 결핍의 나타나는 부위 — 「이동성(Mg 등)」? (↔ 비이동성(Fe 등))","오래된 잎부터"],"O2-9":["백화증(chlorosis)을 일으키는 결핍 원소는?","Mg(엽록소 성분) · Fe(엽록소 합성 효소 보조인자)"],"X-PL-24":["오래된 잎부터 증상이 나타나는 결핍은?","이동성(Mg 등) / 비이동성(Fe 등)=어린 부분부터"],"O2-14":["질화작용(nitrification)의 단계는?","NH₃ → NO₂⁻(아질산) → NO₃⁻(질산), 각 단계를 다른 질화세균이 매개"],"O2-14#2":["질화작용(nitrification)의 단계는?","NO₂⁻(아질산)"],"O2-14#3":["질화작용(nitrification)의 단계는?","NO₃⁻(질산), 각 단계를 다른 질화세균이 매개"],"S-PL-13":["토양 질소 순환의 골격은?","N₂→(고정)NH₃→NH₄⁺→(질화)NO₂⁻→NO₃⁻(식물 주 흡수) / 탈질→N₂"],"O2-12":["식물이 흡수할 수 있는 질소 형태는?","NO₃⁻(질산)·NH₄⁺(암모늄) · 식물은 주로 NO₃⁻ 흡수"],"O2-13":["암모늄(NH₄⁺) 생성 2경로는?","질소고정세균이 N₂→NH₃ · 암모니아화(분해자가 죽은 유기질소를 NH₄⁺로)"],"O2-15":["탈질작용(denitrification)이란?","혐기성 토양에서 탈질세균이 NO₃⁻→N₂로 바꿔 대기로 잃음"],"X-PL-25":["NO₃⁻를 N₂로 되돌리는 과정과 NH₃를 NO₃⁻로 만드는 과정은?","탈질작용(혐기) / 질화작용"]},"hubPanel":"s22p03"};
+const L0 = /*L0*/{"id":"L22d","scene":"s22","part":"d","title":"땅속의 두 동업 — 뿌리혹과 균근","sub":"뿌리 끝 흰 구름(플라보노이드) · 혹 그림 말풍선(Nod 신호) · 혹 속 알약꼴 세균(근류균) · 금빛 밀폐 헬멧 + 거품 금지(산소에 약함 · 레그헤모글로빈) · 큰 바퀴(니트로게나아제) · 세포 속 붉은 가지(AM) · 겉만 감은 실(ECM) · 아래 잎부터 누런 콩(이동성 원소 결핍)","img":"img/L22d.webp?v=af3524b7df71","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"정원의 땅속 단면 — 왼쪽은 콩 뿌리(흰 구름 · 말풍선 띄운 알약꼴 세균 · 창 달린 혹) · 오른쪽은 나무뿌리(속까지 붉은 가지 · 겉만 감은 흰 실) · 위의 콩은 아래 잎부터 누렇다","fact":"뿌리와 미생물의 공생 둘 — 뿌리혹(질소 고정)과 균근(인 · 물 ↔ 당) · 결핍은 잎에 드러난다","hook":"땅속의 두 동업","say":"정원을 세로로 잘라 땅속을 들여다보자. 왼쪽에는 콩 뿌리와 흰 구름, 말풍선을 띄운 초록 알약 모양 세균, 창 달린 혹이 있다. 오른쪽 나무뿌리는 하나는 속까지 붉은 가지가 들어 있고, 다른 하나는 겉이 흰 실로 감겨 있다. 땅 위 콩은 아래 잎부터 누렇다. 뿌리와 미생물의 두 협력 관계인 뿌리혹의 질소 고정과 균근을 보자.","box":null,"src":["s22p03#0"],"cards":[]},{"sid":"s2","obj":"콩 뿌리 끝에서 뭉게뭉게 피어나는 흰 구름","fact":"콩과 식물이 먼저 플라보노이드를 내 근류균을 부른다","hook":"뿌리가 먼저 신호 구름","say":"콩 뿌리 끝에서 피어나는 흰 구름을 보자. 먼저 신호를 보내는 쪽은 식물이다. 콩과 식물이 플라보노이드를 분비해 근류균을 부른다.","box":[30,730,200,200],"src":["s22p03#0"],"cards":[]},{"sid":"s3","obj":"흰 구름 곁의 초록 알약꼴 세균 — 둥근 혹 덩이가 그려진 말풍선을 띄웠다","fact":"근류균이 혹을 만들라는 신호(Nod 인자)로 답한다 — 서로 확인한 뒤에야 혹이 생긴다","hook":"혹 그림 말풍선 = 답장","say":"흰 구름 옆의 초록 알약 모양 근류균이 말풍선으로 답한다. 안에는 둥근 혹의 그림이 있다. 혹을 만들라는 이 신호가 노드 인자다. 혹을 뜻하는 영어 노듈의 앞부분과 연결하자. 식물과 세균이 신호를 주고받아 확인한 뒤에 혹이 만들어진다.","box":[[240,745,185,205],[330,620,170,160]],"src":["s22p03#1"],"cards":[]},{"sid":"s4","obj":"콩 뿌리에 부풀어 오른 둥근 혹 하나 — 둥근 창 안에 알약꼴 세균이 들어앉았다","fact":"세균이 뿌리 피층 안에 자리 잡는다(뿌리혹 · 박테로이드)","hook":"혹 안에 들어앉은 알약꼴 세균","say":"콩 뿌리에 둥글게 부푼 혹 옆구리의 둥근 창 안으로 초록 알약 모양 세균이 보인다. 세균이 뿌리 피층 안에 자리 잡은 모습이다. 혹 안에서 질소를 고정하는 형태로 바뀐 세균을 박테로이드라고 한다. 콩과 식물을 번갈아 심는 윤작이 토양의 질소를 회복시키는 이유와 연결하자.","box":[520,560,360,380],"src":["s22p03#2"],"cards":["O2-19","O2-21"]},{"sid":"s5","obj":"혹 속 세균은 금빛 밀폐 헬멧을 썼고 · 혹 곁뿌리에 매단 표지엔 공기 방울에 붉은 빗금","fact":"질소고정효소는 산소에 닿으면 망가진다 — 레그헤모글로빈이 산소를 완충(「효소에 산소 원활 공급」은 오답)","hook":"밀폐 헬멧 · 거품 금지 · 붉은 빗금 = 레그헤모글로빈","say":"혹 안의 세균은 얼굴까지 덮은 금빛 밀폐 헬멧을 쓰고 있다. 곁뿌리에 매단 둥근 표지의 공기 방울에는 붉은 빗금이 그어져 있다. 산소에 노출되면 질소고정효소가 손상된다는 뜻이다. 표지의 붉은 빗금은 실제 뿌리혹을 붉게 만드는 단백질 레그헤모글로빈의 단서다. 산소를 붙잡아 농도를 완충하므로 효소를 보호하면서도 세균 호흡에 필요한 산소는 알맞게 공급한다. 질소고정효소에 산소를 원활히 공급해야 한다는 선지는 이 관계를 뒤집은 설명이다.","box":[[570,620,200,200],[880,700,110,100]],"src":["s22p03#3"],"cards":["O2-20","X-PL-26"]},{"sid":"s6","obj":"세균이 돌리는 바큇살 달린 쇠 기계 바퀴","fact":"니트로게나아제(질소고정효소) — 대기 N₂(삼중결합)를 NH₃로 고정하는 장치","hook":"큰 바퀴 = 니트로게나아제","say":"세균이 돌리는 바큇살 달린 쇠 기계 바퀴는 니트로게나아제다. 앞에서 산소에 의해 손상된다고 보았던 질소고정효소다. 대기의 질소는 삼중결합으로 거의 불활성이어서 식물이 그대로 이용할 수 없다. 이 바퀴가 그 질소를 암모니아로 바꾼다.","box":[680,720,120,120],"src":["s22p03#4"],"cards":["O2-16","O2-18"]},{"sid":"s7","obj":"그 바퀴를 돌리는 것은 금빛 헬멧을 쓴 초록 알약꼴 세균 — 혹 안에 사람은 없다","fact":"질소를 고정하는 쪽은 식물이 아니라 근류균 — 질소고정효소는 원핵(세균)의 것","hook":"바퀴는 세균이 돌린다","say":"바퀴를 돌리는 주체는 금빛 헬멧을 쓴 알약 모양 세균이다. 혹 안에 사람은 없다. 질소를 고정하는 것은 식물이 아니라 근류균이라는 구분이다. 질소고정효소는 원핵생물에만 있어 질소고정생물은 거의 모두 원핵생물이다. 근류균, 아조토박터, 시아노박테리아 같은 세균이 대표다. 콩을 윤작하면 토양에 질소가 돌아오는 이유를 다시 연결하자.","box":[580,640,220,180],"src":["s22p03#5"],"cards":["O2-17","L0-24"]},{"sid":"s8","obj":"오른쪽 — 세로로 연 나무뿌리의 방 같은 세포 안까지 붉은 나뭇가지가 뻗어 덤불처럼 찼다(밖에도 붉은 가지가 뻗는다)","fact":"수지상균근(AM) — 균사가 세포벽을 뚫고 수지상체를 만든다 · 글로메로균 · 육상식물 80%","hook":"세포 안의 붉은 나무 = 수지상체","say":"오른쪽에서 길게 열어 놓은 나무뿌리를 보자. 방처럼 생긴 세포 안에 붉은 가지가 덤불처럼 뻗고, 뿌리 밖으로도 이어진다. 수지상균근, AM이다. 균사가 세포벽을 뚫고 들어가 나뭇가지 모양 수지상체를 만든다. 세포벽은 뚫지만 원형질막은 뚫지 않고 안쪽으로 밀어 넣는다는 차이를 구분하자. 글로메로균이 형성하며, 나무뿐 아니라 풀과 곡식까지 육상식물의 팔십 퍼센트에 나타난다. 균류는 인과 물을 주고 식물은 당을 제공한다. 곰팡이 마을에서 뿌리에 손가락을 넣어 작은 나무처럼 갈라지던 가죽 글러브를 기억하자. 그 손가락 끝이 여기의 붉은 가지다.","box":[[1150,420,390,540]],"src":["s22p03#6"],"cards":["M2-8","O2-23","O2-23#1","M2-8#1"]},{"sid":"s9","obj":"또 하나의 나무뿌리 — 겉만 흰 실로 고치처럼 감겼고 실은 세포 속으로 안 들어간다","fact":"외생균근(ECM) — 뿌리 겉과 세포 사이만 감싼다 · 자낭균 · 담자균 · 소나무 · 참나무","hook":"겉만 감은 실 = 외생","say":"다른 나무뿌리는 겉만 흰 실로 고치처럼 감겨 있다. 외생균근, ECM이다. 균사는 표면을 덮고 세포 사이로는 들어가지만 세포 안에는 들어가지 않는다. 자낭균과 담자균이 소나무나 참나무 같은 나무와 이루는 관계다.","box":[1480,400,500,620],"src":["s22p03#7"],"cards":["M2-8#2","O2-23#2"]},{"sid":"s10","obj":"땅 위의 콩 — 아래쪽 오래된 잎부터 누렇고 갈색 · 위쪽 어린 잎은 싱싱한 초록","fact":"이동성 높은 원소(Mg 등)의 결핍은 오래된 잎부터 · 비이동성(Fe 등)은 어린 잎부터","hook":"아래 잎부터 누렇다 = 이동성","say":"땅 위의 콩은 오래된 아래 잎부터 누렇고 갈색으로 변했지만, 어린 위쪽 잎은 싱싱한 초록색이다. 이동성이 높은 원소가 부족할 때의 모습이다. 식물은 마그네슘처럼 이동 가능한 원소를 늙은 잎에서 어린 잎으로 옮기므로, 결핍 증상이 오래된 잎에 먼저 생긴다. 잘 이동하지 않는 철은 반대로 어린 잎부터 증상이 나타난다. 누렇게 변하는 백화증의 대표 원인은 엽록소 성분인 마그네슘과 엽록소 합성 효소의 보조인자인 철의 부족이다.","box":[[150,260,760,200],[200,20,700,240]],"src":["s22p03#8"],"cards":["O2-10#1","O2-9","X-PL-24"]},{"sid":"s11","obj":"땅속 가운데 — 위아래로 이어진 키 큰 원통형 유리 여과 통 둘 · 위 통으로 떨어지는 갈색 알갱이 · 분홍 알약 세균이 첫 통 손잡이를 돌리자 통 안이 옅은 노랑 물이 되고 · 아래 통으로 내려간 물을 보라 알약 세균이 손잡이를 돌려 진한 호박색 물로 만들어 바닥 꼭지로 떨어뜨린다","fact":"질화작용 = NH₃(NH₄⁺) → NO₂⁻(아질산) → NO₃⁻(질산) · 단계마다 다른 질화세균이 매개","hook":"한 번 거치면 옅은 노랑(아질산) · 두 번 거치면 진한 호박색(질산) = 질화 두 단계","say":"땅속 가운데에는 원통형 유리 여과 통 둘이 위아래로 연결되어 있다. 이 덱에서 갈색 알갱이는 암모늄, 옅은 노랑 물은 아질산, 진한 호박색 물은 질산이다. 위쪽 첫째 통에 갈색 알갱이가 떨어지면 분홍 알약 세균이 옆 손잡이를 돌려 옅은 노랑 물로 바꾼다. 아질산균이 암모니아나 암모늄을 아질산, NO₂ 마이너스로 산화하는 첫 단계다. 옅은 노랑 물이 연결관을 타고 아래쪽 둘째 통으로 내려오면, 이번에는 보라 알약 세균이 손잡이를 돌려 진한 호박색 물로 바꾼다. 질산균이 아질산을 질산, NO₃ 마이너스로 산화하는 단계다. 암모니아에서 아질산을 거쳐 질산이 되는 두 단계가 질화작용이며, 서로 다른 질화세균이 각 단계를 맡는다. 큰 흐름도 연결하자. 대기 질소는 고정으로 암모니아와 암모늄이 되고, 질화를 거쳐 질산이 되어 식물에 주로 흡수되며, 탈질로 다시 대기 질소가 된다.","box":[[1020,465,178,392]],"src":["s30p01#1","s30p01#2"],"cards":["O2-14","O2-14#2","O2-14#3","S-PL-13"]},{"sid":"s12","obj":"땅 위 풀밭 — 오른쪽 나무 밑동 가까이 쌓인 갈색 낙엽 더미를 작은 갈색 알약 세균 둘이 갉아먹자 그 밑으로 갈색 알갱이들이 흙 속으로 스며든다 · 왼쪽 콩 밑동 곁에선 흰 수건 머리띠를 두른 농부가 투명 유리병의 진한 호박색 물을 콩 식물 쪽으로 붓는다","fact":"암모늄 두 길 = 질소고정 + 암모니아화(분해자) · 식물은 NO₃⁻ · NH₄⁺ 흡수(주로 NO₃⁻)","hook":"썩는 낙엽 밑 갈색 알갱이 = 암모니아화 · 농부가 붓는 호박색 물 = 주로 질산 흡수","say":"땅 위 오른쪽 풀밭에는 썩는 갈색 낙엽 더미가 있다. 작은 갈색 알약 세균 둘이 이를 분해하면 갈색 알갱이인 암모늄이 흙으로 스며든다. 죽은 생물이나 유기질소를 분해해 암모늄을 만드는 암모니아화다. 토양에 암모늄이 생기는 두 경로를 구분하자. 뿌리혹의 질소고정세균은 대기 질소를 암모니아로 바꾸고, 이곳의 분해자는 유기질소를 암모늄으로 바꾼다. 왼쪽의 흰 수건 머리띠 농부는 유리병에 담긴 진한 호박색 물을 콩 밑동에 붓는다. 아래 여과 통에서 만든 질산이다. 뿌리로 흡수하는 무기 질소는 질산인 NO₃ 마이너스와 암모늄인 NH₄ 플러스의 두 형태다. 토양에서는 대부분 질산 형태로 존재하므로 식물은 주로 질산을 흡수한다.","box":[[790,120,238,250],[1045,255,240,210]],"src":["s30p01#3"],"cards":["O2-12","O2-13"]},{"sid":"s13","obj":"땅속 맨 아래 — 창문 하나 없이 막힌 흙벽 지하실에서 주황 알약 세균이 진한 호박색 물이 든 유리병의 마개를 따자, 하얗고 맑은 김이 피어올라 천장의 가는 관을 타고 땅 위 하늘로 빠져나간다","fact":"탈질작용 = 혐기성 토양에서 탈질세균이 NO₃⁻ → N₂ 로 바꿔 대기로 잃음","hook":"창 없는 지하실(혐기) · 호박색 병에서 맑은 김(N₂)이 하늘로 = 탈질","say":"땅속 맨 아래에는 창문 없는 흙벽 지하실이 있다. 창이 없다는 모습은 산소가 부족한 혐기 조건이다. 주황 알약 세균이 진한 호박색 물을 담은 유리병의 마개를 열자, 맑은 흰 김이 천장에 꽂힌 가는 관을 따라 땅 위 하늘로 올라간다. 호박색 물은 질산이고, 날아가는 김은 질소 기체 N₂이다. 물이 고이거나 다져져 산소가 부족한 토양에서 탈질세균이 질산을 질소 기체로 환원해 대기로 돌려보내는 탈질작용이다. 토양의 이용 가능한 질소가 공기로 빠져나가는 경로다. 산소가 있는 흙에서 암모니아를 질산으로 바꾸는 여과 통 두 칸의 질화작용과, 혐기 지하실에서 질산을 질소 기체로 바꾸는 탈질작용의 방향을 구분하자.","box":[[958,935,236,200],[998,195,80,745]],"src":["s30p01#4"],"cards":["O2-15","X-PL-25"]}],"cq":{"O2-19":["콩과식물 뿌리혹(root nodule)에서 세균의 분화형은?","박테로이드(bacteroid, 질소 고정형)"],"O2-21":["윤작(crop rotation)으로 콩과를 심는 효과는?","토양 질소 회복"],"O2-20":["레그헤모글로빈(leghemoglobin)의 역할은?","산소를 완충해 니트로게나아제를 보호하면서 세균 호흡에 O₂를 적절히 공급"],"X-PL-26":["뿌리혹에서 산소를 완충하는 것과 세균의 질소고정형 이름은?","레그헤모글로빈 / 박테로이드"],"O2-16":["대기 질소(N₂)를 식물이 못 쓰는 이유는?","삼중결합으로 거의 불활성"],"O2-18":["질소 고정 효소와 그 약점은?","니트로게나아제(nitrogenase) · 산소에 의해 불활성화(혐기 조건/산소 차단 필요)"],"O2-17":["질소 고정(nitrogen fixation)을 하는 생물은?","모든 질소고정생물은 세균(Rhizobium·Azotobacter·시아노박테리아)"],"L0-24":["질소고정(nitrogen fixation)이란?","일부 원핵이 대기 질소(N₂)를 암모니아(NH₃)로 전환; 진핵이 못 쓰는 대기 질소를 식물이 쓸 형태로"],"M2-8":["수지상균근(AM)과 외생균근(ECM)의 차이는?","AM(글로메로균)=균사가 뿌리 세포벽 뚫고 수지상체 형성, 식물 80% · ECM(자낭·담자균)=뿌리 표면·세포 사이 감쌈(세포 내 침투 없음), 나무"],"O2-23":["수지상균근(AM)과 외생균근(ECM)의 균류·분포는?","AM=글로메로균, 수지상체, 육상식물 80% · ECM=자낭·담자균, 나무"],"O2-23#1":["수지상균근(AM)과 외생균근(ECM)의 균류·분포 — 「AM」? (↔ ECM)","글로메로균, 수지상체, 육상식물 80%"],"M2-8#1":["수지상균근(AM)과 외생균근(ECM)의 차이는?","AM(글로메로균)=균사가 뿌리 세포벽 뚫고 수지상체 형성, 식물 80%"],"M2-8#2":["수지상균근(AM)과 외생균근(ECM)의 차이는?","ECM(자낭·담자균)=뿌리 표면·세포 사이 감쌈(세포 내 침투 없음), 나무"],"O2-23#2":["수지상균근(AM)과 외생균근(ECM)의 균류·분포 — 「ECM」? (↔ AM)","자낭·담자균, 나무"],"O2-10#1":["이동성·비이동성 무기물 결핍의 나타나는 부위 — 「이동성(Mg 등)」? (↔ 비이동성(Fe 등))","오래된 잎부터"],"O2-9":["백화증(chlorosis)을 일으키는 결핍 원소는?","Mg(엽록소 성분) · Fe(엽록소 합성 효소 보조인자)"],"X-PL-24":["오래된 잎부터 증상이 나타나는 결핍은?","이동성(Mg 등) / 비이동성(Fe 등)=어린 부분부터"],"O2-14":["질화작용(nitrification)의 단계는?","NH₃ → NO₂⁻(아질산) → NO₃⁻(질산), 각 단계를 다른 질화세균이 매개"],"O2-14#2":["질화작용(nitrification)의 단계는?","NO₂⁻(아질산)"],"O2-14#3":["질화작용(nitrification)의 단계는?","NO₃⁻(질산), 각 단계를 다른 질화세균이 매개"],"S-PL-13":["토양 질소 순환의 골격은?","N₂→(고정)NH₃→NH₄⁺→(질화)NO₂⁻→NO₃⁻(식물 주 흡수) / 탈질→N₂"],"O2-12":["식물이 흡수할 수 있는 질소 형태는?","NO₃⁻(질산)·NH₄⁺(암모늄) · 식물은 주로 NO₃⁻ 흡수"],"O2-13":["암모늄(NH₄⁺) 생성 2경로는?","질소고정세균이 N₂→NH₃ · 암모니아화(분해자가 죽은 유기질소를 NH₄⁺로)"],"O2-15":["탈질작용(denitrification)이란?","혐기성 토양에서 탈질세균이 NO₃⁻→N₂로 바꿔 대기로 잃음"],"X-PL-25":["NO₃⁻를 N₂로 되돌리는 과정과 NH₃를 NO₃⁻로 만드는 과정은?","탈질작용(혐기) / 질화작용"]},"hubPanel":"s22p03"}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>

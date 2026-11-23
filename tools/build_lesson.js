@@ -163,7 +163,7 @@ dialog#big.fb[open]{position:fixed;inset:2vh 2vw;margin:auto;z-index:50;box-shad
 <header class="page-head"><h1>생물학 그림 레슨</h1><nav class="page-nav" aria-label="학습 도구"><a href="../sketchy.html">Sketchy 허브</a><a href="symbols.html">기호 사전</a><a href="../index.html">SRS 기출 카드</a></nav></header>
 <nav class="contents" aria-labelledby="contents"><div class="contents-head"><h2 id="contents" tabindex="-1">단원 목차</h2><span class="sub">${topicCount}개 단원 · 그림 레슨 ${all.length}개</span></div>
 <div class="toc-grid">${contents}</div></nav>
-<div class="tools" role="group" aria-label="목록 도구"><button id="fStar" type="button" aria-pressed="false">★ 표시한 것만 (0)</button><span class="note">그림 칸 오른쪽 ☆ 를 눌러 중요한 그림을 표시한다. 왼쪽 그림을 누르면 이 자리에서 크게 본다. 표시는 이 브라우저에만 남는다.</span></div>
+<div class="tools" role="group" aria-label="목록 도구"><button id="fStar" type="button" aria-pressed="false">★ 표시한 것만 (0)</button><button id="chainAll" type="button" title="1번 그림부터 다 읽으면 5초 알림 뒤 다음 그림으로 넘어가며 듣는다">▶ 처음부터 이어 듣기</button><button id="chainStar" type="button" title="★ 표시한 그림만 차례로 이어서 듣는다">▶ ★만 이어 듣기</button><span class="note">그림 칸 오른쪽 ☆ 를 눌러 중요한 그림을 표시한다. 왼쪽 그림을 누르면 이 자리에서 크게 본다. 표시는 이 브라우저에만 남는다.</span></div>
 ${topicSections}
 <section class="progress">
 <h2>SRS 카드 ${cardPlace.tot}장이 어디 있나</h2><p class="sub">지은 과 <b>${cardPlace.built}</b> · 과가 아직 없는 옛 s 판 <b>${cardPlace.pendS}</b> · d 묶음(도해) <b>${cardPlace.d}</b> · <b>그림이 아무 데도 없음 ${cardPlace.none}</b> — 아래 진척 막대는 옛 판에 딸린 카드만 센다.</p>\n<h2>갈아엎기 진척 — 행 ${tot.rc}/${tot.r} · 기출 카드 ${tot.cc}/${tot.c}</h2><div class="bar"><i style="width:${(100 * tot.cc / Math.max(1, tot.c)).toFixed(1)}%"></i></div>

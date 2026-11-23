@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L22a","scene":"s22","part":"a","title":"건축 박람회의 집 셋과 관 둘 — 식물 세포와 물관 · 체관","sub":"얇은 벽 + 사는 사람(유조직) · 모서리만 두꺼운 벽(후각조직) · 금 간 돌벽 빈집(후벽조직 · 석세포 · 섬유) · 뻥 뚫린 빈 관(물관) · 구멍 원반 칸의 머리 없는 사람(체관요소) · 곁방 조수(반세포)","img":"img/L22a.webp?v=572e842e3e9f","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"잔디밭 건축 박람회 — 왼쪽 집 셋(벽이 다르고 · 사는 사람이 있거나 없거나) · 오른쪽 위 텅 빈 굵은 관 · 아래 칸칸이 머리 없는 사람이 앉은 긴 관","fact":"식물 세포는 살아 있는지 + 세포벽 종류로 가른다 — 기본조직 셋 · 관 둘(물관 · 체관)","hook":"벽과 사는 사람으로 가른다","say":"잔디밭의 건축 박람회다. 왼쪽 집 셋은 벽의 모양이 서로 다르고, 안에 사람이 사는 집과 빈집이 있다. 오른쪽에는 관 둘이 있다. 위에는 텅 빈 굵은 관, 아래에는 칸 사이에 체처럼 구멍 난 원반이 있는 긴 관이 놓여 있다. 살아 있는 세포인지, 세포벽은 어떤 모습인지 두 기준으로 식물 세포를 구별해 보자.","box":null,"src":["s22p01#0"],"cards":["O0-11","O0-10"]},{"sid":"s2","obj":"첫째 집 — 얇고 고른 벽 · 안에서 책 읽는 사람","fact":"유조직 — 살아 있고 얇은 1차벽 · 광합성 · 저장 · 분열능","hook":"얇은 벽 + 사는 사람","say":"첫 번째 집은 사방의 벽이 얇고 고르며, 안에서 사람이 책을 읽는다. 살아 있고 얇은 1차벽만 가진 유조직이다. 광합성·저장·분비를 담당하고, 상처가 나면 다시 분열할 수 있다. 가장 흔한 기본 세포라는 점도 기억하자.","box":[30,160,320,400],"src":["s22p01#0"],"cards":["O0-11","O0-10"]},{"sid":"s3","obj":"둘째 집 — 벽은 얇은데 네 모서리만 둥근 기둥처럼 두껍다 · 안에서 차 마시는 사람","fact":"후각조직 — 살아 있고 모서리가 두꺼운 1차벽 · 유연한 지지(셀러리 심)","hook":"모서리만 두꺼운 벽","say":"두 번째 집은 벽이 얇지만 네 모서리만 둥근 기둥처럼 두껍다. 안에서 차를 마시는 사람이 있으므로 살아 있는 세포다. 1차벽의 모서리가 두꺼운 후각조직을 나타낸다. 자라는 줄기와 잎자루를 유연하게 지지하며, 셀러리의 심을 떠올리면 된다.","box":[370,180,360,380],"src":["s22p01#1"],"cards":["O0-12#1","O0-12","O0-12#2"]},{"sid":"s4","obj":"셋째 집 — 금 간 두꺼운 회색 돌벽 · 안은 텅 비었다 · 앞에 둥근 돌덩이와 가는 돌 섬유 다발","fact":"후벽조직 — 성숙하면 죽는다 · 리그닌 2차벽 · 단단한 지지(석세포 · 섬유)","hook":"두꺼운 돌벽 · 빈집","say":"세 번째 집은 금이 간 두꺼운 회색 돌벽뿐이고 안에 사람이 없다. 성숙하면 죽는 후벽조직이다. 리그닌으로 단단해진 2차벽이 남아 지지 기능을 하므로, 죽은 뒤 제 역할을 하는 모습이다. 앞에 놓인 둥근 돌덩이는 석세포, 가느다란 돌 섬유 다발은 섬유다.","box":[[700,180,395,460]],"src":["s22p01#2"],"cards":["O0-13","S-PL-10","X-PL-20"]},{"sid":"s5","obj":"오른쪽 위 — 짧은 마디를 이어 붙인 굵은 관 · 입구로 들여다보면 마디 사이 벽 없이 안이 뻥 뚫렸고 아무도 없다","fact":"물관부의 물관요소 · 헛물관 — 죽어 속이 빈 관 · 물과 무기양분을 위로","hook":"뻥 뚫린 빈 관 = 물관","say":"오른쪽 위의 굵은 관은 짧은 마디를 이어 붙인 모양이다. 안을 들여다보면 아무도 없고 마디 사이도 뚫려 있다. 물관요소의 끝벽이 뚫려 길게 이어진 물관이다. 그림에는 물관만 그렸다. 헛물관은 다르다. 끝이 뾰족하고 막혀 있는 가는 세포로, 옆벽의 벽공을 통해 물을 전달한다. 물관요소와 헛물관은 성숙하면 죽어 속이 비고, 그 안으로 물과 무기양분이 위로 이동한다. 물관부와 체관부를 묶어 관다발, 한자말로 관속이라고 한다. 뿌리에서는 한가운데의 중심주 하나로 모이며, 줄기와 잎에서는 여러 가닥의 관다발로 나뉜다.","box":[1100,170,900,420],"src":["s22p01#3"],"cards":["O0-8","O0-8#1","M0-19","O0-14"]},{"sid":"s6","obj":"아래 긴 관 — 왼쪽 칸들 사이에 구멍 숭숭한 원반 둘 · 칸마다 머리 없는 사람이 병을 들고 똑바로 앉아 있다","fact":"체관요소 — 핵(· 리보솜)은 없지만 살아 있다 · 물관과 달리 비어 있지 않다","hook":"머리 없이 살아 있다","say":"아래의 긴 관에서는 왼쪽 칸 사이에 구멍 난 원반 둘이 서 있고, 각 칸에 머리 없는 사람이 병을 들고 앉아 있다. 핵과 리보솜을 잃어도 살아 있는 체관요소다. 머리가 없지만 바로 앉아 있다는 모습에 핵 없는 생존을 연결하자. 물관처럼 텅 빈 관은 아니며, 체처럼 구멍 난 원반은 체판이다.","box":[[40,680,1990,340],[380,700,80,300],[760,700,80,300]],"src":["s22p01#4"],"cards":["O0-15","O0-15#1","M0-20","X-PL-18"]},{"sid":"s7","obj":"칸마다 뒷벽에 작은 창 하나 — 창 너머 노란 곁방의 조수가 몸을 내밀어 머리 없는 사람에게 병을 건넨다","fact":"반세포(동반세포) — 체관요소 곁에 붙어 대신 일해 준다(겉씨는 알부민세포)","hook":"곁방 조수 = 반세포","say":"각 칸 뒷벽에는 작은 창이 하나씩 있다. 창 너머 노란 곁방의 조수가 몸을 내밀어 머리 없는 사람에게 병을 건넨다. 반세포, 또는 동반세포를 뜻한다. 체관요소마다 곁에 붙어 핵이 없는 체관요소를 대신해 단백질을 만들고 짐을 싣는 역할이다. 겉씨식물에서는 알부민세포가 이 일을 담당한다.","box":[[150,740,120,160],[480,740,120,160],[950,740,130,140],[1130,740,120,160],[1430,740,120,160],[1740,740,120,160]],"src":["s22p01#5"],"cards":["O0-15#2","M0-20","X-PL-19"]}],"cq":{"O0-11":["유조직(parenchyma)의 특징은?","살아있음 · 얇은 1차벽 · 광합성 · 저장 · 분비 · 상처 회복(분열능 유지)"],"O0-10":["기본조직 3세포의 구별 기준은?","살아있는지 + 세포벽 종류"],"O0-12#1":["후각조직(collenchyma)의 특징은?","살아있음"],"O0-12":["후각조직(collenchyma)의 특징은?","살아있음 · 모서리가 두꺼운 1차벽 · 자라는 줄기·잎자루를 유연하게 지지(셀러리 심)"],"O0-12#2":["후각조직(collenchyma)의 특징은?","모서리가 두꺼운 1차벽"],"O0-13":["후벽조직(sclerenchyma)의 특징은?","성숙 시 죽음 · 리그닌 2차벽 · 단단한 지지(석세포 sclereid, 섬유 fiber)"],"S-PL-10":["기본조직 3세포를 생사와 세포벽으로 구분하면?","유조직=생·얇은 1차벽 / 후각=생·두꺼운 1차벽 / 후벽=사·리그닌 2차벽"],"X-PL-20":["살아있고 두꺼운 1차벽인 조직과 죽고 리그닌 2차벽인 조직은?","후각조직(유연한 지지) / 후벽조직(단단한 지지)"],"O0-8":["관속조직계의 구성과 위치는?","물관부+체관부 · 뿌리=중심 관속주(중심주), 줄기/잎=관속"],"O0-8#1":["관속조직계의 구성과 위치는?","물관부+체관부"],"M0-19":["목부(xylem)의 물관요소·헛물관의 상태는?","성숙하며 죽어 속 빈 관이 되어 물·무기양분을 위로 나름"],"O0-14":["물관부(xylem)의 두 세포와 상태는?","헛물관(모든 관속식물) · 물관요소(대부분 속씨식물) · 성숙하며 죽어 속 빈 관"],"O0-15":["체관요소의 상태와 보조 세포는?","핵·리보솜 잃은 채 살아있음 · 속씨식물=동반세포(반세포) · 겉씨식물=알부민세포가 보조"],"O0-15#1":["체관요소의 상태와 보조 세포는?","핵·리보솜 잃은 채 살아있음"],"M0-20":["사부(phloem)의 체관요소의 상태는?","핵·리보솜을 잃은 채 살아 있어 동반세포(반세포)의 도움으로 양분을 나름"],"X-PL-18":["성숙 시 죽는 쪽과 핵 없이 살아있는 쪽은?","물관요소·헛물관=죽음 / 체관요소=핵·리보솜 없이 살아있음"],"O0-15#2":["체관요소의 상태와 보조 세포는?","동반세포(반세포)"],"X-PL-19":["알부민세포가 체관을 보조하는 식물은?","겉씨식물 (← 속씨식물은 동반세포(반세포))"]},"hubPanel":"s22p01"};
+const L0 = /*L0*/{"id":"L22a","scene":"s22","part":"a","title":"건축 박람회의 집 셋과 관 둘 — 식물 세포와 물관 · 체관","sub":"얇은 벽 + 사는 사람(유조직) · 모서리만 두꺼운 벽(후각조직) · 금 간 돌벽 빈집(후벽조직 · 석세포 · 섬유) · 뻥 뚫린 빈 관(물관) · 구멍 원반 칸의 머리 없는 사람(체관요소) · 곁방 조수(반세포)","img":"img/L22a.webp?v=572e842e3e9f","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"잔디밭 건축 박람회 — 왼쪽 집 셋(벽이 다르고 · 사는 사람이 있거나 없거나) · 오른쪽 위 텅 빈 굵은 관 · 아래 칸칸이 머리 없는 사람이 앉은 긴 관","fact":"식물 세포는 살아 있는지 + 세포벽 종류로 가른다 — 기본조직 셋 · 관 둘(물관 · 체관)","hook":"벽과 사는 사람으로 가른다","say":"잔디밭의 건축 박람회다. 왼쪽 집 셋은 벽의 모양이 서로 다르고, 안에 사람이 사는 집과 빈집이 있다. 오른쪽에는 관 둘이 있다. 위에는 텅 빈 굵은 관, 아래에는 칸 사이에 체처럼 구멍 난 원반이 있는 긴 관이 놓여 있다. 살아 있는 세포인지, 세포벽은 어떤 모습인지 두 기준으로 식물 세포를 구별해 보자.","box":null,"src":["s22p01#0"],"cards":["O0-11","O0-10"]},{"sid":"s2","obj":"첫째 집 — 얇고 고른 벽 · 안에서 책 읽는 사람","fact":"유조직 — 살아 있고 얇은 1차벽 · 광합성 · 저장 · 분열능","hook":"얇은 벽 + 사는 사람","say":"첫 번째 집은 사방의 벽이 얇고 고르며, 안에서 사람이 책을 읽는다. 살아 있고 얇은 1차벽만 가진 유조직이다. 광합성·저장·분비를 담당하고, 상처가 나면 다시 분열할 수 있다. 가장 흔한 기본 세포라는 점도 기억하자.","box":[30,160,320,400],"src":["s22p01#0"],"cards":["O0-11","O0-10"]},{"sid":"s3","obj":"둘째 집 — 벽은 얇은데 네 모서리만 둥근 기둥처럼 두껍다 · 안에서 차 마시는 사람","fact":"후각조직 — 살아 있고 모서리가 두꺼운 1차벽 · 유연한 지지(셀러리 심)","hook":"모서리만 두꺼운 벽","say":"두 번째 집은 벽이 얇지만 네 모서리만 둥근 기둥처럼 두껍다. 안에서 차를 마시는 사람이 있으므로 살아 있는 세포다. 1차벽의 모서리가 두꺼운 후각조직을 나타낸다. 자라는 줄기와 잎자루를 유연하게 지지하며, 셀러리의 심을 떠올리면 된다.","box":[370,180,360,380],"src":["s22p01#1"],"cards":["O0-12#1","O0-12","O0-12#2"]},{"sid":"s4","obj":"셋째 집 — 금 간 두꺼운 회색 돌벽 · 안은 텅 비었다 · 앞에 둥근 돌덩이와 가는 돌 섬유 다발","fact":"후벽조직 — 성숙하면 죽는다 · 리그닌 2차벽 · 단단한 지지(석세포 · 섬유)","hook":"두꺼운 돌벽 · 빈집","say":"세 번째 집은 금이 간 두꺼운 회색 돌벽뿐이고 안에 사람이 없다. 성숙하면 죽는 후벽조직이다. 리그닌으로 단단해진 2차벽이 남아 지지 기능을 하므로, 죽은 뒤 제 역할을 하는 모습이다. 앞에 놓인 둥근 돌덩이는 석세포, 가느다란 돌 섬유 다발은 섬유다.","box":[[700,180,395,460]],"src":["s22p01#2"],"cards":["O0-13","S-PL-10","X-PL-20"]},{"sid":"s5","obj":"오른쪽 위 — 짧은 마디를 이어 붙인 굵은 관 · 입구로 들여다보면 마디 사이 벽 없이 안이 뻥 뚫렸고 아무도 없다","fact":"물관부의 물관요소 · 헛물관 — 죽어 속이 빈 관 · 물과 무기양분을 위로","hook":"뻥 뚫린 빈 관 = 물관","say":"오른쪽 위의 굵은 관은 짧은 마디를 이어 붙인 모양이다. 안을 들여다보면 아무도 없고 마디 사이도 뚫려 있다. 물관요소의 끝벽이 뚫려 길게 이어진 물관이다. 그림에는 물관만 그렸다. 헛물관은 다르다. 끝이 뾰족하고 막혀 있는 가는 세포로, 옆벽의 벽공을 통해 물을 전달한다. 물관요소와 헛물관은 성숙하면 죽어 속이 비고, 그 안으로 물과 무기양분이 위로 이동한다. 물관부와 체관부를 묶어 관다발, 한자말로 관속이라고 한다. 뿌리에서는 한가운데의 중심주 하나로 모이며, 줄기와 잎에서는 여러 가닥의 관다발로 나뉜다.","box":[1100,170,900,420],"src":["s22p01#3"],"cards":["O0-8","O0-8#1","M0-19","O0-14"]},{"sid":"s6","obj":"아래 긴 관 — 왼쪽 칸들 사이에 구멍 숭숭한 원반 둘 · 칸마다 머리 없는 사람이 병을 들고 똑바로 앉아 있다","fact":"체관요소 — 핵(· 리보솜)은 없지만 살아 있다 · 물관과 달리 비어 있지 않다","hook":"머리 없이 살아 있다","say":"아래의 긴 관에서는 왼쪽 칸 사이에 구멍 난 원반 둘이 서 있고, 각 칸에 머리 없는 사람이 병을 들고 앉아 있다. 핵과 리보솜을 잃어도 살아 있는 체관요소다. 머리가 없지만 바로 앉아 있다는 모습에 핵 없는 생존을 연결하자. 물관처럼 텅 빈 관은 아니며, 체처럼 구멍 난 원반은 체판이다.","box":[[40,680,1990,340],[380,700,80,300],[760,700,80,300]],"src":["s22p01#4"],"cards":["O0-15","O0-15#1","M0-20","X-PL-18"]},{"sid":"s7","obj":"칸마다 뒷벽에 작은 창 하나 — 창 너머 노란 곁방의 조수가 몸을 내밀어 머리 없는 사람에게 병을 건넨다","fact":"반세포(동반세포) — 체관요소 곁에 붙어 대신 일해 준다(겉씨는 알부민세포)","hook":"곁방 조수 = 반세포","say":"각 칸 뒷벽에는 작은 창이 하나씩 있다. 창 너머 노란 곁방의 조수가 몸을 내밀어 머리 없는 사람에게 병을 건넨다. 반세포, 또는 동반세포를 뜻한다. 체관요소마다 곁에 붙어 핵이 없는 체관요소를 대신해 단백질을 만들고 짐을 싣는 역할이다. 겉씨식물에서는 알부민세포가 이 일을 담당한다.","box":[[150,740,120,160],[480,740,120,160],[950,740,130,140],[1130,740,120,160],[1430,740,120,160],[1740,740,120,160]],"src":["s22p01#5"],"cards":["O0-15#2","M0-20","X-PL-19"]}],"cq":{"O0-11":["유조직(parenchyma)의 특징은?","살아있음 · 얇은 1차벽 · 광합성 · 저장 · 분비 · 상처 회복(분열능 유지)"],"O0-10":["기본조직 3세포의 구별 기준은?","살아있는지 + 세포벽 종류"],"O0-12#1":["후각조직(collenchyma)의 특징은?","살아있음"],"O0-12":["후각조직(collenchyma)의 특징은?","살아있음 · 모서리가 두꺼운 1차벽 · 자라는 줄기·잎자루를 유연하게 지지(셀러리 심)"],"O0-12#2":["후각조직(collenchyma)의 특징은?","모서리가 두꺼운 1차벽"],"O0-13":["후벽조직(sclerenchyma)의 특징은?","성숙 시 죽음 · 리그닌 2차벽 · 단단한 지지(석세포 sclereid, 섬유 fiber)"],"S-PL-10":["기본조직 3세포를 생사와 세포벽으로 구분하면?","유조직=생·얇은 1차벽 / 후각=생·두꺼운 1차벽 / 후벽=사·리그닌 2차벽"],"X-PL-20":["살아있고 두꺼운 1차벽인 조직과 죽고 리그닌 2차벽인 조직은?","후각조직(유연한 지지) / 후벽조직(단단한 지지)"],"O0-8":["관속조직계의 구성과 위치는?","물관부+체관부 · 뿌리=중심 관속주(중심주), 줄기/잎=관속"],"O0-8#1":["관속조직계의 구성과 위치는?","물관부+체관부"],"M0-19":["목부(xylem)의 물관요소·헛물관의 상태는?","성숙하며 죽어 속 빈 관이 되어 물·무기양분을 위로 나름"],"O0-14":["물관부(xylem)의 두 세포와 상태는?","헛물관(모든 관속식물) · 물관요소(대부분 속씨식물) · 성숙하며 죽어 속 빈 관"],"O0-15":["체관요소의 상태와 보조 세포는?","핵·리보솜 잃은 채 살아있음 · 속씨식물=동반세포(반세포) · 겉씨식물=알부민세포가 보조"],"O0-15#1":["체관요소의 상태와 보조 세포는?","핵·리보솜 잃은 채 살아있음"],"M0-20":["사부(phloem)의 체관요소의 상태는?","핵·리보솜을 잃은 채 살아 있어 동반세포(반세포)의 도움으로 양분을 나름"],"X-PL-18":["성숙 시 죽는 쪽과 핵 없이 살아있는 쪽은?","물관요소·헛물관=죽음 / 체관요소=핵·리보솜 없이 살아있음"],"O0-15#2":["체관요소의 상태와 보조 세포는?","동반세포(반세포)"],"X-PL-19":["알부민세포가 체관을 보조하는 식물은?","겉씨식물 (← 속씨식물은 동반세포(반세포))"]},"hubPanel":"s22p01"}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>

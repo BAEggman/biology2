@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L20b","scene":"s20","part":"b","title":"칸막이 너머 — 익히고 떨구고 · 닫고 누른다 (에틸렌 · ABA)","sub":"익은 토마토의 연보라 기체(에틸렌 · 성숙 · 양성 되먹임) · 갈고리 모종(삼중반응) · 떨어지는 누런 잎(탈리 · 노화) · 갓 쓴 아비(ABA) · 롤 셔터 내리기(기공 닫기) · 눌린 흙 속 닫힌 씨앗(휴면) · 발치에 눌린 모종(생장 억제) · 갈라진 땅의 빳빳한 잎(건조 내성)","img":"img/L20b.webp?v=50577c7a12ff","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"열린 유리 칸막이 문 너머 — 익은 토마토를 든 사람과 갓 쓴 아비","fact":"멈추고 늙히는 둘 — 익히고 떨구고(에틸렌) · 닫고 누른다(ABA)","hook":"문 너머 둘은 내리고 누른다","say":"호르몬 온실의 열린 유리 칸막이 문 너머로 가 보자. 이곳의 둘은 왼쪽에서 만난 넷과 달리 내리고, 떨어뜨리고, 누르는 쪽으로 작용한다. 익은 토마토를 든 사람은 에틸렌, 갓을 쓴 늙은 아비는 에이비에이다.","box":null,"src":["s20u01#0"],"cards":[]},{"sid":"s2","obj":"사람이 쳐든 푹 익은 토마토에서 연보라 기체가 뭉게뭉게 — 구름 안 열매는 빨갛게 익고 · 구름 밖 아래 열매만 초록","fact":"에틸렌 — 유일한 기체 호르몬 · 열매 성숙 · 익는 열매가 에틸렌을 더 내며 서로 익힌다(양성 되먹임)","hook":"익은 토마토의 기체 = 에틸렌","say":"사람이 든 푹 익은 토마토에서 연보라색 기체가 나와 토마토 포기를 감싼다. 구름 안의 열매는 빨강과 주황으로 익지만, 구름 밖 아래쪽 열매는 초록색이다. 유일한 기체 호르몬인 에틸렌이 열매 성숙을 촉진하는 모습이다. 익은 열매가 기체를 방출하고, 그 기체가 주변 열매를 익혀 에틸렌을 더 내게 한다. 상자 속 사과 하나가 다른 과일의 성숙까지 촉진하는 양성 되먹임이다. 그래서 녹색 바나나를 운송할 때는 에틸렌을 제거한다.","box":[300,40,820,820],"src":["s20u01#8"],"cards":["P1-7"]},{"sid":"s3","obj":"포기 발치의 모종 둘 — 가스 쪽 것은 짧고 굵게 휜 갈고리꼴 · 다른 하나는 곧고 가늘다","fact":"삼중반응 — 신장 억제 · 비대 · 수평 생장(장애물을 돌아간다)","hook":"짧고 · 굵고 · 휜 셋","say":"토마토 포기 발치의 모종 둘을 비교하자. 가스 쪽 모종은 짧고 굵으며 끝이 아래로 휜 갈고리 모양이고, 다른 모종은 곧고 가늘다. 신장 억제, 비대, 수평 생장으로 이루어진 삼중반응이다. 흙 속에서 장애물을 만난 싹이 그대로 밀기보다 돌아가게 한다. 짧고, 굵고, 휘었다는 세 특징을 함께 기억하자.","box":[[600,900,120,120],[900,820,100,180]],"src":["s20u01#9"],"cards":[]},{"sid":"s4","obj":"구름에 싸인 토마토 포기에서 누런 잎 셋이 떨어져 내린다","fact":"잎 탈리 · 노화도 에틸렌(옥신 ↓ · 에틸렌 ↑ → 떨켜) · 늦추는 것은 시토키닌","hook":"구름 속에서 잎이 진다","say":"구름에 싸인 토마토 포기에서 누런 잎 셋이 떨어진다. 에틸렌은 잎의 탈리와 낙엽, 노화도 촉진한다. 잎이 늙어 옥신 공급이 끊기면 떨켜 세포가 에틸렌에 더 민감해지고, 셀룰레이스가 세포벽을 분해한다. 에틸렌이 노화를 늦춘다는 선지는 반대로 바꾼 설명이다. 노화를 늦추는 쪽은 토끼로 나타낸 시토키닌이다.","box":[[960,320,90,110],[960,500,90,90],[955,583,95,122]],"src":["s20u01#10"],"cards":[]},{"sid":"s5","obj":"맨 오른쪽 바닥에 쪼그려 앉은 갓 쓴 늙은 아비 — 흰 두루마기 · 흰 수염 · 한 손은 셔터 손잡이 · 한 손은 흙더미","fact":"ABA(앱시스산) — 아바 = 아비 · 닫고 · 재우고 · 멈추고 · 버틴다","hook":"갓 쓴 아비 = 아바 = ABA","say":"맨 오른쪽 바닥에 쪼그려 앉은 늙은 아비를 보자. 넓은 챙의 검은 갓과 흰 두루마기, 흰 수염이 특징이다. 한 손은 셔터 손잡이를, 다른 손은 흙더미를 붙잡고 있다. 아바라는 소리와 갓 쓴 아비를 에이비에이, 앱시스산에 연결하자. 이 호르몬의 네 작용은 같은 방향으로 묶인다. 닫고, 재우고, 멈추고, 버틴다.","box":[1060,300,520,700],"src":["s20u01#11"],"cards":["P1-6","S-PL-14"]},{"sid":"s6","obj":"아비 곁 큰 잎에 금속 롤 셔터가 내려와 잎의 위쪽을 덮었다 — 아비가 셔터 아래 손잡이를 잡아 끌어내리는 중","fact":"기공을 닫는다 — 마르면 공변세포의 물을 빼내 쭈그러뜨린다 · 여는 게 아니다(최다 함정)","hook":"셔터를 내린다 = 기공을 닫는다","say":"아비 옆 큰 잎에는 금속 롤 셔터가 내려와 위쪽을 덮고 있다. 아비가 셔터 아래 손잡이를 잡아 더 내려 닫는 모습은 기공 폐쇄다. 건조해지면 공변세포에서 물이 빠져나가 세포가 쭈그러들게 한다. 여는 것이 아니라 닫는 작용이라는 점을 셔터를 내리는 방향으로 기억하자. 이 호르몬에서 가장 자주 나오는 함정이다.","box":[[1420,100,500,420],[1480,500,380,500]],"src":["s20u01#12"],"drop":["O1-22"],"cards":["P1-6#2","S-PL-14","O1-22#2"]},{"sid":"s7","obj":"아비의 다른 손바닥이 흙더미를 꾹 누른다 · 잘린 앞면 속에 닫힌 갈색 씨앗 하나 · 싹이 없다","fact":"종자(와 눈)의 휴면을 건다 — 조기 발아를 막는다 · 깨우는 지베렐린과 맞쌍","hook":"묻어 누른다 = 재운다","say":"아비는 다른 손바닥으로 바닥의 짙은 흙더미를 꾹 누르고 있다. 잘린 단면 속에는 아직 닫혀 있고 싹이 나지 않은 갈색 씨앗 하나가 묻혀 있다. 종자의 휴면이다. 눈의 휴면도 기출에서는 이 아비에 해당하지만, 캠벨에서는 주된 역할로 다루지 않는다. 씨가 성숙할 때 에이비에이가 증가해 너무 일찍 발아하지 못하게 한다. 문 건너 지난 그림에서 끌로 씨앗을 깨던 장면과 비교하자. 지베렐린과 브라시노스테로이드는 깨우는 쪽이고, 흙에 묻어 재우는 아비는 에이비에이다.","box":[[1040,820,380,220],[1180,940,80,60]],"src":["s20u01#13"],"cards":["P1-6#3","X-PL-27"]},{"sid":"s8","obj":"아비 발치에 납작하게 눌려 누운 모종 — 떡잎 둘이 바닥에 붙었다","fact":"생장을 억제한다 — 왼쪽 넷이 미는 것을 이쪽이 되민다","hook":"발치에 납작 눌린 모종 = 멈춘다","say":"아비 발치의 모종 한 포기는 밟힌 듯 납작하게 누워 있고, 떡잎 둘이 바닥에 붙어 있다. 생장 억제의 단서다. 왼쪽의 네 호르몬이 생장을 밀어 주던 것과 반대 방향으로 연결하자.","box":[1360,990,180,80],"src":["s20u01#14"],"cards":["P1-6#1"]},{"sid":"s9","obj":"셔터 잎은 쩍쩍 갈라진 바닥 위에 빳빳이 섰다 · 곁의 같은 바닥 풀 한 포기는 바싹 말라 누렇다","fact":"건조 내성 — 멈추는 것이 버티는 힘(닫아서 버틴다) · 넷 중 이것만 「버틴다」","hook":"셔터 닿은 잎만 버틴다","say":"셔터로 덮인 잎은 갈라진 땅에서도 빳빳이 서 있지만, 옆의 풀은 같은 땅에서 누렇게 말랐다. 아비의 셔터가 닿은 잎만 버티는 모습은 건조 내성이다. 닫아서 버티는 모습에서, 멈추는 것이 견디는 힘이 된다는 점을 연결하자. 네 작용 중 이것은 단순히 막는 것보다 버티게 한다는 데 초점이 있다. 이 덱에서 갈라진 땅은 건조 스트레스의 공통 단서다.","box":[[1480,860,568,284],[1760,740,260,250]],"src":["s20u01#15"],"cards":["P1-6#4"]}],"cq":{"P1-7":["에틸렌(ethylene)의 주요 기능은?","과일 성숙 · 낙엽(잎 탈리) · 삼중반응 · 노화 촉진"],"P1-6":["앱시스산(ABA)의 주요 기능은?","생장 억제 · 기공 닫기(건조 스트레스) · 종자 휴면 · 건조 내성"],"S-PL-14":["식물 호르몬을 생장 촉진과 억제·성숙으로 나누면?","촉진=옥신·지베렐린·시토키닌·브라시노스테로이드 / 억제·노화=ABA·에틸렌"],"P1-6#2":["앱시스산(ABA)의 주요 기능은?","기공 닫기(건조 스트레스)"],"O1-22#2":["기공 열림·닫힘의 신호 — 「닫힘」? (↔ 열림)","건조 스트레스 시 ABA(앱시스산)"],"P1-6#3":["앱시스산(ABA)의 주요 기능은?","종자 휴면"],"X-PL-27":["종자 휴면을 유도하는 호르몬과 발아를 촉진하는 호르몬은?","휴면=ABA / 발아=지베렐린·브라시노스테로이드"],"P1-6#1":["앱시스산(ABA)의 주요 기능은?","생장 억제"],"P1-6#4":["앱시스산(ABA)의 주요 기능은?","건조 내성"]},"hubPanel":"s20u01"};
+const L0 = /*L0*/{"id":"L20b","scene":"s20","part":"b","title":"칸막이 너머 — 익히고 떨구고 · 닫고 누른다 (에틸렌 · ABA)","sub":"익은 토마토의 연보라 기체(에틸렌 · 성숙 · 양성 되먹임) · 갈고리 모종(삼중반응) · 떨어지는 누런 잎(탈리 · 노화) · 갓 쓴 아비(ABA) · 롤 셔터 내리기(기공 닫기) · 눌린 흙 속 닫힌 씨앗(휴면) · 발치에 눌린 모종(생장 억제) · 갈라진 땅의 빳빳한 잎(건조 내성)","img":"img/L20b.webp?v=50577c7a12ff","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"열린 유리 칸막이 문 너머 — 익은 토마토를 든 사람과 갓 쓴 아비","fact":"멈추고 늙히는 둘 — 익히고 떨구고(에틸렌) · 닫고 누른다(ABA)","hook":"문 너머 둘은 내리고 누른다","say":"호르몬 온실의 열린 유리 칸막이 문 너머로 가 보자. 이곳의 둘은 왼쪽에서 만난 넷과 달리 내리고, 떨어뜨리고, 누르는 쪽으로 작용한다. 익은 토마토를 든 사람은 에틸렌, 갓을 쓴 늙은 아비는 에이비에이다.","box":null,"src":["s20u01#0"],"cards":[]},{"sid":"s2","obj":"사람이 쳐든 푹 익은 토마토에서 연보라 기체가 뭉게뭉게 — 구름 안 열매는 빨갛게 익고 · 구름 밖 아래 열매만 초록","fact":"에틸렌 — 유일한 기체 호르몬 · 열매 성숙 · 익는 열매가 에틸렌을 더 내며 서로 익힌다(양성 되먹임)","hook":"익은 토마토의 기체 = 에틸렌","say":"사람이 든 푹 익은 토마토에서 연보라색 기체가 나와 토마토 포기를 감싼다. 구름 안의 열매는 빨강과 주황으로 익지만, 구름 밖 아래쪽 열매는 초록색이다. 유일한 기체 호르몬인 에틸렌이 열매 성숙을 촉진하는 모습이다. 익은 열매가 기체를 방출하고, 그 기체가 주변 열매를 익혀 에틸렌을 더 내게 한다. 상자 속 사과 하나가 다른 과일의 성숙까지 촉진하는 양성 되먹임이다. 그래서 녹색 바나나를 운송할 때는 에틸렌을 제거한다.","box":[300,40,820,820],"src":["s20u01#8"],"cards":["P1-7"]},{"sid":"s3","obj":"포기 발치의 모종 둘 — 가스 쪽 것은 짧고 굵게 휜 갈고리꼴 · 다른 하나는 곧고 가늘다","fact":"삼중반응 — 신장 억제 · 비대 · 수평 생장(장애물을 돌아간다)","hook":"짧고 · 굵고 · 휜 셋","say":"토마토 포기 발치의 모종 둘을 비교하자. 가스 쪽 모종은 짧고 굵으며 끝이 아래로 휜 갈고리 모양이고, 다른 모종은 곧고 가늘다. 신장 억제, 비대, 수평 생장으로 이루어진 삼중반응이다. 흙 속에서 장애물을 만난 싹이 그대로 밀기보다 돌아가게 한다. 짧고, 굵고, 휘었다는 세 특징을 함께 기억하자.","box":[[600,900,120,120],[900,820,100,180]],"src":["s20u01#9"],"cards":[]},{"sid":"s4","obj":"구름에 싸인 토마토 포기에서 누런 잎 셋이 떨어져 내린다","fact":"잎 탈리 · 노화도 에틸렌(옥신 ↓ · 에틸렌 ↑ → 떨켜) · 늦추는 것은 시토키닌","hook":"구름 속에서 잎이 진다","say":"구름에 싸인 토마토 포기에서 누런 잎 셋이 떨어진다. 에틸렌은 잎의 탈리와 낙엽, 노화도 촉진한다. 잎이 늙어 옥신 공급이 끊기면 떨켜 세포가 에틸렌에 더 민감해지고, 셀룰레이스가 세포벽을 분해한다. 에틸렌이 노화를 늦춘다는 선지는 반대로 바꾼 설명이다. 노화를 늦추는 쪽은 토끼로 나타낸 시토키닌이다.","box":[[960,320,90,110],[960,500,90,90],[955,583,95,122]],"src":["s20u01#10"],"cards":[]},{"sid":"s5","obj":"맨 오른쪽 바닥에 쪼그려 앉은 갓 쓴 늙은 아비 — 흰 두루마기 · 흰 수염 · 한 손은 셔터 손잡이 · 한 손은 흙더미","fact":"ABA(앱시스산) — 아바 = 아비 · 닫고 · 재우고 · 멈추고 · 버틴다","hook":"갓 쓴 아비 = 아바 = ABA","say":"맨 오른쪽 바닥에 쪼그려 앉은 늙은 아비를 보자. 넓은 챙의 검은 갓과 흰 두루마기, 흰 수염이 특징이다. 한 손은 셔터 손잡이를, 다른 손은 흙더미를 붙잡고 있다. 아바라는 소리와 갓 쓴 아비를 에이비에이, 앱시스산에 연결하자. 이 호르몬의 네 작용은 같은 방향으로 묶인다. 닫고, 재우고, 멈추고, 버틴다.","box":[1060,300,520,700],"src":["s20u01#11"],"cards":["P1-6","S-PL-14"]},{"sid":"s6","obj":"아비 곁 큰 잎에 금속 롤 셔터가 내려와 잎의 위쪽을 덮었다 — 아비가 셔터 아래 손잡이를 잡아 끌어내리는 중","fact":"기공을 닫는다 — 마르면 공변세포의 물을 빼내 쭈그러뜨린다 · 여는 게 아니다(최다 함정)","hook":"셔터를 내린다 = 기공을 닫는다","say":"아비 옆 큰 잎에는 금속 롤 셔터가 내려와 위쪽을 덮고 있다. 아비가 셔터 아래 손잡이를 잡아 더 내려 닫는 모습은 기공 폐쇄다. 건조해지면 공변세포에서 물이 빠져나가 세포가 쭈그러들게 한다. 여는 것이 아니라 닫는 작용이라는 점을 셔터를 내리는 방향으로 기억하자. 이 호르몬에서 가장 자주 나오는 함정이다.","box":[[1420,100,500,420],[1480,500,380,500]],"src":["s20u01#12"],"drop":["O1-22"],"cards":["P1-6#2","S-PL-14","O1-22#2"]},{"sid":"s7","obj":"아비의 다른 손바닥이 흙더미를 꾹 누른다 · 잘린 앞면 속에 닫힌 갈색 씨앗 하나 · 싹이 없다","fact":"종자(와 눈)의 휴면을 건다 — 조기 발아를 막는다 · 깨우는 지베렐린과 맞쌍","hook":"묻어 누른다 = 재운다","say":"아비는 다른 손바닥으로 바닥의 짙은 흙더미를 꾹 누르고 있다. 잘린 단면 속에는 아직 닫혀 있고 싹이 나지 않은 갈색 씨앗 하나가 묻혀 있다. 종자의 휴면이다. 눈의 휴면도 기출에서는 이 아비에 해당하지만, 캠벨에서는 주된 역할로 다루지 않는다. 씨가 성숙할 때 에이비에이가 증가해 너무 일찍 발아하지 못하게 한다. 문 건너 지난 그림에서 끌로 씨앗을 깨던 장면과 비교하자. 지베렐린과 브라시노스테로이드는 깨우는 쪽이고, 흙에 묻어 재우는 아비는 에이비에이다.","box":[[1040,820,380,220],[1180,940,80,60]],"src":["s20u01#13"],"cards":["P1-6#3","X-PL-27"]},{"sid":"s8","obj":"아비 발치에 납작하게 눌려 누운 모종 — 떡잎 둘이 바닥에 붙었다","fact":"생장을 억제한다 — 왼쪽 넷이 미는 것을 이쪽이 되민다","hook":"발치에 납작 눌린 모종 = 멈춘다","say":"아비 발치의 모종 한 포기는 밟힌 듯 납작하게 누워 있고, 떡잎 둘이 바닥에 붙어 있다. 생장 억제의 단서다. 왼쪽의 네 호르몬이 생장을 밀어 주던 것과 반대 방향으로 연결하자.","box":[1360,990,180,80],"src":["s20u01#14"],"cards":["P1-6#1"]},{"sid":"s9","obj":"셔터 잎은 쩍쩍 갈라진 바닥 위에 빳빳이 섰다 · 곁의 같은 바닥 풀 한 포기는 바싹 말라 누렇다","fact":"건조 내성 — 멈추는 것이 버티는 힘(닫아서 버틴다) · 넷 중 이것만 「버틴다」","hook":"셔터 닿은 잎만 버틴다","say":"셔터로 덮인 잎은 갈라진 땅에서도 빳빳이 서 있지만, 옆의 풀은 같은 땅에서 누렇게 말랐다. 아비의 셔터가 닿은 잎만 버티는 모습은 건조 내성이다. 닫아서 버티는 모습에서, 멈추는 것이 견디는 힘이 된다는 점을 연결하자. 네 작용 중 이것은 단순히 막는 것보다 버티게 한다는 데 초점이 있다. 이 덱에서 갈라진 땅은 건조 스트레스의 공통 단서다.","box":[[1480,860,568,284],[1760,740,260,250]],"src":["s20u01#15"],"cards":["P1-6#4"]}],"cq":{"P1-7":["에틸렌(ethylene)의 주요 기능은?","과일 성숙 · 낙엽(잎 탈리) · 삼중반응 · 노화 촉진"],"P1-6":["앱시스산(ABA)의 주요 기능은?","생장 억제 · 기공 닫기(건조 스트레스) · 종자 휴면 · 건조 내성"],"S-PL-14":["식물 호르몬을 생장 촉진과 억제·성숙으로 나누면?","촉진=옥신·지베렐린·시토키닌·브라시노스테로이드 / 억제·노화=ABA·에틸렌"],"P1-6#2":["앱시스산(ABA)의 주요 기능은?","기공 닫기(건조 스트레스)"],"O1-22#2":["기공 열림·닫힘의 신호 — 「닫힘」? (↔ 열림)","건조 스트레스 시 ABA(앱시스산)"],"P1-6#3":["앱시스산(ABA)의 주요 기능은?","종자 휴면"],"X-PL-27":["종자 휴면을 유도하는 호르몬과 발아를 촉진하는 호르몬은?","휴면=ABA / 발아=지베렐린·브라시노스테로이드"],"P1-6#1":["앱시스산(ABA)의 주요 기능은?","생장 억제"],"P1-6#4":["앱시스산(ABA)의 주요 기능은?","건조 내성"]},"hubPanel":"s20u01"}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>

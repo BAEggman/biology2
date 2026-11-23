@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L46c","scene":"s46","part":"c","title":"부엌 식탁의 가라앉힌 유리병과 붉은 원반 — 혈장 · 세포성 요소 · 적혈구","sub":"가라앉아 세 층으로 갈린 유리병(혈장 + 세포성 요소) · 절반 넘는 노란 층(혈장 55 %) · 선처럼 얇은 흰 띠(백혈구 · 혈소판) · 짙은 빨강 층(적혈구) · 노란 층에 녹은 흰 소금 · 분필(무기염류 · HCO₃⁻ 완충) · 노란 층에 뜬 넷(앨범 = 알부민 · Y자 집게 = 항체 · 기름방울 구명 튜브 = 아포지질단백질 · 털실 = 피브리노겐) · 구멍 없는 옴폭 원반 · 옆모습 아령(양면오목원반 · 산소 운반) · 내던진 돔 천막 · 콩 통(핵 · 미토콘드리아 없음) · 창밖의 해 + 당구 + 금화 둘(무산소 해당과정으로만 ATP) · 노란 층에 더 많이 뜬 어두운 연기 방울(CO₂ — 대부분 혈장에 · HCO₃⁻ 로 약 65 %)","img":"img/L46c.webp?v=eb02ecd6cbdd","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"부엌 식탁 위 키 큰 유리병 — 피가 가라앉아 칼로 자른 듯 반듯한 세 층(노랑 · 얇은 흰 띠 · 짙은 빨강) (틀)","fact":"피 = 혈장(액체 기질) + 세포성 요소 — 원심분리하면 층으로 갈린다","hook":"가라앉힌 유리병의 세 층 = 혈장 + 세포성 요소","say":"부엌 식탁의 키 큰 유리병에는 혈액이 들어 있다. 응고를 막은 뒤 원심분리해 가라앉히자 칼로 자른 듯 반듯하게 층이 나뉘었다. 맨 위에는 맑은 노란 층, 가운데에는 선처럼 아주 얇은 흰 띠, 아래에는 짙은 빨간 층이 생겼다. 혈액은 액체 성분인 혈장과, 그 안에 떠 있는 세포성 요소로 나뉜다. 노란 층은 혈장이고 흰 띠와 빨간 층은 세포성 요소다. 세포가 액체 기질에 흩어져 있으므로 혈액은 결합조직이다. 혈장은 물질을 운반하고 pH와 삼투 균형을 유지한다. 세포성 요소는 기체 운반, 방어, 응고를 담당한다.","box":[250,70,370,875],"src":["s46p04#0"],"cards":["H0-143","H0-142","H0-286","G0-35"]},{"sid":"s2","obj":"맨 위 맑은 노란 층 — 병 속 피의 절반이 넘는다","fact":"혈장 = 혈액의 액체성 기질 · 부피의 약 55 %(절반이 넘는다)","hook":"절반 넘는 노란 층 = 혈장 55 %","say":"맨 위의 맑은 노란 층이 가장 두껍고 병의 절반보다 조금 더 많다. 혈장은 혈액의 액체성 기질이며 전체 부피의 약 55 퍼센트다. 물에 단백질, 영양소, 노폐물이 녹아 있는 노란 국물처럼 생각해 보자.","box":[270,275,330,390],"src":["s46p04#1"],"cards":["H0-144","H0-146"]},{"sid":"s7","obj":"노란 층 한가운데 — 반짝이며 녹는 흰 소금 알갱이 · 떠 있는 흰 분필 토막 셋","fact":"혈장의 무기염류 — pH 완충 · 삼투압 유지 · 대표 완충제는 HCO₃⁻(분필)","hook":"녹은 흰 소금 = 무기염류 · 흰 분필 = HCO₃⁻ 완충","say":"노란 층 한가운데에는 흰 소금 알갱이가 반짝이며 녹아 있고 흰 분필 토막 셋이 떠 있다. 혈장에 녹은 무기염류와 이온을 나타낸다. 하는 일은 둘이다. pH 변화를 줄이는 완충과 삼투압을 맞추는 일이다. 이 덱의 흰 분필은 탄산수소이온인 HCO₃⁻이다. 산이 들어올 때 받아 주는 혈액의 대표적인 완충제다. 혈장의 이온 농도는 곧 조직액의 이온 조성이 되어 세포가 일하는 환경을 정한다. 노란 물인 혈장은 짐도 나른다. 영양소, 대사 노폐물, 호흡 기체, 호르몬이라는 네 종류의 짐을 온몸으로 운반한다.","box":[[395,360,110,130],[505,475,72,75]],"cards":["H0-147","H0-148","H0-153","H0-154"]},{"sid":"s8","obj":"노란 층에 뜬 넷 — 펼친 사진 앨범 · 하늘색 Y자 집게 · 주황 기름방울을 끼운 빨강 · 하양 구명 튜브 · 흰 털실 뭉치","fact":"혈장 단백질 넷 — 알부민 · 면역글로불린 · 아포지질단백질 · 피브리노겐","hook":"앨범 = 알부민 · Y자 집게 = 항체 · 구명 튜브 = 지질 운반 · 털실 = 피브리노겐","say":"노란 층에는 단백질을 나타내는 소품 넷이 있다. 펼친 사진 앨범은 알부민이다. 뒤뜰 꽃밭의 앨범처럼 물을 혈관 안에 붙잡아 삼투 균형을 유지하고 pH 완충도 돕는다. 하늘색 Y 자 집게는 면역글로불린인 항체로, 침입자를 잡아 방어한다. 주황 기름방울을 끼운 구명 튜브는 아포지질단백질이다. 물에 녹지 않는 지질을 감싸 운반하는 역할이다. 흰 털실 뭉치는 피브리노겐이며, 응고 계단에서 풀려 실 그물인 피브린으로 바뀌어 혈액을 굳힌다.","box":[[295,350,125,100],[470,345,105,105],[325,470,100,125],[445,520,90,100]],"cards":["H0-149","H0-150","H0-151","H0-152"]},{"sid":"s3","obj":"맨 아래 짙은 빨강 층 · 그 위 경계에 선처럼 얇은 흰 띠","fact":"붉은 층 = 적혈구 · 얇은 흰 띠 = 백혈구 · 혈소판 — 얇다 = 적혈구가 압도적","hook":"빨간 층 = 적혈구 · 얇은 흰 띠 = 백혈구 · 혈소판","say":"맨 아래 짙은 빨간 층은 적혈구다. 그 위 경계의 가느다란 흰 띠에는 백혈구와 혈소판이 모였다. 띠가 매우 얇다는 점은 적혈구가 압도적으로 많고 백혈구와 혈소판은 아주 적다는 단서다. 빨간 층과 흰 띠를 합친 세포성 요소는 혈액 부피의 약 45 퍼센트다. 위에서 아래로 혈장, 백혈구와 혈소판의 버피 코트, 적혈구 순서로 읽자.","box":[270,632,330,295],"src":["s46p04#2"],"cards":["H0-145","H0-277"]},{"sid":"s4","obj":"식탁의 붉은 원반들 — 양면이 옴폭하고 가운데가 얇아 옅은 분홍으로 비친다(구멍은 없다) · 모로 선 하나는 옆모습이 아령 · 표면마다 흰 방울이 매달렸다","fact":"적혈구 = 양면오목원반 — 표면적을 넓혀 기체 교환이 빠르다 · 일은 산소 운반","hook":"구멍 안 뚫린 도넛 · 옆모습 아령 = 양면오목원반","say":"식탁 위에 흩어진 붉은 원반들은 양면이 오목하고 가운데가 얇아서 옅은 분홍색으로 보인다. 구멍을 뚫다 만 도넛처럼 보이지만 구멍은 없다. 옆으로 선 원반은 양 끝이 두껍고 가운데가 잘록한 아령 모양이다. 적혈구의 양면오목원반형이다. 가운데를 오목하게 하여 표면적을 넓히므로 기체 교환이 빠르다. 원반마다 달린 흰 방울은 산소이며, 적혈구의 산소 운반 기능을 나타낸다.","box":[[665,700,540,265],[985,635,85,200]],"src":["s46p04#3"],"cards":["H0-155","H0-156","H0-157"]},{"sid":"s5","obj":"얼굴 달린 붉은 원반이 어깨 너머로 내던진 것들(점선 궤적 · 먼지) — 문 열린 작은 돔 천막(안에 보라 공) · 안쪽에 주름이 접힌 콩 모양 통 둘","fact":"포유류 적혈구엔 핵(헤모글로빈을 더 담으려) · 미토콘드리아(나르는 O₂ 를 안 쓰려)가 없다","hook":"내던진 천막 = 핵 없음 · 내던진 콩 통 = 미토콘드리아 없음","say":"오른쪽에서 얼굴과 팔다리가 달린 붉은 원반을 보자. 방금 어깨 너머로 던진 물건들의 궤적이 점선으로 남아 있다. 문이 열려 있고 안에 보라 공이 든 작은 돔 천막은 유사분열 헛간에서 보았던 핵이다. 안쪽에 주름이 있는 콩 모양 통 둘은 미토콘드리아다. 포유류 적혈구는 성숙하면서 핵을 내보내고 미토콘드리아도 없앤다. 핵을 없애 헤모글로빈을 더 많이 담고, 미토콘드리아를 없애 자신이 운반하는 산소를 소비하지 않는다는 연결이다.","box":[[1715,620,300,190],[1760,820,250,135]],"src":["s46p04#4"],"cards":["H0-158","H0-159","H0-160"]},{"sid":"s6","obj":"그 원반이 당구공을 쳐 금화 둘이 튄다 · 창밖에 해가 떴다 · 제 몸의 흰 방울엔 손대지 않는다","fact":"적혈구의 ATP 는 무산소 해당과정으로만 — 나르는 산소는 쓰지 않는다","hook":"창밖의 해 + 당구 = 해당 · 금화 = ATP","say":"핵 천막과 미토콘드리아 콩 통을 버린 원반이 큐로 당구공을 치고 있다. 공 옆에서 금화 둘이 튀고 창밖에는 해가 떴다. 해와 당구를 이어 해당과정을 떠올리자. 금화는 언제나 ATP이다. 미토콘드리아가 없는 적혈구는 무산소 해당과정으로만 ATP를 만든다. 몸에 산소 방울을 많이 달고 있어도 자기 에너지를 만드는 데 쓰지 않는다. 산소는 목적지로 운반하는 짐이다.","box":[[1235,740,130,185],[1400,573,280,350],[865,105,320,290]],"src":["s46p04#4"],"cards":["H0-158","H0-159","H0-160"]},{"sid":"s9","obj":"유리병 속 어두운 잿빛 연기 방울 — 맑은 노란 층에 더 많이 떠 있고 · 짙은 빨강 층에는 그보다 적다","fact":"혈액의 CO₂ — 대부분 혈장에 실려 간다(HCO₃⁻ 로 약 65 % · 그냥 녹아 약 7 %)","hook":"어두운 연기 방울 = CO₂ · 노란 층에 더 많음 = 혈장이 더 많이 나름","say":"유리병 안의 어두운 잿빛 연기는 이산화탄소다. 노란 혈장 층에 더 많이, 빨간 적혈구 층에는 더 적게 있다. 혈액이 운반하는 이산화탄소는 대부분 혈장에 실린다. 기본서 수치로 약 65 %는 흰 분필인 탄산수소이온 형태로 혈장에 녹고, 약 7 %는 그대로 녹아 이동한다. 나머지는 적혈구의 헤모글로빈에 결합한다. 운반 형태별로 정리하면 탄산수소이온 약 70 %(교재에 따라 65 ~ 70), 헤모글로빈 결합 약 23 %, 단순 용해 약 7 %이다.","box":[268,280,335,640],"src":[],"cards":["G0-182"]},{"sid":"s10","obj":"왼쪽 벽에 건 피 주머니 → 관 → 유리병 위쪽 옆벽을 뚫고 들어간 바늘 — 쏟아진 남의 붉은 원반들이 노란 층 위에서 하늘색 Y 집게에 엮여 한 덩어리로 엉겼다","fact":"응집 = 적혈구 항원(응집원) + 혈장 항체(응집소) · 수혈은 받는 쪽 항체 vs 주는 쪽 항원","hook":"남의 피를 꽂자 노란 층의 집게가 남의 원반을 서로 엮었다 = 응집","say":"왼쪽 벽의 혈액 주머니에서 나온 관과 바늘이 유리병 위쪽 옆벽을 뚫고, 다른 사람의 붉은 원반을 병 안에 쏟아 넣는다. 수혈이다. 들어온 원반의 가장자리마다 꽂힌 주황 막대사탕은 이 덱에서 당 사슬을 나타낸다. 원반 겉의 표지인 적혈구 항원, 응집원이다. 노란 층의 하늘색 Y 집게는 혈장 항체다. 집게의 한 팔이 한 원반의 사탕을, 다른 팔이 이웃 원반의 사탕을 붙잡아 원반들을 엮어 남의 원반이 한 덩어리로 엉긴다. 적혈구 항원인 응집원과 혈장 항체인 응집소가 만나 생기는 응집반응이다. 혈액형 검사에서는 이런 엉김을 본다. 수혈 적합성을 판단할 때는 받는 사람인 수여자의 혈장 항체가 주는 사람인 공여자의 적혈구 항원을 인식하는지 확인한다.","box":[[62,24,250,292],[268,165,340,190]],"cards":["IM-091","IM-090"]},{"sid":"s11","obj":"사탕 견주기 — 병 주인의 원반(식탁 넷 · 모로 선 아령 · 당구 치는 원반)엔 초록 알 하나짜리 막대사탕 · 병 위 덩어리와 바늘 밑의 남의 원반엔 주황 알 둘짜리 · 병 위 덩어리를 엮은 하늘색 Y 집게 다섯은 주황 사탕만 문다","fact":"ABO 혈장 항체 — A형 = 항B · B형 = 항A · AB형 = 없음 · O형 = 항A + 항B","hook":"제 원반에 없는 사탕을 무는 집게만 혈장에 산다","say":"원반에 꽂힌 사탕의 모양을 비교하자. 식탁의 원반 넷, 옆으로 선 아령 모양 원반, 당구 치는 원반에는 초록 알 하나의 사탕이 있다. 병 주인의 A 항원이므로 A 형 혈액이다. 주머니에서 온 원반과 병 위의 응집 덩어리, 바늘 아래 원반에는 주황 알 둘의 사탕이 있다. B 자의 두 볼록한 부분처럼 알 둘로 B 항원을 나타냈다. 노란 층에서 나온 Y 집게 다섯은 주황 사탕만 물고 초록 사탕은 건드리지 않는다. 혈장에는 자기 적혈구에 없는 항원에 대한 항체가 있기 때문이다. 자기 사탕을 무는 집게가 있으면 자신의 혈액이 응집하겠다. A 형의 혈장에는 항B, B 형에는 항A가 있다. AB 형은 두 항원이 모두 있어 해당 항체가 없고, O 형은 두 항원이 없어 항A와 항B를 모두 가진다.","box":[[268,165,340,190],[650,625,560,360],[1395,572,285,290]],"cards":["IM-089"]}],"cq":{"H0-143":["혈액의 두 큰 구성요소는?","혈장과 세포성 요소"],"H0-142":["혈액은 어떤 조직으로 분류되는가?","결합조직"],"H0-286":["혈장과 세포성 요소를 비교하면?","혈장은 운반·완충·삼투 · 세포성 요소는 기체운반·면역·응고 담당"],"G0-35":["혈액이 결합조직으로 분류되는 이유는?","세포와 액체성 기질(혈장)을 가진 조직이기 때문이다"],"H0-144":["혈액 부피 중 혈장이 차지하는 비율은?","약 55%"],"H0-146":["혈장(plasma)이란?","혈액의 액체성 기질"],"H0-147":["혈장 속 무기염류의 역할 두 가지는?","pH 완충과 삼투압 유지"],"H0-148":["탄산수소이온(HCO3-)의 중요한 기능은?","혈액 pH 완충"],"H0-153":["혈장으로 운반되는 것의 예 네 가지는?","영양소 · 대사노폐물 · 호흡기체 · 호르몬"],"H0-154":["혈장 이온 농도가 조직액에 중요한 이유는?","조직액의 이온 조성과 세포 기능에 직접 영향을 주기 때문"],"H0-149":["알부민의 기능 두 가지는?","삼투 균형 유지와 pH 완충"],"H0-150":["면역글로불린의 기능은?","항체로서 방어·면역"],"H0-151":["아포지질단백질의 기능은?","지질 운반"],"H0-152":["피브리노겐의 기능은?","혈액 응고에 참여"],"H0-145":["혈액 부피 중 세포성 요소가 차지하는 비율은?","약 45%"],"H0-277":["원심분리한 혈액의 세 층을 위에서부터 쓰면?","혈장(위) · 백혈구·혈소판(중간, buffy coat) · 적혈구(아래)"],"H0-155":["적혈구(erythrocyte)의 주된 기능은?","산소 운반"],"H0-156":["적혈구의 대표적인 모양은?","양면오목원반형"],"H0-157":["적혈구가 양면오목인 이유는?","표면적을 넓혀 기체교환을 빠르게 하기 위해"],"H0-158":["포유류 적혈구에 핵이 없는 이유는?","헤모글로빈을 더 많이 담기 위해"],"H0-159":["포유류 적혈구에 미토콘드리아가 없는 이유는?","운반하는 산소를 자체적으로 소비하지 않기 위해"],"H0-160":["적혈구가 ATP를 만드는 방식은?","무산소 해당과정"],"G0-182":["혈액의 CO₂가 혈장에 실려 가는 두 꼴과 각 비율은?(기본서 43장)","HCO₃⁻(탄산수소 이온)로 녹아 약 65% · 그대로 녹아 약 7%"],"IM-091":["응집반응(혈액형 검사)은 무엇 때문에 일어나나?","적혈구 항원(응집원) + 혈장 항체(응집소) 반응"],"IM-090":["수혈 응집 판단 기준은?","수여자 혈장 항체가 공여자 적혈구 항원을 공격하는가"],"IM-089":["ABO 혈액형별 혈장 항체는? (A/B/AB/O)","A=anti-B / B=anti-A / AB=없음 / O=anti-A와 anti-B"]},"hubPanel":"s46p04"};
+const L0 = /*L0*/{"id":"L46c","scene":"s46","part":"c","title":"부엌 식탁의 가라앉힌 유리병과 붉은 원반 — 혈장 · 세포성 요소 · 적혈구","sub":"가라앉아 세 층으로 갈린 유리병(혈장 + 세포성 요소) · 절반 넘는 노란 층(혈장 55 %) · 선처럼 얇은 흰 띠(백혈구 · 혈소판) · 짙은 빨강 층(적혈구) · 노란 층에 녹은 흰 소금 · 분필(무기염류 · HCO₃⁻ 완충) · 노란 층에 뜬 넷(앨범 = 알부민 · Y자 집게 = 항체 · 기름방울 구명 튜브 = 아포지질단백질 · 털실 = 피브리노겐) · 구멍 없는 옴폭 원반 · 옆모습 아령(양면오목원반 · 산소 운반) · 내던진 돔 천막 · 콩 통(핵 · 미토콘드리아 없음) · 창밖의 해 + 당구 + 금화 둘(무산소 해당과정으로만 ATP) · 노란 층에 더 많이 뜬 어두운 연기 방울(CO₂ — 대부분 혈장에 · HCO₃⁻ 로 약 65 %)","img":"img/L46c.webp?v=eb02ecd6cbdd","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"부엌 식탁 위 키 큰 유리병 — 피가 가라앉아 칼로 자른 듯 반듯한 세 층(노랑 · 얇은 흰 띠 · 짙은 빨강) (틀)","fact":"피 = 혈장(액체 기질) + 세포성 요소 — 원심분리하면 층으로 갈린다","hook":"가라앉힌 유리병의 세 층 = 혈장 + 세포성 요소","say":"부엌 식탁의 키 큰 유리병에는 혈액이 들어 있다. 응고를 막은 뒤 원심분리해 가라앉히자 칼로 자른 듯 반듯하게 층이 나뉘었다. 맨 위에는 맑은 노란 층, 가운데에는 선처럼 아주 얇은 흰 띠, 아래에는 짙은 빨간 층이 생겼다. 혈액은 액체 성분인 혈장과, 그 안에 떠 있는 세포성 요소로 나뉜다. 노란 층은 혈장이고 흰 띠와 빨간 층은 세포성 요소다. 세포가 액체 기질에 흩어져 있으므로 혈액은 결합조직이다. 혈장은 물질을 운반하고 pH와 삼투 균형을 유지한다. 세포성 요소는 기체 운반, 방어, 응고를 담당한다.","box":[250,70,370,875],"src":["s46p04#0"],"cards":["H0-143","H0-142","H0-286","G0-35"]},{"sid":"s2","obj":"맨 위 맑은 노란 층 — 병 속 피의 절반이 넘는다","fact":"혈장 = 혈액의 액체성 기질 · 부피의 약 55 %(절반이 넘는다)","hook":"절반 넘는 노란 층 = 혈장 55 %","say":"맨 위의 맑은 노란 층이 가장 두껍고 병의 절반보다 조금 더 많다. 혈장은 혈액의 액체성 기질이며 전체 부피의 약 55 퍼센트다. 물에 단백질, 영양소, 노폐물이 녹아 있는 노란 국물처럼 생각해 보자.","box":[270,275,330,390],"src":["s46p04#1"],"cards":["H0-144","H0-146"]},{"sid":"s7","obj":"노란 층 한가운데 — 반짝이며 녹는 흰 소금 알갱이 · 떠 있는 흰 분필 토막 셋","fact":"혈장의 무기염류 — pH 완충 · 삼투압 유지 · 대표 완충제는 HCO₃⁻(분필)","hook":"녹은 흰 소금 = 무기염류 · 흰 분필 = HCO₃⁻ 완충","say":"노란 층 한가운데에는 흰 소금 알갱이가 반짝이며 녹아 있고 흰 분필 토막 셋이 떠 있다. 혈장에 녹은 무기염류와 이온을 나타낸다. 하는 일은 둘이다. pH 변화를 줄이는 완충과 삼투압을 맞추는 일이다. 이 덱의 흰 분필은 탄산수소이온인 HCO₃⁻이다. 산이 들어올 때 받아 주는 혈액의 대표적인 완충제다. 혈장의 이온 농도는 곧 조직액의 이온 조성이 되어 세포가 일하는 환경을 정한다. 노란 물인 혈장은 짐도 나른다. 영양소, 대사 노폐물, 호흡 기체, 호르몬이라는 네 종류의 짐을 온몸으로 운반한다.","box":[[395,360,110,130],[505,475,72,75]],"cards":["H0-147","H0-148","H0-153","H0-154"]},{"sid":"s8","obj":"노란 층에 뜬 넷 — 펼친 사진 앨범 · 하늘색 Y자 집게 · 주황 기름방울을 끼운 빨강 · 하양 구명 튜브 · 흰 털실 뭉치","fact":"혈장 단백질 넷 — 알부민 · 면역글로불린 · 아포지질단백질 · 피브리노겐","hook":"앨범 = 알부민 · Y자 집게 = 항체 · 구명 튜브 = 지질 운반 · 털실 = 피브리노겐","say":"노란 층에는 단백질을 나타내는 소품 넷이 있다. 펼친 사진 앨범은 알부민이다. 뒤뜰 꽃밭의 앨범처럼 물을 혈관 안에 붙잡아 삼투 균형을 유지하고 pH 완충도 돕는다. 하늘색 Y 자 집게는 면역글로불린인 항체로, 침입자를 잡아 방어한다. 주황 기름방울을 끼운 구명 튜브는 아포지질단백질이다. 물에 녹지 않는 지질을 감싸 운반하는 역할이다. 흰 털실 뭉치는 피브리노겐이며, 응고 계단에서 풀려 실 그물인 피브린으로 바뀌어 혈액을 굳힌다.","box":[[295,350,125,100],[470,345,105,105],[325,470,100,125],[445,520,90,100]],"cards":["H0-149","H0-150","H0-151","H0-152"]},{"sid":"s3","obj":"맨 아래 짙은 빨강 층 · 그 위 경계에 선처럼 얇은 흰 띠","fact":"붉은 층 = 적혈구 · 얇은 흰 띠 = 백혈구 · 혈소판 — 얇다 = 적혈구가 압도적","hook":"빨간 층 = 적혈구 · 얇은 흰 띠 = 백혈구 · 혈소판","say":"맨 아래 짙은 빨간 층은 적혈구다. 그 위 경계의 가느다란 흰 띠에는 백혈구와 혈소판이 모였다. 띠가 매우 얇다는 점은 적혈구가 압도적으로 많고 백혈구와 혈소판은 아주 적다는 단서다. 빨간 층과 흰 띠를 합친 세포성 요소는 혈액 부피의 약 45 퍼센트다. 위에서 아래로 혈장, 백혈구와 혈소판의 버피 코트, 적혈구 순서로 읽자.","box":[270,632,330,295],"src":["s46p04#2"],"cards":["H0-145","H0-277"]},{"sid":"s4","obj":"식탁의 붉은 원반들 — 양면이 옴폭하고 가운데가 얇아 옅은 분홍으로 비친다(구멍은 없다) · 모로 선 하나는 옆모습이 아령 · 표면마다 흰 방울이 매달렸다","fact":"적혈구 = 양면오목원반 — 표면적을 넓혀 기체 교환이 빠르다 · 일은 산소 운반","hook":"구멍 안 뚫린 도넛 · 옆모습 아령 = 양면오목원반","say":"식탁 위에 흩어진 붉은 원반들은 양면이 오목하고 가운데가 얇아서 옅은 분홍색으로 보인다. 구멍을 뚫다 만 도넛처럼 보이지만 구멍은 없다. 옆으로 선 원반은 양 끝이 두껍고 가운데가 잘록한 아령 모양이다. 적혈구의 양면오목원반형이다. 가운데를 오목하게 하여 표면적을 넓히므로 기체 교환이 빠르다. 원반마다 달린 흰 방울은 산소이며, 적혈구의 산소 운반 기능을 나타낸다.","box":[[665,700,540,265],[985,635,85,200]],"src":["s46p04#3"],"cards":["H0-155","H0-156","H0-157"]},{"sid":"s5","obj":"얼굴 달린 붉은 원반이 어깨 너머로 내던진 것들(점선 궤적 · 먼지) — 문 열린 작은 돔 천막(안에 보라 공) · 안쪽에 주름이 접힌 콩 모양 통 둘","fact":"포유류 적혈구엔 핵(헤모글로빈을 더 담으려) · 미토콘드리아(나르는 O₂ 를 안 쓰려)가 없다","hook":"내던진 천막 = 핵 없음 · 내던진 콩 통 = 미토콘드리아 없음","say":"오른쪽에서 얼굴과 팔다리가 달린 붉은 원반을 보자. 방금 어깨 너머로 던진 물건들의 궤적이 점선으로 남아 있다. 문이 열려 있고 안에 보라 공이 든 작은 돔 천막은 유사분열 헛간에서 보았던 핵이다. 안쪽에 주름이 있는 콩 모양 통 둘은 미토콘드리아다. 포유류 적혈구는 성숙하면서 핵을 내보내고 미토콘드리아도 없앤다. 핵을 없애 헤모글로빈을 더 많이 담고, 미토콘드리아를 없애 자신이 운반하는 산소를 소비하지 않는다는 연결이다.","box":[[1715,620,300,190],[1760,820,250,135]],"src":["s46p04#4"],"cards":["H0-158","H0-159","H0-160"]},{"sid":"s6","obj":"그 원반이 당구공을 쳐 금화 둘이 튄다 · 창밖에 해가 떴다 · 제 몸의 흰 방울엔 손대지 않는다","fact":"적혈구의 ATP 는 무산소 해당과정으로만 — 나르는 산소는 쓰지 않는다","hook":"창밖의 해 + 당구 = 해당 · 금화 = ATP","say":"핵 천막과 미토콘드리아 콩 통을 버린 원반이 큐로 당구공을 치고 있다. 공 옆에서 금화 둘이 튀고 창밖에는 해가 떴다. 해와 당구를 이어 해당과정을 떠올리자. 금화는 언제나 ATP이다. 미토콘드리아가 없는 적혈구는 무산소 해당과정으로만 ATP를 만든다. 몸에 산소 방울을 많이 달고 있어도 자기 에너지를 만드는 데 쓰지 않는다. 산소는 목적지로 운반하는 짐이다.","box":[[1235,740,130,185],[1400,573,280,350],[865,105,320,290]],"src":["s46p04#4"],"cards":["H0-158","H0-159","H0-160"]},{"sid":"s9","obj":"유리병 속 어두운 잿빛 연기 방울 — 맑은 노란 층에 더 많이 떠 있고 · 짙은 빨강 층에는 그보다 적다","fact":"혈액의 CO₂ — 대부분 혈장에 실려 간다(HCO₃⁻ 로 약 65 % · 그냥 녹아 약 7 %)","hook":"어두운 연기 방울 = CO₂ · 노란 층에 더 많음 = 혈장이 더 많이 나름","say":"유리병 안의 어두운 잿빛 연기는 이산화탄소다. 노란 혈장 층에 더 많이, 빨간 적혈구 층에는 더 적게 있다. 혈액이 운반하는 이산화탄소는 대부분 혈장에 실린다. 기본서 수치로 약 65 %는 흰 분필인 탄산수소이온 형태로 혈장에 녹고, 약 7 %는 그대로 녹아 이동한다. 나머지는 적혈구의 헤모글로빈에 결합한다. 운반 형태별로 정리하면 탄산수소이온 약 70 %(교재에 따라 65 ~ 70), 헤모글로빈 결합 약 23 %, 단순 용해 약 7 %이다.","box":[268,280,335,640],"src":[],"cards":["G0-182"]},{"sid":"s10","obj":"왼쪽 벽에 건 피 주머니 → 관 → 유리병 위쪽 옆벽을 뚫고 들어간 바늘 — 쏟아진 남의 붉은 원반들이 노란 층 위에서 하늘색 Y 집게에 엮여 한 덩어리로 엉겼다","fact":"응집 = 적혈구 항원(응집원) + 혈장 항체(응집소) · 수혈은 받는 쪽 항체 vs 주는 쪽 항원","hook":"남의 피를 꽂자 노란 층의 집게가 남의 원반을 서로 엮었다 = 응집","say":"왼쪽 벽의 혈액 주머니에서 나온 관과 바늘이 유리병 위쪽 옆벽을 뚫고, 다른 사람의 붉은 원반을 병 안에 쏟아 넣는다. 수혈이다. 들어온 원반의 가장자리마다 꽂힌 주황 막대사탕은 이 덱에서 당 사슬을 나타낸다. 원반 겉의 표지인 적혈구 항원, 응집원이다. 노란 층의 하늘색 Y 집게는 혈장 항체다. 집게의 한 팔이 한 원반의 사탕을, 다른 팔이 이웃 원반의 사탕을 붙잡아 원반들을 엮어 남의 원반이 한 덩어리로 엉긴다. 적혈구 항원인 응집원과 혈장 항체인 응집소가 만나 생기는 응집반응이다. 혈액형 검사에서는 이런 엉김을 본다. 수혈 적합성을 판단할 때는 받는 사람인 수여자의 혈장 항체가 주는 사람인 공여자의 적혈구 항원을 인식하는지 확인한다.","box":[[62,24,250,292],[268,165,340,190]],"cards":["IM-091","IM-090"]},{"sid":"s11","obj":"사탕 견주기 — 병 주인의 원반(식탁 넷 · 모로 선 아령 · 당구 치는 원반)엔 초록 알 하나짜리 막대사탕 · 병 위 덩어리와 바늘 밑의 남의 원반엔 주황 알 둘짜리 · 병 위 덩어리를 엮은 하늘색 Y 집게 다섯은 주황 사탕만 문다","fact":"ABO 혈장 항체 — A형 = 항B · B형 = 항A · AB형 = 없음 · O형 = 항A + 항B","hook":"제 원반에 없는 사탕을 무는 집게만 혈장에 산다","say":"원반에 꽂힌 사탕의 모양을 비교하자. 식탁의 원반 넷, 옆으로 선 아령 모양 원반, 당구 치는 원반에는 초록 알 하나의 사탕이 있다. 병 주인의 A 항원이므로 A 형 혈액이다. 주머니에서 온 원반과 병 위의 응집 덩어리, 바늘 아래 원반에는 주황 알 둘의 사탕이 있다. B 자의 두 볼록한 부분처럼 알 둘로 B 항원을 나타냈다. 노란 층에서 나온 Y 집게 다섯은 주황 사탕만 물고 초록 사탕은 건드리지 않는다. 혈장에는 자기 적혈구에 없는 항원에 대한 항체가 있기 때문이다. 자기 사탕을 무는 집게가 있으면 자신의 혈액이 응집하겠다. A 형의 혈장에는 항B, B 형에는 항A가 있다. AB 형은 두 항원이 모두 있어 해당 항체가 없고, O 형은 두 항원이 없어 항A와 항B를 모두 가진다.","box":[[268,165,340,190],[650,625,560,360],[1395,572,285,290]],"cards":["IM-089"]}],"cq":{"H0-143":["혈액의 두 큰 구성요소는?","혈장과 세포성 요소"],"H0-142":["혈액은 어떤 조직으로 분류되는가?","결합조직"],"H0-286":["혈장과 세포성 요소를 비교하면?","혈장은 운반·완충·삼투 · 세포성 요소는 기체운반·면역·응고 담당"],"G0-35":["혈액이 결합조직으로 분류되는 이유는?","세포와 액체성 기질(혈장)을 가진 조직이기 때문이다"],"H0-144":["혈액 부피 중 혈장이 차지하는 비율은?","약 55%"],"H0-146":["혈장(plasma)이란?","혈액의 액체성 기질"],"H0-147":["혈장 속 무기염류의 역할 두 가지는?","pH 완충과 삼투압 유지"],"H0-148":["탄산수소이온(HCO3-)의 중요한 기능은?","혈액 pH 완충"],"H0-153":["혈장으로 운반되는 것의 예 네 가지는?","영양소 · 대사노폐물 · 호흡기체 · 호르몬"],"H0-154":["혈장 이온 농도가 조직액에 중요한 이유는?","조직액의 이온 조성과 세포 기능에 직접 영향을 주기 때문"],"H0-149":["알부민의 기능 두 가지는?","삼투 균형 유지와 pH 완충"],"H0-150":["면역글로불린의 기능은?","항체로서 방어·면역"],"H0-151":["아포지질단백질의 기능은?","지질 운반"],"H0-152":["피브리노겐의 기능은?","혈액 응고에 참여"],"H0-145":["혈액 부피 중 세포성 요소가 차지하는 비율은?","약 45%"],"H0-277":["원심분리한 혈액의 세 층을 위에서부터 쓰면?","혈장(위) · 백혈구·혈소판(중간, buffy coat) · 적혈구(아래)"],"H0-155":["적혈구(erythrocyte)의 주된 기능은?","산소 운반"],"H0-156":["적혈구의 대표적인 모양은?","양면오목원반형"],"H0-157":["적혈구가 양면오목인 이유는?","표면적을 넓혀 기체교환을 빠르게 하기 위해"],"H0-158":["포유류 적혈구에 핵이 없는 이유는?","헤모글로빈을 더 많이 담기 위해"],"H0-159":["포유류 적혈구에 미토콘드리아가 없는 이유는?","운반하는 산소를 자체적으로 소비하지 않기 위해"],"H0-160":["적혈구가 ATP를 만드는 방식은?","무산소 해당과정"],"G0-182":["혈액의 CO₂가 혈장에 실려 가는 두 꼴과 각 비율은?(기본서 43장)","HCO₃⁻(탄산수소 이온)로 녹아 약 65% · 그대로 녹아 약 7%"],"IM-091":["응집반응(혈액형 검사)은 무엇 때문에 일어나나?","적혈구 항원(응집원) + 혈장 항체(응집소) 반응"],"IM-090":["수혈 응집 판단 기준은?","수여자 혈장 항체가 공여자 적혈구 항원을 공격하는가"],"IM-089":["ABO 혈액형별 혈장 항체는? (A/B/AB/O)","A=anti-B / B=anti-A / AB=없음 / O=anti-A와 anti-B"]},"hubPanel":"s46p04"}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>

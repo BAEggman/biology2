@@ -40,6 +40,8 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .notice{margin:8px 0 0;padding:8px 12px;border:1px solid #e8c48c;background:#fff8ec;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .notice[hidden]{display:none}.notice b{color:var(--gold)}
   .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
@@ -48,7 +50,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
+  <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
   <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
@@ -70,7 +72,9 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
-    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림 → 목록">🔁 반복 꺼짐</button>
+    <button id="bNextAuto" type="button" aria-pressed="false" hidden title="다 읽으면 5초 뒤 다음 그림으로 저절로 넘어간다">다음 그림 자동 꺼짐</button>
+    <button id="bScope" type="button" hidden title="이어 듣는 범위 — 전체 / ★ 표시한 것만">범위 전체</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
   </div>
@@ -80,12 +84,14 @@
     <button id="bAbClr" type="button">구간 지움</button>
     <span class="hint" id="abNote"></span>
   </div>
+  <div class="notice" id="nextNote" role="status" hidden></div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) · 이 그림 전체 · 목록(다음 그림으로 이어 가다 끝에서 처음으로)을 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 「다음 그림 자동」을 켜면 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다(알림에서 취소할 수 있다). 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
+<script src="order.js"></script>
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
@@ -124,25 +130,30 @@ const LStore = (() => {
   };
 })();
 
-const L = {"id":"L20f","scene":"s20","part":"f","title":"큰 줄기와 누운 화분 — 굴광성 · 굴중성의 옥신","sub":"그늘 쪽 옥수수 알갱이(옥신 이동) · 알갱이 쪽 긴 칸(신장) · 빛 쪽으로 굽은 큰 줄기 · 누운 유리 화분(중력) · 위로 휜 줄기 · 골무 속 가라앉은 낟알(뿌리골무 · 평형석) · 아래로 휜 뿌리(같은 아래 · 반대 반응)","img":"img/L20f.webp?v=b9311043eb3c","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"같은 작업실 두 칸 — 왼쪽: 파란 창 앞 방 높이 큰 줄기(앞을 잘라 속이 보인다) · 세로 틀선 너머 오른쪽: 창도 빛도 없는 구석에 누운 유리 화분","fact":"굴광성(빛)도 굴중성(중력)도 옥신이 한쪽으로 몰린 결과 — 몰린 쪽 반응이 줄기 · 뿌리에서 다르다","hook":"빛 칸 · 중력 칸","say":"같은 작업실을 두 칸으로 나누었다. 왼쪽 파란 창 앞에는 방 높이만 하고 앞면을 위아래로 길게 자른 큰 줄기 하나가 있고, 세로 틀선 너머 오른쪽의 창도 빛줄기도 없는 구석에는 유리 화분이 옆으로 누워 있다. 왼쪽은 빛에 대한 반응, 오른쪽은 중력에 대한 반응이다. 둘 다 옥신의 비대칭 분포로 굽는다.","box":null,"src":["s20u02#9"],"cards":["P1-11#1"]},{"sid":"s2","obj":"큰 줄기 속 — 노란 옥수수 알갱이가 창 반대쪽(오른쪽) 안벽만 따라 띠를 이루어 · 굽은 꼭대기에선 바깥 벽을 따라 눈알 밑까지 · 창 쪽엔 하나도 없다","fact":"옥신은 빛의 반대쪽(그늘 쪽)으로 옮겨 간다 · 「빛 쪽에 모인다」는 정반대","hook":"옥수수는 그늘 쪽으로","say":"큰 줄기 속의 노란 옥수수 알갱이는 창 반대편인 오른쪽 안벽을 따라 모여 있다. 굽은 꼭대기에서도 바깥쪽 벽을 따라 눈알 아래까지 이어지고, 창 쪽 벽에는 없다. 옥수수는 옥신이다. 옥신은 빛 반대편인 그늘 쪽에 모이므로, 빛 쪽에 모인다고 쓰면 방향이 반대가 된다.","box":[580,120,420,660],"src":["s20u02#9"],"cards":["P1-11#1"]},{"sid":"s3","obj":"알갱이 쪽(오른쪽 · 굽이 바깥) 벽의 칸은 세로로 길게 늘어났고 · 창 쪽(왼쪽 · 굽이 안쪽) 벽의 칸은 작고 납작하다","fact":"옥신이 많은 쪽 세포가 더 신장한다(늘이는 기작은 산생장설 — 지퍼 줄기)","hook":"알갱이 쪽 칸이 길다","say":"옥수수가 모인 오른쪽 벽의 세포는 세로로 길게 늘어나 있고, 창 쪽 왼쪽 세포는 짧고 납작하다. 옥신이 많은 쪽에서 신장이 더 일어난다. 호르몬 온실의 지퍼 줄기를 떠올리자. 수소 이온을 세포벽 쪽으로 내보내 벽을 느슨하게 하는 산생장설과 연결된다.","box":[600,160,400,620],"src":["s20u02#10"],"cards":["P1-11#2"]},{"sid":"s4","obj":"큰 줄기의 위쪽이 창 쪽(왼쪽)으로 굽었고 · 끝의 눈알이 창을 본다","fact":"줄기가 빛 쪽으로 굽는다 — 빛이 당기는 게 아니라 그늘 쪽이 더 길어져서","hook":"길어진 쪽 반대로 휜다","say":"큰 줄기는 왼쪽 창을 향해 휘고 끝의 눈알도 창을 본다. 줄기가 빛 쪽으로 굽는 것은 빛이 잡아당겨서가 아니다. 그늘 쪽이 더 길어지면서 반대편인 빛 쪽으로 굽는 것이다.","box":[[450,110,570,400]],"src":["s20u02#11"],"cards":["P1-11#3"]},{"sid":"s5","obj":"알갱이가 몰린 쪽(오른쪽)과 줄기가 굽은 쪽(왼쪽)이 반대다","fact":"굴광성 = 옥신 비대칭 — 그늘 쪽으로 이동 → 그늘 쪽 신장 → 빛 쪽으로 굽음","hook":"몰린 쪽 ↔ 굽는 쪽 반대","say":"옥신이 모인 쪽은 오른쪽이고 굽은 쪽은 왼쪽으로 서로 반대다. 그늘 쪽으로 옥신이 이동하고, 그쪽 세포가 더 빨리 신장하므로, 결과적으로 빛 쪽으로 굽는다. 굴광성을 이 세 단계로 연결하자.","box":[460,110,560,680],"src":["s20u02#12"],"cards":["P1-11","P1-19"]},{"sid":"s6","obj":"오른쪽 칸 — 창도 빛도 없는 구석에 옆으로 누운 유리 화분(입구가 오른쪽) · 입구로 나온 줄기의 속에 노란 알갱이가 아래쪽 안벽에만 한 줄","fact":"옆 빛이 없으면 중력이 방향을 정한다 — 눕히면 옥신이 아래쪽으로 몰린다","hook":"눕히면 알갱이가 아래로","say":"오른쪽의 누운 유리 화분에는 창도 빛줄기도 없다. 화분 입구로 나온 줄기의 잘린 속에는 노란 알갱이가 아래쪽 안벽에만 한 줄로 모였다. 한쪽 빛이 없는 상황에서는 중력이 방향을 정한다. 줄기를 눕히면 옥신이 아래쪽으로 모인다.","box":[[1250,560,560,470],[1660,350,330,460]],"src":["s20u02#13"],"cards":[]},{"sid":"s7","obj":"누운 줄기 — 아래쪽 칸은 길고 위쪽 칸은 짧아 끝이 위로 휘었다 · 이 끝엔 눈알이 없다","fact":"줄기는 굴중성 음성(위로) — 옥신이 몰린 아래쪽 세포가 더 길어져서","hook":"줄기 끝은 위로","say":"누운 줄기의 아래쪽 세포가 더 길고 위쪽은 짧아, 끝이 위로 휜다. 빛 반응이 아니라 중력 반응이어서 끝에 눈알은 없다. 줄기의 음성 굴중성이다. 옥신이 많은 쪽이 더 길어진다는 원리는 왼쪽 굴광성 장면과 같다.","box":[1660,350,330,460],"src":["s20u02#14"],"cards":["P1-20#2","P1-20"]},{"sid":"s8","obj":"유리 너머 흙 속 흰 뿌리 끝에 은빛 바느질 골무(점점이 파인 쇠) · 잘라 연 골무 속 짙은 회색 둥근 낟알들이 아래쪽에 가라앉았고 위는 비었다","fact":"평형석 — 뿌리골무 세포의 녹말체가 무거워 가라앉아 「아래」를 알린다(골무 = 뿌리골무)","hook":"골무 = 뿌리골무 · 가라앉은 낟알","say":"유리 너머 흙 속의 흰 뿌리 끝은 은빛 바느질 골무에 들어 있다. 점점이 파인 쇠 골무의 앞면을 잘라 열면, 안의 짙은 회색 둥근 낟알은 아래에 가라앉아 있고 위쪽은 비었다. 골무는 뿌리골무, 가라앉은 알갱이는 평형석이다. 뿌리골무 세포의 녹말체, 즉 녹말을 담은 색소체가 무거워 아래로 가라앉아 중력 방향을 알린다.","box":[1310,830,140,170],"src":["s20u02#15"],"cards":["P1-21"]},{"sid":"s9","obj":"같은 화분의 뿌리 끝은 아래로 휜다 ↔ 줄기 끝은 위로 · 뿌리 아래 가장자리에도 노란 알갱이가 한 줄 — 뿌리는 알갱이 쪽으로 휘었다","fact":"뿌리는 굴중성 양성(아래로) — 옥신은 여기도 아래로 몰리지만 뿌리는 예민해 그쪽이 덜 자란다","hook":"몰리는 쪽은 둘 다 아래 · 반응이 반대","say":"같은 화분에서 줄기 끝은 위로, 뿌리 끝은 아래로 굽는다. 뿌리 아래쪽에도 노란 알갱이가 한 줄로 있다. 옥신이 아래쪽에 모이지만, 줄기와 달리 알갱이가 있는 쪽으로 휜다. 뿌리는 옥신에 훨씬 더 민감하여 옥신이 많은 쪽의 생장이 억제되기 때문이다. 뿌리의 양성 굴중성이다. 줄기와 뿌리에서 옥신이 모이는 방향이 다르다고 설명하지 말자. 둘 다 아래쪽에 모이되 생장 반응이 반대다.","box":[[1340,780,340,240],[1660,350,330,460]],"src":["s20u02#16"],"cards":["P1-20#1","P1-20"]},{"sid":"s10","obj":"큰 줄기(빛)와 누운 화분(중력) — 둘 다 알갱이가 한쪽 안벽에만 몰려 있다","fact":"옥신은 줄기 끝 · 어린 잎에서 만든다 — 줄기는 몰린 쪽이 길어지고 뿌리는 덜 자란다","hook":"한쪽으로만 몰린 알갱이","say":"큰 줄기와 누운 화분 모두 옥신이 한쪽에만 모여 있다. 굴광성과 굴중성은 모두 옥신의 비대칭 분포와 연결된다. 줄기는 옥신이 많은 쪽이 더 길어지고, 뿌리는 그쪽이 덜 자란다. 옥신은 줄기 끝과 어린 잎에서 만들어진다. 호르몬 온실 꼭대기의 옥수수 자루가 곁눈을 억제했던 정단우성도 함께 떠올리자.","box":[[460,110,560,680],[1250,350,740,690]],"src":["s20u02#17"],"cards":["P1-3","P1-3#2"]}],"cq":{"P1-11#1":["옥신에 의한 굴광성 기작은?","옥신이 빛의 반대(어두운) 쪽으로 이동"],"P1-11#2":["옥신에 의한 굴광성 기작은?","어두운 쪽 세포가 더 신장"],"P1-11#3":["옥신에 의한 굴광성 기작은?","줄기가 빛 쪽으로 굽음"],"P1-11":["옥신에 의한 굴광성 기작은?","옥신이 빛의 반대(어두운) 쪽으로 이동→어두운 쪽 세포가 더 신장→줄기가 빛 쪽으로 굽음"],"P1-19":["굴광성(phototropism)의 원인은?","빛 쪽으로(양성, 줄기) · 옥신의 비대칭 분포"],"P1-20#2":["굴중성(gravitropism)에서 뿌리와 줄기의 방향 — 「줄기」? (↔ 뿌리)","음성(위)"],"P1-20":["굴중성(gravitropism)에서 뿌리와 줄기의 방향은?","뿌리=양성(아래) · 줄기=음성(위)"],"P1-21":["굴중성에서 중력을 감지하는 구조는?","평형석(statolith, 녹말이 든 녹말체 amyloplast)이 중력 방향으로 가라앉음"],"P1-20#1":["굴중성(gravitropism)에서 뿌리와 줄기의 방향 — 「뿌리」? (↔ 줄기)","양성(아래)"],"P1-3":["옥신(auxin, IAA)의 생산 부위와 주요 기능은?","줄기 끝·어린 잎 · 세포(줄기) 신장(저농도) · 정단우성 · 굴광성·굴중성"],"P1-3#2":["옥신(auxin, IAA)의 생산 부위와 주요 기능은?","세포(줄기) 신장(저농도), 정단우성, 굴광성·굴중성"]},"hubPanel":"s20u02"};
+const L0 = /*L0*/{"id":"L20f","scene":"s20","part":"f","title":"큰 줄기와 누운 화분 — 굴광성 · 굴중성의 옥신","sub":"그늘 쪽 옥수수 알갱이(옥신 이동) · 알갱이 쪽 긴 칸(신장) · 빛 쪽으로 굽은 큰 줄기 · 누운 유리 화분(중력) · 위로 휜 줄기 · 골무 속 가라앉은 낟알(뿌리골무 · 평형석) · 아래로 휜 뿌리(같은 아래 · 반대 반응)","img":"img/L20f.webp?v=b9311043eb3c","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"같은 작업실 두 칸 — 왼쪽: 파란 창 앞 방 높이 큰 줄기(앞을 잘라 속이 보인다) · 세로 틀선 너머 오른쪽: 창도 빛도 없는 구석에 누운 유리 화분","fact":"굴광성(빛)도 굴중성(중력)도 옥신이 한쪽으로 몰린 결과 — 몰린 쪽 반응이 줄기 · 뿌리에서 다르다","hook":"빛 칸 · 중력 칸","say":"같은 작업실을 두 칸으로 나누었다. 왼쪽 파란 창 앞에는 방 높이만 하고 앞면을 위아래로 길게 자른 큰 줄기 하나가 있고, 세로 틀선 너머 오른쪽의 창도 빛줄기도 없는 구석에는 유리 화분이 옆으로 누워 있다. 왼쪽은 빛에 대한 반응, 오른쪽은 중력에 대한 반응이다. 둘 다 옥신의 비대칭 분포로 굽는다.","box":null,"src":["s20u02#9"],"cards":["P1-11#1"]},{"sid":"s2","obj":"큰 줄기 속 — 노란 옥수수 알갱이가 창 반대쪽(오른쪽) 안벽만 따라 띠를 이루어 · 굽은 꼭대기에선 바깥 벽을 따라 눈알 밑까지 · 창 쪽엔 하나도 없다","fact":"옥신은 빛의 반대쪽(그늘 쪽)으로 옮겨 간다 · 「빛 쪽에 모인다」는 정반대","hook":"옥수수는 그늘 쪽으로","say":"큰 줄기 속의 노란 옥수수 알갱이는 창 반대편인 오른쪽 안벽을 따라 모여 있다. 굽은 꼭대기에서도 바깥쪽 벽을 따라 눈알 아래까지 이어지고, 창 쪽 벽에는 없다. 옥수수는 옥신이다. 옥신은 빛 반대편인 그늘 쪽에 모이므로, 빛 쪽에 모인다고 쓰면 방향이 반대가 된다.","box":[580,120,420,660],"src":["s20u02#9"],"cards":["P1-11#1"]},{"sid":"s3","obj":"알갱이 쪽(오른쪽 · 굽이 바깥) 벽의 칸은 세로로 길게 늘어났고 · 창 쪽(왼쪽 · 굽이 안쪽) 벽의 칸은 작고 납작하다","fact":"옥신이 많은 쪽 세포가 더 신장한다(늘이는 기작은 산생장설 — 지퍼 줄기)","hook":"알갱이 쪽 칸이 길다","say":"옥수수가 모인 오른쪽 벽의 세포는 세로로 길게 늘어나 있고, 창 쪽 왼쪽 세포는 짧고 납작하다. 옥신이 많은 쪽에서 신장이 더 일어난다. 호르몬 온실의 지퍼 줄기를 떠올리자. 수소 이온을 세포벽 쪽으로 내보내 벽을 느슨하게 하는 산생장설과 연결된다.","box":[600,160,400,620],"src":["s20u02#10"],"cards":["P1-11#2"]},{"sid":"s4","obj":"큰 줄기의 위쪽이 창 쪽(왼쪽)으로 굽었고 · 끝의 눈알이 창을 본다","fact":"줄기가 빛 쪽으로 굽는다 — 빛이 당기는 게 아니라 그늘 쪽이 더 길어져서","hook":"길어진 쪽 반대로 휜다","say":"큰 줄기는 왼쪽 창을 향해 휘고 끝의 눈알도 창을 본다. 줄기가 빛 쪽으로 굽는 것은 빛이 잡아당겨서가 아니다. 그늘 쪽이 더 길어지면서 반대편인 빛 쪽으로 굽는 것이다.","box":[[450,110,570,400]],"src":["s20u02#11"],"cards":["P1-11#3"]},{"sid":"s5","obj":"알갱이가 몰린 쪽(오른쪽)과 줄기가 굽은 쪽(왼쪽)이 반대다","fact":"굴광성 = 옥신 비대칭 — 그늘 쪽으로 이동 → 그늘 쪽 신장 → 빛 쪽으로 굽음","hook":"몰린 쪽 ↔ 굽는 쪽 반대","say":"옥신이 모인 쪽은 오른쪽이고 굽은 쪽은 왼쪽으로 서로 반대다. 그늘 쪽으로 옥신이 이동하고, 그쪽 세포가 더 빨리 신장하므로, 결과적으로 빛 쪽으로 굽는다. 굴광성을 이 세 단계로 연결하자.","box":[460,110,560,680],"src":["s20u02#12"],"cards":["P1-11","P1-19"]},{"sid":"s6","obj":"오른쪽 칸 — 창도 빛도 없는 구석에 옆으로 누운 유리 화분(입구가 오른쪽) · 입구로 나온 줄기의 속에 노란 알갱이가 아래쪽 안벽에만 한 줄","fact":"옆 빛이 없으면 중력이 방향을 정한다 — 눕히면 옥신이 아래쪽으로 몰린다","hook":"눕히면 알갱이가 아래로","say":"오른쪽의 누운 유리 화분에는 창도 빛줄기도 없다. 화분 입구로 나온 줄기의 잘린 속에는 노란 알갱이가 아래쪽 안벽에만 한 줄로 모였다. 한쪽 빛이 없는 상황에서는 중력이 방향을 정한다. 줄기를 눕히면 옥신이 아래쪽으로 모인다.","box":[[1250,560,560,470],[1660,350,330,460]],"src":["s20u02#13"],"cards":[]},{"sid":"s7","obj":"누운 줄기 — 아래쪽 칸은 길고 위쪽 칸은 짧아 끝이 위로 휘었다 · 이 끝엔 눈알이 없다","fact":"줄기는 굴중성 음성(위로) — 옥신이 몰린 아래쪽 세포가 더 길어져서","hook":"줄기 끝은 위로","say":"누운 줄기의 아래쪽 세포가 더 길고 위쪽은 짧아, 끝이 위로 휜다. 빛 반응이 아니라 중력 반응이어서 끝에 눈알은 없다. 줄기의 음성 굴중성이다. 옥신이 많은 쪽이 더 길어진다는 원리는 왼쪽 굴광성 장면과 같다.","box":[1660,350,330,460],"src":["s20u02#14"],"cards":["P1-20#2","P1-20"]},{"sid":"s8","obj":"유리 너머 흙 속 흰 뿌리 끝에 은빛 바느질 골무(점점이 파인 쇠) · 잘라 연 골무 속 짙은 회색 둥근 낟알들이 아래쪽에 가라앉았고 위는 비었다","fact":"평형석 — 뿌리골무 세포의 녹말체가 무거워 가라앉아 「아래」를 알린다(골무 = 뿌리골무)","hook":"골무 = 뿌리골무 · 가라앉은 낟알","say":"유리 너머 흙 속의 흰 뿌리 끝은 은빛 바느질 골무에 들어 있다. 점점이 파인 쇠 골무의 앞면을 잘라 열면, 안의 짙은 회색 둥근 낟알은 아래에 가라앉아 있고 위쪽은 비었다. 골무는 뿌리골무, 가라앉은 알갱이는 평형석이다. 뿌리골무 세포의 녹말체, 즉 녹말을 담은 색소체가 무거워 아래로 가라앉아 중력 방향을 알린다.","box":[1310,830,140,170],"src":["s20u02#15"],"cards":["P1-21"]},{"sid":"s9","obj":"같은 화분의 뿌리 끝은 아래로 휜다 ↔ 줄기 끝은 위로 · 뿌리 아래 가장자리에도 노란 알갱이가 한 줄 — 뿌리는 알갱이 쪽으로 휘었다","fact":"뿌리는 굴중성 양성(아래로) — 옥신은 여기도 아래로 몰리지만 뿌리는 예민해 그쪽이 덜 자란다","hook":"몰리는 쪽은 둘 다 아래 · 반응이 반대","say":"같은 화분에서 줄기 끝은 위로, 뿌리 끝은 아래로 굽는다. 뿌리 아래쪽에도 노란 알갱이가 한 줄로 있다. 옥신이 아래쪽에 모이지만, 줄기와 달리 알갱이가 있는 쪽으로 휜다. 뿌리는 옥신에 훨씬 더 민감하여 옥신이 많은 쪽의 생장이 억제되기 때문이다. 뿌리의 양성 굴중성이다. 줄기와 뿌리에서 옥신이 모이는 방향이 다르다고 설명하지 말자. 둘 다 아래쪽에 모이되 생장 반응이 반대다.","box":[[1340,780,340,240],[1660,350,330,460]],"src":["s20u02#16"],"cards":["P1-20#1","P1-20"]},{"sid":"s10","obj":"큰 줄기(빛)와 누운 화분(중력) — 둘 다 알갱이가 한쪽 안벽에만 몰려 있다","fact":"옥신은 줄기 끝 · 어린 잎에서 만든다 — 줄기는 몰린 쪽이 길어지고 뿌리는 덜 자란다","hook":"한쪽으로만 몰린 알갱이","say":"큰 줄기와 누운 화분 모두 옥신이 한쪽에만 모여 있다. 굴광성과 굴중성은 모두 옥신의 비대칭 분포와 연결된다. 줄기는 옥신이 많은 쪽이 더 길어지고, 뿌리는 그쪽이 덜 자란다. 옥신은 줄기 끝과 어린 잎에서 만들어진다. 호르몬 온실 꼭대기의 옥수수 자루가 곁눈을 억제했던 정단우성도 함께 떠올리자.","box":[[460,110,560,680],[1250,350,740,690]],"src":["s20u02#17"],"cards":["P1-3","P1-3#2"]}],"cq":{"P1-11#1":["옥신에 의한 굴광성 기작은?","옥신이 빛의 반대(어두운) 쪽으로 이동"],"P1-11#2":["옥신에 의한 굴광성 기작은?","어두운 쪽 세포가 더 신장"],"P1-11#3":["옥신에 의한 굴광성 기작은?","줄기가 빛 쪽으로 굽음"],"P1-11":["옥신에 의한 굴광성 기작은?","옥신이 빛의 반대(어두운) 쪽으로 이동→어두운 쪽 세포가 더 신장→줄기가 빛 쪽으로 굽음"],"P1-19":["굴광성(phototropism)의 원인은?","빛 쪽으로(양성, 줄기) · 옥신의 비대칭 분포"],"P1-20#2":["굴중성(gravitropism)에서 뿌리와 줄기의 방향 — 「줄기」? (↔ 뿌리)","음성(위)"],"P1-20":["굴중성(gravitropism)에서 뿌리와 줄기의 방향은?","뿌리=양성(아래) · 줄기=음성(위)"],"P1-21":["굴중성에서 중력을 감지하는 구조는?","평형석(statolith, 녹말이 든 녹말체 amyloplast)이 중력 방향으로 가라앉음"],"P1-20#1":["굴중성(gravitropism)에서 뿌리와 줄기의 방향 — 「뿌리」? (↔ 줄기)","양성(아래)"],"P1-3":["옥신(auxin, IAA)의 생산 부위와 주요 기능은?","줄기 끝·어린 잎 · 세포(줄기) 신장(저농도) · 정단우성 · 굴광성·굴중성"],"P1-3#2":["옥신(auxin, IAA)의 생산 부위와 주요 기능은?","세포(줄기) 신장(저농도), 정단우성, 굴광성·굴중성"]},"hubPanel":"s20u02"}/*L1*/;   // 다음 그림을 그 자리에서 바꿔 끼울 때, 받아 온 과 쪽에서 이 두 표지 사이의 글을 읽는다
+let L = L0;
 const $ = id => document.getElementById(id);
-$('title').textContent = L.title; document.title = L.title;
 // 요약 줄(sub)에는 물건 = 답이 다 적혀 있다 — 복습 · 시험에서는 접어 두고, 누르면 편다(GPT 추가 감사 2026-11-11 §7)
 let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
-$('img').src = L.img; $('img').alt = L.title;
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
 function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
 $('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
-paintStar();
-if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
-if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
-const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+const ov = $('ov');
+function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
+  $('title').textContent = L.title; document.title = L.title;
+  $('img').src = L.img; $('img').alt = L.title;
+  $('home').href = L.home || 'index.html';  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
+  $('hub').href = L.hub || (L.hubPanel ? '../sketchy.html#' + L.hubPanel : '../sketchy.html');
+  ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
+  paintStar();
+}
+paintChrome();
 let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
-const stops = L.stops;
+let stops = L.stops;
 subShow();
 const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const sidOf = k => stops[k].sid || ('s' + (k + 1));             // 정거장의 바뀌지 않는 ID
@@ -150,8 +161,10 @@ const quizItems = () => stops.map((_, k) => k).filter(k => stops[k].box);  // �
 // 기록 v2 — 정거장 번호가 아니라 정거장 ID(sid)에 붙는다(정거장을 넣고 빼도 기록이 다른 사실로 옮겨 가지 않는다).
 //   {v:2, items:{sid:[{t,ok,s}]}, sessions:[{id,t0,t1,n,ok,done}]}
 //   옛 기록({번호:[{t,ok}]})은 처음 한 번 번호 k → 's'+(k+1) 로 옮기고, 원본은 lesson_<ID>__v1 에 그대로 남긴다.
-const scoreKey = 'lesson_' + L.id;
-let store = { v: 2, items: {}, sessions: [] };
+let scoreKey, store;
+function loadStore() {   // 과가 바뀔 때마다 그 과의 기록을 다시 읽는다 — 점수 열쇠는 lesson_<ID> 그대로
+scoreKey = 'lesson_' + L.id;
+store = { v: 2, items: {}, sessions: [] };
 try {
   const raw = JSON.parse(localStorage.getItem(scoreKey) || 'null');
   if (raw && raw.v === 2) store = raw;
@@ -162,6 +175,8 @@ try {
   }
 } catch (e) {}
 store.items = store.items || {}; store.sessions = store.sessions || [];
+}
+loadStore();
 const save = () => { try { localStorage.setItem(scoreKey, JSON.stringify(store)); } catch (e) {} };
 try { shuffle = localStorage.getItem('lesson_shuffle') === '1'; } catch (e) {}
 
@@ -334,7 +349,7 @@ const TTS_ORDER = {"L01a":"바이러스 항구 I · II 번 부두","L01b":"바�
 
 const ttsNorm = t => TTSNorm.ttsNorm(t, TTS_LEX, TTS_ORDER, L.id);
 let speakSeq = 0;
-const narration = new LessonNarration(L.id);
+let narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
@@ -347,7 +362,21 @@ function speak(t, sid) {
 }
 // ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
 //   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
-const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+// ── 이어 듣기(§1.5) 바탕 — 목록 차례(order.js) · 범위(전체 / ★만). 한 파일(standalone)에는 다른 과가 없어 꺼 둔다.
+const ORDER = (typeof LESSON_ORDER !== 'undefined' && Array.isArray(LESSON_ORDER)) ? LESSON_ORDER : [];
+const canChain = ORDER.length > 0 && !L0.home;
+let autoNext = canChain && LStore.prefs().autoNext, scope = LStore.prefs().scope;
+const navigate = u => (window.__navigate ? window.__navigate(u) : (location.href = u));   // 시험이 가로챌 수 있게 한 군데로
+function neighbor(d, wrap) {   // 목록에서 앞(-1) · 뒤(+1) 과 — 범위 밖(★ 없는 과)은 건너뛴다. 없으면 null
+  const at = ORDER.findIndex(o => o.id === L.id); if (at < 0) return null;
+  for (let n = 1; n <= ORDER.length; n++) {
+    let k = at + d * n; if (k < 0 || k >= ORDER.length) { if (!wrap) return null; k = ((k % ORDER.length) + ORDER.length) % ORDER.length; }
+    const id = ORDER[k].id; if (scope !== 'star' || LStore.isStar(id)) return id;
+  }
+  return null;
+}
+const titleOf = id => { const o = ORDER.find(x => x.id === id); return o ? id + ' ' + o.t : id; };
+const REP_CYCLE = canChain ? ['off', 'ab', 'one', 'list'] : ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복', list: '🔁 목록 반복' };
 let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
 let lastTouch = Date.now();
 ['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
@@ -358,17 +387,19 @@ function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 �
   if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
   return [a, b];
 }
-function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : rep === 'list' ? ' · 목록 반복' : ''; }
 function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
   if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
   return i < 0 || tourEnded ? 0 : i;
 }
 function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
-  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+  if ((rep !== 'off' || autoNext) && Date.now() - lastTouch > IDLE_MS) {
     playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
   }
   if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
-  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  const last = at + 1 >= stops.length;
+  if (rep === 'one' && last) return go(0);
+  if (last && canChain && (rep === 'list' || autoNext)) { go(at + 1); return startCountdown(); }   // 되짚기는 조용히 보이고, 5초 알림
   go(at + 1);
 }
 function repPaint() {
@@ -389,8 +420,68 @@ function abSet(which) {
 }
 $('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
 $('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
+
+// ── 5초 알림 → 다음 그림(그 자리에서 바꿔 끼움)
+//   알림 중 ❚❚ · ▶ · ◀ ▶ · 모드 바꾸기 · 목록 반복 끄기는 모두 go/setMode 를 지나며 알림을 거둔다.
+//   「취소」는 이번 한 번만 — 켜 둔 단추는 그대로다.
+let cd = null, swapSeq = 0;
+const noteEl = $('nextNote');
+function cancelCountdown() { if (cd) { clearTimeout(cd.t); cd = null; } noteEl.hidden = true; noteEl.textContent = ''; }
+function paintCountdown() {
+  noteEl.hidden = false;
+  noteEl.innerHTML = `<span><b>${cd.left}</b>초 뒤 다음 그림 — ${esc(titleOf(cd.target))}</span><button type="button" data-cd="now">지금 넘김</button><button type="button" data-cd="cancel">취소</button>`;
+}
+function startCountdown() {
+  const target = neighbor(1, rep === 'list');
+  if (!target) { noteEl.hidden = false; noteEl.textContent = scope === 'star' ? '★ 표시한 그림의 끝 — 더 넘길 그림이 없다.' : '목록의 끝 — 더 넘길 그림이 없다.'; return; }
+  cd = { left: 5, target, t: 0 }; paintCountdown();
+  const tick = () => { cd.t = setTimeout(() => { if (!cd) return; cd.left--; if (cd.left <= 0) { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); } else { paintCountdown(); tick(); } }, 1000); };
+  tick();
+}
+noteEl.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button[data-cd]'); if (!b || !cd) return;
+  if (b.dataset.cd === 'now') { const t = cd.target; cancelCountdown(); openLesson(t, { auto: true }); }
+  else { cancelCountdown(); noteEl.hidden = false; noteEl.textContent = '취소했다 — 이 그림에서 멈춘다. 다음 그림은 위의 「다음 그림 ▶」 로 갈 수 있다.'; }
+});
+function applyLesson(d) {
+  stopSpeech(); L = d; stops = L.stops; loadStore();
+  narration = new LessonNarration(L.id, { manifest: narration.manifest, hold: narration.hold, heard: narration.heard });   // 목록 · 보류 · 들어 봄 장부는 다시 받지 않는다
+  tourEnded = false; recapAt = -1; i = -1; sess = null;
+  $('tourSlot').innerHTML = L.relatedTour ? `<a href="${L.relatedTour.id}.html">${esc(L.relatedTour.label)}</a>` : '';
+  paintChrome(); setMode('tour'); repPaint(); chainPaint();
+}
+async function openLesson(id, opt = {}) {
+  const my = ++swapSeq, push = opt.push !== false;
+  cancelCountdown(); stopSpeech(); playing = false;
+  let data = null;
+  try {
+    const r = await fetch(new URL(id + '.html', document.baseURI), { cache: 'no-cache' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const t = await r.text(), a = t.indexOf('/*L' + '0*/'), b = t.indexOf('/*L' + '1*/');
+    if (a < 0 || b < a) throw new Error('표지 없음');
+    data = JSON.parse(t.slice(a + 6, b));
+    if (!data || data.id !== id || !Array.isArray(data.stops)) throw new Error('다른 과');
+  } catch (e) { data = null; }
+  if (my !== swapSeq) return;   // 그 사이 더 새로운 요청이 있었다 — 늦게 온 답은 버린다
+  if (!data) { navigate(id + '.html' + (opt.auto ? '#auto' : '')); return; }   // 받지 못하면 예전처럼 쪽을 옮긴다
+  applyLesson(data);
+  if (push) { try { history.pushState({ id }, '', id + '.html'); } catch (e) {} }
+  if (opt.auto) { playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+}
+window.addEventListener('popstate', () => { const m = /\/(L\d{2}[a-z]?)\.html$/.exec(location.pathname); if (m && m[1] !== L.id) openLesson(m[1], { push: false }); });
+function chainPaint() {
+  $('bNextAuto').hidden = $('bScope').hidden = !canChain;
+  $('bNextAuto').textContent = '다음 그림 자동 ' + (autoNext ? '켜짐' : '꺼짐'); $('bNextAuto').classList.toggle('on', autoNext); $('bNextAuto').setAttribute('aria-pressed', String(autoNext));
+  $('bScope').textContent = '범위 ' + (scope === 'star' ? '★만' : '전체'); $('bScope').classList.toggle('on', scope === 'star');
+  const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
+  for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
+}
+$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
+for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
+window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });
 function go(k) {
-  stopSpeech(); recapAt = -1;
+  stopSpeech(); recapAt = -1; cancelCountdown();
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
@@ -404,7 +495,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
+  if (voice && rep === 'off' && !autoNext) speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -424,7 +515,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; cancelCountdown(); stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -489,7 +580,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else { cancelCountdown(); stopSpeech(); } };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -499,16 +590,16 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour'); repPaint();
+setMode('tour'); repPaint(); chainPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
+function beginAutomatically() { if ((!autoStart && location.hash !== '#auto') || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
-window.addEventListener('pagehide', stopSpeech);
+window.addEventListener('pagehide', () => { cancelCountdown(); stopSpeech(); });
 </script>
 </body>
 </html>
