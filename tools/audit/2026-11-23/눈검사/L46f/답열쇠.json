@@ -1,0 +1,45 @@
+{
+ "lesson": "L46f",
+ "real": {
+  "들이마시": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "PO2": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "mmHg": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "PCO2": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "드나드": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "비강": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "대동맥": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RyR1",
+  "GPCR",
+  "Xa"
+ ]
+}

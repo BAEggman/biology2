@@ -1,0 +1,68 @@
+{
+ "lesson": "L04b",
+ "real": {
+  "무체강": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "해면": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "깃세포": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "위수강": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "자포낭": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "불꽃세포(원신관)": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "편형": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "위체강": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "윤형동물": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "탈피동물": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  },
+  "선충": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s12"
+  }
+ },
+ "fake": [
+  "바이러스",
+  "HTLV",
+  "스크래피",
+  "포르밀메티오닌",
+  "CRISPR"
+ ]
+}

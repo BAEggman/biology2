@@ -1,0 +1,95 @@
+{
+ "lesson": "L48e",
+ "real": {
+  "들이마시": {
+   "sid": "s3",
+   "cls": "C",
+   "props": null
+  },
+  "LDL": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "클라트린": {
+   "sid": "s5",
+   "cls": "A1",
+   "props": [
+    "삼각 격자 우리",
+    "삼각 격자 우리를 쓴 수레"
+   ]
+  },
+  "고콜레스테롤혈증": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "강글리오시드": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "GM2": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "프로테아좀": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "유비퀴틴": {
+   "sid": "s10",
+   "cls": "A1",
+   "props": [
+    "둥근 화로",
+    "둥근 화덕",
+    "화덕",
+    "화로"
+   ]
+  },
+  "Ca2": {
+   "sid": "s13",
+   "cls": "C",
+   "props": null
+  },
+  "니코틴": {
+   "sid": "s13",
+   "cls": "A1",
+   "props": [
+    "열린 담뱃갑"
+   ]
+  },
+  "음세포(액체)": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "소기관": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s10"
+  },
+  "단일막(액포막)": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  },
+  "방어물질": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "M6P",
+  "필라멘트",
+  "Cdk2",
+  "PIP2",
+  "스테아르산",
+  "BRCA1",
+  "Bcl"
+ ]
+}

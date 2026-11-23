@@ -1,0 +1,108 @@
+{
+ "lesson": "L48d",
+ "real": {
+  "네트워크": {
+   "sid": "s3",
+   "cls": "C",
+   "props": null
+  },
+  "스테로이드": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null
+  },
+  "Ca2": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "SRP": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "폴리펩타이드": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "펩타이드": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "KDEL": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "트랜스골지망": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null
+  },
+  "M6P": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null,
+   "sid_card": "s10"
+  },
+  "인슐린": {
+   "sid": "s12",
+   "cls": "A1",
+   "props": [
+    "주사기",
+    "주사기를 치켜든"
+   ]
+  },
+  "소포체": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s2"
+  },
+  "골지체": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s2"
+  },
+  "리소좀": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "액포": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "해독": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "발송": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s8"
+  },
+  "저장": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s9"
+  }
+ },
+ "fake": [
+  "LGIC",
+  "필라멘트",
+  "Cdk2",
+  "PIP2",
+  "스테로이드호르몬",
+  "BRCA1",
+  "Bcl",
+  "크리스테"
+ ]
+}
