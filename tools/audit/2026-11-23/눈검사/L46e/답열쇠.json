@@ -1,0 +1,88 @@
+{
+ "lesson": "L46e",
+ "real": {
+  "EPO": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "피브린": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s9"
+  },
+  "피브리노겐": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s9"
+  },
+  "PDGF": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "프로트롬빈": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "프로트롬비나아제": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "Xa": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "Va": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "Ca2": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "느려지기": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "적혈구": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s2"
+  },
+  "백혈구": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s2"
+  },
+  "시트르산": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  },
+  "헤파린": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RyR2",
+  "GnRH",
+  "mV",
+  "콘드로이틴황산염",
+  "B5",
+  "CD4",
+  "신경호르몬"
+ ]
+}

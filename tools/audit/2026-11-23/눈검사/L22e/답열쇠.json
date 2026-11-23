@@ -1,0 +1,91 @@
+{
+ "lesson": "L22e",
+ "real": {
+  "잎겨드랑": {
+   "sid": "s3",
+   "cls": "C",
+   "props": null
+  },
+  "코르크형성층": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "코르크": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null,
+   "sid_card": "s8"
+  },
+  "MPa": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "브로멜리아드": {
+   "sid": "s16",
+   "cls": "C",
+   "props": null
+  },
+  "줄기": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "무기물": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "마디사이": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "정단눈(끝)": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "곁눈(잎겨드랑이)": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "뿌리털": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "뿌리골무(보호)": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "미사": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  },
+  "생장": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s15"
+  },
+  "칼륨": {
+   "sid": "s15",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "루비스코",
+  "Pfr",
+  "브라시노스테로이드",
+  "익스팬신",
+  "AM",
+  "ECM",
+  "앱시스산"
+ ]
+}

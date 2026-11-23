@@ -1,0 +1,68 @@
+{
+ "lesson": "L46g",
+ "real": {
+  "PO2": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "헤모글로빈": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "PCO2": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "BPG": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "HbA": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "폴리펩타이드": {
+   "sid": "s9",
+   "cls": "B",
+   "props": null
+  },
+  "미오글로빈": {
+   "sid": "s9",
+   "cls": "B",
+   "props": null
+  },
+  "카바미노헤모글로빈": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "Hb": {
+   "sid": "s3",
+   "cls": "C",
+   "props": null,
+   "sid_card": "s11"
+  },
+  "H2CO3": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "일산화탄소(CO)": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "SGLT1",
+  "Gi",
+  "mmHg",
+  "크레아티닌",
+  "B5"
+ ]
+}
