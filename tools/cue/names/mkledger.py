@@ -118,7 +118,16 @@ def build():
     if os.path.exists(f'{A}/장부.json'):
         for k, e in json.load(open(f'{A}/장부.json', encoding='utf-8')).items():
             if k not in led:
-                led[k] = {kk: e[kk] for kk in ('과', '낱말', '구간', '출처', '떨어진 갈래') if kk in e}
+                led[k] = {kk: e[kk] for kk in ('과', '낱말', '구간', '출처', '떨어진 갈래', '계측') if kk in e}
+    # ③ 넓힘(2026-11-23 · 상시 요청 지시서 §4) — 문 1(tools/audit_lesson_names.js)의 N′(흘림) · N(없음 · 옛 면제 포함) 짝을 모두 올린다.
+    #    출처 「이름 계측(N′)」 「이름 계측(N)」 「이름 계측(옛 면제)」. 갈래는 덱 감사가 그 과를 열 때 가름.json 에 단다.
+    nm = json.loads(subprocess.check_output(['node', f'{R}/tools/audit_lesson_names.js', '--json'], cwd=R))
+    for r in nm:
+        if r['gate'] not in ('N', 'N′'): continue
+        src = '이름 계측(N′)' if r['gate'] == 'N′' else ('이름 계측(옛 면제)' if r['old'] else '이름 계측(N)')
+        k = f"{r['lesson']}|{r['term']}"
+        if k in led: led[k].setdefault('계측', src); continue
+        add(r['lesson'], r['term'], r['sid'], src); led[k]['계측'] = src
     for k, e in led.items():
         L, w = e['과'], e['낱말']
         d = json.load(open(f'{R}/lessons/{L}.json', encoding='utf-8'))
