@@ -1,0 +1,30 @@
+{
+ "lesson": "L36d",
+ "real": {
+  "평행맥": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "그물맥": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "수염뿌리": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "곧은뿌리(주근)": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "어린잎",
+  "니트로게나아제",
+  "지베렐린"
+ ]
+}

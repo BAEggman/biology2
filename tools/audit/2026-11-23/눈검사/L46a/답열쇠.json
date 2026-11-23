@@ -1,0 +1,40 @@
+{
+ "lesson": "L46a",
+ "real": {
+  "좌심실": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "방실판막": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "반달판막(반월판)": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "폐순환": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "체순환": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "방실결절": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2"
+ ]
+}

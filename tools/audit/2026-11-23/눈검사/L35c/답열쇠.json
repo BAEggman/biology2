@@ -1,0 +1,91 @@
+{
+ "lesson": "L35c",
+ "real": {
+  "스컹크": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null,
+   "sid_card": "s4"
+  },
+  "점박이스컹크": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "시클리드": {
+   "sid": "s14",
+   "cls": "C",
+   "props": null
+  },
+  "갑작스러운": {
+   "sid": "s18",
+   "cls": "C",
+   "props": null
+  },
+  "무성생식": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "생태종": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "계통종": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "배수성": {
+   "sid": "s14",
+   "cls": "fact",
+   "props": null
+  },
+  "서식지": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s14"
+  },
+  "귀리": {
+   "sid": "s16",
+   "cls": "fact",
+   "props": null
+  },
+  "목화": {
+   "sid": "s16",
+   "cls": "fact",
+   "props": null
+  },
+  "감자": {
+   "sid": "s16",
+   "cls": "fact",
+   "props": null
+  },
+  "담배": {
+   "sid": "s16",
+   "cls": "fact",
+   "props": null
+  },
+  "융합": {
+   "sid": "s17",
+   "cls": "fact",
+   "props": null
+  },
+  "점진적": {
+   "sid": "s18",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "바이로이드",
+  "HTLV",
+  "신경호르몬",
+  "CRISPR",
+  "Cas",
+  "크로이츠펠트",
+  "EBV"
+ ]
+}
