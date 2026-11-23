@@ -1,0 +1,130 @@
+{
+ "lesson": "L31b",
+ "real": {
+  "FADH2": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "피루브산": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "PDH": {
+   "sid": "s19",
+   "cls": "C",
+   "props": null
+  },
+  "TPP": {
+   "sid": "s19",
+   "cls": "A0",
+   "props": [
+    "넥타이"
+   ]
+  },
+  "B1": {
+   "sid": "s19",
+   "cls": "A0",
+   "props": [
+    "넥타이"
+   ]
+  },
+  "크렙스": {
+   "sid": "s8",
+   "cls": "C",
+   "props": null
+  },
+  "TCA": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "옥살로아세트산": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "시트르산": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s9"
+  },
+  "케토글루타르산": {
+   "sid": "s15",
+   "cls": "C",
+   "props": null
+  },
+  "BPG": {
+   "sid": "s13",
+   "cls": "B",
+   "props": null
+  },
+  "PG": {
+   "sid": "s13",
+   "cls": "C",
+   "props": null
+  },
+  "PEP": {
+   "sid": "s13",
+   "cls": "B",
+   "props": null
+  },
+  "푸마르산": {
+   "sid": "s17",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s12"
+  },
+  "리포산": {
+   "sid": "s19",
+   "cls": "fact",
+   "props": null
+  },
+  "CoA": {
+   "sid": "s19",
+   "cls": "fact",
+   "props": null
+  },
+  "FAD": {
+   "sid": "s19",
+   "cls": "fact",
+   "props": null
+  },
+  "NAD⁺": {
+   "sid": "s19",
+   "cls": "fact",
+   "props": null
+  },
+  "이성질화": {
+   "sid": "s14",
+   "cls": "fact",
+   "props": null
+  },
+  "수화": {
+   "sid": "s17",
+   "cls": "fact",
+   "props": null
+  },
+  "NADH": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s18"
+  }
+ },
+ "fake": [
+  "사이토크롬",
+  "P680",
+  "옥살아세트산",
+  "플라스토퀴논",
+  "B6",
+  "C4",
+  "카로티노이드",
+  "뉴클레오타이드",
+  "CH3",
+  "PLP"
+ ]
+}

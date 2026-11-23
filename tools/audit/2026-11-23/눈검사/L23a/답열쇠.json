@@ -1,0 +1,27 @@
+{
+ "lesson": "L23a",
+ "real": {
+  "mV": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "활성": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s4"
+  },
+  "불활성": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2"
+ ]
+}

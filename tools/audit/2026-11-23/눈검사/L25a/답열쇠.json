@@ -1,0 +1,57 @@
+{
+ "lesson": "L25a",
+ "real": {
+  "CRP": {
+   "sid": "s4",
+   "cls": "A0",
+   "props": [
+    "덮개"
+   ],
+   "sid_card": "s1"
+  },
+  "CAP": {
+   "sid": "s4",
+   "cls": "A0",
+   "props": [
+    "덮개"
+   ],
+   "sid_card": "s1"
+  },
+  "프로모터": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "퍼메이스": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "트랜스아세틸화효소": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "알로락토오스": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "작동자": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "조절유전자": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "Ubx",
+  "GU",
+  "뉴클레오티드",
+  "텔로머레이스"
+ ]
+}

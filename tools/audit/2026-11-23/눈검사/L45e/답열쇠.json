@@ -1,0 +1,91 @@
+{
+ "lesson": "L45e",
+ "real": {
+  "퍼옥시좀": {
+   "sid": "s4",
+   "cls": "A0",
+   "props": [
+    "퍼내는 국자",
+    "거품이 부글거리는 물통",
+    "거품물을 퍼내는 국자"
+   ],
+   "sid_card": "s1"
+  },
+  "루비스코": {
+   "sid": "s2",
+   "cls": "A1",
+   "props": [
+    "앞 렌즈가 루비빛인 놋쇠 스코프",
+    "루비빛인 놋쇠 스코프"
+   ],
+   "sid_card": "s1"
+  },
+  "CAM": {
+   "sid": "s12",
+   "cls": "A0",
+   "props": [
+    "초승달"
+   ],
+   "sid_card": "s1"
+  },
+  "H2O2": {
+   "sid": "s4",
+   "cls": "C",
+   "props": null
+  },
+  "카르복실화효소": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "PEP": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "옥살아세트산": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "OAA": {
+   "sid": "s6",
+   "cls": "B",
+   "props": null
+  },
+  "피루브산": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "파인애플": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null,
+   "sid_card": "s9"
+  },
+  "C₄(공간)": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "손해": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "유관속초세포": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "모노뉴클레오타이드",
+  "P700",
+  "아스코르브산",
+  "CH3",
+  "Ca2",
+  "ETS"
+ ]
+}
