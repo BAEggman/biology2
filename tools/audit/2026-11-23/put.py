@@ -20,6 +20,11 @@ def main():
         x = dict(dr['줄'][i - 1]); x.update(ed.get(i, {})); x['출처'] = '대역 → 본 세션 확인' + (' · 고침' if i in ed else '')
         out.append(x)
     for x in dec.get('보탬') or []: x = dict(x); x['출처'] = x.get('출처') or '본 세션'; out.append(x)
+    sp = []
+    for x in out:
+        for c in [c.strip() for c in x['부호'].replace("'", '′').replace('/', '·').split('·') if c.strip()]:
+            y = dict(x); y['부호'] = c; sp.append(y)
+    out = sp
     for x in out:
         x['과'] = L; x['부호'] = x['부호'].replace("'", '′').strip()
         assert x['부호'] in ORDER, (L, x)
