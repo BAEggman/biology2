@@ -1,0 +1,88 @@
+{
+ "lesson": "L52a",
+ "real": {
+  "SEM": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "TEM": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "마이크로솜": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "크리스테": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "마걸리스": {
+   "sid": "s11",
+   "cls": "C",
+   "props": null
+  },
+  "균류": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "동물": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "식물": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "생화학": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "미토콘드리아": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s8"
+  },
+  "활동": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "이중막": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s10"
+  },
+  "DNA": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s10"
+  },
+  "리보솜": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s10"
+  }
+ },
+ "fake": [
+  "세퍼레이스",
+  "Gs",
+  "카스파아제",
+  "CDK",
+  "Cdc6",
+  "DAG",
+  "에피네프린"
+ ]
+}
