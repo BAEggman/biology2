@@ -1,0 +1,79 @@
+{
+ "lesson": "L17a",
+ "real": {
+  "크레아티닌": {
+   "sid": "s13",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s5"
+  },
+  "GFR": {
+   "sid": "s14",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s5"
+  },
+  "PAH": {
+   "sid": "s7",
+   "cls": "A0",
+   "props": [
+    "하마"
+   ],
+   "sid_card": "s5"
+  },
+  "히스타민": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "SGLT2": {
+   "sid": "s8",
+   "cls": "A0",
+   "props": [
+    "소금 자루 하나",
+    "소금 자루 1 + 꾸러미 1"
+   ]
+  },
+  "PCT": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "SGLT1": {
+   "sid": "s9",
+   "cls": "A0",
+   "props": [
+    "소금 자루 둘",
+    "소금 자루 2 + 꾸러미 1"
+   ],
+   "sid_card": "s8"
+  },
+  "SGLT": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "GLUT": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null
+  },
+  "Tm": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "포도당": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "SCN",
+  "GnRH",
+  "가스트린",
+  "크레아틴인산",
+  "B5"
+ ]
+}

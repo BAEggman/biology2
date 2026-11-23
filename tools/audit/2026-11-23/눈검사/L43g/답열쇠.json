@@ -1,0 +1,56 @@
+{
+ "lesson": "L43g",
+ "real": {
+  "UTR": {
+   "sid": "s2",
+   "cls": "C",
+   "props": null
+  },
+  "펩타이드": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "유비퀴틴": {
+   "sid": "s5",
+   "cls": "A1",
+   "props": [
+    "둥근 화로",
+    "둥근 화덕",
+    "화덕",
+    "화로"
+   ]
+  },
+  "ncRNA": {
+   "sid": "s6",
+   "cls": "C",
+   "props": null
+  },
+  "뉴클레오타이드": {
+   "sid": "s7",
+   "cls": "B",
+   "props": null
+  },
+  "분해": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "miRNA": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "siRNA": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UV",
+  "DnaG",
+  "드러나기",
+  "트랜스아세틸화효소"
+ ]
+}
