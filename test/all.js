@@ -18,6 +18,7 @@ const SUITES=[
   ['verify_tts.js','낭독 입력 — ttsNorm(say)에 로마자 · 그리스 · 첨자 · 과 번호 0 · 소문자 낱말은 사전 · 본보기 쌍 · 과 화면에 끼움'],
   ['verify_answerkey.js','답 열쇠 · 이름 장부 — 군더더기(㉮)를 내지 않음 · 꼭 필요한 이름은 남김 · 면제마다 까닭 · 장부 줄마다 갈래 · 상태'],
   ['verify_stoprules.js','잠금 규칙 — 열린 항목은 닿는 구간만 · grp 는 과 전체 · 다시 그릴 구역은 볼 것 · triage · lock_stops · dropped 가 같은 규칙'],
+  ['verify_standing.js','상시 요청 문 — CLAUDE.md · 상시요청.md 의 요청 여섯(상태 · 증거) · 「끝」의 증거 · 6+1 문(기준선 뒤 hook · obj 바꿈은 tools/cue/jobs 기록)'],
   ['verify_audio.js','녹음 목록 — manifest = 지금 say · 음성 저장소 주소 · 검수 기록 · heard · 상태 글(준비 중 → AI 검수 / 들어 봄)'],
 ];
 let bad=[];
