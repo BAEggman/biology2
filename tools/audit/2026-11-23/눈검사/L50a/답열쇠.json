@@ -1,0 +1,81 @@
+{
+ "lesson": "L50a",
+ "real": {
+  "콘드로이틴황산염": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "소화": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "호흡": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s2"
+  },
+  "단층편평상피": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "입방상피": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "단층원주상피": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "거짓중층원주상피": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "중층편평상피": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "성긴결합조직": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  },
+  "섬유성결합조직": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "인대": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s12"
+  },
+  "힘줄": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s12"
+  },
+  "연골": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "V2",
+  "췌장폴리펩타이드",
+  "B5",
+  "CD4"
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "lesson": "L53c",
+ "real": {
+  "들여보내": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "mV": {
+   "sid": "s9",
+   "cls": "B",
+   "props": null
+  },
+  "우아바인": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "모자이크",
+  "Gs",
+  "전아폽토시스"
+ ]
+}
