@@ -6,11 +6,7 @@
   const rowOf = id => rows().find(r => r.dataset.id === id) || null;
 
   // ── 별표 ───────────────────────────────────────────
-  function paintStarBtn(btn, on) {
-    btn.setAttribute('aria-pressed', String(on)); btn.textContent = on ? '★' : '☆';
-    btn.setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시');
-  }
-  function paintRow(row) { const on = LStore.isStar(row.dataset.id); row.classList.toggle('starred', on); paintStarBtn($('.star', row), on); }
+  function paintRow(row) { const n = LStore.rating(row.dataset.id); row.classList.toggle('starred', n > 0); LStore.paintSet($('.starset', row), n); }
 
   // 거르기 — 켜면 별표 없는 줄을 감추고, 줄이 하나도 안 남은 단원은 통째로 감춘다(목차의 그 항목도)
   function applyFilter() {
@@ -24,10 +20,11 @@
     f.textContent = '★ 표시한 것만 (' + n + ')'; f.setAttribute('aria-pressed', String(only)); f.classList.toggle('on', only);
     $('#chainStar').disabled = n === 0;
   }
-  function setStar(id, on) { LStore.setStar(id, on); const r = rowOf(id); if (r) paintRow(r); if (bigRow && bigRow.dataset.id === id) paintStarBtn($('#bigStar'), on); applyFilter(); if (bigRow) bigButtons(); }
+  function setRating(id, n) { LStore.setRating(id, n); const r = rowOf(id); if (r) paintRow(r); if (bigRow && bigRow.dataset.id === id) LStore.paintSet($('#bigStar'), LStore.rating(id)); applyFilter(); if (bigRow) bigButtons(); }
+  const toggleRating = (id, n) => setRating(id, LStore.rating(id) === n ? 0 : n);   // 지금 점수와 같은 별을 다시 누르면 지운다
   document.addEventListener('click', e => {
     const b = e.target.closest && e.target.closest('.row .star'); if (!b) return;
-    e.preventDefault(); const id = b.closest('.row').dataset.id; setStar(id, !LStore.isStar(id));
+    e.preventDefault(); toggleRating(b.closest('.row').dataset.id, +b.dataset.n);
   });
   $('#fStar').addEventListener('click', () => { LStore.setPrefs({ onlyStar: !LStore.prefs().onlyStar }); applyFilter(); });
 
@@ -44,7 +41,7 @@
     $('#bigTitle').textContent = id + ' ' + row.dataset.title;
     const img = $('#bigImg'); img.alt = id + ' ' + row.dataset.title; img.src = row.dataset.img || '';   // 큰 그림은 열 때 부른다
     $('#bigGo').href = id + '.html';
-    paintStarBtn($('#bigStar'), LStore.isStar(id));
+    LStore.paintSet($('#bigStar'), LStore.rating(id));
     subOpen = false; $('#bigSub').hidden = true; $('#bigSub').textContent = ''; $('#bigSubBtn').textContent = '요약 보기'; $('#bigSubBtn').setAttribute('aria-expanded', 'false');
     bigButtons();
   }
@@ -70,7 +67,7 @@
   $('#bigClose').addEventListener('click', closeBig);
   $('#bigPrev').addEventListener('click', () => step(-1));
   $('#bigNext').addEventListener('click', () => step(1));
-  $('#bigStar').addEventListener('click', () => { if (bigRow) setStar(bigRow.dataset.id, !LStore.isStar(bigRow.dataset.id)); });
+  $('#bigStar').addEventListener('click', e => { const b = e.target.closest && e.target.closest('.star'); if (b && bigRow) toggleRating(bigRow.dataset.id, +b.dataset.n); });
   $('#bigSubBtn').addEventListener('click', () => {
     if (!bigRow) return; subOpen = !subOpen;
     const sub = $('.card .sub', bigRow); $('#bigSub').textContent = subOpen && sub ? sub.textContent : '';
@@ -86,7 +83,7 @@
   });
 
   // 다른 탭에서 바뀌면 따라간다
-  window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars' || e.key === 'lesson_prefs') { rows().forEach(paintRow); if (bigRow) paintStarBtn($('#bigStar'), LStore.isStar(bigRow.dataset.id)); applyFilter(); } });
+  window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars' || e.key === 'lesson_prefs') { rows().forEach(paintRow); if (bigRow) LStore.paintSet($('#bigStar'), LStore.rating(bigRow.dataset.id)); applyFilter(); } });
 
   // 이어 듣기 — 첫 그림으로 가서 「다음 그림 자동」을 켠다(범위만 다르게). 과 화면이 #auto 로 열리면 곧장 읽기 시작한다.
   function chain(scope) {

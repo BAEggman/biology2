@@ -31,6 +31,8 @@ const CARDS = (() => { const m = fs.readFileSync(path.join(ROOT, 'index.html'), 
 const cardsOf = s => stopCards(s, idx);
 const firstPanel = L => { for (const s of L.stops) for (const r of (s.src || [])) return r.split('#')[0]; return null; };
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const STAR_BTNS = [1, 2, 3, 4, 5].map(k => `<button class="star" type="button" data-n="${k}" aria-pressed="false" aria-label="${k}점">☆</button>`).join('');   // 별점 1~5 — 지금 점수와 같은 별을 다시 누르면 지운다
+const STAR5 = (attrs = '') => `<span class="starset"${attrs} role="group" aria-label="별점 없음" data-n="0">${STAR_BTNS}</span>`;
 function renderLesson(data, lessonBase = '') {
   let tourLink = '';
   if (data.relatedTour) {
@@ -40,7 +42,7 @@ function renderLesson(data, lessonBase = '') {
     }
     tourLink = `<a href="${lessonBase}${id}.html">${esc(label)}</a>`;
   }
-  return tpl.replace('__TITLE__', data.title.replace(/[<&]/g, '')).replace('__TTS__', () => TTS_BLOCK).replace('__STORE__', () => STORE_BLOCK)
+  return tpl.replace('__TITLE__', data.title.replace(/[<&]/g, '')).replace('__TTS__', () => TTS_BLOCK).replace('__STORE__', () => STORE_BLOCK).replace('__STAR5__', () => STAR_BTNS)
     .replace('__TOUR_LINK__', () => tourLink).replace('__DATA__', JSON.stringify(data));
 }
 for (const id of ids) {
@@ -129,7 +131,7 @@ function topicSection(topic) {
   const attr = t => esc(t).replace(/"/g, '&quot;');
   const cards = topic.main.map(L => {
     const rev = IMG_REV[L.id] || '';
-    return `<div class="row" data-id="${L.id}" data-title="${attr(L.title)}" data-img="${rev ? `img/${L.id}.webp?v=${rev}` : ''}"><button class="thumb" type="button" aria-label="${L.id} 그림 크게 보기">${rev ? `<img src="thumb/${L.id}.webp?v=${rev}" width="160" height="90" loading="lazy" decoding="async" alt="">` : ''}</button><a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(cardsOf)).size} · ${esc(L.sub || '')}</div></a><button class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>`;
+    return `<div class="row" data-id="${L.id}" data-title="${attr(L.title)}" data-img="${rev ? `img/${L.id}.webp?v=${rev}` : ''}"><button class="thumb" type="button" aria-label="${L.id} 그림 크게 보기">${rev ? `<img src="thumb/${L.id}.webp?v=${rev}" width="160" height="90" loading="lazy" decoding="async" alt="">` : ''}</button><a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(cardsOf)).size} · ${esc(L.sub || '')}</div></a>${STAR5()}</div>`;
   }).join('\n');
   const links = topic.related.map(r => `<li><a href="${r.id}.html">${esc(r.id)} · ${esc(r.label)}</a></li>`).join('');
   const related = links ? `<aside class="related"><h4>함께 볼 그림</h4><ul>${links}</ul></aside>` : '';
@@ -147,9 +149,9 @@ a:focus-visible,summary:focus-visible,[tabindex="-1"]:focus-visible{outline:3px 
 .unit{margin-top:36px}.unit>h2{border-bottom:2px solid #255b4c;padding-bottom:6px;font-size:22px;letter-spacing:-.035em}.chapter{margin-top:22px}.chapter-head{display:flex;gap:12px;align-items:baseline;justify-content:space-between}.chapter h3{font-size:18px;scroll-margin-top:12px}.back{font-size:13px;white-space:nowrap;padding:4px 0}
 .card{display:block;border:1px solid #dce1db;background:#fff;border-radius:10px;padding:11px 14px;margin:7px 0;text-decoration:none;color:inherit;overflow-wrap:anywhere}.card b{color:#0f665b}.card:hover{border-color:#87aa9a}.toc-group a:hover,.related a:hover{text-decoration:underline}.related{display:flex;align-items:baseline;gap:3px 12px;flex-wrap:wrap;padding:3px 2px 7px}.related h4{color:#4b5250;font-size:13px}.related ul{display:flex;gap:2px 15px;flex-wrap:wrap;margin:0}.related a{display:inline-block;font-size:13px;padding:3px 0}
 .progress{margin-top:32px;border-top:1px solid #d8dfd8;padding-top:12px}.progress h2{font-size:16px;margin-top:12px}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #e3e1da;padding:5px 6px;text-align:left}th{color:#4b4b55;font-weight:600}.bar{height:6px;background:#e3e1da;border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:#0f766e}
-.row{display:grid;grid-template-columns:160px 1fr 44px;gap:10px;align-items:stretch;margin:7px 0}.row .card{margin:0}
+.row{display:grid;grid-template-columns:160px 1fr auto;gap:10px;align-items:stretch;margin:7px 0}.row .card{margin:0}
 .thumb{display:block;padding:0;border:1px solid #dce1db;border-radius:10px;overflow:hidden;background:#e9e6dd;cursor:zoom-in;height:90px;width:160px;min-width:0}.thumb img{display:block;width:160px;height:90px;object-fit:cover}.thumb:hover{border-color:#87aa9a}
-.star{font:inherit;font-size:24px;line-height:1;padding:0;border:1px solid #dce1db;background:#fff;border-radius:10px;cursor:pointer;color:#8a8a94}.star:hover{border-color:#87aa9a}.starred .star,.star[aria-pressed="true"]{color:#b45309;border-color:#e8c48c;background:#fff8ec}
+.starset{display:inline-flex;gap:0;align-items:center;align-self:center;justify-self:end;white-space:nowrap}.star{font:inherit;font-size:20px;line-height:1;padding:3px 2px;border:0;background:none;border-radius:6px;cursor:pointer;color:#8a8a94}.star:hover{color:#b45309}.star[aria-pressed="true"]{color:#b45309}
 .row[hidden],.unit[hidden],.chapter[hidden],.toc-group[hidden],.toc-group li[hidden]{display:none}
 .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 0}.tools button{font:inherit;font-size:13.5px;padding:7px 13px;border:1px solid #d8dfd8;background:#fff;border-radius:9px;cursor:pointer}.tools button.on,.tools button[aria-pressed="true"]{background:#0f766e;color:#fff;border-color:#0f766e}.tools .note{font-size:12.5px;color:#4b5250}
 a:focus-visible,button:focus-visible{outline:3px solid #176eae;outline-offset:2px}
@@ -157,8 +159,8 @@ dialog#big{border:0;border-radius:14px;padding:0;width:min(1100px,96vw);max-heig
 dialog#big.fb[open]{position:fixed;inset:2vh 2vw;margin:auto;z-index:50;box-shadow:0 0 0 100vmax rgba(20,20,30,.62)}
 .big-in{padding:12px 14px 14px}.big-top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.big-top h2{font-size:16px;margin:0;flex:1 1 220px;overflow-wrap:anywhere}.big-img{display:block;width:100%;height:auto;margin:10px 0;border:1px solid #dce1db;border-radius:10px;background:#f1efe8;aspect-ratio:2048/1144}
 .big-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.big-bar button,.big-bar a.go{font:inherit;font-size:13.5px;padding:7px 12px;border:1px solid #d8dfd8;background:#fff;border-radius:9px;cursor:pointer;color:#202823;text-decoration:none}.big-bar a.go{background:#0f766e;color:#fff;border-color:#0f766e}.big-bar button:disabled{opacity:.4;cursor:default}.big-sub{font-size:13px;color:#4b5250;margin:8px 0 0}
-@media(max-width:700px){.toc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.contents{padding:14px}.wrap{padding:16px 12px 32px}.toc-group a{padding:5px 0}.related a{padding:5px 0}.row{grid-template-columns:112px 1fr 40px;gap:8px}.thumb{width:112px;height:63px}.thumb img{width:112px;height:63px}.star{font-size:22px}}
-@media(max-width:370px){.toc-grid{gap:12px 9px}.toc-group a{font-size:13px}.quantity{white-space:normal}.page-nav{gap:12px}.row{grid-template-columns:96px 1fr 38px}.thumb{width:96px;height:54px}.thumb img{width:96px;height:54px}}
+@media(max-width:700px){.toc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.contents{padding:14px}.wrap{padding:16px 12px 32px}.toc-group a{padding:5px 0}.related a{padding:5px 0}.row{grid-template-columns:112px 1fr;gap:8px}.row .starset{grid-column:1/-1}.thumb{width:112px;height:63px}.thumb img{width:112px;height:63px}.star{font-size:24px;padding:4px 5px}}
+@media(max-width:370px){.toc-grid{gap:12px 9px}.toc-group a{font-size:13px}.quantity{white-space:normal}.page-nav{gap:12px}.row{grid-template-columns:96px 1fr}.thumb{width:96px;height:54px}.thumb img{width:96px;height:54px}}
 </style></head><body><main class="wrap">
 <header class="page-head"><h1>생물학 그림 레슨</h1><nav class="page-nav" aria-label="학습 도구"><a href="../sketchy.html">Sketchy 허브</a><a href="symbols.html">기호 사전</a><a href="../index.html">SRS 기출 카드</a></nav></header>
 <nav class="contents" aria-labelledby="contents"><div class="contents-head"><h2 id="contents" tabindex="-1">단원 목차</h2><span class="sub">${topicCount}개 단원 · 그림 레슨 ${all.length}개</span></div>
@@ -170,7 +172,7 @@ ${topicSections}
 <div class="table-scroll"><table><tr><th>묶음</th><th>단원</th><th>카드</th><th>행</th><th>덮인 행</th><th>덮인 카드</th><th>과</th></tr>
 ${cover.map(x => `<tr><td>${x.id}</td><td>${esc(x.unit)}</td><td>${x.cards}</td><td>${x.rows}</td><td>${x.rowsCovered}</td><td>${x.cardsCovered}</td><td>${x.lessons.map(l => `<a href="${l}.html">${l}</a>`).join(' ')}</td></tr>`).join('')}
 </table></div><p class="sub">d 묶음(도해)은 s 묶음을 다 세운 뒤 결정(2026-11-08).</p></section></main>
-<dialog id="big" aria-labelledby="bigTitle"><div class="big-in"><div class="big-top"><h2 id="bigTitle"></h2><div class="big-bar"><button id="bigPrev" type="button">◀ 앞 그림</button><button id="bigNext" type="button">다음 그림 ▶</button><button id="bigStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시" style="padding:4px 12px">☆</button><a id="bigGo" class="go" href="#">이 그림 공부하기</a><button id="bigClose" type="button">닫기</button></div></div><img id="bigImg" class="big-img" alt=""><div class="big-bar"><button id="bigSubBtn" type="button" aria-expanded="false">요약 보기</button></div><p id="bigSub" class="big-sub" hidden></p></div></dialog>
+<dialog id="big" aria-labelledby="bigTitle"><div class="big-in"><div class="big-top"><h2 id="bigTitle"></h2><div class="big-bar"><button id="bigPrev" type="button">◀ 앞 그림</button><button id="bigNext" type="button">다음 그림 ▶</button>${STAR5(' id="bigStar"')}<a id="bigGo" class="go" href="#">이 그림 공부하기</a><button id="bigClose" type="button">닫기</button></div></div><img id="bigImg" class="big-img" alt=""><div class="big-bar"><button id="bigSubBtn" type="button" aria-expanded="false">요약 보기</button></div><p id="bigSub" class="big-sub" hidden></p></div></dialog>
 <script src="order.js"></script>
 <script>
 ${STORE_BLOCK}

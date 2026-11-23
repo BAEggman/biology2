@@ -11,7 +11,7 @@
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
   .titlebar{display:flex;align-items:center;gap:10px}.titlebar h1{flex:1;min-width:0}
-  .star{font-size:22px;line-height:1;padding:2px 10px;color:#8a8a94}.star[aria-pressed="true"]{color:var(--gold);border-color:#e8c48c;background:#fff8ec}
+  .starset{display:inline-flex;align-items:center;white-space:nowrap}.star{font-size:22px;line-height:1;padding:2px 3px;border:0;background:none;color:#8a8a94;cursor:pointer}.star:hover{color:var(--gold)}.star[aria-pressed="true"]{color:var(--gold)}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
   .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
   .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
@@ -51,7 +51,7 @@
 <body>
 <div class="wrap">
   <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot"></span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
-  <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
+  <div class="titlebar"><h1 id="title"></h1><span id="bStar" class="starset" role="group" aria-label="별점 없음" data-n="0"><button class="star" type="button" data-n="1" aria-pressed="false" aria-label="1점">☆</button><button class="star" type="button" data-n="2" aria-pressed="false" aria-label="2점">☆</button><button class="star" type="button" data-n="3" aria-pressed="false" aria-label="3점">☆</button><button class="star" type="button" data-n="4" aria-pressed="false" aria-label="4점">☆</button><button class="star" type="button" data-n="5" aria-pressed="false" aria-label="5점">☆</button></span></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
     <button id="bTour" class="on">투어</button>
@@ -95,7 +95,7 @@
 <script>
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
-   열쇠: lesson_stars {ID: 찍은 때(ms)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
+   열쇠: lesson_stars {ID: 별점 1~5 (옛 값 = 찍은 때(ms) 는 5점으로 읽는다)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
    읽기 · 쓰기는 모두 try/catch — 저장이 막힌 브라우저에서는 그 쪽을 떠날 때까지만 기억하고 오류를 내지 않는다.
    (lesson_<ID> · lesson_shuffle · lesson_srs_inbox · lesson_auto_start 는 여기서 건드리지 않는다) */
 const LStore = (() => {
@@ -112,12 +112,22 @@ const LStore = (() => {
   const REP = ['off', 'ab', 'one', 'list'];
   return {
     stars() { const s = rd('lesson_stars', {}); return isObj(s) ? s : {}; },
-    isStar(id) { return id in LStore.stars(); },
-    setStar(id, on) {
+    rating(id) { const v = LStore.stars()[id]; if (v === undefined) return 0; return Number.isInteger(v) && v >= 1 && v <= 5 ? v : 5; },   // 별점 0~5 — 옛 값(찍은 때 ms)은 5점
+    isStar(id) { return LStore.rating(id) > 0; },
+    setRating(id, n) {
+      n = Math.max(0, Math.min(5, Math.round(+n) || 0));
       const s = { ...LStore.stars() };
-      if (on) s[id] = Date.now(); else delete s[id];
+      if (n > 0) s[id] = n; else delete s[id];
       if (Object.keys(s).length) wr('lesson_stars', s); else del('lesson_stars');
-      return on;
+      return n;
+    },
+    setStar(id, on) { return LStore.setRating(id, on ? 5 : 0) > 0; },
+    // 별 다섯 개 묶음(.starset — 안에 .star 다섯)을 n 점으로 칠한다
+    paintSet(box, n) {
+      if (!box) return;
+      box.dataset.n = String(n);
+      Array.prototype.forEach.call(box.querySelectorAll('.star'), b => { const k = +b.dataset.n, on = k <= n; b.textContent = on ? '★' : '☆'; b.setAttribute('aria-pressed', String(on)); b.setAttribute('aria-label', k + '점' + (k === n ? ' (눌러서 지우기)' : '')); });
+      box.setAttribute('aria-label', n ? '별점 ' + n + '점' : '별점 없음');
     },
     prefs() {
       const p = rd('lesson_prefs', {}); const o = isObj(p) ? p : {};
@@ -138,8 +148,8 @@ let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
-function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
-$('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
+function paintStar() { LStore.paintSet($('bStar'), LStore.rating(L.id)); }
+$('bStar').onclick = e => { const b = e.target.closest && e.target.closest('.star'); if (!b) return; const n = +b.dataset.n; LStore.setRating(L.id, LStore.rating(L.id) === n ? 0 : n); paintStar(); };   // 지금 점수와 같은 별을 다시 누르면 지운다
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
 const ov = $('ov');
 function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
@@ -476,7 +486,14 @@ function chainPaint() {
   const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
   for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
 }
-$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bNextAuto').onclick = () => {
+  autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint();
+  // 켠 순간 지금 상태에서 무슨 일이 일어나는지 알린다 — 다음 그림은 「이 과의 마지막 그림을 다 읽은 뒤」 5초 알림으로 넘어가고, 그러려면 ▶ 로 읽는 중이어야 한다
+  if (autoNext) {
+    if (tourEnded && mode === 'tour') startCountdown();   // 이미 다 읽은 자리에서 켰으면 바로 5초 알림
+    else $('audioStatus').textContent = mode !== 'tour' ? '다음 그림 자동은 「투어」에서 ▶ 로 읽을 때 쓰인다' : playing ? '켜졌다 — 이 과를 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다' : '켜졌다 — ▶ 를 누르면 이 과를 끝까지 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다';
+  } else $('audioStatus').textContent = '다음 그림 자동을 껐다 — 이 과의 끝에서 멈춘다';
+};
 $('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
 for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
 window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });

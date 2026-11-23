@@ -11,7 +11,7 @@
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
   .titlebar{display:flex;align-items:center;gap:10px}.titlebar h1{flex:1;min-width:0}
-  .star{font-size:22px;line-height:1;padding:2px 10px;color:#8a8a94}.star[aria-pressed="true"]{color:var(--gold);border-color:#e8c48c;background:#fff8ec}
+  .starset{display:inline-flex;align-items:center;white-space:nowrap}.star{font-size:22px;line-height:1;padding:2px 3px;border:0;background:none;color:#8a8a94;cursor:pointer}.star:hover{color:var(--gold)}.star[aria-pressed="true"]{color:var(--gold)}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
   .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
   .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
@@ -51,7 +51,7 @@
 <body>
 <div class="wrap">
   <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><span id="tourSlot">__TOUR_LINK__</span><a id="navPrev" href="#" hidden>◀ 앞 그림</a><a id="navNext" href="#" hidden>다음 그림 ▶</a></nav>
-  <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
+  <div class="titlebar"><h1 id="title"></h1><span id="bStar" class="starset" role="group" aria-label="별점 없음" data-n="0">__STAR5__</span></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
     <button id="bTour" class="on">투어</button>
@@ -102,8 +102,8 @@ let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 // 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
-function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
-$('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
+function paintStar() { LStore.paintSet($('bStar'), LStore.rating(L.id)); }
+$('bStar').onclick = e => { const b = e.target.closest && e.target.closest('.star'); if (!b) return; const n = +b.dataset.n; LStore.setRating(L.id, LStore.rating(L.id) === n ? 0 : n); paintStar(); };   // 지금 점수와 같은 별을 다시 누르면 지운다
 window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
 const ov = $('ov');
 function paintChrome() {   // 과가 바뀔 때마다 다시 칠하는 것 — 제목 · 그림 · 링크 · 별표
@@ -311,7 +311,14 @@ function chainPaint() {
   const p = canChain ? neighbor(-1, false) : null, n = canChain ? neighbor(1, false) : null;
   for (const [el, id] of [[$('navPrev'), p], [$('navNext'), n]]) { el.hidden = !id; if (id) { el.href = id + '.html'; el.title = titleOf(id); el.dataset.id = id; } }
 }
-$('bNextAuto').onclick = () => { autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint(); };
+$('bNextAuto').onclick = () => {
+  autoNext = !autoNext; LStore.setPrefs({ autoNext }); if (!autoNext) cancelCountdown(); chainPaint();
+  // 켠 순간 지금 상태에서 무슨 일이 일어나는지 알린다 — 다음 그림은 「이 과의 마지막 그림을 다 읽은 뒤」 5초 알림으로 넘어가고, 그러려면 ▶ 로 읽는 중이어야 한다
+  if (autoNext) {
+    if (tourEnded && mode === 'tour') startCountdown();   // 이미 다 읽은 자리에서 켰으면 바로 5초 알림
+    else $('audioStatus').textContent = mode !== 'tour' ? '다음 그림 자동은 「투어」에서 ▶ 로 읽을 때 쓰인다' : playing ? '켜졌다 — 이 과를 다 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다' : '켜졌다 — ▶ 를 누르면 이 과를 끝까지 읽은 뒤 5초 알림을 띄우고 다음 그림으로 넘어간다';
+  } else $('audioStatus').textContent = '다음 그림 자동을 껐다 — 이 과의 끝에서 멈춘다';
+};
 $('bScope').onclick = () => { scope = scope === 'star' ? 'all' : 'star'; LStore.setPrefs({ scope }); chainPaint(); };
 for (const id of ['navPrev', 'navNext']) $(id).addEventListener('click', e => { e.preventDefault(); const t = $(id).dataset.id; if (t) openLesson(t, { auto: playing }); });
 window.addEventListener('storage', e => { if (e.key === 'lesson_stars') chainPaint(); });

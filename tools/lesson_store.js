@@ -1,6 +1,6 @@
 /* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
    빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
-   열쇠: lesson_stars {ID: 찍은 때(ms)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
+   열쇠: lesson_stars {ID: 별점 1~5 (옛 값 = 찍은 때(ms) 는 5점으로 읽는다)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
    읽기 · 쓰기는 모두 try/catch — 저장이 막힌 브라우저에서는 그 쪽을 떠날 때까지만 기억하고 오류를 내지 않는다.
    (lesson_<ID> · lesson_shuffle · lesson_srs_inbox · lesson_auto_start 는 여기서 건드리지 않는다) */
 const LStore = (() => {
@@ -17,12 +17,22 @@ const LStore = (() => {
   const REP = ['off', 'ab', 'one', 'list'];
   return {
     stars() { const s = rd('lesson_stars', {}); return isObj(s) ? s : {}; },
-    isStar(id) { return id in LStore.stars(); },
-    setStar(id, on) {
+    rating(id) { const v = LStore.stars()[id]; if (v === undefined) return 0; return Number.isInteger(v) && v >= 1 && v <= 5 ? v : 5; },   // 별점 0~5 — 옛 값(찍은 때 ms)은 5점
+    isStar(id) { return LStore.rating(id) > 0; },
+    setRating(id, n) {
+      n = Math.max(0, Math.min(5, Math.round(+n) || 0));
       const s = { ...LStore.stars() };
-      if (on) s[id] = Date.now(); else delete s[id];
+      if (n > 0) s[id] = n; else delete s[id];
       if (Object.keys(s).length) wr('lesson_stars', s); else del('lesson_stars');
-      return on;
+      return n;
+    },
+    setStar(id, on) { return LStore.setRating(id, on ? 5 : 0) > 0; },
+    // 별 다섯 개 묶음(.starset — 안에 .star 다섯)을 n 점으로 칠한다
+    paintSet(box, n) {
+      if (!box) return;
+      box.dataset.n = String(n);
+      Array.prototype.forEach.call(box.querySelectorAll('.star'), b => { const k = +b.dataset.n, on = k <= n; b.textContent = on ? '★' : '☆'; b.setAttribute('aria-pressed', String(on)); b.setAttribute('aria-label', k + '점' + (k === n ? ' (눌러서 지우기)' : '')); });
+      box.setAttribute('aria-label', n ? '별점 ' + n + '점' : '별점 없음');
     },
     prefs() {
       const p = rd('lesson_prefs', {}); const o = isObj(p) ? p : {};

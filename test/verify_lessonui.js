@@ -81,6 +81,7 @@ function bootLesson(id, { store = {}, brokenStorage = false, manifest = { lesson
 const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
 const key = (w, k) => w.document.dispatchEvent(new w.KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true }));
 const stars = w => JSON.parse(w.localStorage.getItem('lesson_stars') || '{}');
+const starN = (box, k) => box.querySelector('.star[data-n="' + k + '"]'), sfill = box => Array.from(box.querySelectorAll('.star')).map(b => b.textContent).join('');   // 별점 1~5 — 별 다섯 개 묶음
 const prefs = w => JSON.parse(w.localStorage.getItem('lesson_prefs') || '{}');
 const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex').slice(0, 12);
 
@@ -107,7 +108,7 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
       yes(im && im.getAttribute('loading') === 'lazy' && im.getAttribute('width') === '160' && im.getAttribute('height') === '90' && im.getAttribute('decoding') === 'async', id + ' 썸네일 태그');
       yes(fs.existsSync(path.join(LES, im.getAttribute('src').split('?')[0])), id + ' 썸네일 파일');
       yes(/\?v=[0-9a-f]{12}$/.test(im.getAttribute('src')), id + ' 썸네일 ?v=');
-      eq([r.querySelector('.star').getAttribute('aria-pressed'), r.querySelector('.star').textContent], ['false', '☆'], id + ' 별표');
+      eq([r.querySelectorAll('.star').length, sfill(r.querySelector('.starset')), r.querySelector('.starset').dataset.n], [5, '☆☆☆☆☆', '0'], id + ' 별 다섯 개');
       eq(r.querySelector('a.card').getAttribute('href'), id + '.html', id + ' 제목 칸');
       yes(r.querySelector('.thumb').tagName === 'BUTTON' && r.querySelector('.star').tagName === 'BUTTON', id + ' 단추 · 링크 안에 단추 없음');
       yes(!r.querySelector('a button'), id + ' 링크 안의 단추');
@@ -121,16 +122,19 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
   });
 
   const first = rows[0], second = rows[1], third = rows[2];
-  await T('별표를 누르면 aria-pressed · ★ · lesson_stars 가 바뀌고 쪽이 옮겨 가지 않음', () => {
-    const href0 = A.w.location.href;
-    click(A.w, first.querySelector('.star'));
-    eq([first.querySelector('.star').getAttribute('aria-pressed'), first.querySelector('.star').textContent, first.classList.contains('starred')], ['true', '★', true]);
-    const s = stars(A.w); eq(Object.keys(s), [first.dataset.id]); yes(typeof s[first.dataset.id] === 'number' && s[first.dataset.id] > 1e12, '찍은 때(ms)');
+  await T('별(1~5)을 누르면 그 점수까지 ★ 로 차고 lesson_stars 에 점수가 남고 쪽이 옮겨 가지 않음', () => {
+    const href0 = A.w.location.href, box = first.querySelector('.starset');
+    click(A.w, starN(first, 3));
+    eq([sfill(box), box.dataset.n, first.classList.contains('starred'), starN(first, 3).getAttribute('aria-pressed'), starN(first, 4).getAttribute('aria-pressed')], ['★★★☆☆', '3', true, 'true', 'false']);
+    const s = stars(A.w); eq(Object.keys(s), [first.dataset.id]); eq(s[first.dataset.id], 3, '점수');
+    click(A.w, starN(first, 5)); eq([sfill(box), stars(A.w)[first.dataset.id]], ['★★★★★', 5], '다른 별을 누르면 점수가 바뀜');
+    click(A.w, starN(first, 2)); eq([sfill(box), stars(A.w)[first.dataset.id]], ['★★☆☆☆', 2], '낮춰도 됨');
+    click(A.w, starN(first, 3)); eq(stars(A.w)[first.dataset.id], 3);
     eq(A.w.location.href, href0, '쪽이 옮겨 감');
   });
   await T('다시 누르면 지워지고 열쇠도 빠진다(마지막 하나면 lesson_stars 자체가 없어짐)', () => {
-    click(A.w, first.querySelector('.star'));
-    eq(first.querySelector('.star').getAttribute('aria-pressed'), 'false'); eq(A.w.localStorage.getItem('lesson_stars'), null);
+    click(A.w, starN(first, 3));   // 지금 점수와 같은 별 = 지움
+    eq([sfill(first.querySelector('.starset')), first.classList.contains('starred')], ['☆☆☆☆☆', false]); eq(A.w.localStorage.getItem('lesson_stars'), null);
   });
   await T('거르기 — 켜면 별표 없는 줄 · 빈 단원 · 목차 항목이 감춰지고 (n) 이 맞음 · 설정이 lesson_prefs 에 남음', () => {
     click(A.w, second.querySelector('.star')); click(A.w, third.querySelector('.star'));
@@ -161,7 +165,7 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
     yes(dlg.open, '열림'); eq(A.d.getElementById('bigImg').getAttribute('src'), first.dataset.img); yes(/^img\/L\d{2}[a-z]?\.webp\?v=[0-9a-f]{12}$/.test(first.dataset.img), '큰 그림 주소');
     yes(fs.existsSync(path.join(LES, first.dataset.img.split('?')[0])), '큰 그림 파일');
     eq(bigTitle(), first.dataset.id + ' ' + first.dataset.title); eq(A.d.getElementById('bigGo').getAttribute('href'), first.dataset.id + '.html');
-    eq(A.d.getElementById('bigStar').getAttribute('aria-pressed'), 'false'); eq(A.d.getElementById('bigPrev').disabled, true); eq(A.d.getElementById('bigNext').disabled, false);
+    eq(A.d.getElementById('bigStar').dataset.n, '0'); eq(A.d.getElementById('bigPrev').disabled, true); eq(A.d.getElementById('bigNext').disabled, false);
   });
   await T('요약(sub)은 접혀 있고 「요약 보기」를 눌러야 펼쳐짐', () => {
     eq(A.d.getElementById('bigSub').hidden, true); eq(A.d.getElementById('bigSub').textContent, '');
@@ -175,10 +179,11 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
     click(A.w, A.d.getElementById('bigPrev')); eq(A.d.getElementById('bigPrev').disabled, true);
     key(A.w, 'ArrowLeft'); eq(bigTitle().split(' ')[0], first.dataset.id, '처음에서 더 안 감');
   });
-  await T('큰 보기 안의 ☆ — 같은 열쇠 · 목록의 별표도 따라 바뀜', () => {
-    click(A.w, A.d.getElementById('bigStar'));
-    eq([A.d.getElementById('bigStar').getAttribute('aria-pressed'), first.querySelector('.star').getAttribute('aria-pressed')], ['true', 'true']); eq(Object.keys(stars(A.w)).includes(first.dataset.id), true);
-    click(A.w, A.d.getElementById('bigStar')); eq(first.querySelector('.star').getAttribute('aria-pressed'), 'false');
+  await T('큰 보기 안의 별 — 같은 열쇠 · 목록의 별도 따라 바뀜 · 같은 별을 다시 누르면 지움', () => {
+    const big = A.d.getElementById('bigStar');
+    click(A.w, starN(big, 4));
+    eq([big.dataset.n, sfill(first.querySelector('.starset'))], ['4', '★★★★☆']); eq(stars(A.w)[first.dataset.id], 4);
+    click(A.w, starN(big, 4)); eq([big.dataset.n, sfill(first.querySelector('.starset'))], ['0', '☆☆☆☆☆']);
   });
   await T('Esc · 닫기 — 닫히고 큰 그림을 놓음', () => {
     key(A.w, 'Escape'); yes(!dlg.open, 'Esc'); eq(A.d.getElementById('bigImg').getAttribute('src'), null);
@@ -193,7 +198,7 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
   });
   await T('큰 보기에서 별표를 지워도 그 그림은 닫기 전까지 남음(거르기를 켠 채)', () => {
     click(A.w, A.d.getElementById('fStar'));   // 거르기 켬 — second · third 만
-    click(A.w, second.querySelector('.thumb')); click(A.w, A.d.getElementById('bigStar'));   // second 별표 지움
+    click(A.w, second.querySelector('.thumb')); click(A.w, starN(A.d.getElementById('bigStar'), 1));   // second 별표(1점) 지움
     yes(!second.hidden, '열려 있는 그림은 안 사라짐'); click(A.w, A.d.getElementById('bigClose')); yes(second.hidden, '닫으면 거름');
     click(A.w, A.d.getElementById('fStar'));
   });
@@ -217,13 +222,15 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
   });
 
   console.log('\n── ① 별표 — 과 화면 ──');
-  await T('과 화면 제목 곁 ☆ — 같은 열쇠 · 목록과 한 몸', () => {
+  await T('과 화면 제목 곁 별 다섯 — 같은 열쇠 · 목록과 한 몸 · 옛 값(찍은 때)은 5점', () => {
     const P = bootLesson('L17e'); eq(P.errs, []); const b = P.d.getElementById('bStar'), w = P.w;
-    eq([b.getAttribute('aria-pressed'), b.textContent], ['false', '☆']);
-    click(w, b); eq([b.getAttribute('aria-pressed'), b.textContent], ['true', '★']); eq(Object.keys(stars(w)), ['L17e']);
-    const Q = bootLesson('L17e', { store: { lesson_stars: JSON.stringify({ L17e: 5 }) } }); eq(Q.d.getElementById('bStar').getAttribute('aria-pressed'), 'true', '저장된 별표');
-    Q.w.localStorage.removeItem('lesson_stars'); Q.w.dispatchEvent(new Q.w.StorageEvent('storage', { key: 'lesson_stars' })); eq(Q.d.getElementById('bStar').textContent, '☆', '다른 탭에서 지움');
-    const R = bootLesson('L17e', { brokenStorage: true }); click(R.w, R.d.getElementById('bStar')); eq(R.d.getElementById('bStar').textContent, '★', '저장이 막혀도'); eq(R.errs, []);
+    eq([b.dataset.n, sfill(b)], ['0', '☆☆☆☆☆']);
+    click(w, starN(b, 4)); eq([b.dataset.n, sfill(b)], ['4', '★★★★☆']); eq(stars(w), { L17e: 4 });
+    click(w, starN(b, 4)); eq([b.dataset.n, sfill(b), w.localStorage.getItem('lesson_stars')], ['0', '☆☆☆☆☆', null], '같은 별 = 지움');
+    const Q = bootLesson('L17e', { store: { lesson_stars: JSON.stringify({ L17e: 2 }) } }); eq(sfill(Q.d.getElementById('bStar')), '★★☆☆☆', '저장된 점수');
+    const O = bootLesson('L17e', { store: { lesson_stars: JSON.stringify({ L17e: 1795400000000 }) } }); eq(sfill(O.d.getElementById('bStar')), '★★★★★', '옛 값(찍은 때 ms)은 5점');
+    Q.w.localStorage.removeItem('lesson_stars'); Q.w.dispatchEvent(new Q.w.StorageEvent('storage', { key: 'lesson_stars' })); eq(sfill(Q.d.getElementById('bStar')), '☆☆☆☆☆', '다른 탭에서 지움');
+    const R = bootLesson('L17e', { brokenStorage: true }); click(R.w, starN(R.d.getElementById('bStar'), 2)); eq(sfill(R.d.getElementById('bStar')), '★★☆☆☆', '저장이 막혀도'); eq(R.errs, []);
   });
   await T('과 화면이 빌드의 모든 142과에서 같은 틀(별표 단추 · 저장 도우미)로 지어짐', () => {
     const bad = lessons.filter(L => { const t = fs.readFileSync(path.join(LES, L.id + '.html'), 'utf8'); return !t.includes('id="bStar"') || !t.includes('const LStore'); }).map(L => L.id);
@@ -390,6 +397,14 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
     eq([P.d.getElementById('navNext').getAttribute('href'), P.d.getElementById('navPrev').getAttribute('href')], [F2 + '.html', nextOf(F, -1) + '.html']);
     const Q = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: true, scope: 'star' }) } }); eq([Q.d.getElementById('bNextAuto').textContent, Q.d.getElementById('bScope').textContent], ['다음 그림 자동 켜짐', '범위 ★만'], '새로 열어도 기억');
   });
+  await T('「다음 그림 자동」을 켜는 순간 지금 상태에 맞는 안내가 뜸 — 안 읽는 중이면 ▶ 안내 · 다 읽은 자리에서 켜면 바로 5초 알림 · 끄면 끝에서 멈춘다는 안내', async () => {
+    const P = bootLesson(F), st = () => P.d.getElementById('audioStatus').textContent;
+    clickId(P, 'bNextAuto'); yes(/▶ 를 누르면 .*다음 그림으로 넘어간다/.test(st()), '안 읽는 중: ' + st());
+    clickId(P, 'bNextAuto'); yes(/껐다/.test(st()), '끔: ' + st());
+    const Q = bootLesson(F, { store: { lesson_prefs: JSON.stringify({ autoNext: false }) } });
+    Q.w.eval('tourEnded = true'); clickId(Q, 'bNextAuto'); yes(/초 뒤 다음 그림/.test(noteTxt(Q)), '다 읽은 자리에서 켬: ' + noteTxt(Q));
+    const R = bootLesson(F); clickId(R, 'bReview'); clickId(R, 'bNextAuto'); yes(/투어/.test(R.d.getElementById('audioStatus').textContent), '복습에서 켬');
+  });
   await T('목록 맨 앞 과에는 앞 그림 링크가 없고, 맨 뒤 과에는 다음 그림 링크가 없음 · 한 파일(standalone)에는 이어 듣기 단추가 없음', () => {
     const a = bootLesson(ORD[0].id), z = bootLesson(ORD[ORD.length - 1].id);
     eq([a.d.getElementById('navPrev').hidden, a.d.getElementById('navNext').hidden, z.d.getElementById('navNext').hidden, z.d.getElementById('navPrev').hidden], [true, false, true, false]);
@@ -411,7 +426,7 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
     await P.tick(3200);
     eq(cur(P), F2, '과가 바뀜'); eq(P.d.getElementById('title').textContent, P.w.eval('L.title')); eq(P.d.title, P.w.eval('L.title'));
     eq(pathId(P), F2, '주소창'); eq(P.w.eval('scoreKey'), 'lesson_' + F2); eq(P.w.eval('Object.keys(store.items)'), ['s1'], '그 과의 옛 기록을 읽음');
-    eq(P.d.getElementById('bStar').textContent, '★', '새 과의 별표'); yes(P.d.getElementById('img').getAttribute('src').includes(F2), '그림이 바뀜');
+    eq(sfill(P.d.getElementById('bStar')), '★★★★★', '새 과의 별표(옛 값 9 → 5점)'); yes(P.d.getElementById('img').getAttribute('src').includes(F2), '그림이 바뀜');
     eq(at(P), 0, '새 과의 첫 정거장부터 읽기 시작'); eq(P.w.eval('playing'), true); eq(noteTxt(P), '', '알림이 사라짐');
     yes(P.d.getElementById('step').textContent.startsWith('1 / ' + nStops(F2)), '단계 ' + P.d.getElementById('step').textContent);
     eq(P.d.getElementById('bNextAuto').textContent, '다음 그림 자동 켜짐', '켜 둔 채 이어짐'); eq(P.errs, []);
