@@ -1,0 +1,128 @@
+{
+ "lesson": "L19b",
+ "real": {
+  "Rb": {
+   "sid": "s2",
+   "cls": "A0",
+   "props": [
+    "루비"
+   ]
+  },
+  "E2F": {
+   "sid": "s3",
+   "cls": "A1",
+   "props": [
+    "숫자 2",
+    "F자"
+   ]
+  },
+  "Cdk1": {
+   "sid": "s7",
+   "cls": "A0",
+   "props": [
+    "음반"
+   ],
+   "sid_card": "s6"
+  },
+  "사이클린": {
+   "sid": "s7",
+   "cls": "A0",
+   "props": [
+    "자전거",
+    "사이클"
+   ]
+  },
+  "DEAB": {
+   "sid": "s10",
+   "cls": "A0",
+   "props": [
+    "D · E · 사다리 · B",
+    "왼쪽부터 읽으면"
+   ],
+   "sid_card": "s7"
+  },
+  "키네이스": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "Wee1": {
+   "sid": "s8",
+   "cls": "A0",
+   "props": [
+    "어깨띠",
+    "겨자색 어깨띠"
+   ]
+  },
+  "포스파테이스": {
+   "sid": "s9",
+   "cls": "B",
+   "props": null
+  },
+  "Cdc25": {
+   "sid": "s9",
+   "cls": "A0",
+   "props": [
+    "음반"
+   ]
+  },
+  "Cdk4": {
+   "sid": "s4",
+   "cls": "A0",
+   "props": [
+    "음반"
+   ],
+   "sid_card": "s11"
+  },
+  "Cdk6": {
+   "sid": "s11",
+   "cls": "A0",
+   "props": [
+    "음반"
+   ]
+  },
+  "Cdk2": {
+   "sid": "s4",
+   "cls": "A0",
+   "props": [
+    "음반"
+   ],
+   "sid_card": "s11"
+  },
+  "유비퀴틴화": {
+   "sid": "s12",
+   "cls": "A0",
+   "props": [
+    "둥근 화로",
+    "둥근 화덕",
+    "화덕",
+    "화로"
+   ]
+  },
+  "MPF": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "E+Cdk2": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  },
+  "A+Cdk2": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "Mad2",
+  "호르몬신호",
+  "DAG",
+  "PS",
+  "시토크롬",
+  "BRCA1",
+  "Bcl",
+  "트레오닌"
+ ]
+}

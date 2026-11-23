@@ -1,0 +1,21 @@
+{
+ "lesson": "L11d",
+ "real": {
+  "프라이머": {
+   "sid": "s2",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "슈퍼코일": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  }
+ },
+ "fake": [
+  "UTR",
+  "DnaG",
+  "뉴클레오솜"
+ ]
+}

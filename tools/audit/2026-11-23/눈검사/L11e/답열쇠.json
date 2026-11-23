@@ -1,0 +1,36 @@
+{
+ "lesson": "L11e",
+ "real": {
+  "프라이머": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s4"
+  },
+  "텔로머레이스": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s5"
+  },
+  "TTAGGG": {
+   "sid": "s3",
+   "cls": "A1",
+   "props": [
+    "T·T·A 판자와 G·G·G 판자가 번갈아",
+    "판자와 G·G·G 판자가 번갈아"
+   ],
+   "sid_card": "s6"
+  },
+  "생식계열": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UV",
+  "DnaG",
+  "뉴클레오타이드"
+ ]
+}

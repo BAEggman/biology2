@@ -1,0 +1,41 @@
+{
+ "lesson": "L37a",
+ "real": {
+  "뉴클레오솜": {
+   "sid": "s4",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "H2A": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "H2B": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "H3": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "H4": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "H1": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "UTR",
+  "헬리케이스",
+  "DnaG"
+ ]
+}

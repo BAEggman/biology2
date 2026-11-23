@@ -1,0 +1,70 @@
+{
+ "lesson": "L19a",
+ "real": {
+  "FACS": {
+   "sid": "s2",
+   "cls": "C",
+   "props": null
+  },
+  "캐드헤린": {
+   "sid": "s13",
+   "cls": "C",
+   "props": null
+  },
+  "인테그린": {
+   "sid": "s14",
+   "cls": "C",
+   "props": null
+  },
+  "G1": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s3"
+  },
+  "S기": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "G2": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s5"
+  },
+  "M기": {
+   "sid": "s11",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s6"
+  },
+  "G0": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  },
+  "근육세포(가로무늬)": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "할구": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  },
+  "세포융합": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "마이크로솜",
+  "Gt",
+  "전아폽토시스",
+  "CDK",
+  "Cdc6"
+ ]
+}

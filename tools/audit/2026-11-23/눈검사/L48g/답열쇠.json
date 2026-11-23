@@ -1,0 +1,20 @@
+{
+ "lesson": "L48g",
+ "real": {
+  "세포질분열": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "역할": {
+   "sid": "s10",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "마걸리스",
+  "Gs",
+  "인슐린"
+ ]
+}
