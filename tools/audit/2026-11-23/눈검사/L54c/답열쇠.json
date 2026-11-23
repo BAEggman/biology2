@@ -1,0 +1,45 @@
+{
+ "lesson": "L54c",
+ "real": {
+  "칙술루브": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "Pg": {
+   "sid": "s5",
+   "cls": "C",
+   "props": null
+  },
+  "아홀로틀": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "판구조": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "판게아": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "이시성": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "유형성숙": {
+   "sid": "s9",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "바이로이드",
+  "HTLV",
+  "스트로마톨라이트"
+ ]
+}

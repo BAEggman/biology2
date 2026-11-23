@@ -27,6 +27,8 @@ def main():
     out = sp
     for x in out:
         x['과'] = L; x['부호'] = x['부호'].replace("'", '′').strip()
+        if '→' in x['부호']:  # 「P10 → W」 꼴 — 채점표 원칙 번호 → 부호. 부호만 남기고 원칙은 근거 앞에 둔다
+            a, b = [t.strip() for t in x['부호'].rsplit('→', 1)]; x['부호'] = b; x['근거'] = f'({a}) ' + x.get('근거', '')
         assert x['부호'] in ORDER, (L, x)
         if x.get('처방') not in RX: x['처방'] = next((r for r in RX if r in (x.get('처방') or '')), '글')
         x['급'] = ORDER[x['부호']]

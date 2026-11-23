@@ -1,0 +1,57 @@
+{
+ "lesson": "L07a",
+ "real": {
+  "신경호르몬": {
+   "sid": "s5",
+   "cls": "B",
+   "props": null
+  },
+  "ADH": {
+   "sid": "s6",
+   "cls": "A0",
+   "props": [
+    "V자",
+    "이음쇠",
+    "수도꼭지"
+   ],
+   "sid_card": "s5"
+  },
+  "바소프레신": {
+   "sid": "s6",
+   "cls": "A0",
+   "props": [
+    "V자",
+    "이음쇠",
+    "수도꼭지"
+   ],
+   "sid_card": "s5"
+  },
+  "프로스타글란딘": {
+   "sid": "s7",
+   "cls": "C",
+   "props": null
+  },
+  "에스트로겐": {
+   "sid": "s7",
+   "cls": "A1",
+   "props": [
+    "빨대"
+   ]
+  },
+  "분비": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "방출": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "ROMK",
+  "Gi",
+  "Va"
+ ]
+}
