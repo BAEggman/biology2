@@ -1,0 +1,40 @@
+{
+ "lesson": "L22a",
+ "real": {
+  "유조직": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "후각조직": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "후벽조직": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "헛물관": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  },
+  "체관요소": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "반세포(동반세포)": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "어린잎",
+  "니트로게나아제",
+  "지베렐린"
+ ]
+}

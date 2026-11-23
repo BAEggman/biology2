@@ -1,0 +1,138 @@
+{
+ "lesson": "L08a",
+ "real": {
+  "트로포닌": {
+   "sid": "s9",
+   "cls": "A1",
+   "props": [
+    "트로피 받침대"
+   ],
+   "sid_card": "s1"
+  },
+  "칼모듈린": {
+   "sid": "s10",
+   "cls": "A1",
+   "props": [
+    "모듈 쟁반",
+    "모듈"
+   ],
+   "sid_card": "s1"
+  },
+  "DHP": {
+   "sid": "s4",
+   "cls": "A0",
+   "props": [
+    "D자"
+   ],
+   "sid_card": "s1"
+  },
+  "RyR1": {
+   "sid": "s4",
+   "cls": "A1",
+   "props": [
+    "사자 머리"
+   ],
+   "sid_card": "s1"
+  },
+  "RyR2": {
+   "sid": "s6",
+   "cls": "A1",
+   "props": [
+    "놋쇠 사자 머리 문고리",
+    "사자 머리 문고리",
+    "사자 머리"
+   ],
+   "sid_card": "s1"
+  },
+  "CICR": {
+   "sid": "s1",
+   "cls": "B",
+   "props": null
+  },
+  "MLCK": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "트로포미오신": {
+   "sid": "s9",
+   "cls": "B",
+   "props": null
+  },
+  "필라멘트": {
+   "sid": "s9",
+   "cls": "B",
+   "props": null
+  },
+  "PKA": {
+   "sid": "s10",
+   "cls": "A1",
+   "props": [
+    "A자",
+    "사다리"
+   ]
+  },
+  "PKC": {
+   "sid": "s10",
+   "cls": "A1",
+   "props": [
+    "C자"
+   ]
+  },
+  "CaM": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null
+  },
+  "아르기닌": {
+   "sid": "s13",
+   "cls": "A1",
+   "props": [
+    "R자 깃발"
+   ]
+  },
+  "NOS": {
+   "sid": "s13",
+   "cls": "C",
+   "props": null
+  },
+  "NO": {
+   "sid": "s13",
+   "cls": "C",
+   "props": null
+  },
+  "수의근": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "평활근": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null,
+   "sid_card": "s9"
+  },
+  "소화관": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  },
+  "방광": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "TCA",
+  "Gq",
+  "글루카곤",
+  "테스토스테론",
+  "B5",
+  "CD4",
+  "아세틸콜린",
+  "DCT",
+  "Xa"
+ ]
+}

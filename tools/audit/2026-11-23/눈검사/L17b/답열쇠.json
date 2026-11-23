@@ -1,0 +1,84 @@
+{
+ "lesson": "L17b",
+ "real": {
+  "GFR": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "TGF": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null,
+   "sid_card": "s1"
+  },
+  "알도스테론": {
+   "sid": "s7",
+   "cls": "A1",
+   "props": [
+    "알갱이를 쓸어 도로 통에",
+    "도로 통에 담",
+    "알갱이를 건져 도로 자루에"
+   ],
+   "sid_card": "s6"
+  },
+  "ADH": {
+   "sid": "s8",
+   "cls": "A0",
+   "props": [
+    "V자",
+    "이음쇠",
+    "수도꼭지"
+   ]
+  },
+  "심방나트륨이뇨펩티드": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "ANP": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "RAAS": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "AngII": {
+   "sid": "s12",
+   "cls": "C",
+   "props": null
+  },
+  "치밀반": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "간질세포": {
+   "sid": "s1",
+   "cls": "fact",
+   "props": null
+  },
+  "갈증": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  },
+  "혈압약": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "SGLT",
+  "Gs",
+  "mmHg",
+  "크레아티닌",
+  "BPG",
+  "CRH"
+ ]
+}

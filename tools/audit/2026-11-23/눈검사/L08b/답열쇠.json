@@ -1,0 +1,58 @@
+{
+ "lesson": "L08b",
+ "real": {
+  "네불린": {
+   "sid": "s3",
+   "cls": "A1",
+   "props": [
+    "네온 불"
+   ],
+   "sid_card": "s2"
+  },
+  "트로포모듈린": {
+   "sid": "s4",
+   "cls": "A0",
+   "props": [
+    "트로피"
+   ]
+  },
+  "크레아틴인산": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "트로포닌": {
+   "sid": "s10",
+   "cls": "A1",
+   "props": [
+    "트로피 받침대"
+   ]
+  },
+  "트로포미오신": {
+   "sid": "s10",
+   "cls": "B",
+   "props": null
+  },
+  "TpC": {
+   "sid": "s10",
+   "cls": "C",
+   "props": null
+  },
+  "티틴": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "사후강직": {
+   "sid": "s8",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RAAS",
+  "GPCR",
+  "Va",
+  "카르복실화효소"
+ ]
+}

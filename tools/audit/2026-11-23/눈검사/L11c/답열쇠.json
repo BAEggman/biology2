@@ -1,0 +1,61 @@
+{
+ "lesson": "L11c",
+ "real": {
+  "BER": {
+   "sid": "s3",
+   "cls": "B",
+   "props": null
+  },
+  "UV": {
+   "sid": "s7",
+   "cls": "A0",
+   "props": [
+    "해 모양",
+    "그을음"
+   ]
+  },
+  "뉴클레오타이드": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "NER": {
+   "sid": "s8",
+   "cls": "B",
+   "props": null
+  },
+  "GATC": {
+   "sid": "s9",
+   "cls": "A0",
+   "props": [
+    "꽃 도장"
+   ]
+  },
+  "미스매치": {
+   "sid": "s11",
+   "cls": "B",
+   "props": null
+  },
+  "MutS": {
+   "sid": "s12",
+   "cls": "fact",
+   "props": null
+  },
+  "MutL": {
+   "sid": "s13",
+   "cls": "fact",
+   "props": null
+  },
+  "MutH": {
+   "sid": "s14",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "ncRNA",
+  "GU",
+  "라리아트",
+  "트랜슬레이션"
+ ]
+}
