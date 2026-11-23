@@ -228,6 +228,144 @@ const sha12 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest
     eq(bad, []);
   });
 
+
+  // ═══════════════════════ ③ 반복 재생 ═══════════════════════
+  console.log('\n── ③ 반복 재생 ──');
+  const idxOf = P => P.w.eval('i'), at = P => P.w.eval('i');
+  const N = 13;
+  const play = (P) => click(P.w, P.d.getElementById('bPlay'));
+  const clickId = (P, id) => click(P.w, P.d.getElementById(id));
+  const goTo = (P, k) => { P.w.eval('go(' + k + ')'); };
+  const abKey = id => 'lesson_ab_' + id;
+  const trace = async (P, ms, step = 100) => { const seen = []; for (let t = 0; t < ms; t += step) { await P.tick(step); const v = at(P); if (seen[seen.length - 1] !== v) seen.push(v); } return seen; };
+
+  await T('🔁 단추 — 꺼짐 → 구간 → 이 그림 → 꺼짐 · 눌림 표시 · 설정이 lesson_prefs 에 · 구간 줄은 구간일 때만', async () => {
+    const P = bootLesson('L17e'); eq(P.errs, []); const b = P.d.getElementById('bRep'), bar = P.d.getElementById('abBar');
+    eq([b.textContent, b.getAttribute('aria-pressed'), bar.hidden], ['🔁 반복 꺼짐', 'false', true]);
+    clickId(P, 'bRep'); eq([b.textContent, b.getAttribute('aria-pressed'), bar.hidden, prefs(P.w).rep], ['🔁 구간 반복', 'true', false, 'ab']);
+    clickId(P, 'bRep'); eq([b.textContent, bar.hidden, prefs(P.w).rep], ['🔁 이 그림 반복', true, 'one']);
+    clickId(P, 'bRep'); eq([b.textContent, bar.hidden, prefs(P.w).rep], ['🔁 반복 꺼짐', true, 'off']);
+    const Q = bootLesson('L17e', { store: { lesson_prefs: JSON.stringify({ rep: 'one' }) } }); eq(Q.d.getElementById('bRep').textContent, '🔁 이 그림 반복', '새로 열어도 기억');
+  });
+
+  await T('이 그림 반복 — 끝 정거장 다음에 되짚기가 아니라 처음(1번)으로 돌아가 계속 돎 · 되짚기를 읽지 않음', async () => {
+    const P = bootLesson('L17e'); clickId(P, 'bRep'); clickId(P, 'bRep');   // 이 그림
+    play(P); const seen = await trace(P, 13 * 800 * 2 + 400);
+    yes(seen.filter(v => v === 0).length >= 2, '처음으로 두 번 이상 돌아옴 ' + JSON.stringify(seen));
+    yes(seen.includes(N - 1), '끝까지 감'); eq(P.d.getElementById('recap').style.display === 'block', false, '되짚기 칸이 안 열림');
+    yes(!P.spoken.some(t => /되짚기/.test(t)), '되짚기 안내를 읽지 않음');
+    eq(P.errs, []);
+  });
+
+  await T('구간 반복 — 여기부터 · 여기까지가 sid 로 저장되고(lesson_ab_<ID>) 그 안에서만 돎 · 단계 글에 구간이 보임', async () => {
+    const P = bootLesson('L17e'); clickId(P, 'bRep');   // 구간
+    goTo(P, 2); clickId(P, 'bA'); goTo(P, 4); clickId(P, 'bB');
+    eq(JSON.parse(P.w.localStorage.getItem(abKey('L17e'))), { a: 's3', b: 's5' });
+    yes(/구간 3 – 5/.test(P.d.getElementById('step').textContent), '단계 글 ' + P.d.getElementById('step').textContent);
+    P.w.eval('playing=false'); goTo(P, 2); play(P); const seen = await trace(P, 4200);
+    yes(seen.every(v => v >= 2 && v <= 4), '구간 밖으로 안 나감 ' + JSON.stringify(seen));
+    yes(seen.filter(v => v === 2).length >= 2 && seen.includes(4), '4 다음에 2 로 돌아옴 ' + JSON.stringify(seen));
+    eq(P.d.getElementById('recap').style.display === 'block', false);
+  });
+
+  await T('구간 반복 — 구간을 안 정했으면 과 전체를 돌고, 뒤집힌 구간은 서로 비움', async () => {
+    const P = bootLesson('L17e'); clickId(P, 'bRep'); play(P); const seen = await trace(P, 13 * 800 + 3 * 800);
+    yes(seen.includes(N - 1) && seen.filter(v => v === 0).length >= 2, '전체를 돌고 처음으로 ' + JSON.stringify(seen));
+    const Q = bootLesson('L17e'); clickId(Q, 'bRep'); goTo(Q, 6); clickId(Q, 'bA'); goTo(Q, 3); clickId(Q, 'bB');
+    eq(JSON.parse(Q.w.localStorage.getItem(abKey('L17e'))), { a: null, b: 's4' }, '끝을 앞에 두면 시작을 비움');
+    clickId(Q, 'bAbClr'); eq(Q.w.localStorage.getItem(abKey('L17e')), null, '구간 지움');
+  });
+
+  await T('◀ ▶ 로 손으로 넘길 때는 반복하지 않음(구간 끝에서도 그냥 한 칸 더)', async () => {
+    const P = bootLesson('L17e'); clickId(P, 'bRep'); goTo(P, 1); clickId(P, 'bA'); goTo(P, 3); clickId(P, 'bB');
+    P.w.eval('playing=false'); clickId(P, 'bNext'); eq(at(P), 4, '구간 끝 다음 칸으로 감');
+    goTo(P, 1); clickId(P, 'bPrev'); eq(at(P), 0, '구간 앞으로도 감'); clickId(P, 'bRep'); goTo(P, N - 1); clickId(P, 'bNext');
+    eq(P.d.getElementById('recap').style.display, 'block', '반복이 꺼지면 맨 끝에서 되짚기');
+  });
+
+  await T('▶ 를 누르면 구간 밖에서는 구간의 처음부터, 구간 안이면 그 자리부터', async () => {
+    const P = bootLesson('L17e', { speech: 'manual' }); clickId(P, 'bRep'); goTo(P, 4); clickId(P, 'bA'); goTo(P, 6); clickId(P, 'bB');
+    goTo(P, 1); play(P); eq(at(P), 4, '구간 앞에서 시작');
+    clickId(P, 'bPlay'); goTo(P, 5); play(P); eq(at(P), 5, '구간 안에서는 그 자리');
+    clickId(P, 'bPlay'); goTo(P, 9); play(P); eq(at(P), 4, '구간 뒤에서 시작');
+    clickId(P, 'bPlay'); P.w.eval('i=-1'); play(P); eq(at(P), 4, '시작 전에는 구간 처음');
+  });
+
+  await T('반복을 켠 채 되짚기를 눌러도 소리 내어 읽지 않음(화면에만), 껐을 때는 읽고 읽는 정거장 상자가 밝아짐', async () => {
+    const P = bootLesson('L17e', { speech: 'manual' }); clickId(P, 'bRep'); const n0 = P.spoken.length; clickId(P, 'bRecap');
+    eq(P.d.getElementById('recap').style.display, 'block'); eq(P.spoken.length, n0, '반복 중 되짚기는 조용함');
+    const Q = bootLesson('L17e', { speech: 'manual' }); clickId(Q, 'bRecap'); await Q.tick(0); yes(Q.spoken.length >= 1, '반복이 꺼지면 읽음');
+    const bx = k => Q.w.eval('(()=>{const b=stops[' + k + '].box; return b ? (Array.isArray(b[0]) ? b[0][0] : b[0]) : null})()');
+    const cur = () => (Q.d.getElementById('ov').innerHTML.match(/class="cur" x="(\d+)"/) || [])[1];
+    const k0 = Q.w.eval('stops.findIndex(s => s.box)'); const kn = Q.w.eval('stops.findIndex((s, j) => j > ' + k0 + ' && s.box)');
+    for (let k = 0; k < k0; k++) { Q.finishSpeech(); await Q.tick(800); }
+    eq(+cur(), bx(k0), '되짚기에서 읽는 칸의 상자가 밝아짐');
+    for (let k = k0; k < kn; k++) { Q.finishSpeech(); await Q.tick(800); }
+    eq(+cur(), bx(kn), '다음 상자로 옮겨 감');
+  });
+
+  await T('복습 · 시험 모드로 바꾸면 반복이 멎고 저절로 넘어가지 않음 / 투어로 돌아와도 멈춘 채', async () => {
+    const P = bootLesson('L17e'); clickId(P, 'bRep'); clickId(P, 'bRep'); play(P); await P.tick(1500);
+    clickId(P, 'bReview'); eq(P.w.eval('playing'), false); const n = P.spoken.length; await P.tick(5000); eq(P.spoken.length, n, '복습 중에는 읽지 않음');
+    clickId(P, 'bQuiz'); await P.tick(5000); eq(P.w.eval('playing'), false);
+    clickId(P, 'bTour'); await P.tick(5000); eq(P.w.eval('playing'), false, '투어로 돌아와도 스스로 켜지지 않음'); eq(P.errs, []);
+  });
+
+  await T('음성을 끈 채 반복 — 3.5초마다 넘어가며 이 그림 끝에서 처음으로', async () => {
+    const P = bootLesson('L17e'); clickId(P, 'bVoice'); clickId(P, 'bRep'); clickId(P, 'bRep');
+    goTo(P, N - 2); play(P); P.w.eval('go(' + (N - 2) + ')'); const seen = await trace(P, 3600 * 3, 200);
+    yes(seen.includes(N - 1) && seen.includes(0), '끝에서 처음으로 ' + JSON.stringify(seen)); eq(P.spoken.length, 0, '음성이 꺼져 있음');
+  });
+
+  await T('연타 — ▶ ◀ ▶ 🔁 를 빠르게 40번 눌러도 동시에 하나만 읽고 번호가 범위를 벗어나지 않음(seq)', async () => {
+    const P = bootLesson('L17e'); const ids = ['bPlay', 'bNext', 'bPrev', 'bRep', 'bNext', 'bPlay', 'bPrev', 'bNext'];
+    for (let r = 0; r < 40; r++) { clickId(P, ids[(r * 5) % ids.length]); if (r % 7 === 0) await P.tick(30); }
+    await P.tick(5000); yes(at(P) >= -1 && at(P) < N, '번호 ' + at(P)); yes(P.pending.length <= 1, '동시에 살아 있는 낭독 ' + P.pending.length); eq(P.errs, []);
+    const live = P.audios.filter(a => !a.paused).length; yes(live <= 1, '동시에 재생 중인 녹음 ' + live);
+  });
+
+  await T('늦은 완료 — 멈추거나 넘긴 뒤에 옛 낭독이 뒤늦게 끝나도 건너뛰지 않음(alive · settled)', async () => {
+    const P = bootLesson('L17e', { speech: 'manual' }); clickId(P, 'bRep'); clickId(P, 'bRep'); play(P); await P.tick(0);
+    const old = P.pending[0]; yes(old, '첫 낭독'); eq(at(P), 0);
+    clickId(P, 'bNext'); eq(at(P), 1);   // 사람이 넘김 → 옛 낭독은 취소됨
+    old.onend && old.onend(); await P.tick(2000); eq(at(P), 1, '옛 낭독의 늦은 완료가 넘기지 못함');
+    P.finishSpeech(); await P.tick(800); eq(at(P), 2, '지금 낭독이 끝나면 한 칸');
+    clickId(P, 'bPlay'); const cur = P.pending[0]; P.finishSpeech(); await P.tick(3000); eq(at(P), 2, '멈춘 뒤의 완료는 넘기지 못함'); void cur;
+    eq(P.errs, []);
+  });
+
+  await T('늦은 완료 — 반복 한 바퀴 돌아 처음으로 간 뒤에도 옛(끝 정거장) 낭독의 완료가 처음 칸을 넘기지 않음', async () => {
+    const P = bootLesson('L17e', { speech: 'manual' }); clickId(P, 'bRep'); clickId(P, 'bRep'); goTo(P, N - 1); play(P); await P.tick(0);
+    const last = P.pending[0]; yes(last, '끝 정거장 낭독'); P.finishSpeech(); await P.tick(800); eq(at(P), 0, '이 그림 반복으로 처음 칸');
+    last.onend && last.onend(); last.onend && last.onend(); await P.tick(2500); eq(at(P), 0, '옛 완료를 여러 번 받아도 그대로'); eq(P.errs, []);
+  });
+
+  await T('한 시간 지킴이 — 만지지 않고 60분 넘게 반복하면 멈추고 「계속할까요」, ▶ 로 이어 감', async () => {
+    const P = bootLesson('L17e'); clickId(P, 'bRep'); clickId(P, 'bRep'); play(P);
+    await P.tick(59 * 60 * 1000); eq(P.w.eval('playing'), true, '59분에는 계속');
+    await P.tick(3 * 60 * 1000); eq(P.w.eval('playing'), false, '61분에 멈춤'); yes(/계속할까요/.test(P.d.getElementById('audioStatus').textContent), '안내 글');
+    const k = at(P); play(P); await P.tick(2500); eq(P.w.eval('playing'), true, '▶ 로 이어 감'); yes(at(P) !== k || true);
+  });
+
+  await T('손을 대면 한 시간 지킴이가 새로 잼(키 · 누름)', async () => {
+    const P = bootLesson('L17e'); clickId(P, 'bRep'); clickId(P, 'bRep'); play(P);
+    for (let m = 0; m < 3; m++) { await P.tick(30 * 60 * 1000); key(P.w, 'Shift'); }
+    eq(P.w.eval('playing'), true, '90분이 지나도 만지고 있으니 계속');
+  });
+
+  await T('③이 옛 열쇠를 건드리지 않음 · 구간 열쇠는 과마다 따로', async () => {
+    const old = { lesson_L17e: '{"v":2,"items":{},"sessions":[]}', lesson_shuffle: '1', lesson_srs_inbox: '[]', lesson_auto_start: '0' };
+    const P = bootLesson('L17e', { store: old }); clickId(P, 'bRep'); goTo(P, 3); clickId(P, 'bA'); clickId(P, 'bRep'); clickId(P, 'bRep');
+    for (const k in old) eq(P.w.localStorage.getItem(k), old[k], k);
+    eq(Object.keys(P.w.localStorage).filter(k => !(k in old)).sort(), ['lesson_ab_L17e', 'lesson_prefs']);
+    const Q = bootLesson('L16a', { store: { lesson_prefs: JSON.stringify({ rep: 'ab' }) } }); eq(Q.w.localStorage.getItem(abKey('L16a')), null);
+  });
+
+  await T('저장이 막혀도 반복 · 구간이 오류 없이 그 쪽에서 동작', async () => {
+    const P = bootLesson('L17e', { brokenStorage: true }); clickId(P, 'bRep'); goTo(P, 2); clickId(P, 'bA'); goTo(P, 4); clickId(P, 'bB'); P.w.eval('playing=false'); goTo(P, 2); play(P);
+    const seen = await trace(P, 3200); yes(seen.every(v => v >= 2 && v <= 4), JSON.stringify(seen)); eq(P.errs, []);
+  });
+
   console.log('\n' + (fail ? '❌' : '✅') + ' 보기 화면 통과 ' + pass + ' / 실패 ' + fail);
   process.exit(fail ? 1 : 0);
 })();

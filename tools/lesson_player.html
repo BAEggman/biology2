@@ -40,6 +40,7 @@
   .hot:hover{fill:rgba(245,158,11,.18)}
   .judge{display:none;gap:6px;margin-top:8px}
   .judge button{font-size:12.5px}
+  .bar.opt{margin-top:-4px}.bar.opt[hidden]{display:none}
   .nav{display:flex;gap:12px;font-size:12.5px;margin:2px 0 0}
   .nav a{color:var(--teal);text-decoration:none}
   .nav a:hover{text-decoration:underline}
@@ -69,13 +70,20 @@
     <button id="bVoice" class="on">🔊 음성</button>
     <button id="bRate">속도 1.0</button>
     <button id="bAuto" class="on" aria-pressed="true">자동 시작 켜짐</button>
+    <button id="bRep" type="button" aria-pressed="false" title="반복 재생 — 누를 때마다 꺼짐 → 구간 → 이 그림">🔁 반복 꺼짐</button>
     <span class="hint" id="audioStatus" role="status"></span>
     <span class="hint" id="step"></span>
+  </div>
+  <div class="bar opt" id="abBar" hidden>
+    <button id="bA" type="button" title="지금 보는 정거장에서 시작">여기부터</button>
+    <button id="bB" type="button" title="지금 보는 정거장에서 끝">여기까지</button>
+    <button id="bAbClr" type="button">구간 지움</button>
+    <span class="hint" id="abNote"></span>
   </div>
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 🔁 반복은 구간(여기부터~여기까지) 또는 이 그림 전체를 되풀이하며, ◀ ▶ 로 직접 넘길 때는 반복하지 않는다. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
 <script>
@@ -96,7 +104,7 @@ paintStar();
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
-let tourEnded = false;
+let tourEnded = false, recapAt = -1;
 let mode = 'tour', i = -1, playing = false, voice = true, rate = 1.0, quizOrder = [], quizPos = 0, quizRevealed = false, shuffle = false, sess = null;
 const stops = L.stops;
 subShow();
@@ -126,7 +134,7 @@ function draw() {
   let s = '';
   if (mode === 'tour' || mode === 'quiz') {
     const upto = mode === 'tour' ? i : -1;
-    const cur = mode === 'tour' ? i : (quizOrder[quizPos] ?? -1);
+    const cur = mode === 'tour' ? (recapAt >= 0 ? recapAt : i) : (quizOrder[quizPos] ?? -1);
     s += `<defs><mask id="m"><rect x="0" y="0" width="${L.w}" height="${L.h}" fill="#fff"/>`;
     for (let k = 0; k <= upto; k++) if (stops[k].box) s += rect(stops[k].box, 'hole');
     if (mode === 'quiz' && cur >= 0 && stops[cur].box) s += rect(stops[cur].box, 'hole');
@@ -146,7 +154,7 @@ function draw() {
   }
   ov.innerHTML = s;
   ov.querySelectorAll('.hot').forEach(r => r.onclick = () => showCap(+r.dataset.k, true));
-  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
+  $('step').textContent = mode === 'tour' ? (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) + repTail() : mode === 'quiz' ? `${quizPos + 1} / ${quizOrder.length}` : '';
 }
 function capHTML(st, k) {
   const nc = (st.cards || []).length;
@@ -165,20 +173,64 @@ const narration = new LessonNarration(L.id);
 function stopSpeech() { speakSeq++; narration.stop(); }
 function speak(t, sid) {
   const my = ++speakSeq, at = i;
-  const advance = () => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) next(); }, 700);
+  const advance = () => setTimeout(() => { if (my === speakSeq && playing && mode === 'tour' && i === at) autoStep(at); }, 700);
   narration.play({sid, text:t, spokenText:ttsNorm(t), rate, auto:playing && mode === 'tour',
     onend:advance,
     onstatus:label => { if (my === speakSeq) $('audioStatus').textContent = label; },
     onblocked:() => { if (my !== speakSeq) return; playing = false; $('bPlay').textContent = '▶ 시작'; $('audioStatus').textContent = '시작을 눌러 음성을 재생한다'; }
   });
 }
+// ── 반복 재생(보기 화면 명세 §1.4) — 끝에서 처음으로 돌아가는 일은 모두 autoStep 한 곳에서만 일어난다.
+//   손으로 누르는 ◀ ▶ 는 반복하지 않는다(그냥 앞뒤). 복습 · 시험에서는 playing 이 꺼져 있어 저절로 멈춘다.
+const REP_CYCLE = ['off', 'ab', 'one'], REP_LABEL = { off: '🔁 반복 꺼짐', ab: '🔁 구간 반복', one: '🔁 이 그림 반복' };
+let rep = LStore.prefs().rep; if (!REP_CYCLE.includes(rep)) rep = 'off';
+let lastTouch = Date.now();
+['pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => { lastTouch = Date.now(); }, true));
+const IDLE_MS = 60 * 60 * 1000;
+const sidIdx = sid => { const k = stops.findIndex((_, j) => sidOf(j) === sid); return k < 0 ? null : k; };
+function abRange() {   // [처음, 끝] 정거장 번호 — 안 정했으면 과 전체, 뒤집혔거나 없는 sid 는 무시
+  const v = LStore.ab(L.id); let a = v.a ? sidIdx(v.a) : null, b = v.b ? sidIdx(v.b) : null;
+  if (a === null) a = 0; if (b === null) b = stops.length - 1; if (a > b) { a = 0; b = stops.length - 1; }
+  return [a, b];
+}
+function repTail() { return rep === 'ab' ? ' · 구간 ' + (abRange()[0] + 1) + ' – ' + (abRange()[1] + 1) : rep === 'one' ? ' · 이 그림 반복' : ''; }
+function startAt() {   // ▶ 를 눌렀을 때 어디서 시작하나
+  if (rep === 'ab') { const [a, b] = abRange(); return (i < a || i > b || tourEnded) ? a : i; }
+  return i < 0 || tourEnded ? 0 : i;
+}
+function autoStep(at) {   // 한 구간이 다 읽혔을 때(저절로 넘어갈 때) 다음에 어디로 가나
+  if (rep !== 'off' && Date.now() - lastTouch > IDLE_MS) {
+    playing = false; $('bPlay').textContent = '▶ 계속'; $('audioStatus').textContent = '한 시간 넘게 반복했다 — 계속할까요? ▶ 를 누르면 이어 간다'; return;
+  }
+  if (rep === 'ab') { const [a, b] = abRange(); return go(at >= b ? a : at + 1); }
+  if (rep === 'one' && at + 1 >= stops.length) return go(0);
+  go(at + 1);
+}
+function repPaint() {
+  $('bRep').textContent = REP_LABEL[rep]; $('bRep').classList.toggle('on', rep !== 'off'); $('bRep').setAttribute('aria-pressed', String(rep !== 'off'));
+  $('abBar').hidden = rep !== 'ab';
+  if (rep === 'ab') { const [a, b] = abRange(); $('abNote').textContent = `${a + 1}번 – ${b + 1}번 정거장을 되풀이한다(정하지 않으면 과 전체)`; }
+  if (mode === 'tour') $('step').textContent = (i < 0 ? `0 / ${stops.length}` : `${i + 1} / ${stops.length}`) + repTail();
+}
+$('bRep').onclick = () => {
+  rep = REP_CYCLE[(REP_CYCLE.indexOf(rep) + 1) % REP_CYCLE.length]; LStore.setPrefs({ rep }); repPaint();   // 반복을 끄면 그 자리에서 이어 읽다가 끝에서 되짚기로 끝난다
+};
+function abSet(which) {
+  if (i < 0) { $('abNote').textContent = '먼저 정거장 하나를 보는 자리로 간 다음 눌러 주세요'; return; }
+  const v = LStore.ab(L.id); v[which] = sidOf(i);
+  const a = v.a ? sidIdx(v.a) : null, b = v.b ? sidIdx(v.b) : null;
+  if (a !== null && b !== null && a > b) v[which === 'a' ? 'b' : 'a'] = null;   // 앞뒤가 뒤집히면 반대쪽을 비운다
+  LStore.setAb(L.id, v); repPaint();
+}
+$('bA').onclick = () => abSet('a'); $('bB').onclick = () => abSet('b');
+$('bAbClr').onclick = () => { LStore.setAb(L.id, { a: null, b: null }); repPaint(); };
 function go(k) {
-  stopSpeech();
+  stopSpeech(); recapAt = -1;
   tourEnded = k >= stops.length;
   if (k < 0) { i = -1; draw(); $('cap').className = 'cap muted'; $('cap').textContent = '▶ 시작을 누르면 물건을 하나씩 밝히며 말해 준다.'; return; }
   if (k >= stops.length) { i = stops.length - 1; playing = false; $('bPlay').textContent = '▶ 다시'; recap(); return; }
   i = k; draw(); showCap(i, false);
-  if (!voice && playing) { const seq = speakSeq; setTimeout(() => { if (playing && seq === speakSeq && mode === 'tour' && i === k) next(); }, 3500); }
+  if (!voice && playing) { const seq = speakSeq; setTimeout(() => { if (playing && seq === speakSeq && mode === 'tour' && i === k) autoStep(k); }, 3500); }
 }
 function next() { if (mode !== 'tour') return quizNext(); go(i + 1); }
 function prev() { if (mode !== 'tour') return quizPrev(); go(Math.max(-1, i - 1)); }
@@ -187,7 +239,7 @@ function recap() {
   $('recap').style.display = 'block';
   $('recap').innerHTML = `<b>되짚기 — ${L.title}</b><ol>` + stops.map(st => `<li><b>${st.obj}</b> — ${st.fact}</li>`).join('') + '</ol>';
   $('recap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  if (voice) speakRecap();
+  if (voice && rep === 'off') speakRecap();   // 반복 중에는 되짚기를 소리 내어 읽지 않는다(눈으로만)
 }
 // Keep each stable SID so recap reuses the same reviewed recording as the tour.
 function speakRecap() {
@@ -195,7 +247,8 @@ function speakRecap() {
   tourEnded = true; playing = true; $('bPlay').textContent = '❚❚ 멈춤';
   function read(k) {
     if (my !== speakSeq || !voice || mode !== 'tour') return;
-    if (k >= stops.length) { playing = false; $('bPlay').textContent = '▶ 다시'; return; }
+    if (k >= stops.length) { recapAt = -1; draw(); playing = false; $('bPlay').textContent = '▶ 다시'; return; }
+    recapAt = k; draw();
     const st = stops[k], text = st.say || (st.obj + '. ' + st.fact);
     narration.play({sid:st.sid, text, spokenText:ttsNorm(text), rate, auto:true,
       onend:() => setTimeout(() => read(k + 1), 700),
@@ -206,7 +259,7 @@ function speakRecap() {
   read(0);
 }
 function setMode(m) {
-  mode = m; playing = false; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
+  mode = m; playing = false; recapAt = -1; stopSpeech(); $('bPlay').textContent = '▶ 시작'; subOpen = false; subShow();
   ['bTour', 'bRecap', 'bReview', 'bQuiz'].forEach(id => $(id).classList.remove('on'));
   $('recap').style.display = 'none'; $('judge').style.display = 'none';
   if (m === 'tour') { $('bTour').classList.add('on'); go(-1); }
@@ -271,7 +324,7 @@ function showScore() {
 }
 $('bTour').onclick = () => setMode('tour'); $('bReview').onclick = () => setMode('review'); $('bQuiz').onclick = () => setMode('quiz');
 $('bRecap').onclick = () => { setMode('tour'); i = stops.length - 1; draw(); recap(); };
-$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(i < 0 || tourEnded ? 0 : i); else stopSpeech(); };
+$('bPlay').onclick = () => { if (mode !== 'tour') setMode('tour'); playing = !playing; $('bPlay').textContent = playing ? '❚❚ 멈춤' : '▶ 계속'; if (playing) go(startAt()); else stopSpeech(); };
 $('bNext').onclick = next; $('bPrev').onclick = prev;
 $('bVoice').onclick = () => { voice = !voice; $('bVoice').classList.toggle('on', voice); if (!voice) stopSpeech(); };
 $('bRate').onclick = () => { rate = rate >= 1.5 ? 0.8 : +(rate + 0.2).toFixed(1); $('bRate').textContent = '속도 ' + rate.toFixed(1); narration.setRate(rate); };
@@ -281,13 +334,13 @@ $('bShuf').onclick = () => { shuffle = !shuffle; try { localStorage.setItem('les
 shufLabel();
 document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') next(); else if (e.key === 'ArrowLeft') prev(); else if (e.key === ' ') { e.preventDefault(); $('bPlay').click(); } });
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
-setMode('tour');
+setMode('tour'); repPaint();
 let autoStart = true;
 try { autoStart = localStorage.getItem('lesson_auto_start') !== '0'; } catch (_) {}
 function autoLabel() { $('bAuto').textContent = '자동 시작 ' + (autoStart ? '켜짐' : '꺼짐'); $('bAuto').classList.toggle('on', autoStart); $('bAuto').setAttribute('aria-pressed', String(autoStart)); }
 $('bAuto').onclick = () => { autoStart = !autoStart; try { localStorage.setItem('lesson_auto_start', autoStart ? '1' : '0'); } catch (_) {} autoLabel(); };
 autoLabel();
-function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(0); }
+function beginAutomatically() { if (!autoStart || mode !== 'tour' || i !== -1) return; playing = true; $('bPlay').textContent = '❚❚ 멈춤'; go(startAt()); }
 if ($('img').complete && $('img').naturalWidth) beginAutomatically();
 else $('img').addEventListener('load', beginAutomatically, {once:true});
 window.addEventListener('pagehide', stopSpeech);
