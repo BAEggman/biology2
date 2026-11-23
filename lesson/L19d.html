@@ -10,6 +10,8 @@
   body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
+  .titlebar{display:flex;align-items:center;gap:10px}.titlebar h1{flex:1;min-width:0}
+  .star{font-size:22px;line-height:1;padding:2px 10px;color:#8a8a94}.star[aria-pressed="true"]{color:var(--gold);border-color:#e8c48c;background:#fff8ec}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
   .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
   .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
@@ -46,7 +48,7 @@
 <body>
 <div class="wrap">
   <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
-  <h1 id="title"></h1>
+  <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
     <button id="bTour" class="on">투어</button>
@@ -73,10 +75,47 @@
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
 <script>
+/* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
+   빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
+   열쇠: lesson_stars {ID: 찍은 때(ms)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
+   읽기 · 쓰기는 모두 try/catch — 저장이 막힌 브라우저에서는 그 쪽을 떠날 때까지만 기억하고 오류를 내지 않는다.
+   (lesson_<ID> · lesson_shuffle · lesson_srs_inbox · lesson_auto_start 는 여기서 건드리지 않는다) */
+const LStore = (() => {
+  const mem = {};
+  const rd = (k, d) => {
+    let ok = false;
+    try { const v = localStorage.getItem(k); ok = true; if (v !== null && v !== undefined) { const o = JSON.parse(v); mem[k] = o; return o; } } catch (e) {}
+    if (ok) { delete mem[k]; return d; }   // 저장소는 멀쩡한데 값이 없다 = 다른 탭에서 지웠다 — 메모리 값도 버린다
+    return k in mem ? mem[k] : d;
+  };
+  const wr = (k, o) => { mem[k] = o; try { localStorage.setItem(k, JSON.stringify(o)); } catch (e) {} };
+  const del = k => { delete mem[k]; try { localStorage.removeItem(k); } catch (e) {} };
+  const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
+  const REP = ['off', 'ab', 'one', 'list'];
+  return {
+    stars() { const s = rd('lesson_stars', {}); return isObj(s) ? s : {}; },
+    isStar(id) { return id in LStore.stars(); },
+    setStar(id, on) {
+      const s = { ...LStore.stars() };
+      if (on) s[id] = Date.now(); else delete s[id];
+      if (Object.keys(s).length) wr('lesson_stars', s); else del('lesson_stars');
+      return on;
+    },
+    prefs() {
+      const p = rd('lesson_prefs', {}); const o = isObj(p) ? p : {};
+      return { onlyStar: !!o.onlyStar, autoNext: !!o.autoNext, rep: REP.includes(o.rep) ? o.rep : 'off', scope: o.scope === 'star' ? 'star' : 'all' };
+    },
+    setPrefs(patch) { const p = { ...LStore.prefs(), ...patch }; wr('lesson_prefs', p); return p; },
+    ab(id) { const v = rd('lesson_ab_' + id, null); return isObj(v) ? { a: typeof v.a === 'string' ? v.a : null, b: typeof v.b === 'string' ? v.b : null } : { a: null, b: null }; },
+    setAb(id, v) { const k = 'lesson_ab_' + id; if (v && (v.a || v.b)) wr(k, { a: v.a || null, b: v.b || null }); else del(k); },
+    REP,
+  };
+})();
+
 const L = {"id":"L19d","scene":"s19","part":"d","title":"게놈의 수호자 — p53과 종양억제유전자","sub":"DNA 손상 → ATM/ATR → p53(5·3) → p21(2·1) 굄목 · 구덩이(사멸) · 빗장 둘(두 대립유전자 · 열성) · 쥐(Ras) · 쏟아지는 음반(암) · 깁기(BRCA) · 셋(p53 · Rb · BRCA1)","img":"img/L19d.webp?v=94e060f06510","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"왼쪽 상한 지퍼 — 반쯤 벌어지고 이빨이 부서졌다","fact":"DNA 손상 — 지퍼 = 이중나선 · 한 자리만 망가진다","hook":"맞물린 이빨 지퍼 = 이중나선(덱 약속)","say":"바닥 지퍼의 반쯤 벌어진 부분을 보자. 쇠 이빨이 부서져 흩어져 있지만 나머지 반은 정상적으로 맞물려 있다. 맞물린 지퍼는 이중나선이며, 여기서는 가닥 전체가 아니라 한 부분이 망가진 디엔에이 손상을 나타낸다.","box":[0,800,500,260],"src":["s19p02b#0"],"cards":[]},{"sid":"s2","obj":"곁의 현금인출기 — 팔을 뻗어 둥근 도장을 판에","fact":"ATM · ATR이 손상을 감지해 p53을 인산화(활성화)한다","hook":"현금인출기 = ATM · 도장 = 인산화","say":"지퍼 옆 현금인출기의 옆구리에서 마디진 팔이 뻗어 나와 판에 둥근 도장을 찍는다. 현금인출기 에이티엠이 이름의 단서다. 에이티엠과 에이티알은 손상을 가장 먼저 알아채 비상 신호를 보내는 인산화효소 쌍이다. 손상에 반응해 피오십삼을 인산화하여 활성화한다.","box":[20,230,500,560],"src":["s19p02b#1"],"cards":["C1-126","C1-125"]},{"sid":"s3","obj":"나란한 두 판 — 점 다섯 · 점 셋 · 왼 판에 도장 자국","fact":"p53 — 나란한 두 자리의 점을 왼쪽부터 읽는다","hook":"다섯 · 셋 = p53(덱의 점 번호 규약)","say":"가운데 나란히 선 판 두 개를 보자. 왼쪽에는 점 다섯, 오른쪽에는 점 셋이 있다. 왼쪽부터 오·삼으로 읽으면 피오십삼이다. 왼쪽 판의 붉은 도장 자국은 인산화의 표시다.","box":[430,370,250,360],"src":["s19p02b#2"],"cards":[]},{"sid":"s4","obj":"판에서 줄이 둘 — 문 쪽 · 구덩이 쪽","fact":"p53 = 게놈의 수호자 — 주기를 멈추거나(정지) 세포를 없앤다(사멸)","hook":"줄 둘 = 두 갈래","say":"두 판 아래에서 나온 줄이 바닥에서 두 갈래로 나뉜다. 한쪽은 왼쪽 문 아래로, 다른 쪽은 아래 구덩이로 이어진다. 피오십삼은 손상에 반응해 세포주기를 멈추거나 세포 사멸을 유도한다. 손상된 유전정보가 그대로 전해지지 않게 하므로 게놈의 수호자라고 부른다.","box":[[420,680,595,150],[640,760,260,340]],"src":["s19p02b#3"],"cards":["C1-22","F1-136"]},{"sid":"s5","obj":"첫째 줄 끝 — 굄목 위 작은 패 둘(점 둘 · 하나) · 굄목에 막혀 멈춘 음반","fact":"p53이 전사를 촉진 → p21 → Cdk 억제 → 주기 정지","hook":"둘 · 하나 = p21 · 굄목 = 문을 괸다 · 음반 = Cdk","say":"첫 번째 줄이 닿는 문틈의 굄목을 보자. 위의 작은 패 둘에는 각각 점 둘과 점 하나가 있다. 피이십일의 단서다. 피오십삼은 전사를 촉진해 피이십일을 만들게 한다. 굄목 때문에 문이 열리지 않고, 음반 한 장도 막혀 굴러가지 못한다. 음반은 씨디케이다. 피이십일이 씨디케이를 억제해 세포주기를 멈추는 관계를 연결하자.","box":[740,600,220,180],"src":["s19p02b#4","s19p02b#5"],"cards":["C1-23","F1-137","F1-138"]},{"sid":"s6","obj":"둘째 줄 끝 — 뚜껑 젖힌 빈 구덩이","fact":"회복 불가능하면 p53이 아폽토시스를 유도한다(그때 연다)","hook":"뚜껑이 젖혀져 열림","say":"두 번째 줄은 바닥의 네모 구덩이로 이어진다. 나무 뚜껑이 젖혀져 있고 안쪽은 비어 어둡다. 손상을 회복할 수 없을 때 피오십삼이 세포 자살을 유도하는 장면이다. 구덩이는 언제나 열린 것이 아니라, 그런 상황에서 열린다고 기억하자.","box":[[500,775,545,325]],"src":["s19p02b#6"],"cards":["F1-139"]},{"sid":"s7","obj":"문 둘 — 왼 문 빗장 둘 중 위만 부러짐(닫힘) · 오른 문 둘 다 부러져 열림","fact":"종양억제유전자는 대개 열성처럼 — 두 대립유전자가 다 망가져야 드러난다","hook":"빗장 둘 = 대립유전자 둘 · 하나 부러져도 안 열림","say":"가운데의 문 두 개를 비교해 보자. 왼쪽 문은 위 빗장만 부러지고 아래 빗장은 남아 있어 닫혀 있다. 오른쪽은 빗장 둘 다 부러져 바닥에 널려 있고 문이 활짝 열렸다. 종양억제유전자는 대개 두 대립유전자가 모두 기능을 잃을 때 효과가 드러나는, 열성 같은 양상을 나타낸다. 왼쪽처럼 빗장 하나가 처음부터 부러진 상태로 태어나면 이미 한 단계를 거친 셈이므로 유전성 암의 위험이 높다.","box":[[700,80,340,600],[1160,80,420,600],[1045,700,535,410]],"src":["s19p02c#0"],"cards":["F1-170","F1-142"]},{"sid":"s8","obj":"빗장 끝의 점판 둘(5 · 3) — 두 빗장이 같은 판","fact":"p53이 종양억제유전자 대표 · 두 빗장 = 한 유전자의 두 대립유전자(크누드슨 두 번 타격)","hook":"같은 이름의 빗장 둘","say":"각 빗장 왼쪽 끝에는 점 다섯과 셋이 각각 있는 작은 판 둘이 있다. 피오십삼이 대표적인 종양억제유전자라는 단서다. 한 문에 달린 두 빗장은 서로 다른 유전자 둘이 아니라 같은 유전자의 두 대립유전자다. 크누드슨의 두 번 타격 가설은 대개 같은 유전자의 두 대립유전자가 망가지는 것을 말한다. 피오십삼 하나와 알비 하나가 망가지는 것을 두 번이라고 세는 것이 아니다.","box":[[690,290,110,100],[700,440,100,80],[1165,765,130,95]],"src":["s19p02c#1","s19p02c#2"],"cards":["F1-135"]},{"sid":"s9","obj":"빗장 자체 — 문을 가로질러 막는다","fact":"종양억제유전자 = 분열을 억제하거나 손상을 감시해 암을 막는 유전자","hook":"막는 물건(여는 물건이 아님)","say":"문을 가로막아 열리지 않게 하는 빗장의 역할을 기억하자. 종양억제유전자는 세포 분열을 억제하거나 디엔에이 손상을 감시해 암을 막는 유전자다. 통과를 막는 소품이 그 기능을 보여 준다.","box":[[680,262,382,262]],"src":["s19p02c#3"],"cards":["F1-130"]},{"sid":"s10","obj":"쥐가 왼 문을 온 힘으로 미는데 꿈쩍 않음","fact":"원종양유전자(Ras 등)는 미는 쪽 · 막는 것이 남아 있으면 안 열린다","hook":"쥐 = Ras(rat sarcoma)","say":"쥐 한 마리가 왼쪽 문에 어깨를 대고 온 힘으로 밀지만 문은 움직이지 않는다. 쥐는 원종양유전자인 라스로, 성장을 촉진하는 쪽이다. 문을 막는 빗장이 하나 남아 있어 열리지 않는 모습이다. 원종양유전자는 정상적으로 세포의 성장과 분열을 돕지만, 돌연변이로 계속 활성화되면 암유전자가 된다. 대표적인 예는 Ras와 Myc이다. 변화하는 경로는 자리 이동, 유전자 증폭, 점 돌연변이의 세 가지다. 한 대립유전자만 과활성화되어도 성장을 미는 힘이 생기므로 암유전자는 우성처럼 행동한다.","box":[950,480,260,260],"src":["s19p02c#4"],"cards":["F1-168","F1-171","C1-59","C1-60","F1-128","F1-129","F1-169","F1-131","F1-132"]},{"sid":"s11","obj":"오른 열린 문에서 음반이 줄줄이 쏟아진다","fact":"p53 변이 → 손상 DNA를 가진 세포가 계속 분열 → 암","hook":"미는 것도 없는데 저절로 굴러 나온다","say":"오른쪽 열린 문에서는 미는 대상이 없어도 음반이 계속 굴러 나와 쌓인다. 피오십삼에 변이가 생기면 손상된 디엔에이를 가진 세포가 멈추지 않고 분열하여 암으로 이어진다. 정상세포가 암세포로 바뀌는 과정을 형질전환이라고 한다. 암은 세포주기와 성장을 조절하는 여러 유전자에 돌연변이가 축적되어 생긴다. 하나의 변화만이 아니라 여러 변화가 쌓인다는 것이 다단계 모델이다. 왼쪽 문 앞에 가만히 놓인 음반 한 장과 비교해 보자.","box":[1160,520,500,480],"src":["s19p02c#5"],"cards":["C1-119","C1-58","F1-127","F1-140"]},{"sid":"s14","obj":"음반 더미 오른쪽 마루 — 작은 검은 게 무리 둘 · 왼쪽은 멀쩡한 낮은 나무 말뚝 울 안에 가만히 모였다 · 오른쪽은 제 울을 쓰러뜨리고 마루로 쏟아져 나왔고 붉은 호스 끝을 무리로 끌어왔다 · 호스 위 오른쪽 끝 가까이에 게 하나가 올라탔다","fact":"양성 = 제자리 · 악성 = 침윤 · 전이 — 혈관 신생으로 혈관을 끌어와 그 길로 퍼진다","hook":"작은 검은 게 = 암(【작은 검은 게】) · 말뚝 울 = 조직의 경계 · 울 안에 머묾 = 양성 · 울을 넘음 = 악성(침윤) · 붉은 호스 = 혈관(【진홍 호스】) · 끌어옴 = 혈관 신생 · 호스를 타고 떠남 = 전이","say":"음반 더미 오른쪽, 작업대 다리 앞의 작은 검은 게 무리 둘을 보자. 이 덱에서 검은 게는 암을 나타낸다. 왼쪽 무리는 온전한 낮은 나무 말뚝 울타리 안에 머물러 있다. 제자리에 있는 양성종양이며, 상피에서 처음 불어난 이런 덩어리의 예가 폴립이나 선종이다. 오른쪽 무리는 울타리를 쓰러뜨리고 마루로 나와 주변 조직에 파고든다. 침윤하는 악성종양이다. 이 무리가 붉은 고무호스 끝을 끌어당기고 있는데, 붉은 고무호스는 혈관이다. 새 혈관을 끌어와 영양을 얻는 혈관 신생을 뜻한다. 고무호스 오른쪽 끝 부근에 올라탄 게는 혈관을 타고 먼 곳으로 퍼지는 전이의 단서다. 양성은 국소에 머물고, 악성은 침윤과 전이를 한다는 대비를 기억하자.","box":[1650,950,398,105],"cards":["C1-56","C1-56#1","C1-56#2","C1-55","C1-57","F1-141"]},{"sid":"s12","obj":"깁는 작업대 — 바늘 실이 지퍼의 벌어진 자리를 꿰맨다 · 벽에 브래지어 둘","fact":"DNA 수복 · BRCA1 · 2 = 수복에 관련된 종양억제유전자(유방암)","hook":"브라 = BRCA · 둘 = 1 · 2 · 바늘 = 도로 붙인다","say":"오른쪽의 수선 작업대에서는 실을 꿴 바늘이 벌어진 지퍼를 꿰매 다시 붙인다. 디엔에이 수복이다. 벽에 떨어져 걸린 하얀 브래지어 둘은 브라, 즉 비알씨에이 원과 투를 떠올리는 단서다. 유방암 유전자로 알려진 이들은 수복에 관여하는 종양억제유전자다. 제 기능을 잃으면 손상을 고치지 못하고 돌연변이가 축적되어 암 위험이 크게 높아진다. 빗장이 진행을 막는다면 바늘은 손상 부위를 고치는 역할이다.","box":[1560,80,460,620],"src":["s19p02f#0","s19p02f#1","s19p02f#2"],"cards":["F1-143","F1-172","E1-89"]},{"sid":"s13","obj":"작업대 끝 — 점 5 · 3 판 · 루비 박힌 빗장 · 브래지어","fact":"대표 종양억제유전자 셋 — p53 · Rb · BRCA1(막는 쪽 + 고치는 쪽)","hook":"점판 · 루비 · 브라가 한 화면에","say":"작업대 오른쪽 끝의 점 다섯·셋 판, 왼쪽 끝의 루비가 박힌 빗장, 벽의 브래지어를 짚어 보자. 피오십삼·알비·비알씨에이 원이라는 대표 종양억제유전자 셋이다. 진행을 막는 기능과 손상을 고치는 기능은 같은 계열이 맡는 두 역할이다. 성장·분열·수복을 담당하는 유전자들의 조절이 무너지면 암으로 이어지므로, 암은 유전자 발현 조절과도 연결된다.","box":[[1860,320,188,220],[1800,580,180,340]],"src":["s19p02f#3"],"cards":["C1-61","F1-145"]}],"cq":{"C1-126":["ATM/ATR에 의해 인산화되어 활성화되며, 종양 억제 유전자의 제왕이라 불리는 전사인자는?","p53 단백질"],"C1-125":["DNA 손상 시 가장 먼저 손상 부위를 인식하여 비상벨을 울리는 마스터 인산화효소(Kinase) 쌍은?","ATM / ATR"],"C1-22":["DNA 손상을 감지하여 세포 주기를 멈추거나 사멸을 유도하는 단백질은?","p53 단백질"],"F1-136":["p53이 게놈의 수호자라 불리는 이유는?","DNA 손상을 감지해 세포 주기 정지나 세포 자살을 유도하기 때문"],"C1-23":["p53이 전사를 촉진하여 Cdk 활성을 억제하는 단백질은?","p21"],"F1-137":["p53이 활성화하는 대표적 세포주기 억제 단백질은?","p21"],"F1-138":["p21의 역할은?","CDK를 억제해 세포 주기를 멈춘다"],"F1-139":["DNA 손상이 회복 불가능할 때 p53이 유도할 수 있는 것은?","세포 자살"],"F1-170":["종양억제유전자는 보통 열성처럼 행동하는 이유는?","기능 상실이 두 대립유전자 모두에서 일어나야 하는 경우가 많기 때문"],"F1-142":["유전성 암이 위험한 이유는?","이미 한 단계의 돌연변이를 지닌 채 태어나기 때문"],"F1-135":["p53은 어떤 범주의 대표 예시인가?","종양억제유전자"],"F1-130":["종양억제유전자(tumor suppressor gene)란?","세포 분열을 억제하거나 DNA 손상을 감시해 암을 막는 유전자"],"F1-168":["원종양유전자와 종양억제유전자의 기능 차이는?","전자는 성장 촉진 · 후자는 성장 억제·손상 감시"],"F1-171":["Ras와 p53을 비교하면?","Ras는 성장 촉진 측 · p53은 성장 억제·손상 감시 측이다"],"C1-59":["원형암유전자(Proto-oncogene)가 돌연변이로 활성화된 상태는?","암유전자 (Oncogene)"],"C1-60":["대표적인 암유전자 예시는?","Ras · Myc"],"F1-128":["원종양유전자(proto-oncogene)란?","정상적으로 세포 성장과 분열을 돕는 유전자"],"F1-129":["암유전자(oncogene)란?","과활성화되어 암을 유발할 수 있는 변이 원종양유전자"],"F1-169":["암유전자는 보통 유전학적으로 우성처럼 행동하는 이유는?","한 대립유전자 과활성화만으로도 효과가 나타날 수 있기 때문"],"F1-131":["원종양유전자가 암유전자가 되는 방법 3가지는?","이동, 증폭, 점돌연변이"],"F1-132":["Ras 유전자는 어떤 범주의 대표 예시인가?","원종양유전자 또는 암유전자"],"C1-119":["p53 유전자에 변이가 생기면 나타나는 현상은?","손상된 DNA를 가진 세포가 계속 분열하여 암 발생"],"C1-58":["정상세포가 암세포로 바뀌는 과정을 무엇이라 하는가?","형질전환(transformation)"],"F1-127":["암의 기본 원인은?","세포 주기와 성장 조절 유전자의 돌연변이 축적"],"F1-140":["암 발생의 다단계 모델이 뜻하는 것은?","여러 돌연변이가 축적되어야 암이 형성된다는 것"],"C1-56":["양성종양과 악성종양의 차이는?","양성=국소에 머묾 · 악성=주변 조직 침윤·전이 가능"],"C1-56#1":["양성종양과 악성종양의 차이 — 「양성」? (↔ 악성)","국소에 머묾"],"C1-56#2":["양성종양과 악성종양의 차이 — 「악성」? (↔ 양성)","주변 조직 침윤·전이 가능"],"C1-55":["암세포가 혈관을 새로 만들어 영양을 공급받는 현상은?","혈관 신생 (Angiogenesis)"],"C1-57":["암세포가 원래 위치를 벗어나 멀리 퍼지는 과정은?","전이(metastasis)"],"F1-141":["상피세포의 비정상적 과증식으로 생긴 초기 덩어리는?","폴립 또는 선종(폴립 = 겉으로 솟은 모양 · 선종 = 샘 상피에서 생긴 양성종양)"],"F1-143":["BRCA1과 BRCA2는 어떤 범주의 유전자인가?","DNA 수복 관련 종양억제유전자"],"F1-172":["BRCA 유전자가 고장 나면 특히 문제가 되는 것은?","DNA 손상 수복"],"E1-89":["수선 기능이 떨어지면 커지는 위험은?","돌연변이 축적과 암 발생 위험 증가"],"C1-61":["대표적인 종양억제유전자 예시는?","p53 · Rb · BRCA1"],"F1-145":["암과 유전자 발현 조절이 연결되는 이유는?","성장·분열·수복 유전자의 조절이 무너지기 때문"]},"hubPanel":"s19p02b"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; document.title = L.title;
@@ -85,6 +124,11 @@ let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
+// 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
+function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
+$('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
+window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
+paintStar();
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);

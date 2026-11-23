@@ -10,6 +10,8 @@
   body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
+  .titlebar{display:flex;align-items:center;gap:10px}.titlebar h1{flex:1;min-width:0}
+  .star{font-size:22px;line-height:1;padding:2px 10px;color:#8a8a94}.star[aria-pressed="true"]{color:var(--gold);border-color:#e8c48c;background:#fff8ec}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
   .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
   .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
@@ -46,7 +48,7 @@
 <body>
 <div class="wrap">
   <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a><a href="L07a.html">같은 그림 · 전엽과 후엽의 경로 따라가기</a></nav>
-  <h1 id="title"></h1>
+  <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
     <button id="bTour" class="on">투어</button>
@@ -73,10 +75,47 @@
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
 <script>
+/* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
+   빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
+   열쇠: lesson_stars {ID: 찍은 때(ms)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
+   읽기 · 쓰기는 모두 try/catch — 저장이 막힌 브라우저에서는 그 쪽을 떠날 때까지만 기억하고 오류를 내지 않는다.
+   (lesson_<ID> · lesson_shuffle · lesson_srs_inbox · lesson_auto_start 는 여기서 건드리지 않는다) */
+const LStore = (() => {
+  const mem = {};
+  const rd = (k, d) => {
+    let ok = false;
+    try { const v = localStorage.getItem(k); ok = true; if (v !== null && v !== undefined) { const o = JSON.parse(v); mem[k] = o; return o; } } catch (e) {}
+    if (ok) { delete mem[k]; return d; }   // 저장소는 멀쩡한데 값이 없다 = 다른 탭에서 지웠다 — 메모리 값도 버린다
+    return k in mem ? mem[k] : d;
+  };
+  const wr = (k, o) => { mem[k] = o; try { localStorage.setItem(k, JSON.stringify(o)); } catch (e) {} };
+  const del = k => { delete mem[k]; try { localStorage.removeItem(k); } catch (e) {} };
+  const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
+  const REP = ['off', 'ab', 'one', 'list'];
+  return {
+    stars() { const s = rd('lesson_stars', {}); return isObj(s) ? s : {}; },
+    isStar(id) { return id in LStore.stars(); },
+    setStar(id, on) {
+      const s = { ...LStore.stars() };
+      if (on) s[id] = Date.now(); else delete s[id];
+      if (Object.keys(s).length) wr('lesson_stars', s); else del('lesson_stars');
+      return on;
+    },
+    prefs() {
+      const p = rd('lesson_prefs', {}); const o = isObj(p) ? p : {};
+      return { onlyStar: !!o.onlyStar, autoNext: !!o.autoNext, rep: REP.includes(o.rep) ? o.rep : 'off', scope: o.scope === 'star' ? 'star' : 'all' };
+    },
+    setPrefs(patch) { const p = { ...LStore.prefs(), ...patch }; wr('lesson_prefs', p); return p; },
+    ab(id) { const v = rd('lesson_ab_' + id, null); return isObj(v) ? { a: typeof v.a === 'string' ? v.a : null, b: typeof v.b === 'string' ? v.b : null } : { a: null, b: null }; },
+    setAb(id, v) { const k = 'lesson_ab_' + id; if (v && (v.a || v.b)) wr(k, { a: v.a || null, b: v.b || null }); else del(k); },
+    REP,
+  };
+})();
+
 const L = {"id":"L07e","scene":"s07","part":"e","title":"관제탑이 파이프로 내려보내는 셋 — 방출호르몬과 음성 피드백","sub":"흰 낙하산 세 짐은 TRH·CRH·GnRH · 나비, 층층 케이크, 묶은 달걀 둘 · 갑상샘호르몬이 돌아오면 시상하부의 TRH와 전엽의 TSH를 모두 줄인다","img":"img/L07a.webp?v=642ee9744519","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"같은 건물의 옥상 관제탑, 전엽 작업대, 외벽을 따라 올라오는 붉은 관","fact":"시상하부 방출호르몬은 전엽을 자극 · 말초 갑상샘호르몬은 피드백으로 그 축을 억제한다","hook":"파란 관은 지시를 아래로 · 붉은 관은 갑상샘호르몬의 되먹임","say":"옥상은 시상하부, 위층은 뇌하수체 전엽이다. 이번에는 굵은 파란 관의 낙하산에 어떤 짐이 실려 있는지 보자. 이어서 아래에서 돌아오는 붉은 관이 어느 두 위치를 조절하는지 따라가자.","box":null,"src":["s07p05#0"],"cards":["G0-147"]},{"sid":"s2","obj":"옥상의 파란 깔때기 아래, 문맥으로 내려오는 흰 낙하산 세 개와 서로 다른 짐","fact":"TRH·CRH·GnRH는 각각 다른 전엽 세포를 자극하는 시상하부 방출호르몬이다","hook":"같은 낙하산 = 방출호르몬 · 서로 다른 짐 = 별개의 세 호르몬 축","say":"흰 낙하산은 방출호르몬을 뜻한다. 낙하산에 매달린 짐은 나비판, 층층 케이크, 묶인 달걀 둘이다. 서로 다른 세 조절축의 예이지, 이 셋을 순서대로 통과한다는 뜻은 아니다. 시상하부는 성장호르몬 분비도 GHRH와 소마토스타틴으로 조절한다. 프로락틴 분비에는 도파민이 주로 억제 신호를 보낸다.","box":[[521,389,546,173],[1128,229,160,152]],"src":["s07p05#0"],"ask":"세 낙하산은 각각 어느 시상하부 호르몬을 뜻하는가? 셋은 한 경로의 연속 단계인가, 서로 다른 축인가?","cards":["G0-147"]},{"sid":"s3","obj":"흰 낙하산에 매달린 나비 모양 판","fact":"시상하부 TRH → 전엽 TSH → 갑상샘 T3·T4","hook":"낙하산 나비 = TRH · 전엽의 나비 창구 = TSH · 표적은 갑상샘","say":"나비 모양에서 갑상샘을 떠올리자. 옥상에서 파란 문맥을 따라 내려오는 나비 짐은 갑상샘자극호르몬 방출호르몬, TRH이다. TRH를 받은 전엽은 TSH를 분비하고, TSH는 갑상샘에서 T3와 T4의 합성·분비를 촉진한다. 따라서 낙하산의 나비와 전엽 창구의 나비는 같은 갑상샘 축이지만 서로 다른 호르몬을 가리킨다.","box":[[597,411,96,135],[318,615,187,57]],"src":["s07p05#1"],"ask":"나비 짐에 해당하는 시상하부 호르몬은 무엇인가? 전엽이 내는 호르몬과 말초 표적샘의 호르몬까지 순서대로 말해 보자.","cards":["G0-147#1","Q0-25#1","G0-162#1"]},{"sid":"s4","obj":"흰 낙하산에 매달린 층층 케이크","fact":"시상하부 CRH → 전엽 ACTH → 부신피질 코르티솔","hook":"층층 케이크 = 층으로 된 부신피질 · CRH는 ACTH 분비를 자극","say":"층층이 쌓인 케이크는 부신피질의 층을 닮았다. 케이크와 코르텍스의 첫소리를 CRH와 연결해 보자. 시상하부의 CRH가 전엽을 자극하면 ACTH가 분비된다. 이어서 ACTH가 부신피질에 작용해 코르티솔 분비를 촉진한다.","box":[[733,407,100,141],[591,678,158,74]],"src":["s07p05#2"],"ask":"케이크 짐에 해당하는 시상하부 호르몬과 전엽 호르몬은? 부신의 어느 부위에서 어떤 호르몬이 증가하는가?","cards":["G0-147#2"]},{"sid":"s5","obj":"흰 낙하산 하나에 함께 매달린 달걀 둘","fact":"맥동성 시상하부 GnRH → 전엽 FSH·LH → 난소 또는 정소","hook":"낙하산 하나와 달걀 둘 = 하나의 방출호르몬이 두 생식샘자극호르몬을 조절","say":"달걀 둘은 낙하산 하나에 함께 매달려 있다. 시상하부에서 맥동성으로 분비되는 GnRH 하나가 전엽의 두 호르몬, FSH와 LH를 조절한다는 단서다. 달걀은 생식샘인 고나드를 뜻한다. 두 호르몬은 여성의 난소와 남성의 정소에 작용한다.","box":[[892,408,104,139],[902,673,145,77]],"src":["s07p05#3"],"ask":"달걀 둘은 어느 호르몬 한 가지의 지시를 받는가? 전엽 호르몬 둘과 이들이 작용하는 기관은 무엇인가?","cards":["G0-147#3","Q1-20#1"]},{"sid":"s6","obj":"아래쪽에서 외벽을 타고 올라오는 붉은 관과 그 안의 보라 결정","fact":"말초 갑상샘에서 분비된 T3·T4가 전신 혈액을 통해 시상하부와 전엽에 음성 피드백","hook":"보라 결정 = 갑상샘호르몬 · 붉은 관 = 말초에서 돌아오는 피드백","say":"오른쪽 아래 나비는 갑상샘이다. 여기서 위로 이어지는 붉은 관을 따라가 보자. 관 안의 보라 결정은 요오드를 포함한 갑상샘호르몬이다. 갑상샘에서 분비된 T3와 T4의 농도가 높아지면 전신 혈액을 통해 시상하부와 뇌하수체 전엽의 자극을 줄인다. 파란 문맥은 시상하부의 방출호르몬이 아래로 가는 길이고, 붉은 관은 말초호르몬의 영향을 거슬러 확인하는 길이다.","box":[[1847,441,57,539],[1836,944,200,195],[1237,421,615,38],[1072,363,172,90],[470,346,606,36],[1433,51,261,86]],"src":["s07p05#4"],"ask":"외벽을 올라오는 보라 결정의 분비 기관과 호르몬은? 전신 혈액을 통한 이 반응은 어떤 피드백인가?","cards":["Q0-25#4","Q0-14"]},{"sid":"s7","obj":"붉은 관의 두 끝이 옥상과 전엽의 나비 쪽 덧문을 각각 반쯤 닫는다","fact":"T3·T4↑ → 시상하부 TRH↓, 전엽 TSH↓ · 갑상샘호르몬이 낮아지면 억제가 풀린다","hook":"나비 덧문 둘 = 시상하부와 전엽 · 반쯤 닫힘 = 갑상샘 축 자극 감소","say":"오른쪽의 붉은 관을 따라가면 위쪽 가지는 옥상의 나비표 덧문, 가로 가지는 위층의 나비 창구 셔터에 닿는다. 갑상샘호르몬이 충분해지면 시상하부의 TRH 분비와 전엽의 TSH 분비가 모두 줄어든다. 나비 축의 덧문을 반쯤 닫는 동작이 이 감소를 나타낸다. 반대로 갑상샘호르몬 농도가 낮아지면 두 위치의 억제가 풀린다. 다른 낙하산의 CRH와 GnRH는 각각 자신의 조절축을 따른다.","box":[[1169,39,219,100],[286,526,232,94],[1290,44,151,67],[1763,412,126,55],[379,369,56,168]],"src":["s07p05#4"],"ask":"갑상샘호르몬이 높을 때 두 덧문 각각에서 어느 호르몬이 줄어드는가? 갑상샘호르몬 농도가 낮아지면 이 억제는 어떻게 변하는가?","cards":["Q0-25#4","Q0-14"]}],"relatedTour":{"id":"L07a","label":"같은 그림 · 전엽과 후엽의 경로 따라가기"},"cq":{"G0-147":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","TRH · CRH · GnRH"],"G0-147#1":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","TRH"],"Q0-25#1":["갑상선 호르몬 T3·T4의 조절 경로는?","시상하부 TRH"],"G0-162#1":["혈중 갑상샘 호르몬이 낮을 때 활성화되는 축은?","TRH"],"G0-147#2":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","CRH"],"G0-147#3":["뇌하수체 전엽을 조절하는 시상하부 호르몬 예 3가지는?","GnRH"],"Q1-20#1":["남성 호르몬 조절 경로는?","시상하부 GnRH"],"Q0-25#4":["갑상선 호르몬 T3·T4의 조절 경로는?","(음성 피드백으로 TRH·TSH 억제)"],"Q0-14":["음성 피드백(negative feedback)의 역할은?","반응이 자극을 줄여 기존 상태 회복(항상성 경로의 기본, 인슐린↔글루카곤)"]},"hubPanel":"s07p05"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; document.title = L.title;
@@ -85,6 +124,11 @@ let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
+// 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
+function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
+$('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
+window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
+paintStar();
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);

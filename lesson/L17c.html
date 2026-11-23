@@ -10,6 +10,8 @@
   body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
+  .titlebar{display:flex;align-items:center;gap:10px}.titlebar h1{flex:1;min-width:0}
+  .star{font-size:22px;line-height:1;padding:2px 10px;color:#8a8a94}.star[aria-pressed="true"]{color:var(--gold);border-color:#e8c48c;background:#fff8ec}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
   .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
   .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
@@ -46,7 +48,7 @@
 <body>
 <div class="wrap">
   <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
-  <h1 id="title"></h1>
+  <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
     <button id="bTour" class="on">투어</button>
@@ -73,10 +75,47 @@
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
 <script>
+/* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
+   빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
+   열쇠: lesson_stars {ID: 찍은 때(ms)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
+   읽기 · 쓰기는 모두 try/catch — 저장이 막힌 브라우저에서는 그 쪽을 떠날 때까지만 기억하고 오류를 내지 않는다.
+   (lesson_<ID> · lesson_shuffle · lesson_srs_inbox · lesson_auto_start 는 여기서 건드리지 않는다) */
+const LStore = (() => {
+  const mem = {};
+  const rd = (k, d) => {
+    let ok = false;
+    try { const v = localStorage.getItem(k); ok = true; if (v !== null && v !== undefined) { const o = JSON.parse(v); mem[k] = o; return o; } } catch (e) {}
+    if (ok) { delete mem[k]; return d; }   // 저장소는 멀쩡한데 값이 없다 = 다른 탭에서 지웠다 — 메모리 값도 버린다
+    return k in mem ? mem[k] : d;
+  };
+  const wr = (k, o) => { mem[k] = o; try { localStorage.setItem(k, JSON.stringify(o)); } catch (e) {} };
+  const del = k => { delete mem[k]; try { localStorage.removeItem(k); } catch (e) {} };
+  const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
+  const REP = ['off', 'ab', 'one', 'list'];
+  return {
+    stars() { const s = rd('lesson_stars', {}); return isObj(s) ? s : {}; },
+    isStar(id) { return id in LStore.stars(); },
+    setStar(id, on) {
+      const s = { ...LStore.stars() };
+      if (on) s[id] = Date.now(); else delete s[id];
+      if (Object.keys(s).length) wr('lesson_stars', s); else del('lesson_stars');
+      return on;
+    },
+    prefs() {
+      const p = rd('lesson_prefs', {}); const o = isObj(p) ? p : {};
+      return { onlyStar: !!o.onlyStar, autoNext: !!o.autoNext, rep: REP.includes(o.rep) ? o.rep : 'off', scope: o.scope === 'star' ? 'star' : 'all' };
+    },
+    setPrefs(patch) { const p = { ...LStore.prefs(), ...patch }; wr('lesson_prefs', p); return p; },
+    ab(id) { const v = rd('lesson_ab_' + id, null); return isObj(v) ? { a: typeof v.a === 'string' ? v.a : null, b: typeof v.b === 'string' ? v.b : null } : { a: null, b: null }; },
+    setAb(id, v) { const k = 'lesson_ab_' + id; if (v && (v.a || v.b)) wr(k, { a: v.a || null, b: v.b || null }); else del(k); },
+    REP,
+  };
+})();
+
 const L = {"id":"L17c","scene":"s17","part":"c","title":"장터 좌판 세 칸 — 요를 펴느냐 접느냐","sub":"질소 노폐물 셋 — 암모니아(어류) · 요소(양서류 · 포유류 · 상어 · 간) · 요산(조류 · 파충류 · 곤충 · 알) · 독성 · 물 · ATP · 변태 · 통풍","img":"img/L17c.webp?v=2b12a3863d8c","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"좌판 세 칸","fact":"같은 질소를 버리는 세 방법 — 사는 곳이 정한다(물속 · 뭍 · 알 속)","hook":"왼쪽부터 물속 · 뭍 · 알 속","say":"콩팥 장터의 좌판 세 칸을 보자. 단백질을 분해해 생긴 질소를 버리는 세 가지 방법이다. 왼쪽은 물속, 가운데는 육지, 오른쪽은 알 속이다. 살아가는 환경과 배출 방법을 짝지어 보자.","box":null,"src":["s17u01#20"],"cards":["S-RN-18","H1-5","H1-4","H1-4#2","S-RN-17","H1-1"]},{"sid":"s2","obj":"왼 칸 — 유리 물통의 코를 쥔 물고기와 올챙이 · 김 · 물통에 뚜껑이 없다","fact":"암모니아 — 어류 · 수생(올챙이) · 너무 독해 가둬 둘 수 없어 바로 흘린다(아가미로 확산)","hook":"코를 쥔다 = 암모니아 냄새 · 뚜껑 없음 = 못 가둔다","say":"왼쪽 유리 물통에는 코를 쥔 물고기와 헤엄치는 올챙이가 있고, 물 위로 김이 올라온다. 어류와 물속 올챙이가 배출하는 암모니아다. 독성이 강해 오래 가두어 둘 수 없으므로 뚜껑 없이 흘려보내는 모습이다. 아가미를 통해 바로 확산되어 나간다.","box":[180,200,460,500],"src":["s17u01#17"],"cards":["X-RN-26","H1-1#1","H1-2"]},{"sid":"s3","obj":"왼 칸 앞 넘치는 큰 물독 · 선반에 동전 없음","fact":"물이 가장 많이 든다 · 만드는 값은 0(단백질을 헐면 그대로 나온다)","hook":"큰 독 = 물 많이 · 동전 없음 = 공짜","say":"왼쪽 칸 앞의 큰 물독은 넘치고 있다. 암모니아는 높은 농도로 두면 해로우므로 묽게 만들어 곧바로 배출해야 해 물이 가장 많이 필요하다. 반면 선반에는 동전이 없다. 단백질을 분해할 때 그대로 나오고 별도 가공이 필요하지 않아, 만드는 데 에너지가 들지 않는다는 단서다.","box":[[80,800,400,320],[120,680,420,120]],"src":["s17u01#17"],"cards":["X-RN-26","H1-1#1","H1-2"]},{"sid":"s11","obj":"왼 칸 물통 수면에서 오른 김 한 가닥이 휘어 통 모서리에 기울여 둔 유리병(속에 레몬) 아가리로 빨려 든다(김 띠 위 꺾쇠 둘이 병 쪽을 가리킴) · 병목에 마개가 끈으로 매달렸다 · 선반에는 마개를 막은 병 둘 — 레몬을 감은 잿빛 김이 갇혔다","fact":"NH₃ + H⁺ → NH₄⁺ 가두기(글루타민에서) — 산을 오줌으로 · 적정산과 함께 두 길","hook":"김(암모니아)이 레몬(H⁺)을 만나 병에 갇힌다 = NH₄⁺ 가두기","say":"왼쪽 물통 수면에서 올라온 김 한 가닥이 휘어 통 모서리에 기울여 놓은 유리병의 아가리로 빨려 들어간다. 김 위의 꺾쇠가 병 쪽을 가리킨다. 병 안에는 레몬이 있고, 병목에는 끈에 달린 마개가 막을 준비를 한다. 선반의 병 둘은 이미 닫혀 레몬을 감싼 잿빛 김이 갇혀 있다. 김은 막을 통과해 확산하는 암모니아 NH₃, 레몬은 수소 이온이다. 집합관에서 둘이 만나 암모늄 이온 NH₄⁺가 되면 전하 때문에 되돌아 나가지 못하고 오줌에 갇힌다. NH₄⁺ 가두기는 산을 휘발하지 않는 형태로 오줌에 실어 버리는 경로다. 이 암모니아는 근위세뇨관에서 글루타민을 분해해 만들며, 이때 생긴 새 중탄산은 혈액으로 간다. 산증에서는 생성과 배출을 늘려 수소 이온을 제거하고 중탄산을 보충한다. 산이 오줌으로 나가는 마지막 두 형태인 적정산과 NH₄⁺를 함께 기억하자.","box":[[195,335,285,127],[70,595,155,180]],"cards":["H1-149","H1-150","H1-64","H1-65","H1-151","H1-159"]},{"sid":"s4","obj":"가운데 칸 — 개구리 · 바구니에 펴 덮은 누런 요 · 강아지 · 요 밑 상어 지느러미","fact":"요소 — 양서류 성체 · 포유류 · 상어(몸에 쌓아 바닷물과 삼투를 맞춘다)","hook":"펴서 덮은 요 = 요소 · 상어가 요 밑 = 요소를 몸에 쌓는다","say":"가운데 칸의 개구리 옆 바구니에는 누런 요가 펼쳐져 있고 강아지가 내다본다. 요 아래에 숨은 상어는 회색 지느러미만 내밀고 있다. 요는 요소의 이름 단서다. 양서류 성체와 포유류가 요소를 이용한다. 상어는 바다에 살면서도 몸에 요소를 축적해 바닷물과 삼투를 맞추므로, 물고기 칸 대신 이 요 아래에 있다.","box":[680,400,640,380],"src":["s17u01#18"],"cards":["H1-1#2","H1-3","X-RN-27"]},{"sid":"s5","obj":"가운데 칸 — 중간 물그릇 · 동전 몇 · 뒤의 붉은 벽돌 곳간","fact":"덜 독해 모아 진하게 내보낸다 · 간의 요소회로가 만든다(ATP 듦 · 총괄 2 NH₃ + CO₂)","hook":"붉은 벽돌 곳간 = 간(덱 전체 약속)","say":"가운데 칸에는 중간 크기의 물그릇과 동전 몇 개가 놓였다. 요소는 암모니아보다 덜 독해 잠시 저장하고 농축해서 배출할 수 있으므로 물이 덜 필요하다. 대신 합성에는 에너지가 든다. 뒤쪽의 붉은 벽돌 곳간은 간이다. 간의 요소회로에서 암모니아와 아스파르트산의 질소 둘, 이산화탄소로 요소를 만들며 에이티피를 사용한다. 만들어진 요소는 콩팥으로 이동해 오줌으로 배출된다.","box":[[920,690,385,115],[960,220,340,240]],"src":["s17u01#18"],"cards":["H1-1#2","H1-3","X-RN-27","G1-141"]},{"sid":"s6","obj":"오른 칸 — 깨진 알 속 병아리 발밑에 접어 쌓은 흰 요 산 · 도마뱀 · 딱정벌레","fact":"요산 — 조류 · 파충류 · 곤충 · 알 속에선 못 버리니 안 녹는 고체로 굳혀 쌓는다","hook":"접어 쌓은 요 = 요산 · 알 속 = 못 버린다","say":"오른쪽의 깨진 알 속 병아리 발밑에는 흰 요가 접혀 산처럼 쌓여 있다. 알 옆구리에는 도마뱀, 선반에는 딱정벌레가 있다. 접어 쌓은 요에서 요산을 떠올리자. 조류, 파충류, 곤충이 이용한다. 알 안에서는 노폐물을 밖으로 내보낼 수 없으므로, 물에 거의 녹지 않는 고체 형태로 만들어 쌓아 둔다.","box":[1380,220,420,580],"src":["s17u01#19"],"cards":["H1-1#3","H1-4#1","X-RN-25"]},{"sid":"s7","obj":"오른 칸 — 작은 물그릇 · 동전 더미","fact":"물이 거의 안 든다 · ATP 비용은 최대","hook":"작은 그릇 · 동전 더미","say":"오른쪽 칸의 물그릇은 매우 작지만 동전은 더미로 쌓여 있다. 요산은 배출에 물이 거의 필요하지 않은 대신, 합성에 드는 에너지 비용이 가장 크다.","box":[[1440,615,400,195]],"src":["s17u01#19"],"cards":["H1-1#3","H1-4#1","X-RN-25"]},{"sid":"s8","obj":"세 칸의 물그릇은 왼 > 가운데 > 오른 · 동전은 반대","fact":"독성 · 물 소요: 암모니아 > 요소 > 요산 · ATP 비용: 요산 > 요소 > 암모니아","hook":"덜 독하게 만들수록 값이 든다","say":"세 칸을 나란히 비교하자. 물그릇은 왼쪽에서 오른쪽으로 작아지고, 동전은 반대로 많아진다. 암모니아, 요소, 요산 순으로 독성과 물 소요량은 줄어들지만 에이티피 비용은 증가한다. 독성이 낮은 형태로 바꿀수록 에너지가 더 드는 관계다.","box":[[80,800,400,320],[920,690,385,115],[1440,615,400,195]],"src":["s17u01#20"],"cards":["S-RN-18","H1-5","H1-4","H1-4#2","S-RN-17","H1-1"]},{"sid":"s9","obj":"왼 칸에서 가운데 칸으로 뛰어오르는 올챙이-개구리","fact":"변태 때 암모니아 → 요소로 바꾼다(폐어도 가뭄에 요소로)","hook":"물에서 뭍으로 오르면 요를 편다","say":"다리가 생긴 올챙이가 물통에서 가운데 칸으로 뛰어오른다. 물속 올챙이는 암모니아를 배출하다가, 변태해 뭍에 사는 개구리가 되면 요소로 바꾼다. 폐어도 가뭄에 흙 속으로 들어갈 때는 요소로 전환한다.","box":[460,240,440,200],"src":["s17u01#20"],"cards":["S-RN-18","H1-5","H1-4","H1-4#2","S-RN-17","H1-1"]},{"sid":"s10","obj":"오른 칸 곁 발에 붕대 감은 사람 — 흰 요 조각을 밟고 아파한다","fact":"사람 · 영장류도 요산을 만든다 → 쌓이면 관절에 결정, 통풍","hook":"굳은 요 조각을 밟는다 = 결정 · 통풍","say":"오른쪽 칸 옆의 사람은 발에 붕대를 감고, 굳은 흰 요 조각을 밟아 펄쩍 뛰고 있다. 사람도 핵산을 분해하면 요산이 생긴다. 이것이 축적되어 관절에 결정이 침착하면 통풍으로 이어진다.","box":[1600,440,448,704],"src":[],"cards":[]}],"cq":{"S-RN-18":["질소 노폐물의 독성·물량 순서와 ATP 비용 순서는?","독성·물량 암모니아>요소>요산 / ATP 요산>요소>암모니아"],"H1-5":["질소 노폐물의 독성·필요 물량 vs ATP 비용 순서는?","독성·물량: 암모니아 > 요소 > 요산 · ATP 비용: 요산 > 요소 > 암모니아"],"H1-4":["요산(uric acid)의 장점과 비용은?","물에 안 녹아 물 손실을 최소화하며 배출 · 합성에 ATP가 많이 듦 (질소당 H 1개) · 사람은 축적 시 통풍(gout)"],"H1-4#2":["요산(uric acid)의 장점과 비용은?","합성에 ATP가 많이 듦 (질소당 H 1개) — 사람은 축적 시 통풍(gout)"],"S-RN-17":["질소 노폐물 3종의 주 배출 동물군은?","암모니아 어류 / 요소 포유·양서·상어 / 요산 조류·파충·곤충"],"H1-1":["질소 노폐물 3종류와 주로 배출하는 동물군은?","암모니아(수생·어류) · 요소(포유류·양서류·상어) · 요산(조류·파충류·곤충)"],"X-RN-26":["암모니아를 그대로 배출하는 동물군과 그 이유는?","수생동물·어류 — 독성이 강해 많은 물로 즉시 희석·배출해야 하기 때문"],"H1-1#1":["질소 노폐물 3종류와 주로 배출하는 동물군은?","암모니아(수생·어류)"],"H1-2":["암모니아(ammonia)의 특징은?","독성이 매우 강해 많은 물로 즉시 희석·배출"],"H1-149":["암모니아(NH3)가 집합관에서 중요한 이유는?","H+와 결합해 NH4+로 trapping되어 산 배설을 돕기 때문이다"],"H1-150":["NH4+ trapping의 생리적 의미는?","산을 비휘발성 형태로 소변에 배설할 수 있게 하는 것"],"H1-64":["근위세뇨관에서 NH4+ 생성의 전구 아미노산으로 중요한 것은?","글루타민"],"H1-65":["근위세뇨관 암모니아 생성(ammoniagenesis)의 의미는?","H+ 배설과 새로운 HCO3- 생성에 기여한다"],"H1-151":["산증에서 암모니아 생성과 배설이 증가하는 이유는?","H+를 더 많이 제거하고 새 HCO3-를 보충하기 위해"],"H1-159":["집합관에서 최종적으로 산 배설이 가능해지는 두 방식은?","적정산 배설과 NH4+ 배설"],"H1-1#2":["질소 노폐물 3종류와 주로 배출하는 동물군은?","요소(포유류·양서류·상어)"],"H1-3":["요소(urea)의 특징과 생성 장소는?","독성이 낮아 농축 배출 가능 · 간에서 암모니아+CO₂ 결합으로 생성 (질소당 H 2개)"],"X-RN-27":["요소를 배출하는 동물군과 요소 생성 장소는?","포유류·양서류·상어 / 간에서 암모니아+CO2 결합으로 생성"],"G1-141":["간은 아미노산 분해로 생긴 질소(암모니아)를 무엇으로 전환하는가?","요소(urea)"],"H1-1#3":["질소 노폐물 3종류와 주로 배출하는 동물군은?","요산(조류·파충류·곤충)"],"H1-4#1":["요산(uric acid)의 장점과 비용은?","물에 안 녹아 물 손실을 최소화하며 배출"],"X-RN-25":["요산을 배출하는 동물군은?","조류·파충류·곤충 (← 요소는 포유류·양서류·상어, 암모니아는 수생·어류)"]},"hubPanel":"s17u01"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; document.title = L.title;
@@ -85,6 +124,11 @@ let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
+// 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
+function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
+$('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
+window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
+paintStar();
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);

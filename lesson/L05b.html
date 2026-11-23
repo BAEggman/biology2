@@ -10,6 +10,8 @@
   body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
+  .titlebar{display:flex;align-items:center;gap:10px}.titlebar h1{flex:1;min-width:0}
+  .star{font-size:22px;line-height:1;padding:2px 10px;color:#8a8a94}.star[aria-pressed="true"]{color:var(--gold);border-color:#e8c48c;background:#fff8ec}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
   .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
   .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
@@ -46,7 +48,7 @@
 <body>
 <div class="wrap">
   <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
-  <h1 id="title"></h1>
+  <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
     <button id="bTour" class="on">투어</button>
@@ -73,10 +75,47 @@
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
 <script>
+/* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
+   빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
+   열쇠: lesson_stars {ID: 찍은 때(ms)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
+   읽기 · 쓰기는 모두 try/catch — 저장이 막힌 브라우저에서는 그 쪽을 떠날 때까지만 기억하고 오류를 내지 않는다.
+   (lesson_<ID> · lesson_shuffle · lesson_srs_inbox · lesson_auto_start 는 여기서 건드리지 않는다) */
+const LStore = (() => {
+  const mem = {};
+  const rd = (k, d) => {
+    let ok = false;
+    try { const v = localStorage.getItem(k); ok = true; if (v !== null && v !== undefined) { const o = JSON.parse(v); mem[k] = o; return o; } } catch (e) {}
+    if (ok) { delete mem[k]; return d; }   // 저장소는 멀쩡한데 값이 없다 = 다른 탭에서 지웠다 — 메모리 값도 버린다
+    return k in mem ? mem[k] : d;
+  };
+  const wr = (k, o) => { mem[k] = o; try { localStorage.setItem(k, JSON.stringify(o)); } catch (e) {} };
+  const del = k => { delete mem[k]; try { localStorage.removeItem(k); } catch (e) {} };
+  const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
+  const REP = ['off', 'ab', 'one', 'list'];
+  return {
+    stars() { const s = rd('lesson_stars', {}); return isObj(s) ? s : {}; },
+    isStar(id) { return id in LStore.stars(); },
+    setStar(id, on) {
+      const s = { ...LStore.stars() };
+      if (on) s[id] = Date.now(); else delete s[id];
+      if (Object.keys(s).length) wr('lesson_stars', s); else del('lesson_stars');
+      return on;
+    },
+    prefs() {
+      const p = rd('lesson_prefs', {}); const o = isObj(p) ? p : {};
+      return { onlyStar: !!o.onlyStar, autoNext: !!o.autoNext, rep: REP.includes(o.rep) ? o.rep : 'off', scope: o.scope === 'star' ? 'star' : 'all' };
+    },
+    setPrefs(patch) { const p = { ...LStore.prefs(), ...patch }; wr('lesson_prefs', p); return p; },
+    ab(id) { const v = rd('lesson_ab_' + id, null); return isObj(v) ? { a: typeof v.a === 'string' ? v.a : null, b: typeof v.b === 'string' ? v.b : null } : { a: null, b: null }; },
+    setAb(id, v) { const k = 'lesson_ab_' + id; if (v && (v.a || v.b)) wr(k, { a: v.a || null, b: v.b || null }); else del(k); },
+    REP,
+  };
+})();
+
 const L = {"id":"L05b","scene":"s05","part":"b","title":"캠핑장의 짝짓기 — 울타리 뽑기 · 천막 둘 · 지퍼 · 낙하산: 균류의 유성생식","sub":"칸마다 천막 하나(반수체 우세) · 뽑힌 산울타리(원형질융합) · 한 칸에 천막 둘(이핵 n+n ≠ 2n) · 버섯까지 이어진 짝 칸(담자균의 긴 n+n · 자실체) · 지퍼로 하나 된 줄무늬 천막(핵융합 · 유일한 2n) · 터져 날아가는 낙하산 천막 넷(감수분열 → 반수체 포자) · 가로막 없는 통로의 천막 줄(접합균 다핵균사)","img":"img/L05b.webp?v=37ee8e118052","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"산울타리로 바둑판처럼 칸을 나눈 넓은 캠핑장 — 칸마다 문 열린 돔 천막 하나(안에 보라 공) · 왼쪽 위는 모두 파랑 · 왼쪽 아래는 모두 노랑 · 그 경계 가운데 두 칸만 바닥까지 파랑 · 노랑으로 칠했다 (틀)","fact":"균류 생활사는 반수체(n) 우세 — 칸(세포)마다 핵이 하나","hook":"칸마다 천막 하나 = n · 캠핑장 대부분 = 반수체 우세","say":"낮은 산울타리가 풀밭을 바둑판처럼 나눈 넓은 캠핑장을 보자. 칸마다 문이 열린 돔 천막 하나가 있고, 천막 안에는 보라 공이 있다. 이 덱에서 천막은 핵, 안의 보라 공은 인이다. 칸 하나는 세포이고, 그 안의 천막 하나는 반수체 n인 핵 하나를 뜻한다. 칸들이 길게 한 줄로 이어진 것이 가는 관 모양의 실인 균사다. 그 줄들이 캠핑장 전체에 얽혀 만든 그물이 균사체다. 가늘게 퍼져 부피에 비해 표면적이 크므로 흡수에 유리하다. 캠핑장 대부분이 천막 하나를 가진 칸인 것처럼, 균류는 생활사 대부분을 반수체로 보낸다. 반수체 우세형 생활사에서는 성체가 n이고, 접합자만 2n이며 곧바로 감수분열한다. 왼쪽 위 천막은 모두 파랑이고 왼쪽 아래 천막은 모두 노랑이다. 두 무리는 서로 다른 짝짓기형이다.","box":null,"src":["s05p03#1"],"cards":["M2-12","D0-171#2","M2-3"]},{"sid":"s2","obj":"가운데 — 바닥까지 파랗게 칠한 칸과 노랗게 칠한 칸 사이 산울타리를 파란 옷 · 노란 옷 두 캠퍼가 맨손으로 뿌리째 뽑는다 · 두 천막은 제자리","fact":"원형질융합 — 두 균사의 세포질만 합쳐지고 핵은 아직 따로","hook":"뽑힌 산울타리 = 원형질융합(세포질만)","say":"가운데에서 파랑 칸과 노랑 칸이 맞닿은 곳을 보자. 파란 옷과 노란 옷을 입은 캠퍼가 두 칸 사이의 산울타리를 뿌리째 뽑는다. 칸은 하나로 합쳐졌지만 파랑 천막과 노랑 천막은 그대로 따로 있다. 이것이 원형질융합이다. 두 균사의 세포질만 합쳐지고 핵은 아직 합쳐지지 않았다. 담은 허물었지만 집은 그대로라고 기억하자.","box":[380,440,650,420],"src":["s05p03#2"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21"]},{"sid":"s3","obj":"합친 칸 옆부터 오른쪽 위로 이어지는 칸 줄 — 칸마다 파랑 · 노랑 천막 둘이 따로 나란히","fact":"이핵 · 2핵(n+n) — 서로 다른 반수체 핵 둘이 한 세포에 따로 · 2n 아님","hook":"한 칸에 천막 둘 = n+n ≠ 2n","say":"합쳐진 칸에서 오른쪽 위로 이어지는 줄을 보자. 칸마다 파랑 천막과 노랑 천막이 하나씩 나란히 서 있다. 한 세포 안에 서로 다른 반수체 핵 둘이 있는 이핵체다. 여기의 이는 다를 이 자다. 두 핵이 짝을 이룬 균사는 두 이 자를 써서 2핵균사라고 하며 n+n으로 표시한다. 천막이 둘이라는 이유로 2n이라고 읽지 말자. 한 세포 안에 있어도 핵이 합쳐지기 전에는 n 더하기 n이다.","box":[915,320,540,400],"src":["s05p03#2"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21","X-EV-22"]},{"sid":"s4","obj":"그 칸 줄이 커다란 갈색 버섯(점 · 고리 없음)까지 이어지고, 버섯 대도 파랑 · 노랑 천막 짝이 든 칸을 층층이 쌓아 지었다","fact":"담자균은 n+n 시기가 길다 · 버섯(자실체)도 2핵균사로 이루어진다","hook":"버섯 대까지 이어진 짝 칸 = 긴 n+n · 버섯 = 2핵균사","say":"천막이 짝지어 있는 칸들의 줄은 커다란 갈색 버섯까지 이어진다. 균류 마을에서 버섯 지붕 집으로 보았던 담자균이다. 버섯의 대는 짝 칸을 층층이 쌓아 만든 모습이고, 층마다 파랑 천막과 노랑 천막이 하나씩 있다. 담자균은 이 n+n 시기가 매우 길다. 우리가 먹는 버섯인 자실체 역시 2핵균사로 이루어진다.","box":[1300,55,460,680],"src":["s05p03#2","s05p02#2"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21","M2-21"]},{"sid":"s5","obj":"버섯 갓 오른쪽 아래 — 파랑 · 노랑 천막이 큰 지퍼 하나로 합쳐져 파랑 · 노랑 줄무늬 큰 천막이 되며 번쩍 빛난다","fact":"핵융합 → 2n 접합자 · 대부분 균류에서 유일한 2배체 단계","hook":"지퍼로 하나 된 줄무늬 천막 = 핵융합 · 유일한 2n","say":"버섯 갓의 오른쪽 아래에서 파랑 천막과 노랑 천막이 큰 지퍼로 합쳐진다. 빛이 번쩍이며 파랑·노랑 줄무늬의 큰 천막 하나가 되었다. 두 반수체 핵이 하나로 합쳐져 2배체, 2n 접합자가 되는 핵융합이다. 대부분의 균류에서 2n인 시기는 이 줄무늬 천막으로 나타낸 순간뿐이다.","box":[1690,425,290,250],"src":["s05p03#0"],"cards":["M2-11","M2-13#3"]},{"sid":"s6","obj":"그 줄무늬 천막이 점선 화살을 따라 바로 위로 올라가 깨져 터지고, 흰 낙하산을 단 작은 천막 넷(파랑 둘 · 노랑 둘)이 오른쪽 위로 날아간다","fact":"2n 은 순간 — 곧바로 감수분열해 반수체 포자가 된다","hook":"터진 줄무늬 천막 → 흰 낙하산 매단 작은 천막 넷(천막 = 핵) = 감수분열 → 포자","say":"줄무늬 천막에서 점선 화살표를 따라 바로 위로 올라가 보자. 천막이 갈라져 터지고, 흰 낙하산을 단 작은 천막 넷이 오른쪽 위로 날아간다. 파랑 둘과 노랑 둘은 감수분열의 결과다. 핵융합 직후의 짧은 2n 시기가 지나면 곧바로 감수분열해 반수체 포자가 된다. 포자는 날아가 내려앉은 곳에서 천막 하나짜리 칸인 반수체 균사로 자란다. 이렇게 처음의 바둑판으로 돌아온다.","box":[[1715,115,330,350]],"src":["s05p03#0"],"cards":["M2-11","M2-13#3"]},{"sid":"s7","obj":"오른쪽 아래 빵 덩이 옆 — 양옆만 산울타리이고 칸을 가르는 가로막이 하나도 없는 긴 통로에 파란 천막이 줄줄이","fact":"접합균 — 격벽 없는 다핵균사(한 세포질에 핵이 여럿)","hook":"가로막 없는 통로의 천막 줄 = 다핵균사","say":"오른쪽 아래에는 균류 마을에서 본 빵곰팡이의 빵 덩이가 있다. 그 옆으로 뻗은 긴 통로는 양쪽에 산울타리가 있지만, 가로막으로 칸을 나누지 않았다. 통로 하나에 파란 천막이 여러 개 들어선 모습은 접합균의 다핵균사다. 격벽이 없으므로 한 세포질 안에 여러 핵이 들어 있다. 핵분열은 거듭하지만 세포질은 나누지 않아 생긴다. 반면 산울타리 가로막으로 칸이 나뉜 다른 줄은 격벽균사다. 그 가로막에는 핵이 오갈 수 있는 구멍이 있다. 균류 마을의 검은 공으로 본 저항성 접합포자낭도 접합균이 만드는 구조다.","box":[1400,690,648,454],"src":["s05p01#2"],"cards":["M2-18#2","S-EV-6","M2-18#1","M2-5"]},{"sid":"s8","obj":"가운데에서 오른쪽 위로 자리 순서대로 — 뽑힌 산울타리 → 한 칸에 천막 둘 → 지퍼로 하나 → 낙하산 넷 (되짚기)","fact":"원형질융합 → 이핵(n+n) → 핵융합(2n) → 감수분열 → 반수체 포자","hook":"울타리 · 둘 · 지퍼 · 낙하산","say":"캠핑장의 길을 따라 순서를 되짚어 보자. 산울타리를 뽑는 원형질융합, 한 칸에 천막 둘이 있는 이핵 n+n, 지퍼로 천막 하나를 만드는 핵융합 2n, 터진 뒤 낙하산 넷으로 날아가는 감수분열과 반수체 포자다. 세포질이 먼저 합쳐지고 핵이 나중에 합쳐진다. 울타리를 뽑은 다음 지퍼를 닫는다는 순서로, 원형질융합과 핵융합을 구분하자.","box":[[660,440,240,230],[920,505,230,215],[1690,425,290,250],[1740,115,305,300]],"src":["s05p03#2","s05p03#0"],"cards":["M2-13","M2-10","M2-13#2","M2-9","M2-13#1","X-EV-21","M2-11","M2-13#3"]}],"cq":{"M2-12":["균류 생활사의 우세 배수성은?","반수체(n) 우세(2배체는 핵융합 직후 잠깐)"],"D0-171#2":["유성생식 생활사의 3가지 유형은?","반수체 우세형(대부분 균류·일부 원생생물·조류): 성체 n, 접합자만 2n이며 곧바로 감수분열"],"M2-3":["균사(hypha)와 균사체(mycelium)란?","균사=가는 관 모양 · 균사체=균사가 얽힌 그물(표면적/부피 극대화로 흡수 효율↑)"],"M2-13":["균류 유성생식의 순서는?","원형질융합(세포질) → 이핵체/2핵 → 핵융합(핵, 2n) → 감수분열 → 반수체 포자"],"M2-10":["이핵체(heterokaryon)와 2핵균사(dikaryotic)란?","한 세포에 서로 다른 반수체 핵 공존 · 핵이 쌍으로 있으면 2핵균사(n+n) — 2배체와 다름"],"M2-13#2":["균류 유성생식의 순서는?","이핵체/2핵"],"M2-9":["원형질융합(plasmogamy)이란?","두 균사의 세포질이 합쳐짐(핵은 바로 안 합쳐짐)"],"M2-13#1":["균류 유성생식의 순서는?","원형질융합(세포질)"],"X-EV-21":["세포질만 합쳐지고 핵은 아직 안 합쳐진 단계는?","원형질융합(plasmogamy) (← 핵융합과 혼동 주의)"],"X-EV-22":["핵이 쌍으로 있지만 2배체가 '아닌' 상태는?","2핵균사(n+n) — 2n과 다름"],"M2-21":["담자균(Basidiomycota)의 특징은?","담자기(basidium)에 담자포자 · 2핵균사가 자실체(버섯) 형성"],"M2-11":["핵융합(karyogamy)의 결과는?","반수체 핵끼리 융합→2배체(2n) 접합자(대부분 균류의 유일한 2배체 단계)"],"M2-13#3":["균류 유성생식의 순서는?","핵융합(핵, 2n)"],"M2-18#2":["접합균(Rhizopus)의 특징은?","저항성 접합포자낭(zygosporangium) 형성(빵곰팡이)"],"S-EV-6":["균류 3문의 유성 구조 격자는?","접합균=접합포자낭 / 자낭균=자낭 / 담자균=담자기"],"M2-18#1":["접합균(Rhizopus)의 특징은?","다핵균사"],"M2-5":["격벽균사(septate)와 다핵균사(coenocytic)의 차이는?","격벽균사=가로벽으로 칸 나뉨(핵 이동 가능) · 다핵균사=격벽 없어 다핵(세포질분열 없는 반복 핵분열)"]},"hubPanel":"s05p03"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; document.title = L.title;
@@ -85,6 +124,11 @@ let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
+// 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
+function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
+$('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
+window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
+paintStar();
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);

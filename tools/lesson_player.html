@@ -10,6 +10,8 @@
   body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
+  .titlebar{display:flex;align-items:center;gap:10px}.titlebar h1{flex:1;min-width:0}
+  .star{font-size:22px;line-height:1;padding:2px 10px;color:#8a8a94}.star[aria-pressed="true"]{color:var(--gold);border-color:#e8c48c;background:#fff8ec}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
   .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
   .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
@@ -46,7 +48,7 @@
 <body>
 <div class="wrap">
   <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a>__TOUR_LINK__</nav>
-  <h1 id="title"></h1>
+  <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
     <button id="bTour" class="on">투어</button>
@@ -73,10 +75,11 @@
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
 <script>
+__STORE__
 const L = __DATA__;
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; document.title = L.title;
@@ -85,6 +88,11 @@ let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
+// 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
+function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
+$('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
+window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
+paintStar();
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);

@@ -10,6 +10,8 @@
   body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
+  .titlebar{display:flex;align-items:center;gap:10px}.titlebar h1{flex:1;min-width:0}
+  .star{font-size:22px;line-height:1;padding:2px 10px;color:#8a8a94}.star[aria-pressed="true"]{color:var(--gold);border-color:#e8c48c;background:#fff8ec}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
   .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
   .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
@@ -46,7 +48,7 @@
 <body>
 <div class="wrap">
   <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
-  <h1 id="title"></h1>
+  <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
     <button id="bTour" class="on">투어</button>
@@ -73,10 +75,47 @@
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
 <script>
+/* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
+   빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
+   열쇠: lesson_stars {ID: 찍은 때(ms)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
+   읽기 · 쓰기는 모두 try/catch — 저장이 막힌 브라우저에서는 그 쪽을 떠날 때까지만 기억하고 오류를 내지 않는다.
+   (lesson_<ID> · lesson_shuffle · lesson_srs_inbox · lesson_auto_start 는 여기서 건드리지 않는다) */
+const LStore = (() => {
+  const mem = {};
+  const rd = (k, d) => {
+    let ok = false;
+    try { const v = localStorage.getItem(k); ok = true; if (v !== null && v !== undefined) { const o = JSON.parse(v); mem[k] = o; return o; } } catch (e) {}
+    if (ok) { delete mem[k]; return d; }   // 저장소는 멀쩡한데 값이 없다 = 다른 탭에서 지웠다 — 메모리 값도 버린다
+    return k in mem ? mem[k] : d;
+  };
+  const wr = (k, o) => { mem[k] = o; try { localStorage.setItem(k, JSON.stringify(o)); } catch (e) {} };
+  const del = k => { delete mem[k]; try { localStorage.removeItem(k); } catch (e) {} };
+  const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
+  const REP = ['off', 'ab', 'one', 'list'];
+  return {
+    stars() { const s = rd('lesson_stars', {}); return isObj(s) ? s : {}; },
+    isStar(id) { return id in LStore.stars(); },
+    setStar(id, on) {
+      const s = { ...LStore.stars() };
+      if (on) s[id] = Date.now(); else delete s[id];
+      if (Object.keys(s).length) wr('lesson_stars', s); else del('lesson_stars');
+      return on;
+    },
+    prefs() {
+      const p = rd('lesson_prefs', {}); const o = isObj(p) ? p : {};
+      return { onlyStar: !!o.onlyStar, autoNext: !!o.autoNext, rep: REP.includes(o.rep) ? o.rep : 'off', scope: o.scope === 'star' ? 'star' : 'all' };
+    },
+    setPrefs(patch) { const p = { ...LStore.prefs(), ...patch }; wr('lesson_prefs', p); return p; },
+    ab(id) { const v = rd('lesson_ab_' + id, null); return isObj(v) ? { a: typeof v.a === 'string' ? v.a : null, b: typeof v.b === 'string' ? v.b : null } : { a: null, b: null }; },
+    setAb(id, v) { const k = 'lesson_ab_' + id; if (v && (v.a || v.b)) wr(k, { a: v.a || null, b: v.b || null }); else del(k); },
+    REP,
+  };
+})();
+
 const L = {"id":"L43b","scene":"s43","part":"b","title":"담장 안 손질 작업대와 선반 셋 — RNA 가공 · 선택적 스플라이싱","sub":"앞머리 모자(5′ 캡) · 꼬리 술(poly-A) · 어깨동무 다섯의 가위(스플라이소좀) · 청록/회색(엑손/인트론) · 올가미 토막(라리아트) · 구멍으로 나가는 짧은 청록 띠(ex = 나감) · 선반 셋 ○△☆ / ○□☆ + 쇠 마디만 다른 연장(선택적 스플라이싱 · 도메인)","img":"img/L43b.webp?v=7dfd4750cc2b","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"벽돌 담 안의 손질 작업장 — 왼쪽 긴 작업대(앞머리 모자 · 꼬리 술 · 가운데 잘라 잇기) · 오른쪽 벽의 선반 셋","fact":"진핵 RNA 가공 셋 — 5′ 캡 · poly-A 꼬리 · 스플라이싱 · 다 핵 안에서 끝나야 나간다","hook":"손질 셋 · 끝나야 나간다","say":"벽돌 담장 안의 RNA 손질 작업장이다. 왼쪽 긴 작업대에서 띠 앞에는 모자를 씌우고, 뒤에는 술을 달며, 가운데는 잘라 잇는다. 5′ 캡, poly-A 꼬리, 스플라이싱이라는 진핵의 RNA 가공 세 가지다. 가공은 핵 안에서 이루어지고, 손질을 마친 뒤 핵공으로 나간다. 가공 전 띠는 전구 mRNA, 가공 후 밖으로 나가는 띠는 성숙한 mRNA이다. 오른쪽의 세 선반에서는 같은 원본으로 다른 결과물을 만드는 과정을 보자.","box":null,"src":["s43p02#7"],"cards":["F0-56","F1-81","F0-55","F1-80"]},{"sid":"s2","obj":"작업대 왼쪽 끝 — 띠의 앞머리에 작은 모자를 씌우는 일꾼","fact":"5′ 캡 — 핵 밖 이동을 돕고 · 분해를 막고 · 리보솜 작은 소단위체가 먼저 잡는 손잡이","hook":"모자 = 5′ 캡","say":"작업대 왼쪽 끝에서 일꾼이 띠 앞머리에 작은 모자를 씌운다. 5′ 캡이다. 변형된 구아닌 하나를 붙이는 것으로, 전사가 스무에서 마흔 뉴클레오타이드 정도 진행된 직후에 형성된다. 기능은 핵 밖 수송을 돕고, 분해를 막으며, 번역 때 리보솜 작은 소단위체가 맨 먼저 잡는 손잡이가 되는 것이다. 주요 기능 두 가지를 묻는다면 분해 방지와 리보솜 결합을 떠올리자.","box":[80,430,220,350],"src":["s43p02#0"],"cards":["F0-56#1","F1-81#1","F0-57","F0-59","F1-82#1","F0-116","F0-58","F0-60"]},{"sid":"s3","obj":"작업대 오른쪽 끝 — 띠의 꼬리에 똑같은 술을 여러 가닥 매다는 일꾼","fact":"poly-A 꼬리(3′ 끝 · 아데닌만) — 안정성을 높이고 핵 밖으로 나가기 · 번역을 돕는다","hook":"똑같은 술 여러 가닥 = poly-A","say":"오른쪽 끝에서는 띠의 꼬리에 같은 술을 여러 가닥 단다. poly-A 꼬리다. 3′ 끝에 아데닌 뉴클레오타이드만 쉰에서 이백오십 개 정도를 주형 없이 붙인다. 먼저 띠가 AAUAAA 신호보다 조금 뒤에서 잘려 기계를 떠나고, 잘린 끝에 꼬리가 붙는다. mRNA의 수명을 늘리고 핵 밖 수송과 번역을 돕는다.","box":[1020,480,220,440],"src":["s43p02#1"],"cards":["F0-56#2","F1-81#2","F0-61","F0-63","F1-82#6","F0-84","F0-84#1","F0-84#2","F0-84#3","F0-62","F0-46","F0-47"]},{"sid":"s4","obj":"작업대 가운데 — 다섯 일꾼이 어깨동무로 한 덩어리가 되어 큰 가위 하나를 띠에 댄다","fact":"스플라이소좀 — 단백질 + snRNA(snRNP 다섯)가 모인 한 복합체가 자른다","hook":"어깨동무 다섯 = 스플라이소좀","say":"가운데의 일꾼 다섯 명은 어깨동무로 한 덩어리를 이루어 큰 가위를 댄다. 한 사람이 아니라 복합체가 자른다는 단서이며, 스플라이소좀이다. 단백질과 작은 핵 RNA로 이루어진 snRNP 다섯 종류가 함께하기 때문에 일꾼도 다섯 명이다.","box":[360,280,560,380],"src":["s43p02#2"],"cards":["F0-68","F0-69","F0-174"]},{"sid":"s5","obj":"띠는 청록과 회색이 번갈아 있다 — 통에 버려진 것은 회색뿐 · 구멍으로 나가는 것은 청록뿐","fact":"청록 = 엑손(mRNA 에 남음 · 양끝 UTR 은 번역 안 됨) · 회색 = 인트론(잘려 나감)","hook":"회색은 통으로 · 청록은 밖으로","say":"띠에서는 청록색과 회색이 번갈아 나온다. 잘라 낸 뒤 바닥 통에는 회색만 버려지고, 밖으로 나가는 띠에는 청록색만 남는다. 최종 mRNA에 남는 청록색은 엑손이다. 대부분 번역되지만, 양끝의 비번역 부위인 유티알도 엑손에 포함된다. 남는다고 모두 번역되는 것은 아니다. 3′ UTR은 번역되지 않으며 조절에 관여한다. 회색 인트론은 전사되지만 잘려 나가 성숙 mRNA에는 없다. 인트론을 제거하고 남은 엑손을 잇는 것이 스플라이싱이다. 인트론은 대개 GU로 시작하고 AG로 끝난다.","box":[200,500,880,260],"src":["s43p02#3"],"cards":["F0-65","F0-66","F0-67","F0-56#3","F1-81#3","F1-79#3","F0-64","F0-71"]},{"sid":"s6","obj":"잘린 회색 토막은 올가미 매듭으로 묶여 담장 안 바닥 통에 버려진다 — 모자도 술도 없다","fact":"인트론은 올가미(라리아트)로 빠지고 · 캡 · 꼬리가 없어 곧 분해된다","hook":"올가미 = 라리아트","say":"잘려 나온 회색 토막들은 올가미 매듭 모양으로 묶여 핵 안의 바닥 통에 놓인다. 인트론이 제거될 때 생기는 라리아트, 즉 올가미 구조다. 모자도 술도 없는 것처럼 캡과 꼬리가 없어 보호받지 못하고 곧 분해된다.","box":[540,770,520,350],"src":["s43p02#4"],"cards":["F0-70","F0-72","F0-171"]},{"sid":"s7","obj":"둥근 구멍 너머 — 일꾼이 청록만 이은 짧은 띠를 들고 나간다 · 앞끝엔 작은 청록 모자 · 뒤끝엔 술","fact":"엑손은 나가고(ex-) 인트론은 안에 남는다(in-) · 손질이 끝난 것만 나간다","hook":"ex = 나간다 · in = 안에","say":"둥근 핵공을 통해 일꾼이 청록색 조각만 이은 짧은 띠를 들고 나간다. 앞에는 청록 모자, 뒤에는 술이 붙어 있다. 엑손은 엑시트처럼 밖으로 나가고, 인트론은 인처럼 안에 남는 것으로 연결하자. 두 이름을 바꿔 놓은 선지가 이 단원의 최다 오답이므로 행선지를 함께 기억하자. 가공을 모두 마친 mRNA만 핵 밖으로 나간다.","box":[1110,90,380,410],"src":["s43p02#5"],"cards":[]},{"sid":"s8","obj":"작업대 위의 띠는 길고 · 구멍으로 나가는 띠는 훨씬 짧다","fact":"유전자가 암호화 구간보다 훨씬 긴 것은 인트론이 많이 끼어 있어서","hook":"긴 띠 → 짧은 띠","say":"작업대 위 긴 띠와 핵공으로 나가는 짧은 띠를 비교하자. 인트론이 제거되어 길이가 줄었다. 실제 유전자가 단백질 암호화 구간보다 훨씬 긴 이유도 많은 인트론이 사이에 들어 있기 때문이다.","box":[[150,500,985,290],[1110,90,380,410]],"src":["s43p02#6"],"cards":["F0-85"]},{"sid":"s9","obj":"오른쪽 선반 셋 — 회색 섞인 원본 띠는 맨 위 하나뿐 · 곁의 일꾼이 맨 위를 가리키며 아래로 쓸어내린다","fact":"선택적 스플라이싱 — 유전자 하나에서 완성품 여럿(아래 둘은 같은 원본에서)","hook":"원본은 맨 위 하나","say":"오른쪽 벽의 선반 세 개를 보자. 회색이 섞인 원본 띠는 맨 위에 하나뿐이다. 일꾼이 위 선반을 가리키며 다른 손으로 아래를 쓸어내린다. 아래 결과물 둘은 별개 원본이 아니라 같은 원본에서 나왔다는 뜻이다. 한 유전자에서 여러 결과물을 만드는 선택적 스플라이싱이다.","box":[1440,180,600,800],"src":["s43p03#0"],"cards":[]},{"sid":"s10","obj":"가운데 선반 ○ △ ☆ + 둥근 손잡이 · 쇠 날 연장 · 아래 선반 ○ □ ☆ + 같은 둥근 손잡이에 쇠 용수철 연장","fact":"엑손 조합을 달리해 다른 폴리펩타이드 — DNA는 그대로 · 자를 자리만 다르게","hook":"같은 원본 · 다른 조합","say":"가운데 선반에는 동그라미·세모·별, 아래 선반에는 동그라미·네모·별이 이어진다. 가운데의 완성 연장은 둥근 나무 손잡이에 쇠 날이 붙고, 아래 것은 같은 손잡이에 쇠 용수철이 붙는다. 한 유전자의 엑손 조합을 달리해 서로 다른 폴리펩타이드를 만드는 것이다. DNA가 바뀐 것이 아니라 RNA를 잘라 이을 위치가 달라진다. 가위가 원본인 맨 위 선반에만 있는 것도 그 단서다.","box":[1640,420,400,560],"src":["s43p03#1"],"cards":["F0-73"]},{"sid":"s11","obj":"두 선반 모두 ○로 시작해 ☆로 끝나고 가운데 한 조각만 다르다 · 연장 둘도 같은 둥근 손잡이에 쇠 마디 하나만 다르다(곧은 날 ↔ 용수철 · 놓인 방향은 반대)","fact":"도메인 — 단백질 속 기능 단위 · 한 조각만 갈아 끼워도 하는 일이 바뀐다","hook":"한 마디만 갈아 끼운다 = 도메인","say":"두 선반은 모두 동그라미로 시작해서 별로 끝나고, 가운데 한 조각만 다르다. 연장 두 개도 같은 둥근 손잡이에 쇠 마디 하나만 다른데, 하나는 곧은 날이고 다른 하나는 용수철이다. 한 마디를 바꾸었을 뿐인데 하나는 빳빳하게 파는 연장, 다른 하나는 튕기는 연장이 되었다. 단백질에서 특정 기능을 담당하는 구조 단위가 도메인이다. 한 조각이 한 기능을 맡으므로, 한 조각만 바꾸어도 하는 일이 통째로 달라진다는 연결이다.","box":[[1650,425,265,150],[1650,660,260,135],[1850,540,190,150],[1850,780,190,150]],"src":["s43p03#2"],"cards":["F0-79","F0-77"]},{"sid":"s12","obj":"맨 위 띠는 청록 조각들 사이사이에 회색이 끼어 있고 · 가위가 그 위에 놓였다","fact":"인트론이 엑손 사이를 벌려 교차 자리가 넓어진다 → 엑손 셔플링(DNA 재조합 · 새 도메인 조합)","hook":"벌어진 틈 = 교차 자리 · DNA 의 일(스플라이싱과 다름)","say":"맨 위 띠의 청록 조각 사이에는 회색 조각이 끼어 있고 가위가 놓여 있다. 이번에는 RNA 가공이 아니라 그 원본인 DNA 수준을 생각해 보자. 인트론은 엑손 사이 거리를 늘린다. 사이가 넓어지면 끊고 바꿔 이을 자리도 넓어진다. 그 사이에서 유전자끼리 교차와 재조합이 일어날 확률이 높아져 엑손 셔플링이 쉬워진다. 엑손 단위가 섞여 새로운 조합을 이루는 현상이다. 엑손 하나가 도메인 하나를 담당하는 경우가 많아, 재조합으로 도메인을 새롭게 결합한 단백질이 생긴다. RNA에서 일어나는 스플라이싱과 달리 DNA 자체가 바뀌며 진화의 재료가 된다.","box":[1620,180,410,240],"src":["s43p03#3"],"cards":["F0-78","F0-76"]},{"sid":"s13","obj":"원본은 맨 위 하나인데 선반 아래로 연장이 둘 나왔다","fact":"유전자 수보다 단백질이 훨씬 다양하다 — 사람이 적은 유전자로 복잡한 까닭","hook":"원본 하나 · 연장 둘","say":"맨 위 원본은 하나지만 아래 선반에는 서로 다른 연장 둘이 나왔다. 선택적 스플라이싱을 통해 유전자 수보다 훨씬 다양한 단백질이 만들어진다. 사람이 비교적 적은 유전자 수로 복잡한 몸을 이루는 중요한 이유와 연결해 두자.","box":[[1620,180,410,240],[1850,540,180,140],[1850,780,180,140]],"src":["s43p03#4"],"cards":["F0-74","F0-75","K2-24"]}],"cq":{"F0-56":["진핵세포 전사 후 RNA 가공의 대표 3가지는?","5' 캡 · 3' poly-A tail · 스플라이싱"],"F1-81":["진핵 mRNA 가공의 세 단계는?","5' cap 첨가 · poly-A 꼬리 첨가 · 스플라이싱"],"F0-55":["진핵세포 전사물이 바로 번역되지 않는 이유는?","전구 mRNA 단계에서 가공이 필요하기 때문"],"F1-80":["전사 직후의 1차 전사물(가공 전)을 무엇이라 하는가?","pre-mRNA(전구 mRNA)"],"F0-56#1":["진핵세포 전사 후 RNA 가공의 대표 3가지는?","5' 캡"],"F1-81#1":["진핵 mRNA 가공의 세 단계는?","5' cap 첨가"],"F0-57":["mRNA 전구체의 5' 말단에 붙는 변형된 구조는?","5' 캡"],"F0-59":["5' 캡의 기능 두 가지는?","분해 방지와 리보솜 결합 도움"],"F1-82#1":["성숙한 mRNA의 주요 구성 요소 6가지는?","5' cap"],"F0-116":["진핵세포 번역 개시에서 작은 소단위체가 먼저 결합하는 위치는?","5' 캡"],"F0-58":["5' 캡의 핵심 염기 종류는?","변형된 구아닌"],"F0-60":["5' 캡은 전사 도중 언제쯤 붙는가?","약 20~40개 뉴클레오타이드가 전사된 직후"],"F0-56#2":["진핵세포 전사 후 RNA 가공의 대표 3가지는?","3' poly-A tail"],"F1-81#2":["진핵 mRNA 가공의 세 단계는?","poly-A 꼬리 첨가"],"F0-61":["mRNA 전구체의 3' 말단에 붙는 아데닌 꼬리는?","poly-A tail"],"F0-63":["poly-A tail의 기능은?","mRNA 안정성 증가와 핵 밖 이동 및 번역 도움"],"F1-82#6":["성숙한 mRNA의 주요 구성 요소 6가지는?","poly-A tail"],"F0-84":["cap과 tail의 공통 기능 3가지는?","핵 밖 이동 · 분해 방지 · 번역 도움"],"F0-84#1":["cap과 tail의 공통 기능 3가지는?","핵 밖 이동"],"F0-84#2":["cap과 tail의 공통 기능 3가지는?","분해 방지"],"F0-84#3":["cap과 tail의 공통 기능 3가지는?","번역 도움"],"F0-62":["poly-A tail의 대략적인 길이는?","약 50~250개 A"],"F0-46":["진핵세포에서 전사 종결과 관련한 대표 RNA 신호 서열은?","AAUAAA"],"F0-47":["AAUAAA 신호 뒤 RNA는 어떻게 되는가?","잘려 나가며 방출된다"],"F0-68":["스플라이싱을 수행하는 복합체는?","스플라이소좀"],"F0-69":["스플라이소좀의 주요 구성 요소는?","단백질과 작은 RNA"],"F0-174":["스플라이소좀을 구성하는 snRNP는 몇 종이며 무엇인가?","5종"],"F0-65":["인트론이란?","전사되지만 번역되지 않고 제거되는 구간"],"F0-66":["엑손이란?","최종 mRNA에 남아 번역 가능한 구간"],"F0-67":["인트론 제거와 엑손 연결 과정을 무엇이라 하는가?","스플라이싱"],"F0-56#3":["진핵세포 전사 후 RNA 가공의 대표 3가지는?","스플라이싱"],"F1-81#3":["진핵 mRNA 가공의 세 단계는?","스플라이싱"],"F1-79#3":["진핵 유전자의 구조 요소를 순서대로 쓰면?","엑손·인트론"],"F0-64":["번역되지 않지만 조절 기능을 하는 3' 말단 부위는?","3' UTR"],"F0-71":["스플라이싱에서 인트론의 시작과 끝에 흔한 염기 서열은?","GU ... AG"],"F0-70":["스플라이싱 중 인트론이 빠져나갈 때 형성되는 고리 구조는?","라리아트"],"F0-72":["잘려 나간 인트론이 빠르게 분해되는 이유는?","캡과 tail이 없어 보호되지 않기 때문"],"F0-171":["cap과 tail이 없는 RNA는 일반적으로 어떤 운명을 가지는가?","불안정하여 빨리 분해되기 쉽다"],"F0-85":["전구 mRNA에서 평균적인 암호화 구간보다 실제 유전자가 더 긴 이유는?","인트론이 많이 포함되기 때문"],"F0-73":["선택적 RNA 스플라이싱이란?","하나의 유전자에서 엑손 조합을 달리해 여러 폴리펩타이드를 만드는 현상"],"F0-79":["도메인이란?","단백질 내에서 특정 기능을 담당하는 구조적 단위"],"F0-77":["엑손 셔플링이 진화에 유리한 이유는?","새로운 도메인 조합 단백질 출현 가능성을 높이기 때문"],"F0-78":["인트론이 엑손 셔플링·진화를 촉진하는 구조적 이유는?","엑손(유전자 좌위) 사이 거리를 늘려 교차(재조합) 확률을 높이기 때문"],"F0-76":["엑손 셔플링이란?","엑손 조합의 재배열을 통해 새로운 단백질 조합이 생기는 것"],"F0-74":["선택적 스플라이싱의 결과는?","유전자 수보다 훨씬 다양한 단백질 생성"],"F0-75":["사람이 적은 유전자 수로도 복잡한 이유 중 하나는?","선택적 스플라이싱"],"K2-24":["유전자 수와 표현형 복잡성의 관계는?","비례하지 않음(사람은 효모의 약 4배뿐; 한 유전자가 여러 단백질 생성)"]},"hubPanel":"s43p02"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; document.title = L.title;
@@ -85,6 +124,11 @@ let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
+// 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
+function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
+$('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
+window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
+paintStar();
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);

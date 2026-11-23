@@ -15,6 +15,7 @@ const SUITES=[
   ['verify_lock.js','그림 · 글 잠금(L17e — 11-19 사용자 만족분)'],
   ['verify_saytext.js','낭독 대본 문(제어문자 · 어미 · 언어 복구 44 · 과 142 / 정거장 1,598)'],
   ['verify_hold.js','검수 보류 — hold.json 이 대장과 같고 재생기가 보류 구간을 스스로 읽지 않음'],
+  ['verify_lessonui.js','보기 화면 — 별표 · 썸네일 · 큰 보기 · (반복 · 자동 넘김)'],
   ['verify_tts.js','낭독 입력 — ttsNorm(say)에 로마자 · 그리스 · 첨자 · 과 번호 0 · 소문자 낱말은 사전 · 본보기 쌍 · 과 화면에 끼움'],
   ['verify_answerkey.js','답 열쇠 · 이름 장부 — 군더더기(㉮)를 내지 않음 · 꼭 필요한 이름은 남김 · 면제마다 까닭 · 장부 줄마다 갈래 · 상태'],
   ['verify_stoprules.js','잠금 규칙 — 열린 항목은 닿는 구간만 · grp 는 과 전체 · 다시 그릴 구역은 볼 것 · triage · lock_stops · dropped 가 같은 규칙'],

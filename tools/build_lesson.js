@@ -15,6 +15,9 @@ const TTS_BLOCK = (() => {
   const src = fs.readFileSync(path.join(__dirname, 'tts_norm.js'), 'utf8').replace(/<\/script/gi, '<\\/script');
   return `const TTS_LEX = ${JSON.stringify({ fixed: lex.fixed, words: lex.words })};\nconst TTS_ORDER = ${JSON.stringify(order)};\n${src}`;
 })();
+// 저장 도우미(별표 · 설정 · 구간 — 명세 §1.1) · 목록 화면의 스크립트 — 두 화면에 그대로 끼워 넣는다
+const STORE_BLOCK = fs.readFileSync(path.join(__dirname, 'lesson_store.js'), 'utf8').replace(/<\/script/gi, '<\\/script');
+const INDEX_UI = fs.readFileSync(path.join(__dirname, 'lesson_index_ui.js'), 'utf8').replace(/<\/script/gi, '<\\/script');
 const argv = process.argv.slice(2); const si = argv.indexOf('--standalone');
 const standaloneDir = si >= 0 ? argv[si + 1] : null;
 let ids = si >= 0 ? argv.filter((_, k) => k !== si && k !== si + 1) : argv;
@@ -37,7 +40,7 @@ function renderLesson(data, lessonBase = '') {
     }
     tourLink = `<a href="${lessonBase}${id}.html">${esc(label)}</a>`;
   }
-  return tpl.replace('__TITLE__', data.title.replace(/[<&]/g, '')).replace('__TTS__', () => TTS_BLOCK)
+  return tpl.replace('__TITLE__', data.title.replace(/[<&]/g, '')).replace('__TTS__', () => TTS_BLOCK).replace('__STORE__', () => STORE_BLOCK)
     .replace('__TOUR_LINK__', () => tourLink).replace('__DATA__', JSON.stringify(data));
 }
 for (const id of ids) {
@@ -97,10 +100,37 @@ const cardPlace = (() => {
 })();
 const topicGroups = lessonTopics(all);
 const topicCount = topicGroups.reduce((sum, g) => sum + g.topics.length, 0);
+// ── 썸네일(명세 §1.3) — lesson/thumb/manifest.json 의 원본 해시가 지금 그림과 다르면 실패한다(python3 tools/mk_thumbs.py)
+const THUMB_MAN = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'lesson', 'thumb', 'manifest.json'), 'utf8')); } catch (e) { return {}; } })();
+const sha12 = f => createHash('sha256').update(fs.readFileSync(f)).digest('hex').slice(0, 12);
+const IMG_REV = {};  // 과 → 원본 그림 해시 앞 12자(큰 그림 · 썸네일 주소의 ?v=)
+for (const L of all) {
+  const f = path.join(ROOT, 'lesson', L.img);
+  if (!fs.existsSync(f)) { console.error(`[${L.id}] 썸네일을 만들 그림이 없다: ${L.img}`); process.exitCode = 1; continue; }
+  IMG_REV[L.id] = sha12(f);
+  if (THUMB_MAN[L.id] !== IMG_REV[L.id] || !fs.existsSync(path.join(ROOT, 'lesson', 'thumb', L.id + '.webp'))) {
+    console.error(`[${L.id}] 썸네일이 낡았다 — python3 tools/mk_thumbs.py ${L.id}`); process.exitCode = 1;
+  }
+}
+// ── lesson/order.js — 과 목록에 보이는 차례 그대로(단원 묶음 → 단원 → 과). 목록 · 과 화면이 함께 읽는다(명세 §1.1)
+const ORDER = topicGroups.flatMap(g => g.topics.flatMap(t => t.main.map(L => ({ id: L.id, t: String(L.title).split(' — ')[0].trim(), u: t.title }))));
+{
+  const seen = new Set(ORDER.map(o => o.id));
+  const miss = all.filter(L => !seen.has(L.id)).map(L => L.id);
+  if (ORDER.length !== all.length || seen.size !== all.length || miss.length) { console.error(`order.js — 모든 과가 꼭 한 번이어야 한다: 목록 ${ORDER.length} · 과 ${all.length} · 빠진 과 ${miss.join(' ')}`); process.exit(1); }
+}
+fs.writeFileSync(path.join(ROOT, 'lesson', 'order.js'),
+  '/* build_lesson.js 생성물 — 손으로 고치지 말 것. 과 목록에 보이는 차례 그대로(단원 묶음 → 단원 → 과). t = 제목의 「 — 」 앞 · u = 단원 이름. */\n'
+  + 'window.LESSON_ORDER=' + JSON.stringify(ORDER) + ';\n');
+console.log(`lesson/order.js · 과 ${ORDER.length}`);
 const contents = topicGroups.map(group => `<div class="toc-group"><h3>${esc(group.title)}</h3>
 <ul>${group.topics.map(topic => `<li><a href="#${topic.id}">${esc(topic.title)} <span class="quantity">(${topic.main.length})</span></a></li>`).join('')}</ul></div>`).join('\n');
 function topicSection(topic) {
-  const cards = topic.main.map(L => `<a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(cardsOf)).size} · ${esc(L.sub || '')}</div></a>`).join('\n');
+  const attr = t => esc(t).replace(/"/g, '&quot;');
+  const cards = topic.main.map(L => {
+    const rev = IMG_REV[L.id] || '';
+    return `<div class="row" data-id="${L.id}" data-title="${attr(L.title)}" data-img="${rev ? `img/${L.id}.webp?v=${rev}` : ''}"><button class="thumb" type="button" aria-label="${L.id} 그림 크게 보기">${rev ? `<img src="thumb/${L.id}.webp?v=${rev}" width="160" height="90" loading="lazy" decoding="async" alt="">` : ''}</button><a class="card" href="${L.id}.html"><b>${esc(L.id)}</b> ${esc(L.title)}<div class="sub">정거장 ${L.stops.length} · 기출 카드 ${new Set(L.stops.flatMap(cardsOf)).size} · ${esc(L.sub || '')}</div></a><button class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>`;
+  }).join('\n');
   const links = topic.related.map(r => `<li><a href="${r.id}.html">${esc(r.id)} · ${esc(r.label)}</a></li>`).join('');
   const related = links ? `<aside class="related"><h4>함께 볼 그림</h4><ul>${links}</ul></aside>` : '';
   return `<section class="chapter" aria-labelledby="${topic.id}"><div class="chapter-head"><h3 id="${topic.id}" tabindex="-1">${esc(topic.title)}</h3><a class="back" href="#contents">목차로 ↑</a></div>
@@ -117,18 +147,35 @@ a:focus-visible,summary:focus-visible,[tabindex="-1"]:focus-visible{outline:3px 
 .unit{margin-top:36px}.unit>h2{border-bottom:2px solid #255b4c;padding-bottom:6px;font-size:22px;letter-spacing:-.035em}.chapter{margin-top:22px}.chapter-head{display:flex;gap:12px;align-items:baseline;justify-content:space-between}.chapter h3{font-size:18px;scroll-margin-top:12px}.back{font-size:13px;white-space:nowrap;padding:4px 0}
 .card{display:block;border:1px solid #dce1db;background:#fff;border-radius:10px;padding:11px 14px;margin:7px 0;text-decoration:none;color:inherit;overflow-wrap:anywhere}.card b{color:#0f665b}.card:hover{border-color:#87aa9a}.toc-group a:hover,.related a:hover{text-decoration:underline}.related{display:flex;align-items:baseline;gap:3px 12px;flex-wrap:wrap;padding:3px 2px 7px}.related h4{color:#4b5250;font-size:13px}.related ul{display:flex;gap:2px 15px;flex-wrap:wrap;margin:0}.related a{display:inline-block;font-size:13px;padding:3px 0}
 .progress{margin-top:32px;border-top:1px solid #d8dfd8;padding-top:12px}.progress h2{font-size:16px;margin-top:12px}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #e3e1da;padding:5px 6px;text-align:left}th{color:#4b4b55;font-weight:600}.bar{height:6px;background:#e3e1da;border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:#0f766e}
-@media(max-width:700px){.toc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.contents{padding:14px}.wrap{padding:16px 12px 32px}.toc-group a{padding:5px 0}.related a{padding:5px 0}}
-@media(max-width:370px){.toc-grid{gap:12px 9px}.toc-group a{font-size:13px}.quantity{white-space:normal}.page-nav{gap:12px}}
+.row{display:grid;grid-template-columns:160px 1fr 44px;gap:10px;align-items:stretch;margin:7px 0}.row .card{margin:0}
+.thumb{display:block;padding:0;border:1px solid #dce1db;border-radius:10px;overflow:hidden;background:#e9e6dd;cursor:zoom-in;height:90px;width:160px;min-width:0}.thumb img{display:block;width:160px;height:90px;object-fit:cover}.thumb:hover{border-color:#87aa9a}
+.star{font:inherit;font-size:24px;line-height:1;padding:0;border:1px solid #dce1db;background:#fff;border-radius:10px;cursor:pointer;color:#8a8a94}.star:hover{border-color:#87aa9a}.starred .star,.star[aria-pressed="true"]{color:#b45309;border-color:#e8c48c;background:#fff8ec}
+.row[hidden],.unit[hidden],.chapter[hidden],.toc-group[hidden],.toc-group li[hidden]{display:none}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 0}.tools button{font:inherit;font-size:13.5px;padding:7px 13px;border:1px solid #d8dfd8;background:#fff;border-radius:9px;cursor:pointer}.tools button.on,.tools button[aria-pressed="true"]{background:#0f766e;color:#fff;border-color:#0f766e}.tools .note{font-size:12.5px;color:#4b5250}
+a:focus-visible,button:focus-visible{outline:3px solid #176eae;outline-offset:2px}
+dialog#big{border:0;border-radius:14px;padding:0;width:min(1100px,96vw);max-height:96vh;overflow:auto;background:#fff;color:#202823}dialog#big::backdrop{background:rgba(20,20,30,.62)}
+dialog#big.fb[open]{position:fixed;inset:2vh 2vw;margin:auto;z-index:50;box-shadow:0 0 0 100vmax rgba(20,20,30,.62)}
+.big-in{padding:12px 14px 14px}.big-top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.big-top h2{font-size:16px;margin:0;flex:1 1 220px;overflow-wrap:anywhere}.big-img{display:block;width:100%;height:auto;margin:10px 0;border:1px solid #dce1db;border-radius:10px;background:#f1efe8;aspect-ratio:2048/1144}
+.big-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.big-bar button,.big-bar a.go{font:inherit;font-size:13.5px;padding:7px 12px;border:1px solid #d8dfd8;background:#fff;border-radius:9px;cursor:pointer;color:#202823;text-decoration:none}.big-bar a.go{background:#0f766e;color:#fff;border-color:#0f766e}.big-bar button:disabled{opacity:.4;cursor:default}.big-sub{font-size:13px;color:#4b5250;margin:8px 0 0}
+@media(max-width:700px){.toc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.contents{padding:14px}.wrap{padding:16px 12px 32px}.toc-group a{padding:5px 0}.related a{padding:5px 0}.row{grid-template-columns:112px 1fr 40px;gap:8px}.thumb{width:112px;height:63px}.thumb img{width:112px;height:63px}.star{font-size:22px}}
+@media(max-width:370px){.toc-grid{gap:12px 9px}.toc-group a{font-size:13px}.quantity{white-space:normal}.page-nav{gap:12px}.row{grid-template-columns:96px 1fr 38px}.thumb{width:96px;height:54px}.thumb img{width:96px;height:54px}}
 </style></head><body><main class="wrap">
 <header class="page-head"><h1>생물학 그림 레슨</h1><nav class="page-nav" aria-label="학습 도구"><a href="../sketchy.html">Sketchy 허브</a><a href="symbols.html">기호 사전</a><a href="../index.html">SRS 기출 카드</a></nav></header>
 <nav class="contents" aria-labelledby="contents"><div class="contents-head"><h2 id="contents" tabindex="-1">단원 목차</h2><span class="sub">${topicCount}개 단원 · 그림 레슨 ${all.length}개</span></div>
 <div class="toc-grid">${contents}</div></nav>
+<div class="tools" role="group" aria-label="목록 도구"><button id="fStar" type="button" aria-pressed="false">★ 표시한 것만 (0)</button><span class="note">그림 칸 오른쪽 ☆ 를 눌러 중요한 그림을 표시한다. 왼쪽 그림을 누르면 이 자리에서 크게 본다. 표시는 이 브라우저에만 남는다.</span></div>
 ${topicSections}
 <section class="progress">
 <h2>SRS 카드 ${cardPlace.tot}장이 어디 있나</h2><p class="sub">지은 과 <b>${cardPlace.built}</b> · 과가 아직 없는 옛 s 판 <b>${cardPlace.pendS}</b> · d 묶음(도해) <b>${cardPlace.d}</b> · <b>그림이 아무 데도 없음 ${cardPlace.none}</b> — 아래 진척 막대는 옛 판에 딸린 카드만 센다.</p>\n<h2>갈아엎기 진척 — 행 ${tot.rc}/${tot.r} · 기출 카드 ${tot.cc}/${tot.c}</h2><div class="bar"><i style="width:${(100 * tot.cc / Math.max(1, tot.c)).toFixed(1)}%"></i></div>
 <div class="table-scroll"><table><tr><th>묶음</th><th>단원</th><th>카드</th><th>행</th><th>덮인 행</th><th>덮인 카드</th><th>과</th></tr>
 ${cover.map(x => `<tr><td>${x.id}</td><td>${esc(x.unit)}</td><td>${x.cards}</td><td>${x.rows}</td><td>${x.rowsCovered}</td><td>${x.cardsCovered}</td><td>${x.lessons.map(l => `<a href="${l}.html">${l}</a>`).join(' ')}</td></tr>`).join('')}
-</table></div><p class="sub">d 묶음(도해)은 s 묶음을 다 세운 뒤 결정(2026-11-08).</p></section></main></body></html>`;
+</table></div><p class="sub">d 묶음(도해)은 s 묶음을 다 세운 뒤 결정(2026-11-08).</p></section></main>
+<dialog id="big" aria-labelledby="bigTitle"><div class="big-in"><div class="big-top"><h2 id="bigTitle"></h2><div class="big-bar"><button id="bigPrev" type="button">◀ 앞 그림</button><button id="bigNext" type="button">다음 그림 ▶</button><button id="bigStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시" style="padding:4px 12px">☆</button><a id="bigGo" class="go" href="#">이 그림 공부하기</a><button id="bigClose" type="button">닫기</button></div></div><img id="bigImg" class="big-img" alt=""><div class="big-bar"><button id="bigSubBtn" type="button" aria-expanded="false">요약 보기</button></div><p id="bigSub" class="big-sub" hidden></p></div></dialog>
+<script src="order.js"></script>
+<script>
+${STORE_BLOCK}
+${INDEX_UI}
+</script></body></html>`;
 fs.writeFileSync(path.join(ROOT, 'lesson', 'index.html'), idxHtml);
 console.log(`lesson/index.html · 과 ${all.length} · 덮인 카드 ${tot.cc}/${tot.c}`);
 // ── lesson/map.js — 옛 판(패널) id → 그 판의 행을 정거장 src 로 쓰는 과. Sketchy 허브가 읽는다(2026-11-10 · 사용자 「sketchy 허브에서 찾을 수가 없는데?」).

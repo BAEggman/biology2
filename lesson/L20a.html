@@ -10,6 +10,8 @@
   body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
   .wrap{max-width:1100px;margin:0 auto;padding:12px 14px 40px}
   h1{font-size:18px;margin:6px 0 2px}
+  .titlebar{display:flex;align-items:center;gap:10px}.titlebar h1{flex:1;min-width:0}
+  .star{font-size:22px;line-height:1;padding:2px 10px;color:#8a8a94}.star[aria-pressed="true"]{color:var(--gold);border-color:#e8c48c;background:#fff8ec}
   .sub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
   .sub.hid{cursor:pointer;color:var(--ink3,#8a8a94);border:1px dashed #c9c6bd;border-radius:8px;padding:4px 8px;display:inline-block}
   .cq{font-size:12.5px;color:var(--ink2);margin-top:8px;border-top:1px dashed #d8d5cc;padding-top:6px}.cq summary{cursor:pointer}.cq li{margin:3px 0}.cq .a{color:var(--ink);font-weight:600}
@@ -46,7 +48,7 @@
 <body>
 <div class="wrap">
   <nav class="nav"><a id="home" href="index.html">← 과 목록</a><a id="hub" href="../sketchy.html">Sketchy 허브(옛 판)</a></nav>
-  <h1 id="title"></h1>
+  <div class="titlebar"><h1 id="title"></h1><button id="bStar" class="star" type="button" aria-pressed="false" aria-label="중요 표시">☆</button></div>
   <p class="sub" id="sub"></p>
   <div class="bar">
     <button id="bTour" class="on">투어</button>
@@ -73,10 +75,47 @@
   <div class="cap" id="cap"></div>
   <div class="judge" id="judge"><button id="jOk">맞았다</button><button id="jNo">틀렸다</button><button id="jShow">답 보기</button></div>
   <div class="recap" id="recap"></div>
-  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
+  <p class="hint">→ 다음 · ← 이전 · 스페이스 재생/멈춤. 녹음이 있는 구간은 Gemini 음성을, 나머지는 기기 음성을 쓴다. 자동 시작이 차단되면 시작을 한 번 누른다. 점수와 ★ 표시는 이 브라우저에만 남는다. 시험에서 틀린 정거장의 카드는 SRS 를 열 때 오늘 복습에 들어간다(이미 배운 카드만 · 벌점 없음).</p>
 </div>
 <script src="narration-player.js?v=20261121b"></script>
 <script>
+/* lesson_store.js — 과 목록 · 과 화면이 함께 쓰는 저장 도우미(보기 화면 명세 §1.1).
+   빌드(build_lesson.js)가 두 화면에 그대로 끼워 넣는다(__STORE__) — 열쇠 이름 · 꼴이 한 군데서만 정해진다.
+   열쇠: lesson_stars {ID: 찍은 때(ms)} · lesson_prefs {onlyStar, autoNext, rep, scope} · lesson_ab_<ID> {a: sid, b: sid}
+   읽기 · 쓰기는 모두 try/catch — 저장이 막힌 브라우저에서는 그 쪽을 떠날 때까지만 기억하고 오류를 내지 않는다.
+   (lesson_<ID> · lesson_shuffle · lesson_srs_inbox · lesson_auto_start 는 여기서 건드리지 않는다) */
+const LStore = (() => {
+  const mem = {};
+  const rd = (k, d) => {
+    let ok = false;
+    try { const v = localStorage.getItem(k); ok = true; if (v !== null && v !== undefined) { const o = JSON.parse(v); mem[k] = o; return o; } } catch (e) {}
+    if (ok) { delete mem[k]; return d; }   // 저장소는 멀쩡한데 값이 없다 = 다른 탭에서 지웠다 — 메모리 값도 버린다
+    return k in mem ? mem[k] : d;
+  };
+  const wr = (k, o) => { mem[k] = o; try { localStorage.setItem(k, JSON.stringify(o)); } catch (e) {} };
+  const del = k => { delete mem[k]; try { localStorage.removeItem(k); } catch (e) {} };
+  const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
+  const REP = ['off', 'ab', 'one', 'list'];
+  return {
+    stars() { const s = rd('lesson_stars', {}); return isObj(s) ? s : {}; },
+    isStar(id) { return id in LStore.stars(); },
+    setStar(id, on) {
+      const s = { ...LStore.stars() };
+      if (on) s[id] = Date.now(); else delete s[id];
+      if (Object.keys(s).length) wr('lesson_stars', s); else del('lesson_stars');
+      return on;
+    },
+    prefs() {
+      const p = rd('lesson_prefs', {}); const o = isObj(p) ? p : {};
+      return { onlyStar: !!o.onlyStar, autoNext: !!o.autoNext, rep: REP.includes(o.rep) ? o.rep : 'off', scope: o.scope === 'star' ? 'star' : 'all' };
+    },
+    setPrefs(patch) { const p = { ...LStore.prefs(), ...patch }; wr('lesson_prefs', p); return p; },
+    ab(id) { const v = rd('lesson_ab_' + id, null); return isObj(v) ? { a: typeof v.a === 'string' ? v.a : null, b: typeof v.b === 'string' ? v.b : null } : { a: null, b: null }; },
+    setAb(id, v) { const k = 'lesson_ab_' + id; if (v && (v.a || v.b)) wr(k, { a: v.a || null, b: v.b || null }); else del(k); },
+    REP,
+  };
+})();
+
 const L = {"id":"L20a","scene":"s20","part":"a","title":"호르몬 온실 왼쪽 — 밀어 올리는 넷","sub":"지퍼 줄기 + 옥수수 알갱이(옥신 · 신장 · 정단우성 · 극성 수송) · 분무기 물(H⁺ · 산생장설) · 알갱이 더미 속 시든 잡초(고농도 억제 · 2,4-D) · 토끼 롤러(시토키닌 · 노화 지연 · 곁눈) · 끌로 깬 씨앗 · 지렛대 키다리(지베렐린) · 자루 없는 솔(브라시노스테로이드)","img":"img/L20a.webp?v=97398e9f9c93","w":2048,"h":1144,"stops":[{"sid":"s1","obj":"유리 온실 왼쪽 — 사람(토끼) 하나 = 호르몬 하나 · 밀어 올리는 넷","fact":"대표 여섯 중 자라게 하는 넷 — 늘리고 · 깨우고 · 늦추고 · 키운다","hook":"사람 하나 = 호르몬 하나","say":"유리 온실의 왼쪽부터 살펴보자. 여기서는 사람이나 토끼 한 인물이 호르몬 하나를 나타낸다. 식물 호르몬은 한 곳에서 소량 만들어져 다른 곳으로 이동한 뒤, 수용체에 결합해 표적 세포의 반응을 일으키는 신호 분자다. 왼쪽에서 밀어 올리는 네 호르몬은 옥신, 지베렐린, 시토키닌, 브라시노스테로이드다. 무엇을 촉진하는지만 나열하기보다 인물의 동작을 따라 구별해 보자. 늘리고, 깨우고, 늦추고, 키우는 동작이다. 오른쪽 끝의 열린 유리문 너머에는 내리고 누르는 두 호르몬이 있으며, 다음 장면에서 본다.","box":null,"src":["s20u01#0"],"cards":["P1-2"]},{"sid":"s2","obj":"지퍼가 위쪽부터 열린 키 큰 줄기 · 꼭대기 옥수수 자루에서 노란 알갱이가 아래로만 흘러내린다 · 아래 곁눈 넷은 작은 지퍼로 잠겼다","fact":"옥신 — 세포 신장 · 정단우성(곁눈 억제) · 극성 수송(줄기 끝에서 아래로)","hook":"옥수수 = 옥신 · 꼭대기 옥수수 = 만드는 곳 · 줄기 지퍼(세포벽)가 열려 늘어남","say":"키 큰 줄기의 지퍼가 위쪽부터 벌어져 있다. 지퍼는 세포벽이어서, 이것이 풀려야 세포가 늘어난다. 꼭대기의 옥수수에서 노란 알갱이가 지퍼 틈을 따라 아래쪽으로만 흘러내리며 벌어진 위쪽을 채운다. 옥수수에서 옥신을 떠올리자. 옥수수가 꼭대기에 있는 것은 줄기 끝과 어린 잎에서 옥신이 만들어진다는 뜻이다. 아래 잎겨드랑이의 곁눈 넷은 작은 지퍼로 잠겨 있고 곁가지는 없다. 세포 신장을 촉진하고 곁눈을 억제하며, 줄기 끝에서 아래로 한 방향으로만 운반되는 옥신의 특징을 함께 연결하자.","box":[60,0,420,1080],"src":["s20u01#1"],"cards":["P1-12#6","S-PL-14"]},{"sid":"s3","obj":"사다리 위 사람이 분무기로 지퍼 틈에 물을 뿌린다","fact":"H⁺를 세포벽으로 — 벽이 산성이 되어 느슨해진다(익스팬신) → 팽압으로 신장 = 산생장설","hook":"분무기 = 펌프 · 뿌리는 물 = H⁺","say":"사다리 위의 사람이 분무기로 지퍼 틈에 물을 뿌린다. 이 장면의 분무기는 펌프, 뿌리는 물은 수소 이온이다. 옥신에 대응하는 인물이 펌프를 켜는 모습이다. 세포벽 쪽으로 수소 이온을 내보내면 벽이 산성화되고, 익스팬신의 작용으로 느슨해진다. 그다음 삼투로 세포 안에 들어온 실제 물이 팽압을 만들어 벽을 밀면서 세포가 길어진다. 이것이 산생장설이다. 이 덱에서 뿌리거나 퍼 넘기는 물은 수소 이온의 단서라는 점을 구별해 두자.","box":[[300,280,340,740]],"src":["s20u01#2"],"cards":["P1-12#1","P1-12#2","P1-12#3","P1-12#4","P1-12"]},{"sid":"s4","obj":"사다리 아래 바닥 — 옥수수 알갱이 더미 위의 잡초가 시들어 늘어졌다","fact":"옥신 이중성 — 저농도 신장 촉진 · 고농도 억제 · 2,4-D는 쌍떡잎 잡초 제초제","hook":"줄기 속 몇 알은 자람 · 바닥 더미는 죽음","say":"사다리 아래에는 옥수수 알갱이가 수북이 쌓여 있고, 그 위의 잡초는 시들어 늘어져 있다. 줄기 안의 소량 알갱이는 성장을 돕지만 바닥의 큰 더미는 죽이는 모습으로, 옥신 농도에 따른 두 효과를 나타낸다. 저농도에서는 신장을 촉진하고 고농도에서는 억제한다. 뿌리는 줄기보다 훨씬 낮은 농도에서도 억제 반응으로 바뀐다. 합성 옥신 이 사 디는 쌍떡잎 잡초를 과도하게 자라게 해 죽이는 제초제다.","box":[320,880,380,200],"src":["s20u01#3"],"cards":["P1-13"]},{"sid":"s5","obj":"흙바닥에 앉은 토끼가 초록 롤러로 화분의 잎을 칠한다 — 롤러 닿은 잎은 칠한 데만 초록 · 안 칠한 곁잎은 누렇다 · 곁가지 하나가 옆으로 길게 · 곁에 새끼 토끼 둘","fact":"시토키닌(뿌리에서 생산) — 세포분열 촉진 · 노화 지연 · 곁눈 생장(옥신의 정단우성과 길항)","hook":"토끼 = 시토키닌 · 흙바닥 = 뿌리 · 새끼 = 분열 · 칠한 데만 초록","say":"흙바닥에 앉은 토끼가 초록 페인트 롤러로 화분의 잎을 칠하고 있다. 칠한 부분만 초록이고 잎끝과 옆의 안 칠한 잎은 누렇다. 토끼에서 시토키닌이라는 이름을 떠올리자. 흙바닥에 앉은 위치는 시토키닌이 주로 뿌리에서 만들어진다는 단서다. 토끼 곁의 새끼 둘은 빠르게 불어나는 세포분열 촉진을, 칠한 부분만 초록인 잎은 노화 지연을 나타낸다. 화분의 꼭대기는 그대로인데 곁가지 하나가 옆으로 길게 뻗은 모습도 보자. 옥신이 곁눈을 억제하는 것과 달리 시토키닌은 그 억제를 풀어 준다.","box":[[700,340,450,720],[1120,430,225,260]],"src":["s20u01#4"],"cards":["P1-4","X-PL-28","P1-14"]},{"sid":"s6","obj":"무릎 꿇은 사람이 끌과 나무 메로 큰 씨앗을 두 쪽으로 깨자 틈에서 초록 싹이 올라온다","fact":"지베렐린 — 발아 유도 · 휴면을 깬다(ABA와 맞쌍)","hook":"씨앗을 깬다 = 깨운다","say":"무릎 꿇은 사람이 끌과 나무 메로 큰 씨앗을 두 쪽으로 깨고 있다. 틈에서 초록 싹이 올라온다. 지베렐린의 발아 유도다. 씨앗을 깨우는 역할은 지베렐린이며, 브라시노스테로이드도 이를 돕는다. 칸막이 너머의 아비, 에이비에이는 같은 씨앗을 다시 묻고 눌러 재운다. 발아를 깨우는 쪽과 재우는 쪽을 짝으로 비교하자.","box":[[1115,640,345,420]],"src":["s20u01#5"],"cards":["P1-8#3","X-PL-27"]},{"sid":"s7","obj":"그 무릎 아래 받침돌에 걸친 판자 지렛대 — 들린 반대 끝의 화분 모종이 마디가 멀찍이 성긴 키다리","fact":"지베렐린 — 마디 사이(절간) 신장으로 키를 키운다(왜성 → 정상 키 · 추대) · 지레","hook":"지레 = 지베렐린 · 눌러서 밀어 올림","say":"씨앗을 깨는 사람의 무릎 아래에는 받침돌에 걸친 판자 지렛대가 있다. 무릎으로 누른 끝은 바닥에 닿고 반대쪽 끝의 화분은 위로 들렸다. 모종도 마디 사이가 길게 벌어진 키다리다. 지레에서 지베렐린을 떠올리자. 지레는 한쪽을 눌러 다른 쪽을 밀어 올리는 도구이고, 지베렐린은 마디 사이를 늘려 줄기를 자라게 한다. 주요 작용은 줄기 신장, 종자 발아, 열매 생장 세 가지다. 왜성 식물에 처리하면 정상 키로 자라고, 이년생 배추에서는 추대를 유도한다.","box":[[1140,860,460,240],[1440,280,180,600]],"src":["s20u01#6"],"cards":["P1-5"]},{"sid":"s8","obj":"짧고 빳빳한 털이 촘촘한 문지르는 솔로 문지른 줄기가 뒤의 가는 이웃보다 훨씬 굵고 크게 지붕까지 섰다","fact":"브라시노스테로이드 — 스테로이드계 · 신장 · 분열 · 관속 분화 · 발아 촉진 · 솔 = 브러시","hook":"솔 = 브러시 = 브라시노","say":"앞쪽 줄기에 솔을 대고 문지르는 사람을 보자. 짧고 빳빳한 털이 촘촘한 솔이며, 문질러진 줄기는 뒤의 가는 이웃 줄기보다 훨씬 굵고 높게 자라 지붕에 닿는다. 브러시라는 이름에서 브라시노스테로이드를 떠올리자. 스테로이드계 호르몬으로 세포 신장과 분열, 관속 분화, 종자 발아를 촉진한다. 칠하는 붓이 아니라 문지르는 솔이라는 점을 구별하자. 이 덱에서 붓은 멜라닌세포 자극호르몬의 소품이다.","box":[1580,40,440,1040],"src":["s20u01#7"],"cards":["P1-8","P1-8#1","P1-8#3","P1-8#2","X-PL-27"]}],"cq":{"P1-2":["식물 호르몬(hormone)의 정의는?","저농도로 한 부위에서 만들어져 다른 부위로 이동, 수용체에 결합해 표적 세포 반응을 일으키는 신호 분자"],"P1-12#6":["산생장설(acid growth hypothesis)이란?","세포 신장"],"S-PL-14":["식물 호르몬을 생장 촉진과 억제·성숙으로 나누면?","촉진=옥신·지베렐린·시토키닌·브라시노스테로이드 / 억제·노화=ABA·에틸렌"],"P1-12#1":["산생장설(acid growth hypothesis)이란?","옥신이 H⁺ 펌프 활성화"],"P1-12#2":["산생장설(acid growth hypothesis)이란?","세포벽 산성화"],"P1-12#3":["산생장설(acid growth hypothesis)이란?","익스팬신(expansin) 활성"],"P1-12#4":["산생장설(acid growth hypothesis)이란?","세포벽 느슨"],"P1-12":["산생장설(acid growth hypothesis)이란?","옥신이 H⁺ 펌프 활성화→세포벽 산성화→익스팬신(expansin) 활성→세포벽 느슨→팽압으로 물 유입→세포 신장"],"P1-13":["옥신 농도와 줄기 신장의 관계는?","저농도에서만 촉진, 고농도면 억제(제초제로 응용)"],"P1-4":["시토키닌(cytokinin)의 생산 부위와 주요 기능은?","뿌리 · 세포분열 촉진 · 정단우성 억제(곁눈 성장) · 잎 노화 지연"],"X-PL-28":["뿌리에서 만들어지는 호르몬과 줄기 끝에서 만들어지는 호르몬은?","뿌리=시토키닌 / 줄기 끝·어린 잎=옥신"],"P1-14":["정단우성(apical dominance)과 관여 호르몬은?","줄기 끝의 옥신이 곁눈 생장을 억제 · 시토키닌은 곁눈 촉진(옥신과 길항)"],"P1-8#3":["브라시노스테로이드(brassinosteroid)의 주요 기능은?","종자 발아"],"X-PL-27":["종자 휴면을 유도하는 호르몬과 발아를 촉진하는 호르몬은?","휴면=ABA / 발아=지베렐린·브라시노스테로이드"],"P1-5":["지베렐린(gibberellin, GA)의 주요 기능은?","줄기 신장 · 종자 발아 · 열매 생장"],"P1-8":["브라시노스테로이드(brassinosteroid)의 주요 기능은?","세포 신장·분열 · 관속 분화 · 종자 발아"],"P1-8#1":["브라시노스테로이드(brassinosteroid)의 주요 기능은?","세포 신장·분열"],"P1-8#2":["브라시노스테로이드(brassinosteroid)의 주요 기능은?","관속 분화"]},"hubPanel":"s20u01"};
 const $ = id => document.getElementById(id);
 $('title').textContent = L.title; document.title = L.title;
@@ -85,6 +124,11 @@ let subOpen = false;
 function subShow() { const hide = (mode === 'review' || mode === 'quiz') && !subOpen && !!L.sub; $('sub').textContent = hide ? '요약 줄은 접어 두었다(답이 적혀 있다) — 누르면 편다' : (L.sub || ''); $('sub').classList.toggle('hid', hide); }
 $('sub').onclick = () => { if (mode === 'review' || mode === 'quiz') { subOpen = !subOpen; subShow(); } };
 $('img').src = L.img; $('img').alt = L.title;
+// 별표 — 목록의 별표와 같은 열쇠(lesson_stars). 다른 탭에서 바뀌어도 따라간다.
+function paintStar() { const on = LStore.isStar(L.id); $('bStar').setAttribute('aria-pressed', String(on)); $('bStar').textContent = on ? '★' : '☆'; $('bStar').setAttribute('aria-label', on ? '중요 표시 지우기' : '중요 표시'); }
+$('bStar').onclick = () => { LStore.setStar(L.id, !LStore.isStar(L.id)); paintStar(); };
+window.addEventListener('storage', e => { if (e.key === null || e.key === 'lesson_stars') paintStar(); });
+paintStar();
 if (L.home) $('home').href = L.home;  // 한 파일(standalone)은 저장소 밖에서 열리므로 배포 주소로
 if (L.hub) $('hub').href = L.hub; else if (L.hubPanel) $('hub').href = '../sketchy.html#' + L.hubPanel;
 const ov = $('ov'); ov.setAttribute('viewBox', `0 0 ${L.w} ${L.h}`);
