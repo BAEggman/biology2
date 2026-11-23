@@ -36,9 +36,18 @@ def lesson_topics():
 
 def kind(rx):
     rx = rx or ''
-    if '다시 그림' in rx or '다시그림' in rx: return '다시 그림'
-    if '구역' in rx or '그림' in rx or '편집' in rx: return '구역 편집'
-    return '글로 풀림'
+    if rx in ('구역 편집', '다시 그림', 'PIL'): return '그림'
+    return '글'   # 글 · 얹는 고리 · 기호 일감
+
+def cost(rs):
+    """줄 묶음 → 분. 그림 줄은 구간마다 구역 편집 40분(전체 구간의 「다시 그림」 이 있거나 구역이 여섯을 넘으면 다시 그림 240분으로 묶음)
+    + 그림을 바꾸면 눈 검사 셋 15분 · 글 줄이 있으면 6+1(글) 한 번 25분."""
+    pic = [r for r in rs if kind(r.get('처방')) == '그림']
+    regions = {r['구간'] for r in pic}
+    redraw = any(r.get('처방') == '다시 그림' and r['구간'] == '전체' for r in pic) or len(regions) > 6
+    m = (240 if redraw else 40 * len(regions)) + (15 if pic else 0)
+    if any(kind(r.get('처방')) == '글' for r in rs): m += 25
+    return m, redraw, len(regions)
 
 def main():
     d = json.load(open(os.path.join(HERE, '덱감사.json'), encoding='utf-8'))
@@ -52,16 +61,14 @@ def main():
         w = sum(ex[k] for k in keys) / len(keys) if keys else 1
         rs = rows.get(L, [])
         base = sum((9 - r['급']) * max(r.get('카드') or 0, 1) for r in rs)
-        k = collections.Counter(kind(r.get('처방')) for r in rs)
         codes = collections.Counter(r['부호'] for r in rs)
-        regions = len({r['구간'] for r in rs if kind(r.get('처방')) == '구역 편집'})
-        redraw = k['다시 그림'] > 0
-        mins = (240 if redraw else 0) + 40 * (0 if redraw else regions) + 25 * (1 if k['글로 풀림'] else 0)
+        mins, redraw, regions = cost(rs)
+        nt = sum(1 for r in rs if kind(r.get('처방')) == '글')
         top = sum(codes[c] for c in ('C', 'D1'))
         nnk = sum(codes[c] for c in ('N', 'N′', 'K'))
         out.append(dict(과=L, 단원=ttl, 기출=round(w), 바탕=base, 점수=round(base * w), 줄=len(rs),
-                        C_D1=top, N_K=nnk, 글=k['글로 풀림'], 구역=regions, 다시=redraw, 분=mins,
-                        부호=' '.join(f'{c}{n}' for c, n in codes.most_common())))
+                        C_D1=top, N_K=nnk, 글=nt, 구역=regions, 다시=redraw, 분=mins, rs=rs,
+                        부호=' '.join(f'{c}×{n}' for c, n in codes.most_common())))
     out.sort(key=lambda x: -x['점수'])
     ranks = sorted(ex.items(), key=lambda kv: -kv[1])
     upper = {k for k, _ in ranks[:8]}
@@ -72,25 +79,25 @@ def main():
         return any(k in upper for k in keys)
     lineA = [o for o in out if o['C_D1'] > 0 and is_upper(o)]
     lineB = [o for o in out if (o['C_D1'] + o['N_K']) > 0]
-    def days(lst, only=None):
+    def days(lst, codes=None):
         m = 0
         for o in lst:
-            if only == 'A':   # 가: C · D1 줄만 — 구역 편집 하나 또는 둘
-                m += 40 * min(o['C_D1'], 2) + 25
-            elif only == 'B': # 나: C · D1 · N · N′ · K
-                m += (240 if o['다시'] else 40 * min(o['C_D1'] + o['N_K'], max(o['구역'], 1))) + 25
-            else:
-                m += o['분']
+            rs = [r for r in o['rs'] if codes is None or r['부호'] in codes]
+            m += cost(rs)[0]
         return m, m / 60 / 7   # 하루 7시간
     md = ['# 고침 순위 — 덱 감사 2026-11-23', '',
           f'덱감사.json 의 끝난 과 {len(out)} 개 · 줄 {sum(o["줄"] for o in out)}. 만든 것: `python3 tools/audit/2026-11-23/mkrank.py`.', '',
           '점수 = Σ(줄마다 (9 − 급) × 걸린 카드 수) × 그 단원의 기출 문항 수(1,475 문 가운데). 급은 C=1 · D1=2 · N/N′/K=3 · M/R=4 · W/T=5 · D2/D3=6 · X=7 · V=8.', '',
           '기출 상위 단원(가 선의 「상위」): ' + ' · '.join(f'{k} {n}' for k, n in ranks[:8]), '']
-    for name, lst, only, desc in (('가', lineA, 'A', '급 C · D1 줄이 있고 기출 상위 여덟 단원인 과 — 그 줄만'),
-                                  ('나', lineB, 'B', '가 + N · N′ · K 줄이 있는 모든 과 — 그 줄까지'),
+    for name, lst, only, desc in (('가', lineA, {'C', 'D1'}, '급 C · D1 줄이 있고 기출 상위 여덟 단원인 과 — 그 줄만'),
+                                  ('나', lineB, {'C', 'D1', 'N', 'N′', 'K'}, '가 + N · N′ · K 줄이 있는 모든 과 — 그 줄까지'),
                                   ('다', out, None, '모든 과 · 모든 줄')):
         m, dd = days(lst, only)
         md.append(f'- **{name} 선** — {desc}: 과 {len(lst)} · 짐작 {m/60:.0f} 시간 ≈ {dd:.1f} 일(하루 7 시간)')
+    top20 = [o for o in out if o in lineA][:20]
+    m, dd = days(top20, {'C', 'D1'})
+    md.append(f'- (참고) 가 선의 점수 위 20 과만: 짐작 {m/60:.0f} 시간 ≈ {dd:.1f} 일')
+    md.append('- 짐작의 바탕: 그림 줄은 구간마다 구역 편집 40 분(구역이 여섯을 넘거나 「전체 · 다시 그림」 줄이 있으면 다시 그림 240 분) + 눈 검사 15 분 · 글 줄이 있으면 6+1 한 번 25 분. Gemini 대기 · 재시도는 넣지 않았다.')
     md += ['', '| 순 | 과 | 단원 | 기출 | 줄 | 부호 | C·D1 | N·N′·K | 글로 풀림 | 구역 편집 | 다시 그림 | 짐작 | 점수 |',
            '|---|---|---|---|---|---|---|---|---|---|---|---|---|']
     for i, o in enumerate(out, 1):
