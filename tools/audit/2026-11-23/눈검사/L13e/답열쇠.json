@@ -1,0 +1,25 @@
+{
+ "lesson": "L13e",
+ "real": {
+  "BCR": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "TCR": {
+   "sid": "s1",
+   "cls": "C",
+   "props": null
+  },
+  "클론선택": {
+   "sid": "s5",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "ROMK",
+  "Gi",
+  "Xa"
+ ]
+}
