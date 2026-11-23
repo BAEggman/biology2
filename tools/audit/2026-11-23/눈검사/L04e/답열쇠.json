@@ -1,0 +1,35 @@
+{
+ "lesson": "L04e",
+ "real": {
+  "선구동물": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "후구동물": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  },
+  "극피": {
+   "sid": "s4",
+   "cls": "fact",
+   "props": null
+  },
+  "수관계": {
+   "sid": "s6",
+   "cls": "fact",
+   "props": null
+  },
+  "척삭": {
+   "sid": "s7",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "바이러스",
+  "HTLV",
+  "스크래피"
+ ]
+}

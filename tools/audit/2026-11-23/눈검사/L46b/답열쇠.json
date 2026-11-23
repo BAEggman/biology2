@@ -1,0 +1,35 @@
+{
+ "lesson": "L46b",
+ "real": {
+  "아스피린": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "LDL": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "HDL": {
+   "sid": "s9",
+   "cls": "C",
+   "props": null
+  },
+  "동맥": {
+   "sid": "s2",
+   "cls": "fact",
+   "props": null
+  },
+  "정맥": {
+   "sid": "s3",
+   "cls": "fact",
+   "props": null
+  }
+ },
+ "fake": [
+  "RyR1",
+  "GPCR",
+  "Xa"
+ ]
+}
