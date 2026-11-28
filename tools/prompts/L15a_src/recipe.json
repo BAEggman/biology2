@@ -1,0 +1,97 @@
+{
+ "lesson": "L15a",
+ "base": "761e8ed",
+ "why": "사용자 고름 넷(1126 · 1128 고르기) — s7 트랜스형 = 꺾였다 빛에 펴지는 감자튀김(밤 Z1 · 낮 Z2 — 접시 급전 막대를 바꿔 넣음) · s9 PDE = 헤드셋 · 큐시트 피디(Z3) · s2 탈분극 = 하회탈 배우(Z4) · s11 과분극 = 분을 과하게 바르는 배우(Z5) · s8 트랜스듀신 = 신발 두 짝이 벗겨져 날아가는 지게꾼(Z6). 명세 = tools/cue/jobs/1128_고리v2/확인_L15a.md",
+ "model": "Gemini 웹 · 모드 알약 「카본 높음」(메뉴: 코드 및 복잡한 작업 4 카본 · 사고 수준 높음)",
+ "steps": [
+  {
+   "zone": "Z2",
+   "crop": [
+    1480,
+    0,
+    1907,
+    240
+   ],
+   "gem": "gem_Z2r2.webp",
+   "allow": "1522,0,1880,205",
+   "opts": [
+    "--ident"
+   ]
+  },
+  {
+   "zone": "Z1",
+   "crop": [
+    440,
+    0,
+    867,
+    240
+   ],
+   "gem": "gem_Z1r1.webp",
+   "allow": "482,10,845,205",
+   "opts": [
+    "--ident"
+   ]
+  },
+  {
+   "zone": "Z3",
+   "crop": [
+    1258,
+    680,
+    1528,
+    1040
+   ],
+   "gem": "gem_Z3r3.webp",
+   "allow": "1296,700,1505,1048",
+   "opts": [
+    "--fit=1326,700,1505,1048"
+   ]
+  },
+  {
+   "pil": "pil_s13edge.py",
+   "args": [
+    "761e8ed"
+   ]
+  },
+  {
+   "zone": "Z4",
+   "crop": [
+    0,
+    650,
+    330,
+    1090
+   ],
+   "gem": "gem_Z4r1.webp",
+   "allow": "12,690,181,1010"
+  },
+  {
+   "zone": "Z5",
+   "crop": [
+    1032,
+    650,
+    1362,
+    1090
+   ],
+   "gem": "gem_Z5r2.webp",
+   "allow": "1034,690,1202,1010"
+  },
+  {
+   "zone": "Z6",
+   "crop": [
+    1440,
+    250,
+    1790,
+    600
+   ],
+   "gem": "gem_Z6r1.webp",
+   "allow": "1530,318,1786,512"
+  }
+ ],
+ "tries": "Z2: 1회 노란 각목처럼 보임 → 같은 대화 2회(울퉁불퉁 · 갈색 튀긴 점 · 둥근 끝) · Z1 1회 · Z3: 1회 헤드셋 · 큐시트 — 독자 ㄱ 둘이 「기사 · 정비공 · 방송 스태프」로 부름(R) → 새 대화 2회(뒤로 쓴 야구모자 · 목에 건 초시계 · 큐 손짓을 더해 시킴 — 모자는 앞으로 · 손짓은 안 나옴) — 새 독자 ㄱ 또 「현장 스태프 · 공연 감독 · 기술 담당자」(초록 작업복이 「기사 · 정비공」으로 읽힘) → 새 대화 3회(옷을 방송 PD 차림으로: 카키 주머니 조끼 · 흰 티 · 청바지 · 야구모자 · 헤드셋 · 초시계 · 뒷주머니 대본 — 허용 상자를 왼쪽 x 1296 까지 넓힘(s11 상자 오른쪽 끝 띠 · 정합은 --fit 으로 옛 상자)) · 1회 때 큐시트 모서리가 허용 상자 x 1478 에서 잘려 x 1505 로 넓힘 — s13 녹음 상자 왼쪽 끝 벽 x 1480 ~ 1506 · y 781 ~ 857 만 바뀜, 그 아래는 pil 로 되돌림) · Z4 1회 · Z5 1회 작고(폭 70 px) 분칠이 약함 → 같은 대화 2회(문 높이로 키우고 분 구름) · Z6 1회. 정합: Z1 · Z2 는 하늘뿐이라 특징점이 모자라(inliers 8) --ident(Gemini 가 같은 틀로 그림 — 지붕 선이 맞음)",
+ "prompts": "tools/cue/jobs/1128_고리v2/확인_L15a.md 의 영어 단락 그대로 — Z5 는 「the same stage actor」를 「one stage actor (a man with black hair tied back) in a plain deep-red traditional Korean long-sleeved robe tied with a red bow at the chest」로 바꿈 · 2회차 덧말은 recipe 의 follow 칸",
+ "follow": {
+  "Z2": "In the picture you just made, change only the long yellow stick so that it is unmistakably a real French fry and not a wooden plank: a slightly uneven, gently wobbly potato stick, golden-yellow with crisp darker golden-brown edges and small brown fried spots, a soft matte potato texture, fatter (about one third thicker), with rounded, slightly ragged browned ends — exactly like one big fry from a fast-food meal, but with no box and no logo. Keep it straight and stiff, pointing the same way from the centre of the dish, keep the rope tied to its tip and pulled tight to the pulley, and keep everything else exactly the same. No text, letters or numbers anywhere.",
+  "Z5": "In the picture you just made, change only the actor: make him clearly bigger — as tall as the door and twice as wide — standing in front of the corner post of the house so that his body overlaps the post and the wall just left of the doorframe (but not the door itself). His whole face must be caked thick, chalk-white with far too much face powder, like a white plaster mask of powder, and he presses a big round pink powder puff against his cheek; a big soft round cloud of white powder puffs up around his head and shoulders only. Keep his deep-red robe with the bow. Nothing white falls onto the floor, the sacks or the salt, and the closed door, the salt sacks and the salt heap stay exactly the same. No text, letters or numbers anywhere."
+ },
+ "prompt_Z3r2": "(Z3 의 첫 단락에서 바꿈) he becomes an unmistakable TV variety-show producer (the boss of the broadcast crew): a black baseball cap worn backwards with a big black over-ear headset with a boom microphone over it, a silver stopwatch hanging on a cord around his neck, and his other hand holds up a clipboard with a white cue sheet (only plain grey horizontal lines) while he points at it with a raised index finger as if giving the 'cue!' signal. … No control tower, no screens, no camera, no film slate, no hand-held microphone, no white lab coat.",
+ "prompt_Z3r3": "(Z3 첫 단락에서 바꿈) he is now dressed exactly like a Korean TV broadcast producer on set, not a mechanic: a khaki multi-pocket photographer-style vest over a plain white T-shirt, blue jeans, sneakers, a black baseball cap, a big black over-ear headset with a boom microphone over the cap, a silver stopwatch on a cord around his neck, and a rolled-up script sticking out of his back pocket. … No green overalls. No control tower, no screens, no camera, no film slate, no hand-held microphone, no white lab coat."
+}
