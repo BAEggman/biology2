@@ -3,7 +3,8 @@
    ① 과마다 N(사전에 고리 없음) + N′(사전에 있는데 흘림) 짝 수가 기준선(test/names_baseline.json)보다 늘지 않는다 — 줄면 --lower 로 기준선을 내린다
    ② closed(고쳐서 닫은 과)는 0
    ③ N · N′ 짝은 모두 이름 장부(tools/cue/names/장부.json)에 줄이 있다 — 덱 감사를 마친 과(덱감사.json 의 「끝난 과」)의 줄은 갈래 · 상태가 찼다
-   ④ 면제는 새 통(hooks.json 「_이름고리_면제」)만 — 낱말마다 정해진 꼴의 까닭 */
+   ④ 면제는 새 통(hooks.json 「_이름고리_면제」)만 — 낱말마다 정해진 꼴의 까닭
+   ⑤ 장부의 손 칸은 가름.json 과 같다 — 장부.json 을 직접 고치면 다음 mkledger.py --write 에 지워진다(2026-11-28 · 11-26 에 고른 18 줄이 그렇게 적혀 있었음) */
 const fs = require('fs'), path = require('path');
 const R = path.join(__dirname, '..');
 const { compute, byLesson } = require('../tools/audit_lesson_names.js');
@@ -24,6 +25,9 @@ const AF = path.join(R, 'tools/audit/2026-11-23/덱감사.json');
 const done = fs.existsSync(AF) ? (JSON.parse(fs.readFileSync(AF, 'utf8'))['끝난 과'] || []) : [];
 const open = Object.values(LED).filter(e => done.includes(e.과) && !(e.갈래 && e.상태));
 ok(open.length === 0, `감사를 마친 과 ${done.length} 의 장부 줄은 갈래 · 상태가 찼다${open.length ? ' — 빈 줄: ' + open.slice(0, 8).map(e => e.과 + ' ' + e.낱말).join(' · ') : ''}`);
+const GF = path.join(R, 'tools/cue/names/가름.json'), GAR = fs.existsSync(GF) ? JSON.parse(fs.readFileSync(GF, 'utf8')) : {};
+const drift = Object.entries(LED).filter(([k, e]) => ['갈래', '처방', '근거', '일감', '상태'].some(c => (e[c] || '') !== ((GAR[k] || {})[c] || '')));
+ok(drift.length === 0, `장부의 손 칸(갈래 · 처방 · 근거 · 일감 · 상태)은 가름.json 과 같다${drift.length ? ' — 어긋난 줄: ' + drift.slice(0, 8).map(x => x[0]).join(' · ') + ' (장부.json 을 직접 고치지 말고 tools/cue/names/setrow.py 로)' : ''}`);
 const H = JSON.parse(fs.readFileSync(path.join(R, 'tools/hooks.json'), 'utf8'));
 const EX = (H._이름고리_면제 || {}).목록 || {};
 const badEx = Object.entries(EX).filter(([k, v]) => typeof v !== 'string' || !/^(일상어 — |이름 뜻 그대로 그림\(④\) — |발문이 이름을 줌 — )/.test(v));
