@@ -33,4 +33,18 @@ function jobDone(dir) {
   return [...new Set(fs_.map(f => (f.match(/^r(\d+)_judge\.md$/) || [])[1]).filter(Boolean))]
     .some(n => '가다라'.split('').every(c => fs_.includes(`r${n}_${c}.md`)));
 }
-module.exports = { h, current, unrecorded, jobDone, ROOT };
+// 사용자가 직접 정한 고리의 일감(고르기 화면 — README §0 · 2026-11-23 「사용자가 직접 정한 고리는 제안 단계 없이 심판이 두 가지만 확인」 · 2026-11-26 두 판 면제 · 고르기 화면).
+// 제안 파일이 없다. 대신 picks.json 에 「고름」이 있고, 그 과의 심판 확인 기록 확인_<과>.md(카드 사실 · 예약 기호)가 있어야 한다.
+function pickLessons(dir) {
+  const p = path.join(dir, 'picks.json');
+  if (!fs.existsSync(p)) return [];
+  let picks; try { picks = JSON.parse(fs.readFileSync(p, 'utf8')); } catch (e) { return []; }
+  if (!Object.values(picks).some(v => v && v['결정'] === '고름')) return [];
+  return fs.readdirSync(dir).map(f => (f.normalize('NFC').match(/^확인_(L\d{2}[a-z]?)\.md$/) || [])[1]).filter(Boolean)
+    .filter(l => fs.readFileSync(path.join(dir, fs.readdirSync(dir).find(f => f.normalize('NFC') === `확인_${l}.md`)), 'utf8').trim().length > 80);
+}
+const pickDone = dir => pickLessons(dir).length > 0;
+const jobOk = dir => jobDone(dir) || pickDone(dir);
+// 그 일감이 이 정거장(과|sid)을 바꿀 자격이 있는가 — 6+1 일감이면 언제나, 사용자 고름 일감이면 그 과의 확인 기록이 있을 때만
+const jobCovers = (dir, key) => jobDone(dir) || pickLessons(dir).includes(String(key).split('|')[0]);
+module.exports = { h, current, unrecorded, jobDone, pickDone, pickLessons, jobOk, jobCovers, ROOT };
